@@ -42,6 +42,8 @@ namespace SMSAndroidsCore
         public static AssetBundle otherBundle;
         public static bool loadedCore = false;
         public static GameObject baseBust;
+        public static int loadedSaveFile;
+        public static SaveLoadManager saveLoadManager;
         public static Scene currentScene;
         public static string assetPath = "BepInEx\\plugins\\SMSAndroidsCore\\Assets\\";
         public static string audioPath = "BepInEx\\plugins\\SMSAndroidsCore\\Audio\\";
@@ -50,6 +52,11 @@ namespace SMSAndroidsCore
         public static string scenePath = "BepInEx\\plugins\\SMSAndroidsCore\\Scenes\\";
         public static string exePath;
         public static Transform bustManager;
+        public static Transform cGManagerSexy;
+        public static Transform coreEvents;
+        public static Transform level;
+        public static Transform mainCanvas;
+        public static Transform roomTalk;
 
         private Dictionary<IdString, GlobalVariableChangeTracker> variableTrackers = new Dictionary<IdString, GlobalVariableChangeTracker>();
         private float monitoringInterval = 0.1f; // Check every 0.1 seconds
@@ -84,9 +91,42 @@ namespace SMSAndroidsCore
             {
                 if (!loadedCore)
                 {
+                    saveLoadManager = GameObject.FindFirstObjectByType<SaveLoadManager>();
+                    loadedSaveFile = saveLoadManager.SlotLoaded;
+
                     bustManager = GameObject.Find("2_Bust_Manager").transform;
+                    cGManagerSexy = GameObject.Find("4_CG_Manager-Sexy").transform;
+                    level = GameObject.Find("5_Levels").transform;
+                    coreEvents = GameObject.Find("8_Core_Events").transform;
+                    roomTalk = GameObject.Find("8_Room_Talk").transform;
+                    mainCanvas = GameObject.Find("9_MainCanvas").transform;
                     baseBust = bustManager.Find("Anna_YellowSexy").gameObject;
 
+                    #region Initialize Keys
+                    if (!PlayerPrefs.HasKey(loadedSaveFile + "_MPE_Initialized"))
+                    {
+                        PlayerPrefs.SetInt(loadedSaveFile + "_MPE_Initialized", 1);
+                        PlayerPrefs.SetInt(loadedSaveFile + "_MPE_SecretBeach_RelaxedAmount", 0);
+                        PlayerPrefs.SetInt(loadedSaveFile + "_MPE_Voyeur_SeenAnis", 0);
+                        PlayerPrefs.SetInt(loadedSaveFile + "_MPE_Voyeur_SeenFrima", 0);
+                        PlayerPrefs.SetInt(loadedSaveFile + "_MPE_Voyeur_SeenGuilty", 0);
+                        PlayerPrefs.SetInt(loadedSaveFile + "_MPE_Voyeur_SeenHelm", 0);
+                        PlayerPrefs.SetInt(loadedSaveFile + "_MPE_Voyeur_SeenMaiden", 0);
+                        PlayerPrefs.SetInt(loadedSaveFile + "_MPE_Voyeur_SeenMary", 0);
+                        PlayerPrefs.SetInt(loadedSaveFile + "_MPE_Voyeur_SeenMast", 0);
+                        PlayerPrefs.SetInt(loadedSaveFile + "_MPE_Voyeur_SeenNeon", 0);
+                        PlayerPrefs.SetInt(loadedSaveFile + "_MPE_Voyeur_SeenPepper", 0);
+                        PlayerPrefs.SetInt(loadedSaveFile + "_MPE_Voyeur_SeenRapi", 0);
+                        PlayerPrefs.SetInt(loadedSaveFile + "_MPE_Voyeur_SeenRosanna", 0);
+                        PlayerPrefs.SetInt(loadedSaveFile + "_MPE_Voyeur_SeenSakura", 0);
+                        PlayerPrefs.SetInt(loadedSaveFile + "_MPE_Voyeur_SeenViper", 0);
+                        PlayerPrefs.SetInt(loadedSaveFile + "_MPE_Voyeur_SeenYan", 0);
+                        PlayerPrefs.Save();
+                        Logger.LogInfo("New PlayerPrefs for current save set.");
+                    }
+                    #endregion
+
+                    Logger.LogInfo("----- CORE LOADED -----");
                     loadedCore = true;
                 }
             }
@@ -94,6 +134,7 @@ namespace SMSAndroidsCore
             {
                 if (loadedCore)
                 {
+                    Logger.LogInfo("----- CORE UNLOADED -----");
                     loadedCore = false;
                 }
             }

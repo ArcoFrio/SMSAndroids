@@ -39,15 +39,55 @@ namespace SMSAndroidsCore
         public static GameObject secretBeachButton;
         public static GameObject secretBeachLevel;
         public static GameObject secretBeachRoomtalk;
+        public static GameObject secretBeachGatekeeper;
+        public static GameObject secretBeachGatekeeperB;
+        public static GameObject secretBeachFlash;
+        public static GameObject secretBeachSky;
+        public Vector2 originLevelPos = Vector2.zero;
 
         public static bool loadedPlaces = false;
         public void Update()
         {
             if (Core.currentScene.name == "CoreGameScene")
             {
-                if (!loadedPlaces)
+                if (!loadedPlaces && Core.loadedCore)
                 {
                     CreateNewPlace(900, "SecretBeach", "Remote Area");
+                    secretBeachButton = Core.mainCanvas.Find("Navigator").Find("MapButtons").Find("900_SecretBeach").gameObject;
+                    secretBeachLevel = Core.level.Find("900_SecretBeach").gameObject;
+                    secretBeachRoomtalk = Core.roomTalk.Find("SecretBeach").gameObject;
+
+                    secretBeachSky = GameObject.Instantiate(Places.secretBeachLevel.transform.GetChild(1).gameObject, Places.secretBeachLevel.transform);
+                    secretBeachFlash = GameObject.Instantiate(Places.secretBeachLevel.transform.GetChild(1).gameObject, Places.secretBeachLevel.transform);
+                    secretBeachGatekeeper = GameObject.Instantiate(Places.secretBeachLevel.transform.GetChild(1).gameObject, Places.secretBeachLevel.transform);
+                    secretBeachGatekeeperB = GameObject.Instantiate(Places.secretBeachLevel.transform.GetChild(1).gameObject, secretBeachGatekeeper.transform);
+                    SetNewLevelSprite(secretBeachSky, Core.locationPath, "SecretBeachUp.PNG", 2048, 1729);
+                    SetNewLevelSprite(secretBeachFlash, Core.locationPath, "Flash.PNG", 2048, 1729);
+                    SetNewLevelSprite(secretBeachGatekeeper, Core.locationPath, "Gatekeeper.PNG", 1024, 783);
+                    SetNewLevelSprite(secretBeachGatekeeperB, Core.locationPath, "GatekeeperB.PNG", 1024, 783);
+                    secretBeachSky.name = "Sky";
+                    secretBeachFlash.name = "Flash";
+                    secretBeachGatekeeper.name = "Gatekeeper";
+                    secretBeachGatekeeperB.name = "Portal";
+                    secretBeachSky.transform.position = new Vector2(secretBeachSky.transform.position.x, 15);
+                    secretBeachFlash.transform.position = new Vector2(secretBeachFlash.transform.position.x, 15);
+                    secretBeachGatekeeper.transform.position = new Vector2(secretBeachSky.transform.position.x, 18);
+                    Places.secretBeachLevel.transform.GetChild(1).GetComponent<MoveRelative2Mouse>().enabled = false;
+                    secretBeachSky.GetComponent<MoveRelative2Mouse>().enabled = false;
+                    secretBeachFlash.GetComponent<MoveRelative2Mouse>().enabled = false;
+                    secretBeachFlash.GetComponent<SpriteRenderer>().sortingOrder = -9;
+                    secretBeachGatekeeper.GetComponent<MoveRelative2Mouse>().enabled = false;
+                    secretBeachGatekeeper.GetComponent<SpriteRenderer>().sortingOrder = -10;
+                    secretBeachGatekeeperB.GetComponent<MoveRelative2Mouse>().enabled = false;
+                    secretBeachGatekeeperB.GetComponent<SpriteRenderer>().sortingOrder = -11;
+                    secretBeachFlash.SetActive(false);
+                    secretBeachGatekeeperB.SetActive(false);
+                    secretBeachGatekeeperB.GetComponent<SpriteRenderer>().color = new Color(secretBeachGatekeeperB.GetComponent<SpriteRenderer>().color.r,
+                        secretBeachGatekeeperB.GetComponent<SpriteRenderer>().color.g, secretBeachGatekeeperB.GetComponent<SpriteRenderer>().color.b, 0);
+                    secretBeachGatekeeperB.AddComponent<FadeInSprite2>();
+                    secretBeachGatekeeperB.GetComponent<FadeInSprite2>().fadeInDuration = 1f;
+                    secretBeachFlash.AddComponent<FadeOutSprite>();
+                    originLevelPos = Places.secretBeachLevel.transform.position;
 
                     Logger.LogInfo("----- PLACES LOADED -----");
                     loadedPlaces = true;
@@ -88,7 +128,7 @@ namespace SMSAndroidsCore
             GameObject level = CreateNewLevel(index + "_" + name, Core.locationPath, name + ".PNG", name + "B.PNG", name + "Mask.PNG");
 
             // RoomTalk
-            GameObject roomTalk = GameObject.Instantiate(GameObject.Find("8_Room_Talk").transform.Find("Beach").gameObject, GameObject.Find("8_Room_Talk").transform);
+            GameObject roomTalk = GameObject.Instantiate(Core.roomTalk.Find("Beach").gameObject, GameObject.Find("8_Room_Talk").transform);
             roomTalk.name = name;
             for (int i = roomTalk.transform.childCount - 1; i > 0; i--)
             {

@@ -180,11 +180,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Characters.cs" />
+    <Compile Include="Dialogues.cs" />
     <Compile Include="MainStory.cs" />
     <Compile Include="Core.cs" />
     <Compile Include="Places.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <None Include="ZZOLD.cs" />
+    <Compile Include="Scenes.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -219,26 +219,13 @@ namespace SMSAndroidsCore
             mBase.GetComponent<SpriteRenderer>().material = mat;
             mBase.GetComponent<SpriteRenderer>().material.SetTexture("_MaskTex", tex);
 
+            GameObject wetParticles = GameObject.Instantiate(Core.bustManager.Find("Anna_Towel").Find("MBase1").Find("Particle System").gameObject, mBase.transform);
+            wetParticles.SetActive(false);
+
             Core.bustManager.GetComponent<SpriteRendererLayoutManager>().targetObjects.Add(newBust);
 
             newBust.SetActive(false);
             return newBust;
-        }
-
-        public GameObject FindInActiveObjectByName(string name)
-        {
-            Transform[] objs = Resources.FindObjectsOfTypeAll<Transform>() as Transform[];
-            for (int i = 0; i < objs.Length; i++)
-            {
-                if (objs[i].hideFlags == HideFlags.None)
-                {
-                    if (objs[i].name == name)
-                    {
-                        return objs[i].gameObject;
-                    }
-                }
-            }
-            return null;
         }
     }
 }
