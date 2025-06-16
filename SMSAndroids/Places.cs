@@ -46,6 +46,7 @@ namespace SMSAndroidsCore
         public Vector2 originLevelPos = Vector2.zero;
 
         public static bool loadedPlaces = false;
+        private GameObject currentRoomTalk;
         public void Update()
         {
             if (Core.currentScene.name == "CoreGameScene")
@@ -101,6 +102,27 @@ namespace SMSAndroidsCore
                     loadedPlaces = false;
                 }
             }
+
+            if (Core.loadedBases)
+            {
+                if (Core.levelBeach.activeSelf)
+                {
+                    secretBeachButton.SetActive(true);
+                }
+                else
+                {
+                    secretBeachButton.SetActive(false);
+                }
+                if (secretBeachRoomtalk.activeSelf && !Core.GetVariableBool("Lock-Game"))
+                {
+                    EnableCurrentRoomTalk(secretBeachRoomtalk);
+                }
+                if (secretBeachButton.transform.GetChild(0).gameObject.activeSelf)
+                {
+                    ClickMapButton(secretBeachRoomtalk, 900);
+                    secretBeachButton.transform.GetChild(0).gameObject.SetActive(false);
+                }
+            }
         }
 
         public void CreateNewPlace(int index, string name, string buttonText)
@@ -126,6 +148,7 @@ namespace SMSAndroidsCore
 
             // Level
             GameObject level = CreateNewLevel(index + "_" + name, Core.locationPath, name + ".PNG", name + "B.PNG", name + "Mask.PNG");
+            Destroy(level.GetComponent<Trigger>());
 
             // RoomTalk
             GameObject roomTalk = GameObject.Instantiate(Core.roomTalk.Find("Beach").gameObject, GameObject.Find("8_Room_Talk").transform);
@@ -134,6 +157,8 @@ namespace SMSAndroidsCore
             {
                 Destroy(roomTalk.transform.GetChild(i).gameObject);
             }
+            Destroy(roomTalk.GetComponent<Trigger>());
+            Destroy(roomTalk.GetComponent<Conditions>());
         }
         public GameObject CreateNewLevel(string name, string pathToCG, string baseSprite, string secondarySprite, string maskSprite)
         {
@@ -183,6 +208,43 @@ namespace SMSAndroidsCore
             tex.filterMode = FilterMode.Point;
             Sprite newSprite = Sprite.Create(tex, new Rect(0, 0, width, height), new Vector2(0.5f, 0.5f), 70.32f);
             gO.GetComponent<SpriteRenderer>().sprite = newSprite;
+        }
+        public void ClickMapButton(GameObject roomTalk, Double index)
+        {
+            if (!Core.GetVariableBool("Lock-Game"))
+            {
+                currentRoomTalk = roomTalk;
+                roomTalk.SetActive(true);
+                Invoke("DisableCurrentRoomTalk", 1f);
+                Core.FindAndModifyVariableDouble("Upcoming-Level", index);
+                Core.FindAndModifyVariableBool("Start-Transfer", true);
+                
+                // Trigger the level change process
+                var triggerChangeLevel = Core.gameplay?.Find("TransferScene")?.gameObject;
+                if (triggerChangeLevel != null)
+                {
+                    var triggerComponent = triggerChangeLevel.GetComponent<Trigger>();
+                    if (triggerComponent != null)
+                    {
+                        triggerComponent.Execute();
+                    }
+                }
+            }
+        }
+
+        public void EnableCurrentRoomTalk(GameObject roomTalk)
+        {
+            Core.FindAndModifyVariableBool("Lock-Game", true);
+            Core.FindAndModifyVariableGameObject("temp-stored-very-short-term", null);
+            Core.FindAndModifyVariableGameObject("stored-talk", roomTalk);
+            Core.FindAndModifyVariableBool("After-Talk-Transition", false);
+        }
+
+        private void DisableCurrentRoomTalk()
+        {
+            Core.FindAndModifyVariableBool("Lock-Game", false);
+            Core.FindAndModifyVariableBool("talk-button", true);
+            currentRoomTalk.SetActive(false);
         }
     }
 }

@@ -17,7 +17,7 @@
     <DebugSymbols>false</DebugSymbols>
     <DebugType>none</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>D:\Downloads\SkyrimM\spec\uTorrent\Starmaker Story 1.5C\BepInEx\plugins\</OutputPath>
+    <OutputPath>D:\Downloads\SkyrimM\spec\uTorrent\Starmaker Story 1.6b\BepInEx\plugins\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -180,6 +180,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Characters.cs" />
+    <Compile Include="Debug.cs" />
     <Compile Include="Dialogues.cs" />
     <Compile Include="MainStory.cs" />
     <Compile Include="Core.cs" />
