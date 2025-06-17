@@ -16,6 +16,7 @@ using System.ComponentModel.Design;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Xml.XPath;
 using TMPro;
 using TransitionsPlusDemos;
 using UnityEngine;
@@ -29,7 +30,7 @@ using static UnityEngine.GraphicsBuffer;
 
 namespace SMSAndroidsCore
 {
-    [BepInPlugin(pluginGuid, Core.pluginName, Core.pluginVersion)]
+    [BepInPlugin(pluginGuid, Core.pluginName + " - Characters", Core.pluginVersion)]
     internal class Characters : BaseUnityPlugin
     {
         #region Plugin Info

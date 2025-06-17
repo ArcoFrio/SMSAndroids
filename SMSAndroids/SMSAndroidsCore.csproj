@@ -117,6 +117,9 @@
       <HintPath>..\Libraries\UnityEngine.InputModule.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="UnityEngine.JSONSerializeModule">
+      <HintPath>..\Libraries\UnityEngine.JSONSerializeModule.dll</HintPath>
+    </Reference>
     <Reference Include="UnityEngine.ParticleSystemModule, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Libraries\UnityEngine.ParticleSystemModule.dll</HintPath>
@@ -180,12 +183,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Characters.cs" />
-    <Compile Include="Debug.cs" />
+    <Compile Include="Debugging.cs" />
     <Compile Include="Dialogues.cs" />
     <Compile Include="MainStory.cs" />
     <Compile Include="Core.cs" />
     <Compile Include="Places.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SaveManager.cs" />
     <Compile Include="Scenes.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

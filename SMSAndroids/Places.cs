@@ -16,6 +16,7 @@ using System.ComponentModel.Design;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Xml.XPath;
 using TMPro;
 using TransitionsPlusDemos;
 using UnityEngine;
@@ -29,14 +30,16 @@ using static UnityEngine.GraphicsBuffer;
 
 namespace SMSAndroidsCore
 {
-    [BepInPlugin(pluginGuid, Core.pluginName, Core.pluginVersion)]
+    [BepInPlugin(pluginGuid, Core.pluginName + " - Places", Core.pluginVersion)]
     internal class Places : BaseUnityPlugin
     {
         #region Plugin Info
         public const string pluginGuid = "treboy.starmakerstory.smsandroidscore.places";
         #endregion
         
-        public static GameObject secretBeachButton;
+        public static GameObject buttonSecretBeach;
+        public static GameObject buttonBeach;
+
         public static GameObject secretBeachLevel;
         public static GameObject secretBeachRoomtalk;
         public static GameObject secretBeachGatekeeper;
@@ -54,7 +57,9 @@ namespace SMSAndroidsCore
                 if (!loadedPlaces && Core.loadedCore)
                 {
                     CreateNewPlace(900, "SecretBeach", "Remote Area");
-                    secretBeachButton = Core.mainCanvas.Find("Navigator").Find("MapButtons").Find("900_SecretBeach").gameObject;
+                    buttonSecretBeach = Core.mainCanvas.Find("Navigator").Find("MapButtons").Find("900_SecretBeach").gameObject;
+                    buttonBeach = Core.mainCanvas.Find("Navigator").Find("MapButtons").Find("14_beach").gameObject;
+
                     secretBeachLevel = Core.level.Find("900_SecretBeach").gameObject;
                     secretBeachRoomtalk = Core.roomTalk.Find("SecretBeach").gameObject;
 
@@ -105,22 +110,27 @@ namespace SMSAndroidsCore
 
             if (Core.loadedBases)
             {
-                if (Core.levelBeach.activeSelf)
+                if (Core.levelBeach.activeSelf && !buttonSecretBeach.activeSelf)
                 {
-                    secretBeachButton.SetActive(true);
+                    buttonSecretBeach.SetActive(true);
                 }
-                else
+                if (!Core.levelBeach.activeSelf && buttonSecretBeach.activeSelf)
                 {
-                    secretBeachButton.SetActive(false);
+                    buttonSecretBeach.SetActive(false);
                 }
+                if (secretBeachLevel.activeSelf && !buttonBeach.activeSelf)
+                {
+                    buttonBeach.SetActive(true);
+                }
+
                 if (secretBeachRoomtalk.activeSelf && !Core.GetVariableBool("Lock-Game"))
                 {
                     EnableCurrentRoomTalk(secretBeachRoomtalk);
                 }
-                if (secretBeachButton.transform.GetChild(0).gameObject.activeSelf)
+                if (buttonSecretBeach.transform.GetChild(0).gameObject.activeSelf)
                 {
                     ClickMapButton(secretBeachRoomtalk, 900);
-                    secretBeachButton.transform.GetChild(0).gameObject.SetActive(false);
+                    buttonSecretBeach.transform.GetChild(0).gameObject.SetActive(false);
                 }
             }
         }
