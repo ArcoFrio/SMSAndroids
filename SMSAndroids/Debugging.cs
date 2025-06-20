@@ -42,6 +42,51 @@ namespace SMSAndroidsCore
         private bool isMonitoring = false;
         private Coroutine monitoringCoroutine;
 
+        // Scene change tracking
+        private string lastSceneName = "";
+        private int lastSceneBuildIndex = -1;
+        private bool sceneChangeLoggingEnabled = true;
+
+        public void Awake()
+        {
+            // Subscribe to scene change events
+            SceneManager.sceneLoaded += OnSceneLoaded;
+            SceneManager.sceneUnloaded += OnSceneUnloaded;
+            
+            Logger.LogInfo("Scene change monitoring initialized");
+        }
+
+        public void OnDestroy()
+        {
+            // Unsubscribe from scene change events
+            SceneManager.sceneLoaded -= OnSceneLoaded;
+            SceneManager.sceneUnloaded -= OnSceneUnloaded;
+        }
+
+        private void OnSceneLoaded(Scene scene, UnityEngine.SceneManagement.LoadSceneMode mode)
+        {
+            if (!sceneChangeLoggingEnabled) return;
+
+            string modeText = mode == UnityEngine.SceneManagement.LoadSceneMode.Single ? "Single" : "Additive";
+            Debug.Log($"[Scene Change] Scene LOADED: '{scene.name}' (Build Index: {scene.buildIndex}, Mode: {modeText})");
+            
+            // Check if this is a scene reload (same scene name)
+            if (scene.name == lastSceneName)
+            {
+                Debug.Log($"[Scene Change] SCENE RELOAD detected: '{scene.name}' was reloaded");
+            }
+            
+            lastSceneName = scene.name;
+            lastSceneBuildIndex = scene.buildIndex;
+        }
+
+        private void OnSceneUnloaded(Scene scene)
+        {
+            if (!sceneChangeLoggingEnabled) return;
+            
+            Debug.Log($"[Scene Change] Scene UNLOADED: '{scene.name}' (Build Index: {scene.buildIndex})");
+        }
+
         public void Update()
         {
             if (Core.currentScene.name == "CoreGameScene")
@@ -58,6 +103,29 @@ namespace SMSAndroidsCore
                 else
                 {
                     Debug.LogError("MapButtons GameObject not found!");
+                }
+            }
+
+            // Check for K key to toggle scene change logging
+            if (Input.GetKeyDown(KeyCode.K))
+            {
+                sceneChangeLoggingEnabled = !sceneChangeLoggingEnabled;
+                Debug.Log($"[Scene Change] Scene change logging {(sceneChangeLoggingEnabled ? "ENABLED" : "DISABLED")}");
+            }
+
+            // Check for L key to print current scene info
+            if (Input.GetKeyDown(KeyCode.L))
+            {
+                var currentScene = SceneManager.GetActiveScene();
+                Debug.Log($"[Scene Change] Current Scene: '{currentScene.name}' (Build Index: {currentScene.buildIndex})");
+                Debug.Log($"[Scene Change] Last Scene: '{lastSceneName}' (Build Index: {lastSceneBuildIndex})");
+                Debug.Log($"[Scene Change] Total loaded scenes: {SceneManager.sceneCount}");
+                
+                // List all loaded scenes
+                for (int i = 0; i < SceneManager.sceneCount; i++)
+                {
+                    var scene = SceneManager.GetSceneAt(i);
+                    Debug.Log($"[Scene Change] Loaded Scene {i}: '{scene.name}' (Build Index: {scene.buildIndex}, IsLoaded: {scene.isLoaded})");
                 }
             }
         }

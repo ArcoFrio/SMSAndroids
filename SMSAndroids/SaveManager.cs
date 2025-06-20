@@ -1,7 +1,9 @@
 using BepInEx;
 using GameCreator;
+using GameCreator.Runtime.Characters;
 using GameCreator.Runtime.Common;
 using GameCreator.Runtime.Common.Audio;
+using GameCreator.Runtime.Common.SaveSystem;
 using GameCreator.Runtime.Common.UnityUI;
 using GameCreator.Runtime.Dialogue;
 using GameCreator.Runtime.Dialogue.UnityUI;
@@ -12,10 +14,12 @@ using JetBrains.Annotations;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.Design;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Security.Policy;
 using System.Xml.XPath;
 using TMPro;
 using TransitionsPlusDemos;
@@ -27,6 +31,7 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using UnityEngine.UIElements;
 using static UnityEngine.GraphicsBuffer;
+using System.Xml.Serialization;
 
 namespace SMSAndroidsCore
 {
@@ -43,14 +48,17 @@ namespace SMSAndroidsCore
         private Dictionary<string, object> currentSlotCache = new Dictionary<string, object>();
         private int currentSaveSlot = -1;
         private string currentSaveFilePath;
+        private bool afterSleepEventsProc = false;
+        private bool saveListenersAdded = false;
+        private bool newGame = false;
+        private bool modSaveThisSession = false;
 
         // Default values for all mod variables
         private static readonly Dictionary<string, object> defaultValues = new Dictionary<string, object>
         {
             // Secret Beach variables
-            { "SecretBeach_RelaxedAmount", 0 },
-            { "SecretBeach_Unlocked", false },
             { "SecretBeach_FirstVisit", false },
+            { "SecretBeach_RelaxedAmount", 0 },
             
             // Voyeur variables for each character
             { "Voyeur_SeenAnis", false },
@@ -69,7 +77,6 @@ namespace SMSAndroidsCore
             { "Voyeur_SeenYan", false },
             
             // General mod variables
-            { "Mod_Initialized", false },
             { "Mod_Version", "0.4.0" }
         };
 
@@ -77,138 +84,190 @@ namespace SMSAndroidsCore
         {
             instance = this;
             Logger.LogInfo("SaveManager plugin loaded");
-            
-            // Ensure saves directory exists
-            if (!Directory.Exists(Core.savesPath))
+
+            SceneManager.sceneLoaded += OnSceneLoaded;
+        }
+        public void OnSceneLoaded(Scene scene, UnityEngine.SceneManagement.LoadSceneMode mode)
+        {
+            modSaveThisSession = false;
+            StartCoroutine(WaitAndLoadSaveFile());
+        }
+
+        private IEnumerator WaitAndLoadSaveFile()
+        {
+            // Wait until SaveLoadManager is initialized and SlotLoaded is valid
+            while (Core.saveLoadManager == null || Core.saveLoadManager.SlotLoaded <= 0)
             {
-                Directory.CreateDirectory(Core.savesPath);
-                Logger.LogInfo($"Created saves directory: {Core.savesPath}");
+                yield return null; // Wait one frame
             }
+            currentSaveSlot = Core.saveLoadManager.SlotLoaded;
+            LoadSaveFile();
         }
 
         public void Update()
         {
-            // Update current save slot if it changed
-            if (Core.saveLoadManager != null && Core.saveLoadManager.SlotLoaded != currentSaveSlot)
+            if (Core.currentScene.name == "CoreGameScene")
             {
-                currentSaveSlot = Core.saveLoadManager.SlotLoaded;
-                LoadSaveFile();
+
+                if (Core.afterSleepEvents.activeSelf && !afterSleepEventsProc)
+                {
+                    afterSleepEventsProc = true;
+                }
+                if (Core.savedUI.activeSelf && afterSleepEventsProc)
+                {
+                    SaveToFile();
+                    afterSleepEventsProc = false;
+                }
+
+
+                if (Core.saveLoadSystem.activeSelf && !saveListenersAdded)
+                {
+                    Core.saveButton1.GetComponent<ButtonInstructions>().onClick.AddListener(() => {
+                        OverwriteSaveSlotWithCurrentFile(2);
+                    });
+                    Core.saveButton2.GetComponent<ButtonInstructions>().onClick.AddListener(() => {
+                        OverwriteSaveSlotWithCurrentFile(3);
+                    });
+                    Core.saveButton3.GetComponent<ButtonInstructions>().onClick.AddListener(() => {
+                        OverwriteSaveSlotWithCurrentFile(4);
+                    });
+                    Core.saveButton4.GetComponent<ButtonInstructions>().onClick.AddListener(() => {
+                        OverwriteSaveSlotWithCurrentFile(5);
+                    });
+                    Core.saveButton5.GetComponent<ButtonInstructions>().onClick.AddListener(() => {
+                        OverwriteSaveSlotWithCurrentFile(6);
+                    });
+                    Core.saveButton6.GetComponent<ButtonInstructions>().onClick.AddListener(() => {
+                        OverwriteSaveSlotWithCurrentFile(7);
+                    });
+                    Core.saveButton7.GetComponent<ButtonInstructions>().onClick.AddListener(() => {
+                        OverwriteSaveSlotWithCurrentFile(8);
+                    });
+                    Core.saveButton8.GetComponent<ButtonInstructions>().onClick.AddListener(() => {
+                        OverwriteSaveSlotWithCurrentFile(9);
+                    });
+                    saveListenersAdded = true;
+                }
+                if (!Core.saveLoadSystem.activeSelf && saveListenersAdded)
+                {
+                    Core.saveButton1.GetComponent<ButtonInstructions>().onClick.AddListener(() => {
+                        OverwriteSaveSlotWithCurrentFile(2);
+                    });
+                    Core.saveButton2.GetComponent<ButtonInstructions>().onClick.AddListener(() => {
+                        OverwriteSaveSlotWithCurrentFile(3);
+                    });
+                    Core.saveButton3.GetComponent<ButtonInstructions>().onClick.AddListener(() => {
+                        OverwriteSaveSlotWithCurrentFile(4);
+                    });
+                    Core.saveButton4.GetComponent<ButtonInstructions>().onClick.AddListener(() => {
+                        OverwriteSaveSlotWithCurrentFile(5);
+                    });
+                    Core.saveButton5.GetComponent<ButtonInstructions>().onClick.AddListener(() => {
+                        OverwriteSaveSlotWithCurrentFile(6);
+                    });
+                    Core.saveButton6.GetComponent<ButtonInstructions>().onClick.AddListener(() => {
+                        OverwriteSaveSlotWithCurrentFile(7);
+                    });
+                    Core.saveButton7.GetComponent<ButtonInstructions>().onClick.AddListener(() => {
+                        OverwriteSaveSlotWithCurrentFile(8);
+                    });
+                    Core.saveButton8.GetComponent<ButtonInstructions>().onClick.AddListener(() => {
+                        OverwriteSaveSlotWithCurrentFile(9);
+                    });
+                    saveListenersAdded = false;
+                }
+
+                if (Core.introMomentNewGame.activeSelf && !newGame)
+                {
+                    ResetToDefaults();
+                    newGame = true;
+                }
+            }
+
+            if (Core.currentScene.name == "GameStart")
+            {
+                if (newGame)
+                {
+                    newGame = false;
+                }
             }
         }
 
         #region Public Methods
 
-        /// <summary>
         /// Sets a string value for the current save slot
-        /// </summary>
         public static void SetString(string variableName, string value)
         {
             if (instance == null) return;
             instance.SetValueInternal(variableName, value);
         }
-
-        /// <summary>
         /// Gets a string value for the current save slot
-        /// </summary>
         public static string GetString(string variableName, string defaultValue = "")
         {
             if (instance == null) return defaultValue;
             return instance.GetValueInternal(variableName, defaultValue);
         }
-
-        /// <summary>
         /// Sets an integer value for the current save slot
-        /// </summary>
         public static void SetInt(string variableName, int value)
         {
             if (instance == null) return;
             instance.SetValueInternal(variableName, value);
         }
-
-        /// <summary>
         /// Gets an integer value for the current save slot
-        /// </summary>
         public static int GetInt(string variableName, int defaultValue = 0)
         {
             if (instance == null) return defaultValue;
             return instance.GetValueInternal(variableName, defaultValue);
         }
-
-        /// <summary>
         /// Sets a float value for the current save slot
-        /// </summary>
         public static void SetFloat(string variableName, float value)
         {
             if (instance == null) return;
             instance.SetValueInternal(variableName, value);
         }
-
-        /// <summary>
         /// Gets a float value for the current save slot
-        /// </summary>
         public static float GetFloat(string variableName, float defaultValue = 0f)
         {
             if (instance == null) return defaultValue;
             return instance.GetValueInternal(variableName, defaultValue);
         }
-
-        /// <summary>
         /// Sets a boolean value for the current save slot
-        /// </summary>
         public static void SetBool(string variableName, bool value)
         {
             if (instance == null) return;
             instance.SetValueInternal(variableName, value);
         }
-
-        /// <summary>
         /// Gets a boolean value for the current save slot
-        /// </summary>
         public static bool GetBool(string variableName, bool defaultValue = false)
         {
             if (instance == null) return defaultValue;
             return instance.GetValueInternal(variableName, defaultValue);
         }
-
-        /// <summary>
         /// Deletes a variable for the current save slot
-        /// </summary>
         public static void DeleteVariable(string variableName)
         {
             if (instance == null) return;
             instance.DeleteVariableInternal(variableName);
         }
-
-        /// <summary>
         /// Checks if a variable exists for the current save slot
-        /// </summary>
         public static bool HasVariable(string variableName)
         {
             if (instance == null) return false;
             return instance.HasVariableInternal(variableName);
         }
-
-        /// <summary>
         /// Gets all variables for the current save slot
-        /// </summary>
         public static Dictionary<string, object> GetAllVariables()
         {
             if (instance == null) return new Dictionary<string, object>();
             return new Dictionary<string, object>(instance.currentSlotCache);
         }
-
-        /// <summary>
         /// Clears all variables for the current save slot
-        /// </summary>
         public static void ClearAllVariables()
         {
             if (instance == null) return;
             instance.ClearAllVariablesInternal();
         }
-
-        /// <summary>
         /// Resets all variables to their default values for the current save slot
-        /// </summary>
         public static void ResetToDefaults()
         {
             if (instance == null) return;
@@ -225,12 +284,8 @@ namespace SMSAndroidsCore
 
             // Update cache
             currentSlotCache[variableName] = value;
-
-            // Save to file
-            SaveToFile();
-            Debug.Log($"[SaveManager] Saved {variableName} = {value} for save slot {currentSaveSlot}");
+            Debug.Log($"[SaveManager] Set runtime variable {variableName} = {value} for save slot {currentSaveSlot}");
         }
-
         private T GetValueInternal<T>(string variableName, T defaultValue)
         {
             if (currentSaveSlot < 0) return defaultValue;
@@ -247,77 +302,80 @@ namespace SMSAndroidsCore
             // If not in cache, return default value
             return defaultValue;
         }
-
         private void DeleteVariableInternal(string variableName)
         {
             if (currentSaveSlot < 0) return;
-
             currentSlotCache.Remove(variableName);
-            SaveToFile();
-            Debug.Log($"[SaveManager] Deleted {variableName} for save slot {currentSaveSlot}");
+            Debug.Log($"[SaveManager] Deleted runtime variable {variableName} for save slot {currentSaveSlot}");
         }
-
         private bool HasVariableInternal(string variableName)
         {
             if (currentSaveSlot < 0) return false;
             return currentSlotCache.ContainsKey(variableName);
         }
-
         private void ClearAllVariablesInternal()
         {
             if (currentSaveSlot < 0) return;
-
             currentSlotCache.Clear();
-            SaveToFile();
-            Debug.Log($"[SaveManager] Cleared all variables for save slot {currentSaveSlot}");
+            Debug.Log($"[SaveManager] Cleared all runtime variables for save slot {currentSaveSlot}");
         }
-
         private void ResetToDefaultsInternal()
         {
             if (currentSaveSlot < 0) return;
-
+            Debug.Log($"[SaveManager] ResetToDefaultsInternal called for slot {currentSaveSlot}");
+            Debug.Log($"[SaveManager] defaultValues count: {defaultValues.Count}");
             currentSlotCache.Clear();
-            
+
             // Add all default values
             foreach (var kvp in defaultValues)
             {
+                Debug.Log($"[SaveManager] Adding default: {kvp.Key} = {kvp.Value}");
                 currentSlotCache[kvp.Key] = kvp.Value;
             }
-
-            SaveToFile();
+            // We still want to save here to create the initial file
+            SaveToFile(currentSaveSlot);
+            modSaveThisSession = false;
             Debug.Log($"[SaveManager] Reset all variables to defaults for save slot {currentSaveSlot}");
         }
-
         private void LoadSaveFile()
         {
-            if (currentSaveSlot < 0) return;
-
-            currentSaveFilePath = Path.Combine(Core.savesPath, $"save_{currentSaveSlot}.json");
+            currentSaveFilePath = Path.Combine(Core.savesPath, $"save_{currentSaveSlot}.txt");
             currentSlotCache.Clear();
-
             try
             {
                 if (File.Exists(currentSaveFilePath))
                 {
-                    string jsonContent = File.ReadAllText(currentSaveFilePath);
-                    var loadedData = JsonUtility.FromJson<SaveData>(jsonContent);
-                    
-                    if (loadedData != null && loadedData.variableEntries != null)
+                    foreach (var line in File.ReadAllLines(currentSaveFilePath))
                     {
-                        foreach (var entry in loadedData.variableEntries)
+                        if (string.IsNullOrWhiteSpace(line) || !line.Contains("=")) continue;
+                        var parts = line.Split(new[] { '=' }, 2);
+                        var key = parts[0];
+                        var value = parts[1];
+                        if (key == "saveSlot" || key == "lastSaved") continue;
+                        // Try to parse value type based on defaultValues
+                        if (defaultValues.TryGetValue(key, out object defaultVal))
                         {
-                            // Convert the serialized value back to the appropriate type
-                            object value = ConvertSerializedValue(entry.value, entry.type);
-                            currentSlotCache[entry.key] = value;
+                            if (defaultVal is int && int.TryParse(value, out int intVal))
+                                currentSlotCache[key] = intVal;
+                            else if (defaultVal is bool && bool.TryParse(value, out bool boolVal))
+                                currentSlotCache[key] = boolVal;
+                            else if (defaultVal is float && float.TryParse(value, out float floatVal))
+                                currentSlotCache[key] = floatVal;
+                            else
+                                currentSlotCache[key] = value;
+                        }
+                        else
+                        {
+                            currentSlotCache[key] = value;
                         }
                     }
-                    
                     Debug.Log($"[SaveManager] Loaded save file: {currentSaveFilePath}");
                 }
                 else
                 {
                     // Create new save file with default values
                     ResetToDefaultsInternal();
+                    // SaveToFile is already called by ResetToDefaultsInternal
                     Debug.Log($"[SaveManager] Created new save file with defaults: {currentSaveFilePath}");
                 }
             }
@@ -329,135 +387,120 @@ namespace SMSAndroidsCore
             }
         }
 
-        private void SaveToFile()
+        private void SaveToFile(int? slotOverride = null)
         {
-            if (currentSaveSlot < 0 || string.IsNullOrEmpty(currentSaveFilePath)) return;
+            int slot = slotOverride ?? 1;
+            string saveFilePath = Path.Combine(Core.savesPath, $"save_{slot}.txt");
 
             try
             {
-                var variableEntries = new List<VariableEntry>();
-                
-                foreach (var kvp in currentSlotCache)
+                using (var writer = new StreamWriter(saveFilePath))
                 {
-                    var entry = new VariableEntry
+                    writer.WriteLine($"saveSlot={slot}");
+                    writer.WriteLine($"lastSaved={DateTime.Now:yyyy-MM-dd HH:mm:ss}");
+                    foreach (var kvp in currentSlotCache)
                     {
-                        key = kvp.Key,
-                        value = kvp.Value.ToString(),
-                        type = GetValueType(kvp.Value)
-                    };
-                    variableEntries.Add(entry);
+                        writer.WriteLine($"{kvp.Key}={kvp.Value}");
+                    }
                 }
-
-                var saveData = new SaveData
-                {
-                    saveSlot = currentSaveSlot,
-                    lastSaved = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"),
-                    variableEntries = variableEntries
-                };
-
-                string jsonContent = JsonUtility.ToJson(saveData, true);
-                File.WriteAllText(currentSaveFilePath, jsonContent);
+                Debug.Log($"[SaveManager] Saved to slot {slot} at {saveFilePath}");
+                modSaveThisSession = true;
             }
             catch (Exception e)
             {
-                Debug.LogError($"[SaveManager] Error saving to file: {e.Message}");
+                Debug.LogError($"[SaveManager] Error saving to slot {slot}: {e.Message}");
             }
         }
 
-        private string GetValueType(object value)
+        #endregion
+        /// Overwrites the specified save slot's file with the contents of the current save slot's file.
+        /// This copies only the serialized file data, not the current in-memory variables.
+        /// <param name="targetSlot">The save slot to overwrite (e.g., 2, 3, ...)</param>
+        public static void OverwriteSaveSlotWithCurrentFile(int targetSlot)
         {
-            if (value is bool) return "bool";
-            if (value is int) return "int";
-            if (value is float) return "float";
-            if (value is string) return "string";
-            return "string"; // Default fallback
-        }
+            if (instance == null) return;
+            if (instance.currentSaveSlot < 0)
+            {
+                Debug.LogError("[SaveManager] No current save slot loaded.");
+                return;
+            }
 
-        private object ConvertSerializedValue(string serializedValue, string type)
-        {
+            string sourceFile;
+            if (instance.modSaveThisSession)
+            {
+                sourceFile = Path.Combine(Core.savesPath, "save_1.txt");
+            }
+            else
+            {
+                sourceFile = Path.Combine(Core.savesPath, $"save_{instance.currentSaveSlot}.txt");
+            }
+            string destFile = Path.Combine(Core.savesPath, $"save_{targetSlot}.txt");
+
+            if (!File.Exists(sourceFile))
+            {
+                Debug.LogError($"[SaveManager] Source save file does not exist: {sourceFile}");
+                return;
+            }
+
             try
             {
-                switch (type)
-                {
-                    case "bool":
-                        return bool.Parse(serializedValue);
-                    case "int":
-                        return int.Parse(serializedValue);
-                    case "float":
-                        return float.Parse(serializedValue);
-                    case "string":
-                    default:
-                        return serializedValue;
-                }
+                File.Copy(sourceFile, destFile, true);
+                Debug.Log($"[SaveManager] Overwrote save slot {targetSlot} with data from {(instance.modSaveThisSession ? "slot 1" : $"slot {instance.currentSaveSlot}")}");
             }
-            catch
+            catch (Exception e)
             {
-                // Return default value if parsing fails
-                switch (type)
-                {
-                    case "bool": return false;
-                    case "int": return 0;
-                    case "float": return 0f;
-                    case "string":
-                    default: return "";
-                }
+                Debug.LogError($"[SaveManager] Error overwriting save slot {targetSlot}: {e.Message}");
             }
         }
 
-        #endregion
-
-        #region Global Variable Integration
-
-        /// <summary>
-        /// Syncs a saved value to a global variable for use in the game
-        /// </summary>
-        public static void SyncToGlobalVariable(string saveVariableName, string globalVariableName)
+        // Add utility method to check if a variable has changed between runtime and save file
+        public static bool HasVariableChanged(string variableName)
         {
-            if (instance == null) return;
+            if (instance == null || instance.currentSaveSlot < 0) return false;
 
-            // Get the saved value (assuming it's a boolean for now)
-            bool value = GetBool(saveVariableName, false);
-            
-            // Set it as a global variable
-            Core.FindAndModifyVariableBool(globalVariableName, value);
-            Debug.Log($"[SaveManager] Synced {saveVariableName} ({value}) to global variable {globalVariableName}");
+            // Get runtime value
+            if (!instance.currentSlotCache.TryGetValue(variableName, out object runtimeValue))
+                return false; // Variable doesn't exist in runtime
+
+            // Get saved value
+            string saveFilePath = Path.Combine(Core.savesPath, $"save_{instance.currentSaveSlot}.txt");
+            if (!File.Exists(saveFilePath))
+                return true; // No save file means runtime value is different
+
+            try
+            {
+                foreach (var line in File.ReadAllLines(saveFilePath))
+                {
+                    if (string.IsNullOrWhiteSpace(line) || !line.Contains("=")) continue;
+                    var parts = line.Split(new[] { '=' }, 2);
+                    if (parts[0] == variableName)
+                    {
+                        var value = parts[1];
+                        // Try to parse value based on defaultValues
+                        if (defaultValues.TryGetValue(variableName, out object defaultVal))
+                        {
+                            object savedValue = null;
+                            if (defaultVal is int && int.TryParse(value, out int intVal))
+                                savedValue = intVal;
+                            else if (defaultVal is bool && bool.TryParse(value, out bool boolVal))
+                                savedValue = boolVal;
+                            else if (defaultVal is float && float.TryParse(value, out float floatVal))
+                                savedValue = floatVal;
+                            else
+                                savedValue = value;
+
+                            return !Equals(runtimeValue, savedValue);
+                        }
+                        return !Equals(runtimeValue.ToString(), value);
+                    }
+                }
+                return true; // Variable not found in save file means it's different
+            }
+            catch (Exception e)
+            {
+                Debug.LogError($"[SaveManager] Error checking variable change: {e.Message}");
+                return false;
+            }
         }
-
-        /// <summary>
-        /// Syncs a global variable value back to the save system
-        /// </summary>
-        public static void SyncFromGlobalVariable(string globalVariableName, string saveVariableName)
-        {
-            if (instance == null) return;
-
-            // Get the global variable value
-            bool value = Core.GetVariableBool(globalVariableName);
-            
-            // Save it
-            SetBool(saveVariableName, value);
-            Debug.Log($"[SaveManager] Synced global variable {globalVariableName} ({value}) to {saveVariableName}");
-        }
-
-        #endregion
-
-        #region Save Data Structure
-
-        [Serializable]
-        private class SaveData
-        {
-            public int saveSlot;
-            public string lastSaved;
-            public List<VariableEntry> variableEntries;
-        }
-
-        [Serializable]
-        private class VariableEntry
-        {
-            public string key;
-            public string value;
-            public string type;
-        }
-
-        #endregion
     }
 } 

@@ -43,8 +43,20 @@ namespace SMSAndroidsCore
         public static AssetBundle otherBundle;
         public static bool loadedCore = false;
         public static bool loadedBases = false;
+        public static GameObject afterSleepEvents;
         public static GameObject baseBust;
+        public static GameObject introMomentNewGame;
         public static GameObject levelBeach;
+        public static GameObject saveButton1;
+        public static GameObject saveButton2;
+        public static GameObject saveButton3;
+        public static GameObject saveButton4;
+        public static GameObject saveButton5;
+        public static GameObject saveButton6;
+        public static GameObject saveButton7;
+        public static GameObject saveButton8;
+        public static GameObject savedUI;
+        public static GameObject saveLoadSystem;
         public static int loadedSaveFile;
         public static SaveLoadManager saveLoadManager;
         public static Scene currentScene;
@@ -64,9 +76,6 @@ namespace SMSAndroidsCore
         public static Transform mainCanvas;
         public static Transform roomTalk;
 
-        private static bool afterSleepEventsEnabled = false;
-        private static bool gameSavedEnabled = false;
-
         public void Awake()
         {
             Logger.LogInfo("Awake");
@@ -84,12 +93,21 @@ namespace SMSAndroidsCore
             otherBundle = AssetBundle.LoadFromFile(exePath + assetPath + "otherbundle");
 
             Logger.LogInfo("Asset Bundles loaded.");
+
+            SceneManager.sceneLoaded += OnSceneLoaded;
         }
-        
+        public void OnSceneLoaded(Scene scene, UnityEngine.SceneManagement.LoadSceneMode mode)
+        {
+            currentScene = scene;
+            loadedCore = false;
+            Characters.loadedBusts = false;
+            Dialogues.loadedDialogues = false;
+            MainStory.loadedStory = false;
+            Places.loadedPlaces = false;
+            Scenes.loadedScenes = false;
+        }
         public void Update()
         {
-            currentScene = SceneManager.GetActiveScene();
-
             if (loadedCore && Characters.loadedBusts && Dialogues.loadedDialogues && MainStory.loadedStory && Places.loadedPlaces && Scenes.loadedScenes)
             {
                 loadedBases = true;
@@ -117,30 +135,18 @@ namespace SMSAndroidsCore
 
                     baseBust = bustManager.Find("Anna_YellowSexy").gameObject;
                     levelBeach = level.Find("14_Beach").gameObject;
-
-                    #region Initialize Keys
-                    if (!PlayerPrefs.HasKey(loadedSaveFile + "_MPE_Initialized"))
-                    {
-                        PlayerPrefs.SetInt(loadedSaveFile + "_MPE_Initialized", 1);
-                        PlayerPrefs.SetInt(loadedSaveFile + "_MPE_SecretBeach_RelaxedAmount", 0);
-                        PlayerPrefs.SetInt(loadedSaveFile + "_MPE_Voyeur_SeenAnis", 0);
-                        PlayerPrefs.SetInt(loadedSaveFile + "_MPE_Voyeur_SeenFrima", 0);
-                        PlayerPrefs.SetInt(loadedSaveFile + "_MPE_Voyeur_SeenGuilty", 0);
-                        PlayerPrefs.SetInt(loadedSaveFile + "_MPE_Voyeur_SeenHelm", 0);
-                        PlayerPrefs.SetInt(loadedSaveFile + "_MPE_Voyeur_SeenMaiden", 0);
-                        PlayerPrefs.SetInt(loadedSaveFile + "_MPE_Voyeur_SeenMary", 0);
-                        PlayerPrefs.SetInt(loadedSaveFile + "_MPE_Voyeur_SeenMast", 0);
-                        PlayerPrefs.SetInt(loadedSaveFile + "_MPE_Voyeur_SeenNeon", 0);
-                        PlayerPrefs.SetInt(loadedSaveFile + "_MPE_Voyeur_SeenPepper", 0);
-                        PlayerPrefs.SetInt(loadedSaveFile + "_MPE_Voyeur_SeenRapi", 0);
-                        PlayerPrefs.SetInt(loadedSaveFile + "_MPE_Voyeur_SeenRosanna", 0);
-                        PlayerPrefs.SetInt(loadedSaveFile + "_MPE_Voyeur_SeenSakura", 0);
-                        PlayerPrefs.SetInt(loadedSaveFile + "_MPE_Voyeur_SeenViper", 0);
-                        PlayerPrefs.SetInt(loadedSaveFile + "_MPE_Voyeur_SeenYan", 0);
-                        PlayerPrefs.Save();
-                        Logger.LogInfo("New PlayerPrefs for current save set.");
-                    }
-                    #endregion
+                    afterSleepEvents = mainCanvas.Find("AfterSleepEvents").gameObject;
+                    introMomentNewGame = mainCanvas.transform.Find("Starmaker").Find("Intro_Moment").gameObject;
+                    savedUI = effects.Find("Effect_Canvas").Find("Game_Saved").Find("Saved").gameObject;
+                    saveLoadSystem = mainCanvas.transform.Find("SaveLoadSystem").gameObject;
+                    saveButton1 = saveLoadSystem.transform.Find("ButtonList").GetChild(0).Find("Button (2)").gameObject;
+                    saveButton2 = saveLoadSystem.transform.Find("ButtonList").GetChild(1).Find("Button (2)").gameObject;
+                    saveButton3 = saveLoadSystem.transform.Find("ButtonList").GetChild(2).Find("Button (2)").gameObject;
+                    saveButton4 = saveLoadSystem.transform.Find("ButtonList").GetChild(3).Find("Button (2)").gameObject;
+                    saveButton5 = saveLoadSystem.transform.Find("ButtonList").GetChild(4).Find("Button (2)").gameObject;
+                    saveButton6 = saveLoadSystem.transform.Find("ButtonList").GetChild(5).Find("Button (2)").gameObject;
+                    saveButton7 = saveLoadSystem.transform.Find("ButtonList").GetChild(6).Find("Button (2)").gameObject;
+                    saveButton8 = saveLoadSystem.transform.Find("ButtonList").GetChild(7).Find("Button (2)").gameObject;
 
                     Logger.LogInfo("----- CORE LOADED -----");
                     loadedCore = true;
@@ -218,7 +224,6 @@ namespace SMSAndroidsCore
                 Debug.LogError($"Variable '{variableNameToFind}' not found in any global variable set");
             }
         }
-        
         public static void FindAndModifyVariableBool(string variableNameToFind, bool newValue)
         {
             var manager = GlobalNameVariablesManager.Instance;
@@ -281,7 +286,6 @@ namespace SMSAndroidsCore
                 Debug.LogError($"Variable '{variableNameToFind}' not found in any global variable set");
             }
         }
-        
         public static void FindAndModifyVariableGameObject(string variableNameToFind, GameObject newValue)
         {
             var manager = GlobalNameVariablesManager.Instance;
@@ -344,7 +348,6 @@ namespace SMSAndroidsCore
                 Debug.LogError($"Variable '{variableNameToFind}' not found in any global variable set");
             }
         }
-        
         public static bool GetVariableBool(string variableNameToFind)
         {
             var manager = GlobalNameVariablesManager.Instance;
@@ -383,7 +386,6 @@ namespace SMSAndroidsCore
             Debug.LogError($"Variable '{variableNameToFind}' not found in any global variable set");
             return false;
         }
-
         public static void AddGameObjectToLocalListVariables(GameObject targetGameObject, GameObject valueToAdd)
         {
             if (targetGameObject == null)
@@ -402,6 +404,5 @@ namespace SMSAndroidsCore
             localListVariables.Push(valueToAdd);
             Debug.Log($"Added GameObject '{valueToAdd?.name ?? "null"}' to LocalListVariables on GameObject: {targetGameObject.name}. New count: {localListVariables.Count}");
         }
-
     }
 }

@@ -44,9 +44,16 @@ namespace SMSAndroidsCore
             {
                 if (!loadedStory && Places.loadedPlaces && Characters.loadedBusts)
                 {
-
                     Logger.LogInfo("----- STORY LOADED -----");
                     loadedStory = true;
+                }
+
+                if (loadedStory)
+                {
+                    if (Places.secretBeachLevel.activeSelf && !SaveManager.GetBool("SecretBeach_FirstVisit"))
+                    {
+                        SaveManager.SetBool("SecretBeach_FirstVisit", true);
+                    }
                 }
             }
             if (Core.currentScene.name == "GameStart")
