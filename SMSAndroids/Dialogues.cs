@@ -36,6 +36,20 @@ namespace SMSAndroidsCore
         #region Plugin Info
         public const string pluginGuid = "treboy.starmakerstory.smsandroidscore.dialogues";
         #endregion
+        public static GameObject defaultOverrideSpeechSkinM;
+        public static GameObject defaultOverrideSpeechSkinF;
+
+        public static GameObject sBDialogueMainFirst;
+        public static GameObject sBDialogueMainFirstScene1;
+        public static GameObject sBDialogueMainFirstScene2;
+        public static GameObject sBDialogueMainFirstScene3;
+        public static GameObject sBDialogueMainFirstScene4;
+        public static GameObject sBDialogueMainFirstScene5;
+        public static GameObject sBDialogueMainFirstDialogueActivator;
+        public static GameObject sBDialogueMainFirstDialogueFinisher;
+        public static GameObject sBDialogueMainFirstMouthActivator;
+        public static GameObject sBDialogueMainFirstSpriteFocus;
+
         public static GameObject sBDialogueMain;
         public static GameObject sBDialogueMainScene1;
         public static GameObject sBDialogueMainScene2;
@@ -59,12 +73,28 @@ namespace SMSAndroidsCore
         public static GameObject sBDialogueMainGKSpriteFocus;
 
         public static bool loadedDialogues = false;
+        public static bool dialoguePlaying = false;
         public void Update()
         {
             if (Core.currentScene.name == "CoreGameScene")
             {
                 if (!loadedDialogues && Places.loadedPlaces)
                 {
+                    defaultOverrideSpeechSkinM = GetActorOverrideSpeechSkinValue(Core.roomTalk.Find("Bath").Find("NoOneInShower").gameObject, "You");
+                    defaultOverrideSpeechSkinF = GetActorOverrideSpeechSkinValue(Core.roomTalk.Find("Bath").Find("AnnaInShower").gameObject, "Anna");
+
+                    sBDialogueMainFirst = CreateNewDialogue("SBDialogueMainFirst", Places.secretBeachRoomtalk.transform);
+                    sBDialogueMainFirstScene1 = sBDialogueMainFirst.transform.Find("Scene1").gameObject;
+                    sBDialogueMainFirstScene2 = sBDialogueMainFirst.transform.Find("Scene2").gameObject;
+                    sBDialogueMainFirstScene3 = sBDialogueMainFirst.transform.Find("Scene3").gameObject;
+                    sBDialogueMainFirstScene4 = sBDialogueMainFirst.transform.Find("Scene4").gameObject;
+                    sBDialogueMainFirstScene5 = sBDialogueMainFirst.transform.Find("Scene5").gameObject;
+                    sBDialogueMainFirstDialogueActivator = sBDialogueMainFirst.transform.Find("DialogueActivator").gameObject;
+                    sBDialogueMainFirstDialogueFinisher = sBDialogueMainFirst.transform.Find("DialogueFinisher").gameObject;
+                    sBDialogueMainFirstMouthActivator = sBDialogueMainFirst.transform.Find("MouthActivator").gameObject;
+                    sBDialogueMainFirstSpriteFocus = sBDialogueMainFirst.transform.Find("SpriteFocus").gameObject;
+                    SetActorOverrideSpeechSkinValue(sBDialogueMainFirst, "PlayerActor", defaultOverrideSpeechSkinM);
+
                     sBDialogueMain = CreateNewDialogue("SBDialogueMain", Places.secretBeachRoomtalk.transform);
                     sBDialogueMainScene1 = sBDialogueMain.transform.Find("Scene1").gameObject;
                     sBDialogueMainScene2 = sBDialogueMain.transform.Find("Scene2").gameObject;
@@ -75,6 +105,7 @@ namespace SMSAndroidsCore
                     sBDialogueMainDialogueFinisher = sBDialogueMain.transform.Find("DialogueFinisher").gameObject;
                     sBDialogueMainMouthActivator = sBDialogueMain.transform.Find("MouthActivator").gameObject;
                     sBDialogueMainSpriteFocus = sBDialogueMain.transform.Find("SpriteFocus").gameObject;
+                    SetActorOverrideSpeechSkinValue(sBDialogueMain, "PlayerActor", defaultOverrideSpeechSkinM);
 
                     sBDialogueMainGK = CreateNewDialogue("SBDialogueMainGatekeeper", Places.secretBeachRoomtalk.transform);
                     sBDialogueMainGKScene1 = sBDialogueMainGK.transform.Find("Scene1").gameObject;
@@ -86,6 +117,7 @@ namespace SMSAndroidsCore
                     sBDialogueMainGKDialogueFinisher = sBDialogueMainGK.transform.Find("DialogueFinisher").gameObject;
                     sBDialogueMainGKMouthActivator = sBDialogueMainGK.transform.Find("MouthActivator").gameObject;
                     sBDialogueMainGKSpriteFocus = sBDialogueMainGK.transform.Find("SpriteFocus").gameObject;
+                    SetActorOverrideSpeechSkinValue(sBDialogueMainGK, "PlayerActor", defaultOverrideSpeechSkinM);
 
                     Logger.LogInfo("----- DIALOGUES LOADED -----");
                     loadedDialogues = true;
@@ -107,6 +139,138 @@ namespace SMSAndroidsCore
             GameObject dialogueInstance = GameObject.Instantiate(dialogue, roomTalk);
             dialogueInstance.GetComponent<Dialogue>().Story.Content.DialogueSkin = Core.coreEvents.Find("SmallTalks").Find("FailedGroceries").Find("GameObject").GetComponent<Dialogue>().Story.Content.DialogueSkin;
             return dialogueInstance;
+        }
+        public static GameObject GetActorOverrideSpeechSkinValue(GameObject dialogueGO, string actorName)
+        {
+            var dialogue = dialogueGO.GetComponent(typeof(GameCreator.Runtime.Dialogue.Dialogue));
+            if (dialogue == null) return null;
+
+            var storyProp = dialogue.GetType().GetProperty("Story", BindingFlags.Public | BindingFlags.Instance);
+            var story = storyProp.GetValue(dialogue);
+            var contentProp = story.GetType().GetProperty("Content", BindingFlags.Public | BindingFlags.Instance);
+            var content = contentProp.GetValue(story);
+
+            var rolesField = content.GetType().GetField("m_Roles", BindingFlags.NonPublic | BindingFlags.Instance);
+            var roles = rolesField.GetValue(content) as Array;
+            if (roles == null) return null;
+
+            foreach (var roleObj in roles)
+            {
+                var actorField = roleObj.GetType().GetField("m_Actor", BindingFlags.NonPublic | BindingFlags.Instance);
+                var actor = actorField.GetValue(roleObj);
+                if (actor != null)
+                {
+                    var nameProp = actor.GetType().GetProperty("name", BindingFlags.Public | BindingFlags.Instance);
+                    string thisActorName = nameProp?.GetValue(actor) as string;
+                    if (thisActorName == actorName)
+                    {
+                        var overrideSpeechSkinField = actor.GetType().GetField("m_OverrideSpeechSkin", BindingFlags.NonPublic | BindingFlags.Instance);
+                        var speechSkin = overrideSpeechSkinField.GetValue(actor);
+                        if (speechSkin != null)
+                        {
+                            var mValueField = speechSkin.GetType().GetField("m_Value", BindingFlags.NonPublic | BindingFlags.Instance);
+                            var prefab = mValueField.GetValue(speechSkin) as GameObject;
+                            return prefab;
+                        }
+                    }
+                }
+            }
+            return null;
+        }
+
+        public static void SetActorOverrideSpeechSkinValue(GameObject dialogueGO, string actorName, GameObject newSkinPrefab)
+        {
+            var dialogue = dialogueGO.GetComponent(typeof(GameCreator.Runtime.Dialogue.Dialogue));
+            if (dialogue == null)
+            {
+                Debug.LogError($"No Dialogue component found on {dialogueGO.name}");
+                return;
+            }
+
+            var storyProp = dialogue.GetType().GetProperty("Story", BindingFlags.Public | BindingFlags.Instance);
+            var story = storyProp.GetValue(dialogue);
+            if (story == null)
+            {
+                Debug.LogError("Dialogue.Story is null.");
+                return;
+            }
+
+            var contentProp = story.GetType().GetProperty("Content", BindingFlags.Public | BindingFlags.Instance);
+            var content = contentProp.GetValue(story);
+            if (content == null)
+            {
+                Debug.LogError("Dialogue.Story.Content is null.");
+                return;
+            }
+
+            var rolesField = content.GetType().GetField("m_Roles", BindingFlags.NonPublic | BindingFlags.Instance);
+            var roles = rolesField.GetValue(content) as Array;
+            if (roles == null)
+            {
+                Debug.LogError("Could not find Roles in Dialogue content.");
+                return;
+            }
+
+            bool actorFound = false;
+            foreach (var roleObj in roles)
+            {
+                if (roleObj == null) continue;
+
+                var actorField = roleObj.GetType().GetField("m_Actor", BindingFlags.NonPublic | BindingFlags.Instance);
+                var actor = actorField.GetValue(roleObj);
+                if (actor != null)
+                {
+                    var nameProp = actor.GetType().GetProperty("name", BindingFlags.Public | BindingFlags.Instance);
+                    string thisActorName = nameProp?.GetValue(actor) as string;
+                    if (thisActorName == actorName)
+                    {
+                        actorFound = true;
+                        var overrideSpeechSkinField = actor.GetType().GetField("m_OverrideSpeechSkin", BindingFlags.NonPublic | BindingFlags.Instance);
+                        if (overrideSpeechSkinField == null)
+                        {
+                            Debug.LogError($"Could not find m_OverrideSpeechSkin field on Actor object for '{actorName}'.");
+                            break; 
+                        }
+
+                        var speechSkin = overrideSpeechSkinField.GetValue(actor);
+
+                        if (speechSkin == null)
+                        {
+                            Debug.Log($"Actor '{actorName}' has a null m_OverrideSpeechSkin. Creating a new instance.");
+                            try
+                            {
+                                Type speechSkinType = overrideSpeechSkinField.FieldType;
+                                speechSkin = Activator.CreateInstance(speechSkinType);
+                                overrideSpeechSkinField.SetValue(actor, speechSkin);
+                                Debug.Log($"Successfully created and assigned new {speechSkinType.Name} instance to actor '{actorName}'.");
+                            }
+                            catch (Exception e)
+                            {
+                                Debug.LogError($"Failed to create an instance of the OverrideSpeechSkin for actor '{actorName}'. Exception: {e}");
+                                break;
+                            }
+                        }
+                        
+                        var mValueField = speechSkin.GetType().GetField("m_Value", BindingFlags.NonPublic | BindingFlags.Instance);
+                        if (mValueField != null)
+                        {
+                            mValueField.SetValue(speechSkin, newSkinPrefab);
+                            Debug.Log($"Successfully set override speech skin for actor '{actorName}' in dialogue '{dialogueGO.name}' to '{(newSkinPrefab ? newSkinPrefab.name : "null")}'.");
+                        }
+                        else
+                        {
+                            Debug.LogError($"Could not find m_Value field on SpeechSkin object for actor '{actorName}'.");
+                        }
+
+                        break; 
+                    }
+                }
+            }
+
+            if (!actorFound)
+            {
+                Debug.LogError($"Actor with name '{actorName}' not found in dialogue '{dialogueGO.name}'.");
+            }
         }
     }
 }

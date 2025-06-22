@@ -57,7 +57,7 @@ namespace SMSAndroidsCore
         private static readonly Dictionary<string, object> defaultValues = new Dictionary<string, object>
         {
             // Secret Beach variables
-            { "SecretBeach_FirstVisit", false },
+            { "SecretBeach_FirstVisited", false },
             { "SecretBeach_RelaxedAmount", 0 },
             
             // Voyeur variables for each character
@@ -90,6 +90,7 @@ namespace SMSAndroidsCore
         public void OnSceneLoaded(Scene scene, UnityEngine.SceneManagement.LoadSceneMode mode)
         {
             modSaveThisSession = false;
+            MainStory.actionTodaySB = false;
             StartCoroutine(WaitAndLoadSaveFile());
         }
 
@@ -116,6 +117,7 @@ namespace SMSAndroidsCore
                 if (Core.savedUI.activeSelf && afterSleepEventsProc)
                 {
                     SaveToFile();
+                    MainStory.actionTodaySB = false;
                     afterSleepEventsProc = false;
                 }
 

@@ -501,6 +501,15 @@ namespace SMSAndroidsCore
                                 var titleProp = instType.GetProperty("Title", BindingFlags.Public | BindingFlags.Instance);
                                 string title = titleProp?.GetValue(instruction)?.ToString() ?? instType.Name;
                                 Debug.Log($"{indent}  Instruction {instIdx}: {title} (Type: {instType.Name})");
+                                // Print all private fields (especially m_ fields)
+                                foreach (var field in instType.GetFields(BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Public))
+                                {
+                                    if (field.Name.StartsWith("m_"))
+                                    {
+                                        var fieldValue = field.GetValue(instruction);
+                                        Debug.Log($"{indent}    {field.Name}: {fieldValue}");
+                                    }
+                                }
                             }
                             else
                             {
@@ -621,17 +630,17 @@ namespace SMSAndroidsCore
                                         }
 
                                         // Print details of the instructions within the branch
-                                        Debug.Log($"      Attempting to get m_Instructions field from Branch {branchIdx}.");
-                                        var instructionsField = branch.GetType().GetField("m_Instructions", BindingFlags.NonPublic | BindingFlags.Instance);
-                                        Debug.Log($"      instructionsField found: {instructionsField != null}");
-                                        if (instructionsField != null)
+                                        Debug.Log($"      Attempting to get m_InstructionList field from Branch {branchIdx}.");
+                                        var instructionListField = branch.GetType().GetField("m_InstructionList", BindingFlags.NonPublic | BindingFlags.Instance);
+                                        Debug.Log($"      instructionListField found: {instructionListField != null}");
+                                        if (instructionListField != null)
                                         {
-                                            var instructions = instructionsField.GetValue(branch);
-                                            PrintInstructionListDetails(instructions, "        ");
+                                            var instructionList = instructionListField.GetValue(branch);
+                                            PrintInstructionListDetails(instructionList, "        ");
                                         }
                                         else
                                         {
-                                            Debug.Log($"      Field 'm_Instructions' not found on Branch for Branch {branchIdx}.");
+                                            Debug.Log($"      Field 'm_InstructionList' not found on Branch for Branch {branchIdx}.");
                                         }
                                     }
                                     else
@@ -710,6 +719,309 @@ namespace SMSAndroidsCore
                         }
                     }
                 }
+            }
+        }
+
+        public static void PrintDialogueComponentInfo(GameObject targetGameObject)
+        {
+            if (targetGameObject == null)
+            {
+                Debug.LogError("Target GameObject is null");
+                return;
+            }
+
+            var dialogue = targetGameObject.GetComponent(typeof(GameCreator.Runtime.Dialogue.Dialogue));
+            if (dialogue == null)
+            {
+                Debug.Log($"No Dialogue component found on {targetGameObject.name}");
+                return;
+            }
+
+            Debug.Log($"=== Dialogue Component Info for {targetGameObject.name} ===");
+
+            // Get the Story property
+            var dialogueType = dialogue.GetType();
+            var storyProp = dialogueType.GetProperty("Story", BindingFlags.Public | BindingFlags.Instance);
+            var story = storyProp?.GetValue(dialogue);
+            if (story == null)
+            {
+                Debug.Log("Dialogue.Story is null");
+                return;
+            }
+
+            // Get Content property
+            var storyType = story.GetType();
+            var contentProp = storyType.GetProperty("Content", BindingFlags.Public | BindingFlags.Instance);
+            var content = contentProp?.GetValue(story);
+            if (content == null)
+            {
+                Debug.Log("Story.Content is null");
+                return;
+            }
+
+            var contentType = content.GetType();
+
+            // Print Roles
+            var rolesField = contentType.GetField("m_Roles", BindingFlags.NonPublic | BindingFlags.Instance);
+            var roles = rolesField?.GetValue(content) as Array;
+            Debug.Log("--- Roles ---");
+            if (roles != null)
+            {
+                int idx = 0;
+                foreach (var roleObj in roles)
+                {
+                    if (roleObj == null) continue;
+                    var roleType = roleObj.GetType();
+                    var actorField = roleType.GetField("m_Actor", BindingFlags.NonPublic | BindingFlags.Instance);
+                    var targetField = roleType.GetField("m_Target", BindingFlags.NonPublic | BindingFlags.Instance);
+                    var actor = actorField?.GetValue(roleObj);
+                    var target = targetField?.GetValue(roleObj);
+
+                    string actorName = "(null)";
+                    string actorDesc = "(null)";
+                    string actorAssetName = "(null)";
+                    if (actor != null)
+                    {
+                        // Try to get name and description via Actant
+                        var actantField = actor.GetType().GetField("m_Actant", BindingFlags.NonPublic | BindingFlags.Instance);
+                        var actant = actantField?.GetValue(actor);
+                        if (actant != null)
+                        {
+                            var getNameMethod = actant.GetType().GetMethod("GetName", BindingFlags.Public | BindingFlags.Instance);
+                            var getDescMethod = actant.GetType().GetMethod("GetDescription", BindingFlags.Public | BindingFlags.Instance);
+                            actorName = getNameMethod?.Invoke(actant, new object[] { null }) as string ?? "(no name)";
+                            actorDesc = getDescMethod?.Invoke(actant, new object[] { null }) as string ?? "(no desc)";
+                        }
+                        // Try to get Unity asset name
+                        var nameProp = actor.GetType().GetProperty("name", BindingFlags.Public | BindingFlags.Instance);
+                        actorAssetName = nameProp?.GetValue(actor) as string ?? "(no asset name)";
+                    }
+
+                    string targetDesc = "(null)";
+                    if (target != null)
+                    {
+                        // Try to get the target GameObject (requires Args, so just print type for now)
+                        targetDesc = target.ToString();
+                    }
+
+                    Debug.Log($"Role {idx}: Actor Asset='{actorAssetName}', Name='{actorName}', Desc='{actorDesc}', Target={targetDesc}");
+                    idx++;
+                }
+            }
+            else
+            {
+                Debug.Log("No roles found.");
+            }
+
+            // Print RootIds
+            var rootIdsProp = contentType.GetProperty("RootIds", BindingFlags.Public | BindingFlags.Instance);
+            var rootIds = rootIdsProp?.GetValue(content) as int[];
+            if (rootIds != null)
+            {
+                Debug.Log($"RootIds: [{string.Join(", ", rootIds)}]");
+            }
+
+            // Print all nodes (if accessible)
+            var getNodeMethod = contentType.GetMethod("Get", BindingFlags.Public | BindingFlags.Instance);
+            if (getNodeMethod != null && rootIds != null)
+            {
+                foreach (var nodeId in rootIds)
+                {
+                    var node = getNodeMethod.Invoke(content, new object[] { nodeId });
+                    if (node != null)
+                    {
+                        Debug.Log($"--- Node {nodeId} ---");
+                        var nodeType = node.GetType();
+
+                        // Print node text
+                        var textField = nodeType.GetField("m_Text", BindingFlags.NonPublic | BindingFlags.Instance);
+                        string nodeText = textField?.GetValue(node)?.ToString() ?? "(no text)";
+                        Debug.Log($"  Text: {nodeText}");
+
+                        // Print node type
+                        var nodeTypeField = nodeType.GetField("m_NodeType", BindingFlags.NonPublic | BindingFlags.Instance);
+                        Debug.Log($"  NodeType: {nodeTypeField?.GetValue(node)}");
+
+                        // Print Acting
+                        var actingField = nodeType.GetField("m_Acting", BindingFlags.NonPublic | BindingFlags.Instance);
+                        var acting = actingField?.GetValue(node);
+                        if (acting != null)
+                        {
+                            var actingType = acting.GetType();
+                            var actorField = actingType.GetField("m_Actor", BindingFlags.NonPublic | BindingFlags.Instance);
+                            var exprField = actingType.GetField("m_Expression", BindingFlags.NonPublic | BindingFlags.Instance);
+                            var portraitField = actingType.GetField("m_Portrait", BindingFlags.NonPublic | BindingFlags.Instance);
+
+                            var actor = actorField?.GetValue(acting);
+                            int exprIdx = exprField != null ? (int)exprField.GetValue(acting) : -1;
+                            var portrait = portraitField?.GetValue(acting);
+
+                            string actorName = "(null)";
+                            string actorDesc = "(null)";
+                            string actorAssetName = "(null)";
+                            string exprName = "(unknown)";
+                            if (actor != null)
+                            {
+                                // Try to get name and description via Actant
+                                var actantField = actor.GetType().GetField("m_Actant", BindingFlags.NonPublic | BindingFlags.Instance);
+                                var actant = actantField?.GetValue(actor);
+                                if (actant != null)
+                                {
+                                    var getNameMethod = actant.GetType().GetMethod("GetName", BindingFlags.Public | BindingFlags.Instance);
+                                    var getDescMethod = actant.GetType().GetMethod("GetDescription", BindingFlags.Public | BindingFlags.Instance);
+                                    actorName = getNameMethod?.Invoke(actant, new object[] { null }) as string ?? "(no name)";
+                                    actorDesc = getDescMethod?.Invoke(actant, new object[] { null }) as string ?? "(no desc)";
+                                }
+                                // Try to get Unity asset name
+                                var nameProp = actor.GetType().GetProperty("name", BindingFlags.Public | BindingFlags.Instance);
+                                actorAssetName = nameProp?.GetValue(actor) as string ?? "(no asset name)";
+
+                                // Try to get expression name
+                                var expressionsField = actor.GetType().GetField("m_Expressions", BindingFlags.NonPublic | BindingFlags.Instance);
+                                var expressions = expressionsField?.GetValue(actor);
+                                if (expressions != null)
+                                {
+                                    var fromIndexMethod = expressions.GetType().GetMethod("FromIndex", BindingFlags.Public | BindingFlags.Instance);
+                                    var exprObj = fromIndexMethod?.Invoke(expressions, new object[] { exprIdx });
+                                    if (exprObj != null)
+                                    {
+                                        var exprNameProp = exprObj.GetType().GetProperty("name", BindingFlags.Public | BindingFlags.Instance);
+                                        exprName = exprNameProp?.GetValue(exprObj) as string ?? exprObj.ToString();
+                                    }
+                                }
+                            }
+
+                            Debug.Log($"  Acting: Actor Asset='{actorAssetName}', Name='{actorName}', Desc='{actorDesc}', ExpressionIdx={exprIdx}, ExpressionName={exprName}, Portrait={portrait}");
+                        }
+                    }
+                    else
+                    {
+                        Debug.Log($"Node {nodeId} is null");
+                    }
+                }
+            }
+
+            Debug.Log($"=== End Dialogue Component Info for {targetGameObject.name} ===");
+        }
+
+        public static void PrintDialogueComponentDeep(GameObject targetGameObject, int maxDepth = 4)
+        {
+            if (targetGameObject == null)
+            {
+                Debug.LogError("Target GameObject is null");
+                return;
+            }
+
+            var dialogue = targetGameObject.GetComponent(typeof(GameCreator.Runtime.Dialogue.Dialogue));
+            if (dialogue == null)
+            {
+                Debug.Log($"No Dialogue component found on {targetGameObject.name}");
+                return;
+            }
+
+            Debug.Log($"=== DEEP Dialogue Component Info for {targetGameObject.name} ===");
+            PrintObjectRecursive(dialogue, "Dialogue", 0, maxDepth, new HashSet<object>());
+            Debug.Log($"=== END DEEP Dialogue Component Info for {targetGameObject.name} ===");
+        }
+
+        private static void PrintObjectRecursive(object obj, string label, int depth, int maxDepth, HashSet<object> visited)
+        {
+            if (obj == null)
+            {
+                Debug.Log($"{new string(' ', depth * 2)}{label}: null");
+                return;
+            }
+            if (visited.Contains(obj))
+            {
+                Debug.Log($"{new string(' ', depth * 2)}{label}: (already printed, skipping to avoid recursion)");
+                return;
+            }
+            Type type = obj.GetType();
+            string indent = new string(' ', depth * 2);
+
+            // Special-case GameObject
+            if (obj is UnityEngine.GameObject go)
+            {
+                Debug.Log($"{indent}{label}: GameObject name='{go.name}' tag='{go.tag}' layer={go.layer}");
+                return;
+            }
+
+            // Special-case Component (but not MonoBehaviour/ScriptableObject)
+            if (obj is UnityEngine.Component comp && !(obj is MonoBehaviour))
+            {
+                Debug.Log($"{indent}{label}: {type.Name} (Component) on GameObject='{comp.gameObject.name}'");
+                return;
+            }
+
+            // For MonoBehaviour and ScriptableObject, print fields/properties as normal
+            // For all other UnityEngine.Objects, print name/type and stop
+            if (obj is UnityEngine.Object unityObj && !(obj is MonoBehaviour) && !(obj is ScriptableObject))
+            {
+                Debug.Log($"{indent}{label}: {type.Name} (Unity Object) name='{unityObj.name}'");
+                return;
+            }
+
+            // Print simple types directly
+            if (type.IsPrimitive || obj is string || obj is decimal || obj is Enum)
+            {
+                Debug.Log($"{indent}{label}: {obj} ({type.Name})");
+                return;
+            }
+
+            // Print collections (print up to 5 elements in detail)
+            if (obj is System.Collections.IEnumerable enumerable && !(obj is string))
+            {
+                Debug.Log($"{indent}{label}: {type.Name} (IEnumerable)");
+                int idx = 0;
+                foreach (var item in enumerable)
+                {
+                    if (idx > 4)
+                    {
+                        Debug.Log($"{indent}  ... (truncated)");
+                        break;
+                    }
+                    PrintObjectRecursive(item, $"[{idx}]", depth + 1, maxDepth, visited);
+                    idx++;
+                }
+                return;
+            }
+
+            // Always print fields for these types, even at maxDepth
+            bool alwaysPrintFields = type.FullName == "GameCreator.Runtime.Dialogue.Role"
+                || type.FullName == "GameCreator.Runtime.Dialogue.Actor"
+                || type.FullName == "GameCreator.Runtime.Dialogue.Actant"
+                || type.IsSubclassOf(typeof(ScriptableObject))
+                || type.IsSubclassOf(typeof(MonoBehaviour));
+
+            if (depth >= maxDepth && !alwaysPrintFields)
+            {
+                Debug.Log($"{indent}{label}: (max depth reached)");
+                return;
+            }
+
+            visited.Add(obj);
+
+            Debug.Log($"{indent}{label}: {type.FullName}");
+
+            // Print all fields
+            var fields = type.GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.FlattenHierarchy);
+            foreach (var field in fields)
+            {
+                object value = null;
+                try { value = field.GetValue(obj); }
+                catch { value = "(unreadable)"; }
+                PrintObjectRecursive(value, field.Name, depth + 1, maxDepth, visited);
+            }
+
+            // Print all properties (skip indexers and Unity's 'hideFlags')
+            var props = type.GetProperties(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.FlattenHierarchy)
+                .Where(p => p.GetIndexParameters().Length == 0 && p.Name != "hideFlags");
+            foreach (var prop in props)
+            {
+                object value = null;
+                try { value = prop.GetValue(obj); }
+                catch { value = "(unreadable)"; }
+                PrintObjectRecursive(value, prop.Name, depth + 1, maxDepth, visited);
             }
         }
     }

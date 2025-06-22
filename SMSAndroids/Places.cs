@@ -123,14 +123,15 @@ namespace SMSAndroidsCore
                     buttonBeach.SetActive(true);
                 }
 
-                if (secretBeachRoomtalk.activeSelf && !Core.GetVariableBool("Lock-Game"))
-                {
-                    EnableCurrentRoomTalk(secretBeachRoomtalk);
-                }
                 if (buttonSecretBeach.transform.GetChild(0).gameObject.activeSelf)
                 {
                     ClickMapButton(secretBeachRoomtalk, 900);
                     buttonSecretBeach.transform.GetChild(0).gameObject.SetActive(false);
+                }
+
+                if (Places.secretBeachLevel.activeSelf)
+                {
+                    secretBeachGatekeeper.transform.Rotate(0, 0, 1f * Time.deltaTime);
                 }
             }
         }
@@ -161,13 +162,12 @@ namespace SMSAndroidsCore
             Destroy(level.GetComponent<Trigger>());
 
             // RoomTalk
-            GameObject roomTalk = GameObject.Instantiate(Core.roomTalk.Find("Beach").gameObject, GameObject.Find("8_Room_Talk").transform);
+            GameObject roomTalk = GameObject.Instantiate(Core.roomTalk.Find("Beach").gameObject, Core.roomTalk);
             roomTalk.name = name;
             for (int i = roomTalk.transform.childCount - 1; i > 0; i--)
             {
                 Destroy(roomTalk.transform.GetChild(i).gameObject);
             }
-            Destroy(roomTalk.GetComponent<Trigger>());
             Destroy(roomTalk.GetComponent<Conditions>());
         }
         public GameObject CreateNewLevel(string name, string pathToCG, string baseSprite, string secondarySprite, string maskSprite)
@@ -225,11 +225,9 @@ namespace SMSAndroidsCore
             {
                 currentRoomTalk = roomTalk;
                 roomTalk.SetActive(true);
-                Invoke("DisableCurrentRoomTalk", 1f);
                 Core.FindAndModifyVariableDouble("Upcoming-Level", index);
                 Core.FindAndModifyVariableBool("Start-Transfer", true);
                 
-                // Trigger the level change process
                 var triggerChangeLevel = Core.gameplay?.Find("TransferScene")?.gameObject;
                 if (triggerChangeLevel != null)
                 {
@@ -242,19 +240,17 @@ namespace SMSAndroidsCore
             }
         }
 
-        public void EnableCurrentRoomTalk(GameObject roomTalk)
+        public bool GetBadWeather()
         {
-            Core.FindAndModifyVariableBool("Lock-Game", true);
-            Core.FindAndModifyVariableGameObject("temp-stored-very-short-term", null);
-            Core.FindAndModifyVariableGameObject("stored-talk", roomTalk);
-            Core.FindAndModifyVariableBool("After-Talk-Transition", false);
+            if (Core.GetVariableBool("rainy-day") || Core.GetVariableBool("snowy-day"))
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
 
-        private void DisableCurrentRoomTalk()
-        {
-            Core.FindAndModifyVariableBool("Lock-Game", false);
-            Core.FindAndModifyVariableBool("talk-button", true);
-            currentRoomTalk.SetActive(false);
-        }
     }
 }
