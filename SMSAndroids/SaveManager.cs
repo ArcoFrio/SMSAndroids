@@ -89,8 +89,10 @@ namespace SMSAndroidsCore
         }
         public void OnSceneLoaded(Scene scene, UnityEngine.SceneManagement.LoadSceneMode mode)
         {
+            MainStory.relaxed = false;
             modSaveThisSession = false;
             MainStory.actionTodaySB = false;
+            MainStory.voyeurLotteryNumber = Core.GetRandomNumber(100);
             StartCoroutine(WaitAndLoadSaveFile());
         }
 
@@ -117,7 +119,17 @@ namespace SMSAndroidsCore
                 if (Core.savedUI.activeSelf && afterSleepEventsProc)
                 {
                     SaveToFile();
+                    MainStory.voyeurTargetsLeft.Clear();
+                    foreach (string character in MainStory.voyeurTargets)
+                    {
+                        if (!SaveManager.GetBool($"Voyeur_Seen{character}"))
+                        {
+                            MainStory.voyeurTargetsLeft.Add(character);
+                        }
+                    }
+                    MainStory.relaxed = false;
                     MainStory.actionTodaySB = false;
+                    MainStory.voyeurLotteryNumber = Core.GetRandomNumber(100);
                     afterSleepEventsProc = false;
                 }
 

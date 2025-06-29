@@ -63,6 +63,7 @@ namespace SMSAndroidsCore
         public static string assetPath = "BepInEx\\plugins\\SMSAndroidsCore\\Assets\\";
         public static string audioPath = "BepInEx\\plugins\\SMSAndroidsCore\\Audio\\";
         public static string bustPath = "BepInEx\\plugins\\SMSAndroidsCore\\Busts\\";
+        public static string bustNikkePath = "BepInEx\\plugins\\SMSAndroidsCore\\Busts\\Nikke\\";
         public static string locationPath = "BepInEx\\plugins\\SMSAndroidsCore\\Locations\\";
         public static string savesPath = "BepInEx\\plugins\\SMSAndroidsCore\\Saves\\";
         public static string scenePath = "BepInEx\\plugins\\SMSAndroidsCore\\Scenes\\";
@@ -404,6 +405,14 @@ namespace SMSAndroidsCore
 
             localListVariables.Push(valueToAdd);
             Debug.Log($"Added GameObject '{valueToAdd?.name ?? "null"}' to LocalListVariables on GameObject: {targetGameObject.name}. New count: {localListVariables.Count}");
+        }
+        public static int GetRandomNumber(int max)
+        {
+            return UnityEngine.Random.Range(0, max + 1);
+        }
+        public static float GetRandomFloat(float min, float max)
+        {
+            return UnityEngine.Random.Range(min, max);
         }
     }
 }

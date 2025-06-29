@@ -72,6 +72,161 @@ namespace SMSAndroidsCore
         public static GameObject sBDialogueMainGKMouthActivator;
         public static GameObject sBDialogueMainGKSpriteFocus;
 
+        #region Voyeur Variables
+        public static GameObject anisBeachDialogue;
+        public static GameObject anisBeachDialogueScene1;
+        public static GameObject anisBeachDialogueScene2;
+        public static GameObject anisBeachDialogueScene3;
+        public static GameObject anisBeachDialogueScene4;
+        public static GameObject anisBeachDialogueScene5;
+        public static GameObject anisBeachDialogueActivator;
+        public static GameObject anisBeachDialogueFinisher;
+        public static GameObject anisBeachDialogueMouthActivator;
+        public static GameObject anisBeachDialogueSpriteFocus;
+
+        public static GameObject frimaBeachDialogue;
+        public static GameObject frimaBeachDialogueScene1;
+        public static GameObject frimaBeachDialogueScene2;
+        public static GameObject frimaBeachDialogueScene3;
+        public static GameObject frimaBeachDialogueScene4;
+        public static GameObject frimaBeachDialogueScene5;
+        public static GameObject frimaBeachDialogueActivator;
+        public static GameObject frimaBeachDialogueFinisher;
+        public static GameObject frimaBeachDialogueMouthActivator;
+        public static GameObject frimaBeachDialogueSpriteFocus;
+
+        public static GameObject guiltyBeachDialogue;
+        public static GameObject guiltyBeachDialogueScene1;
+        public static GameObject guiltyBeachDialogueScene2;
+        public static GameObject guiltyBeachDialogueScene3;
+        public static GameObject guiltyBeachDialogueScene4;
+        public static GameObject guiltyBeachDialogueScene5;
+        public static GameObject guiltyBeachDialogueActivator;
+        public static GameObject guiltyBeachDialogueFinisher;
+        public static GameObject guiltyBeachDialogueMouthActivator;
+        public static GameObject guiltyBeachDialogueSpriteFocus;
+
+        public static GameObject helmBeachDialogue;
+        public static GameObject helmBeachDialogueScene1;
+        public static GameObject helmBeachDialogueScene2;
+        public static GameObject helmBeachDialogueScene3;
+        public static GameObject helmBeachDialogueScene4;
+        public static GameObject helmBeachDialogueScene5;
+        public static GameObject helmBeachDialogueActivator;
+        public static GameObject helmBeachDialogueFinisher;
+        public static GameObject helmBeachDialogueMouthActivator;
+        public static GameObject helmBeachDialogueSpriteFocus;
+
+        public static GameObject maidenBeachDialogue;
+        public static GameObject maidenBeachDialogueScene1;
+        public static GameObject maidenBeachDialogueScene2;
+        public static GameObject maidenBeachDialogueScene3;
+        public static GameObject maidenBeachDialogueScene4;
+        public static GameObject maidenBeachDialogueScene5;
+        public static GameObject maidenBeachDialogueActivator;
+        public static GameObject maidenBeachDialogueFinisher;
+        public static GameObject maidenBeachDialogueMouthActivator;
+        public static GameObject maidenBeachDialogueSpriteFocus;
+
+        public static GameObject maryBeachDialogue;
+        public static GameObject maryBeachDialogueScene1;
+        public static GameObject maryBeachDialogueScene2;
+        public static GameObject maryBeachDialogueScene3;
+        public static GameObject maryBeachDialogueScene4;
+        public static GameObject maryBeachDialogueScene5;
+        public static GameObject maryBeachDialogueActivator;
+        public static GameObject maryBeachDialogueFinisher;
+        public static GameObject maryBeachDialogueMouthActivator;
+        public static GameObject maryBeachDialogueSpriteFocus;
+
+        public static GameObject mastBeachDialogue;
+        public static GameObject mastBeachDialogueScene1;
+        public static GameObject mastBeachDialogueScene2;
+        public static GameObject mastBeachDialogueScene3;
+        public static GameObject mastBeachDialogueScene4;
+        public static GameObject mastBeachDialogueScene5;
+        public static GameObject mastBeachDialogueActivator;
+        public static GameObject mastBeachDialogueFinisher;
+        public static GameObject mastBeachDialogueMouthActivator;
+        public static GameObject mastBeachDialogueSpriteFocus;
+
+        public static GameObject neonBeachDialogue;
+        public static GameObject neonBeachDialogueScene1;
+        public static GameObject neonBeachDialogueScene2;
+        public static GameObject neonBeachDialogueScene3;
+        public static GameObject neonBeachDialogueScene4;
+        public static GameObject neonBeachDialogueScene5;
+        public static GameObject neonBeachDialogueActivator;
+        public static GameObject neonBeachDialogueFinisher;
+        public static GameObject neonBeachDialogueMouthActivator;
+        public static GameObject neonBeachDialogueSpriteFocus;
+
+        public static GameObject pepperBeachDialogue;
+        public static GameObject pepperBeachDialogueScene1;
+        public static GameObject pepperBeachDialogueScene2;
+        public static GameObject pepperBeachDialogueScene3;
+        public static GameObject pepperBeachDialogueScene4;
+        public static GameObject pepperBeachDialogueScene5;
+        public static GameObject pepperBeachDialogueActivator;
+        public static GameObject pepperBeachDialogueFinisher;
+        public static GameObject pepperBeachDialogueMouthActivator;
+        public static GameObject pepperBeachDialogueSpriteFocus;
+
+        public static GameObject rapiBeachDialogue;
+        public static GameObject rapiBeachDialogueScene1;
+        public static GameObject rapiBeachDialogueScene2;
+        public static GameObject rapiBeachDialogueScene3;
+        public static GameObject rapiBeachDialogueScene4;
+        public static GameObject rapiBeachDialogueScene5;
+        public static GameObject rapiBeachDialogueActivator;
+        public static GameObject rapiBeachDialogueFinisher;
+        public static GameObject rapiBeachDialogueMouthActivator;
+        public static GameObject rapiBeachDialogueSpriteFocus;
+
+        public static GameObject rosannaBeachDialogue;
+        public static GameObject rosannaBeachDialogueScene1;
+        public static GameObject rosannaBeachDialogueScene2;
+        public static GameObject rosannaBeachDialogueScene3;
+        public static GameObject rosannaBeachDialogueScene4;
+        public static GameObject rosannaBeachDialogueScene5;
+        public static GameObject rosannaBeachDialogueActivator;
+        public static GameObject rosannaBeachDialogueFinisher;
+        public static GameObject rosannaBeachDialogueMouthActivator;
+        public static GameObject rosannaBeachDialogueSpriteFocus;
+
+        public static GameObject sakuraBeachDialogue;
+        public static GameObject sakuraBeachDialogueScene1;
+        public static GameObject sakuraBeachDialogueScene2;
+        public static GameObject sakuraBeachDialogueScene3;
+        public static GameObject sakuraBeachDialogueScene4;
+        public static GameObject sakuraBeachDialogueScene5;
+        public static GameObject sakuraBeachDialogueActivator;
+        public static GameObject sakuraBeachDialogueFinisher;
+        public static GameObject sakuraBeachDialogueMouthActivator;
+        public static GameObject sakuraBeachDialogueSpriteFocus;
+
+        public static GameObject viperBeachDialogue;
+        public static GameObject viperBeachDialogueScene1;
+        public static GameObject viperBeachDialogueScene2;
+        public static GameObject viperBeachDialogueScene3;
+        public static GameObject viperBeachDialogueScene4;
+        public static GameObject viperBeachDialogueScene5;
+        public static GameObject viperBeachDialogueActivator;
+        public static GameObject viperBeachDialogueFinisher;
+        public static GameObject viperBeachDialogueMouthActivator;
+        public static GameObject viperBeachDialogueSpriteFocus;
+
+        public static GameObject yanBeachDialogue;
+        public static GameObject yanBeachDialogueScene1;
+        public static GameObject yanBeachDialogueScene2;
+        public static GameObject yanBeachDialogueScene3;
+        public static GameObject yanBeachDialogueScene4;
+        public static GameObject yanBeachDialogueScene5;
+        public static GameObject yanBeachDialogueActivator;
+        public static GameObject yanBeachDialogueFinisher;
+        public static GameObject yanBeachDialogueMouthActivator;
+        public static GameObject yanBeachDialogueSpriteFocus;
+#endregion
         public static bool loadedDialogues = false;
         public static bool dialoguePlaying = false;
         public void Update()
@@ -119,6 +274,177 @@ namespace SMSAndroidsCore
                     sBDialogueMainGKSpriteFocus = sBDialogueMainGK.transform.Find("SpriteFocus").gameObject;
                     SetActorOverrideSpeechSkinValue(sBDialogueMainGK, "PlayerActor", defaultOverrideSpeechSkinM);
 
+
+                    #region Voyeur Initialization
+                    anisBeachDialogue = CreateNewDialogue("AnisDialogueBeach01", Places.secretBeachRoomtalk.transform);
+                    anisBeachDialogueScene1 = anisBeachDialogue.transform.Find("Scene1").gameObject;
+                    anisBeachDialogueScene2 = anisBeachDialogue.transform.Find("Scene2").gameObject;
+                    anisBeachDialogueScene3 = anisBeachDialogue.transform.Find("Scene3").gameObject;
+                    anisBeachDialogueScene4 = anisBeachDialogue.transform.Find("Scene4").gameObject;
+                    anisBeachDialogueScene5 = anisBeachDialogue.transform.Find("Scene5").gameObject;
+                    anisBeachDialogueActivator = anisBeachDialogue.transform.Find("DialogueActivator").gameObject;
+                    anisBeachDialogueFinisher = anisBeachDialogue.transform.Find("DialogueFinisher").gameObject;
+                    anisBeachDialogueMouthActivator = anisBeachDialogue.transform.Find("MouthActivator").gameObject;
+                    anisBeachDialogueSpriteFocus = anisBeachDialogue.transform.Find("SpriteFocus").gameObject;
+                    SetActorOverrideSpeechSkinValue(anisBeachDialogue, "AnisActor", defaultOverrideSpeechSkinF);
+
+                    frimaBeachDialogue = CreateNewDialogue("FrimaDialogueBeach01", Places.secretBeachRoomtalk.transform);
+                    frimaBeachDialogueScene1 = frimaBeachDialogue.transform.Find("Scene1").gameObject;
+                    frimaBeachDialogueScene2 = frimaBeachDialogue.transform.Find("Scene2").gameObject;
+                    frimaBeachDialogueScene3 = frimaBeachDialogue.transform.Find("Scene3").gameObject;
+                    frimaBeachDialogueScene4 = frimaBeachDialogue.transform.Find("Scene4").gameObject;
+                    frimaBeachDialogueScene5 = frimaBeachDialogue.transform.Find("Scene5").gameObject;
+                    frimaBeachDialogueActivator = frimaBeachDialogue.transform.Find("DialogueActivator").gameObject;
+                    frimaBeachDialogueFinisher = frimaBeachDialogue.transform.Find("DialogueFinisher").gameObject;
+                    frimaBeachDialogueMouthActivator = frimaBeachDialogue.transform.Find("MouthActivator").gameObject;
+                    frimaBeachDialogueSpriteFocus = frimaBeachDialogue.transform.Find("SpriteFocus").gameObject;
+                    SetActorOverrideSpeechSkinValue(frimaBeachDialogue, "FrimaActor", defaultOverrideSpeechSkinF);
+
+                    guiltyBeachDialogue = CreateNewDialogue("GuiltyDialogueBeach01", Places.secretBeachRoomtalk.transform);
+                    guiltyBeachDialogueScene1 = guiltyBeachDialogue.transform.Find("Scene1").gameObject;
+                    guiltyBeachDialogueScene2 = guiltyBeachDialogue.transform.Find("Scene2").gameObject;
+                    guiltyBeachDialogueScene3 = guiltyBeachDialogue.transform.Find("Scene3").gameObject;
+                    guiltyBeachDialogueScene4 = guiltyBeachDialogue.transform.Find("Scene4").gameObject;
+                    guiltyBeachDialogueScene5 = guiltyBeachDialogue.transform.Find("Scene5").gameObject;
+                    guiltyBeachDialogueActivator = guiltyBeachDialogue.transform.Find("DialogueActivator").gameObject;
+                    guiltyBeachDialogueFinisher = guiltyBeachDialogue.transform.Find("DialogueFinisher").gameObject;
+                    guiltyBeachDialogueMouthActivator = guiltyBeachDialogue.transform.Find("MouthActivator").gameObject;
+                    guiltyBeachDialogueSpriteFocus = guiltyBeachDialogue.transform.Find("SpriteFocus").gameObject;
+                    SetActorOverrideSpeechSkinValue(guiltyBeachDialogue, "GuiltyActor", defaultOverrideSpeechSkinF);
+
+                    helmBeachDialogue = CreateNewDialogue("HelmDialogueBeach01", Places.secretBeachRoomtalk.transform);
+                    helmBeachDialogueScene1 = helmBeachDialogue.transform.Find("Scene1").gameObject;
+                    helmBeachDialogueScene2 = helmBeachDialogue.transform.Find("Scene2").gameObject;
+                    helmBeachDialogueScene3 = helmBeachDialogue.transform.Find("Scene3").gameObject;
+                    helmBeachDialogueScene4 = helmBeachDialogue.transform.Find("Scene4").gameObject;
+                    helmBeachDialogueScene5 = helmBeachDialogue.transform.Find("Scene5").gameObject;
+                    helmBeachDialogueActivator = helmBeachDialogue.transform.Find("DialogueActivator").gameObject;
+                    helmBeachDialogueFinisher = helmBeachDialogue.transform.Find("DialogueFinisher").gameObject;
+                    helmBeachDialogueMouthActivator = helmBeachDialogue.transform.Find("MouthActivator").gameObject;
+                    helmBeachDialogueSpriteFocus = helmBeachDialogue.transform.Find("SpriteFocus").gameObject;
+                    SetActorOverrideSpeechSkinValue(helmBeachDialogue, "HelmActor", defaultOverrideSpeechSkinF);
+
+                    maidenBeachDialogue = CreateNewDialogue("MaidenDialogueBeach01", Places.secretBeachRoomtalk.transform);
+                    maidenBeachDialogueScene1 = maidenBeachDialogue.transform.Find("Scene1").gameObject;
+                    maidenBeachDialogueScene2 = maidenBeachDialogue.transform.Find("Scene2").gameObject;
+                    maidenBeachDialogueScene3 = maidenBeachDialogue.transform.Find("Scene3").gameObject;
+                    maidenBeachDialogueScene4 = maidenBeachDialogue.transform.Find("Scene4").gameObject;
+                    maidenBeachDialogueScene5 = maidenBeachDialogue.transform.Find("Scene5").gameObject;
+                    maidenBeachDialogueActivator = maidenBeachDialogue.transform.Find("DialogueActivator").gameObject;
+                    maidenBeachDialogueFinisher = maidenBeachDialogue.transform.Find("DialogueFinisher").gameObject;
+                    maidenBeachDialogueMouthActivator = maidenBeachDialogue.transform.Find("MouthActivator").gameObject;
+                    maidenBeachDialogueSpriteFocus = maidenBeachDialogue.transform.Find("SpriteFocus").gameObject;
+                    SetActorOverrideSpeechSkinValue(maidenBeachDialogue, "MaidenActor", defaultOverrideSpeechSkinF);
+
+                    maryBeachDialogue = CreateNewDialogue("MaryDialogueBeach01", Places.secretBeachRoomtalk.transform);
+                    maryBeachDialogueScene1 = maryBeachDialogue.transform.Find("Scene1").gameObject;
+                    maryBeachDialogueScene2 = maryBeachDialogue.transform.Find("Scene2").gameObject;
+                    maryBeachDialogueScene3 = maryBeachDialogue.transform.Find("Scene3").gameObject;
+                    maryBeachDialogueScene4 = maryBeachDialogue.transform.Find("Scene4").gameObject;
+                    maryBeachDialogueScene5 = maryBeachDialogue.transform.Find("Scene5").gameObject;
+                    maryBeachDialogueActivator = maryBeachDialogue.transform.Find("DialogueActivator").gameObject;
+                    maryBeachDialogueFinisher = maryBeachDialogue.transform.Find("DialogueFinisher").gameObject;
+                    maryBeachDialogueMouthActivator = maryBeachDialogue.transform.Find("MouthActivator").gameObject;
+                    maryBeachDialogueSpriteFocus = maryBeachDialogue.transform.Find("SpriteFocus").gameObject;
+                    SetActorOverrideSpeechSkinValue(maryBeachDialogue, "MaryActor", defaultOverrideSpeechSkinF);
+
+                    mastBeachDialogue = CreateNewDialogue("MastDialogueBeach01", Places.secretBeachRoomtalk.transform);
+                    mastBeachDialogueScene1 = mastBeachDialogue.transform.Find("Scene1").gameObject;
+                    mastBeachDialogueScene2 = mastBeachDialogue.transform.Find("Scene2").gameObject;
+                    mastBeachDialogueScene3 = mastBeachDialogue.transform.Find("Scene3").gameObject;
+                    mastBeachDialogueScene4 = mastBeachDialogue.transform.Find("Scene4").gameObject;
+                    mastBeachDialogueScene5 = mastBeachDialogue.transform.Find("Scene5").gameObject;
+                    mastBeachDialogueActivator = mastBeachDialogue.transform.Find("DialogueActivator").gameObject;
+                    mastBeachDialogueFinisher = mastBeachDialogue.transform.Find("DialogueFinisher").gameObject;
+                    mastBeachDialogueMouthActivator = mastBeachDialogue.transform.Find("MouthActivator").gameObject;
+                    mastBeachDialogueSpriteFocus = mastBeachDialogue.transform.Find("SpriteFocus").gameObject;
+                    SetActorOverrideSpeechSkinValue(mastBeachDialogue, "MastActor", defaultOverrideSpeechSkinF);
+
+                    neonBeachDialogue = CreateNewDialogue("NeonDialogueBeach01", Places.secretBeachRoomtalk.transform);
+                    neonBeachDialogueScene1 = neonBeachDialogue.transform.Find("Scene1").gameObject;
+                    neonBeachDialogueScene2 = neonBeachDialogue.transform.Find("Scene2").gameObject;
+                    neonBeachDialogueScene3 = neonBeachDialogue.transform.Find("Scene3").gameObject;
+                    neonBeachDialogueScene4 = neonBeachDialogue.transform.Find("Scene4").gameObject;
+                    neonBeachDialogueScene5 = neonBeachDialogue.transform.Find("Scene5").gameObject;
+                    neonBeachDialogueActivator = neonBeachDialogue.transform.Find("DialogueActivator").gameObject;
+                    neonBeachDialogueFinisher = neonBeachDialogue.transform.Find("DialogueFinisher").gameObject;
+                    neonBeachDialogueMouthActivator = neonBeachDialogue.transform.Find("MouthActivator").gameObject;
+                    neonBeachDialogueSpriteFocus = neonBeachDialogue.transform.Find("SpriteFocus").gameObject;
+                    SetActorOverrideSpeechSkinValue(neonBeachDialogue, "NeonActor", defaultOverrideSpeechSkinF);
+
+                    pepperBeachDialogue = CreateNewDialogue("PepperDialogueBeach01", Places.secretBeachRoomtalk.transform);
+                    pepperBeachDialogueScene1 = pepperBeachDialogue.transform.Find("Scene1").gameObject;
+                    pepperBeachDialogueScene2 = pepperBeachDialogue.transform.Find("Scene2").gameObject;
+                    pepperBeachDialogueScene3 = pepperBeachDialogue.transform.Find("Scene3").gameObject;
+                    pepperBeachDialogueScene4 = pepperBeachDialogue.transform.Find("Scene4").gameObject;
+                    pepperBeachDialogueScene5 = pepperBeachDialogue.transform.Find("Scene5").gameObject;
+                    pepperBeachDialogueActivator = pepperBeachDialogue.transform.Find("DialogueActivator").gameObject;
+                    pepperBeachDialogueFinisher = pepperBeachDialogue.transform.Find("DialogueFinisher").gameObject;
+                    pepperBeachDialogueMouthActivator = pepperBeachDialogue.transform.Find("MouthActivator").gameObject;
+                    pepperBeachDialogueSpriteFocus = pepperBeachDialogue.transform.Find("SpriteFocus").gameObject;
+                    SetActorOverrideSpeechSkinValue(pepperBeachDialogue, "PepperActor", defaultOverrideSpeechSkinF);
+
+                    rapiBeachDialogue = CreateNewDialogue("RapiDialogueBeach01", Places.secretBeachRoomtalk.transform);
+                    rapiBeachDialogueScene1 = rapiBeachDialogue.transform.Find("Scene1").gameObject;
+                    rapiBeachDialogueScene2 = rapiBeachDialogue.transform.Find("Scene2").gameObject;
+                    rapiBeachDialogueScene3 = rapiBeachDialogue.transform.Find("Scene3").gameObject;
+                    rapiBeachDialogueScene4 = rapiBeachDialogue.transform.Find("Scene4").gameObject;
+                    rapiBeachDialogueScene5 = rapiBeachDialogue.transform.Find("Scene5").gameObject;
+                    rapiBeachDialogueActivator = rapiBeachDialogue.transform.Find("DialogueActivator").gameObject;
+                    rapiBeachDialogueFinisher = rapiBeachDialogue.transform.Find("DialogueFinisher").gameObject;
+                    rapiBeachDialogueMouthActivator = rapiBeachDialogue.transform.Find("MouthActivator").gameObject;
+                    rapiBeachDialogueSpriteFocus = rapiBeachDialogue.transform.Find("SpriteFocus").gameObject;
+                    SetActorOverrideSpeechSkinValue(rapiBeachDialogue, "RapiActor", defaultOverrideSpeechSkinF);
+
+                    rosannaBeachDialogue = CreateNewDialogue("RosannaDialogueBeach01", Places.secretBeachRoomtalk.transform);
+                    rosannaBeachDialogueScene1 = rosannaBeachDialogue.transform.Find("Scene1").gameObject;
+                    rosannaBeachDialogueScene2 = rosannaBeachDialogue.transform.Find("Scene2").gameObject;
+                    rosannaBeachDialogueScene3 = rosannaBeachDialogue.transform.Find("Scene3").gameObject;
+                    rosannaBeachDialogueScene4 = rosannaBeachDialogue.transform.Find("Scene4").gameObject;
+                    rosannaBeachDialogueScene5 = rosannaBeachDialogue.transform.Find("Scene5").gameObject;
+                    rosannaBeachDialogueActivator = rosannaBeachDialogue.transform.Find("DialogueActivator").gameObject;
+                    rosannaBeachDialogueFinisher = rosannaBeachDialogue.transform.Find("DialogueFinisher").gameObject;
+                    rosannaBeachDialogueMouthActivator = rosannaBeachDialogue.transform.Find("MouthActivator").gameObject;
+                    rosannaBeachDialogueSpriteFocus = rosannaBeachDialogue.transform.Find("SpriteFocus").gameObject;
+                    SetActorOverrideSpeechSkinValue(rosannaBeachDialogue, "RosannaActor", defaultOverrideSpeechSkinF);
+
+                    sakuraBeachDialogue = CreateNewDialogue("SakuraDialogueBeach01", Places.secretBeachRoomtalk.transform);
+                    sakuraBeachDialogueScene1 = sakuraBeachDialogue.transform.Find("Scene1").gameObject;
+                    sakuraBeachDialogueScene2 = sakuraBeachDialogue.transform.Find("Scene2").gameObject;
+                    sakuraBeachDialogueScene3 = sakuraBeachDialogue.transform.Find("Scene3").gameObject;
+                    sakuraBeachDialogueScene4 = sakuraBeachDialogue.transform.Find("Scene4").gameObject;
+                    sakuraBeachDialogueScene5 = sakuraBeachDialogue.transform.Find("Scene5").gameObject;
+                    sakuraBeachDialogueActivator = sakuraBeachDialogue.transform.Find("DialogueActivator").gameObject;
+                    sakuraBeachDialogueFinisher = sakuraBeachDialogue.transform.Find("DialogueFinisher").gameObject;
+                    sakuraBeachDialogueMouthActivator = sakuraBeachDialogue.transform.Find("MouthActivator").gameObject;
+                    sakuraBeachDialogueSpriteFocus = sakuraBeachDialogue.transform.Find("SpriteFocus").gameObject;
+                    SetActorOverrideSpeechSkinValue(sakuraBeachDialogue, "SakuraActor", defaultOverrideSpeechSkinF);
+
+                    viperBeachDialogue = CreateNewDialogue("ViperDialogueBeach01", Places.secretBeachRoomtalk.transform);
+                    viperBeachDialogueScene1 = viperBeachDialogue.transform.Find("Scene1").gameObject;
+                    viperBeachDialogueScene2 = viperBeachDialogue.transform.Find("Scene2").gameObject;
+                    viperBeachDialogueScene3 = viperBeachDialogue.transform.Find("Scene3").gameObject;
+                    viperBeachDialogueScene4 = viperBeachDialogue.transform.Find("Scene4").gameObject;
+                    viperBeachDialogueScene5 = viperBeachDialogue.transform.Find("Scene5").gameObject;
+                    viperBeachDialogueActivator = viperBeachDialogue.transform.Find("DialogueActivator").gameObject;
+                    viperBeachDialogueFinisher = viperBeachDialogue.transform.Find("DialogueFinisher").gameObject;
+                    viperBeachDialogueMouthActivator = viperBeachDialogue.transform.Find("MouthActivator").gameObject;
+                    viperBeachDialogueSpriteFocus = viperBeachDialogue.transform.Find("SpriteFocus").gameObject;
+                    SetActorOverrideSpeechSkinValue(viperBeachDialogue, "ViperActor", defaultOverrideSpeechSkinF);
+
+                    yanBeachDialogue = CreateNewDialogue("YanDialogueBeach01", Places.secretBeachRoomtalk.transform);
+                    yanBeachDialogueScene1 = yanBeachDialogue.transform.Find("Scene1").gameObject;
+                    yanBeachDialogueScene2 = yanBeachDialogue.transform.Find("Scene2").gameObject;
+                    yanBeachDialogueScene3 = yanBeachDialogue.transform.Find("Scene3").gameObject;
+                    yanBeachDialogueScene4 = yanBeachDialogue.transform.Find("Scene4").gameObject;
+                    yanBeachDialogueScene5 = yanBeachDialogue.transform.Find("Scene5").gameObject;
+                    yanBeachDialogueActivator = yanBeachDialogue.transform.Find("DialogueActivator").gameObject;
+                    yanBeachDialogueFinisher = yanBeachDialogue.transform.Find("DialogueFinisher").gameObject;
+                    yanBeachDialogueMouthActivator = yanBeachDialogue.transform.Find("MouthActivator").gameObject;
+                    yanBeachDialogueSpriteFocus = yanBeachDialogue.transform.Find("SpriteFocus").gameObject;
+                    SetActorOverrideSpeechSkinValue(yanBeachDialogue, "YanActor", defaultOverrideSpeechSkinF);
+                    #endregion
+
                     Logger.LogInfo("----- DIALOGUES LOADED -----");
                     loadedDialogues = true;
                 }
@@ -137,6 +463,7 @@ namespace SMSAndroidsCore
         {
             GameObject dialogue = Core.dialogueBundle.LoadAsset<GameObject>(bundleAsset);
             GameObject dialogueInstance = GameObject.Instantiate(dialogue, roomTalk);
+            dialogueInstance.name = bundleAsset;
             dialogueInstance.GetComponent<Dialogue>().Story.Content.DialogueSkin = Core.coreEvents.Find("SmallTalks").Find("FailedGroceries").Find("GameObject").GetComponent<Dialogue>().Story.Content.DialogueSkin;
             return dialogueInstance;
         }
@@ -236,13 +563,19 @@ namespace SMSAndroidsCore
 
                         if (speechSkin == null)
                         {
-                            Debug.Log($"Actor '{actorName}' has a null m_OverrideSpeechSkin. Creating a new instance.");
                             try
                             {
                                 Type speechSkinType = overrideSpeechSkinField.FieldType;
-                                speechSkin = Activator.CreateInstance(speechSkinType);
+                                if (typeof(ScriptableObject).IsAssignableFrom(speechSkinType))
+                                {
+                                    speechSkin = ScriptableObject.CreateInstance(speechSkinType);
+                                }
+                                else
+                                {
+                                    speechSkin = Activator.CreateInstance(speechSkinType);
+                                    Debug.Log($"Created regular instance of {speechSkinType.Name} for actor '{actorName}'.");
+                                }
                                 overrideSpeechSkinField.SetValue(actor, speechSkin);
-                                Debug.Log($"Successfully created and assigned new {speechSkinType.Name} instance to actor '{actorName}'.");
                             }
                             catch (Exception e)
                             {

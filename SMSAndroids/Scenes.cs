@@ -217,5 +217,30 @@ namespace SMSAndroidsCore
             newPicScene.SetActive(false);
             return newPicScene;
         }
+
+        public static void DialogueScenePlayer(Transform cGManager, string baseSceneName, GameObject baseDialogue)
+        {
+            if (!cGManager.Find(baseSceneName + "Scene01").gameObject.activeSelf && baseDialogue.transform.Find("Scene1").gameObject.activeSelf)
+            {
+                cGManager.Find(baseSceneName + "Scene01").gameObject.SetActive(true);
+            }
+            if (!cGManager.Find(baseSceneName + "Scene02").gameObject.activeSelf && baseDialogue.transform.Find("Scene2").gameObject.activeSelf)
+            {
+                cGManager.Find(baseSceneName + "Scene02").gameObject.SetActive(true);
+            }
+            if (!cGManager.Find(baseSceneName + "Scene03").gameObject.activeSelf && baseDialogue.transform.Find("Scene3").gameObject.activeSelf)
+            {
+                cGManager.Find(baseSceneName + "Scene03").gameObject.SetActive(true);
+            }
+            if (!cGManager.Find(baseSceneName + "Scene04").gameObject.activeSelf && baseDialogue.transform.Find("Scene4").gameObject.activeSelf)
+            {
+                if (baseDialogue.transform.Find("Scene1").gameObject.activeSelf)
+                {
+                    baseDialogue.transform.Find("Scene1").gameObject.SetActive(false);
+                    cGManager.Find(baseSceneName + "Scene01").gameObject.SetActive(false);
+                }
+                cGManager.Find(baseSceneName + "Scene04").gameObject.SetActive(true);
+            }
+        }
     }
 }
