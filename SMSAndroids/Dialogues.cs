@@ -72,6 +72,17 @@ namespace SMSAndroidsCore
         public static GameObject sBDialogueMainGKMouthActivator;
         public static GameObject sBDialogueMainGKSpriteFocus;
 
+        public static GameObject sBDialogueStory01;
+        public static GameObject sBDialogueStory01Scene1;
+        public static GameObject sBDialogueStory01Scene2;
+        public static GameObject sBDialogueStory01Scene3;
+        public static GameObject sBDialogueStory01Scene4;
+        public static GameObject sBDialogueStory01Scene5;
+        public static GameObject sBDialogueStory01DialogueActivator;
+        public static GameObject sBDialogueStory01DialogueFinisher;
+        public static GameObject sBDialogueStory01MouthActivator;
+        public static GameObject sBDialogueStory01SpriteFocus;
+
         #region Voyeur Variables
         public static GameObject anisBeachDialogue;
         public static GameObject anisBeachDialogueScene1;
@@ -260,7 +271,6 @@ namespace SMSAndroidsCore
                     sBDialogueMainDialogueFinisher = sBDialogueMain.transform.Find("DialogueFinisher").gameObject;
                     sBDialogueMainMouthActivator = sBDialogueMain.transform.Find("MouthActivator").gameObject;
                     sBDialogueMainSpriteFocus = sBDialogueMain.transform.Find("SpriteFocus").gameObject;
-                    SetActorOverrideSpeechSkinValue(sBDialogueMain, "PlayerActor", defaultOverrideSpeechSkinM);
 
                     sBDialogueMainGK = CreateNewDialogue("SBDialogueMainGatekeeper", Places.secretBeachRoomtalk.transform);
                     sBDialogueMainGKScene1 = sBDialogueMainGK.transform.Find("Scene1").gameObject;
@@ -272,8 +282,18 @@ namespace SMSAndroidsCore
                     sBDialogueMainGKDialogueFinisher = sBDialogueMainGK.transform.Find("DialogueFinisher").gameObject;
                     sBDialogueMainGKMouthActivator = sBDialogueMainGK.transform.Find("MouthActivator").gameObject;
                     sBDialogueMainGKSpriteFocus = sBDialogueMainGK.transform.Find("SpriteFocus").gameObject;
-                    SetActorOverrideSpeechSkinValue(sBDialogueMainGK, "PlayerActor", defaultOverrideSpeechSkinM);
 
+                    sBDialogueStory01 = CreateNewDialogue("SBDialogueStory01", Places.secretBeachRoomtalk.transform);
+                    sBDialogueStory01Scene1 = sBDialogueStory01.transform.Find("Scene1").gameObject;
+                    sBDialogueStory01Scene2 = sBDialogueStory01.transform.Find("Scene2").gameObject;
+                    sBDialogueStory01Scene3 = sBDialogueStory01.transform.Find("Scene3").gameObject;
+                    sBDialogueStory01Scene4 = sBDialogueStory01.transform.Find("Scene4").gameObject;
+                    sBDialogueStory01Scene5 = sBDialogueStory01.transform.Find("Scene5").gameObject;
+                    sBDialogueStory01DialogueActivator = sBDialogueStory01.transform.Find("DialogueActivator").gameObject;
+                    sBDialogueStory01DialogueFinisher = sBDialogueStory01.transform.Find("DialogueFinisher").gameObject;
+                    sBDialogueStory01MouthActivator = sBDialogueStory01.transform.Find("MouthActivator").gameObject;
+                    sBDialogueStory01SpriteFocus = sBDialogueStory01.transform.Find("SpriteFocus").gameObject;
+                    SetActorOverrideSpeechSkinValue(sBDialogueStory01, "AmberActor", defaultOverrideSpeechSkinF);
 
                     #region Voyeur Initialization
                     anisBeachDialogue = CreateNewDialogue("AnisDialogueBeach01", Places.secretBeachRoomtalk.transform);
@@ -461,10 +481,60 @@ namespace SMSAndroidsCore
 
         public GameObject CreateNewDialogue(string bundleAsset, Transform roomTalk)
         {
+            // Check if dialogue bundle is loaded
+            if (Core.dialogueBundle == null)
+            {
+                Debug.LogError($"Core.dialogueBundle is null! Cannot create dialogue '{bundleAsset}'");
+                return null;
+            }
+
+            // Try to load the asset from the bundle
             GameObject dialogue = Core.dialogueBundle.LoadAsset<GameObject>(bundleAsset);
+            
+            // Check if the asset was found
+            if (dialogue == null)
+            {
+                Debug.LogError($"Failed to load asset '{bundleAsset}' from dialogue bundle. Bundle may be missing this asset.");
+                
+                // List all available assets in the bundle for debugging
+                Debug.Log($"Available assets in dialogue bundle:");
+                foreach (var assetName in Core.dialogueBundle.GetAllAssetNames())
+                {
+                    Debug.Log($"- {assetName}");
+                }
+                return null;
+            }
+
+            // Check if roomTalk transform is valid
+            if (roomTalk == null)
+            {
+                Debug.LogError($"roomTalk transform is null! Cannot instantiate dialogue '{bundleAsset}'");
+                return null;
+            }
+
+            // Instantiate the dialogue
             GameObject dialogueInstance = GameObject.Instantiate(dialogue, roomTalk);
             dialogueInstance.name = bundleAsset;
-            dialogueInstance.GetComponent<Dialogue>().Story.Content.DialogueSkin = Core.coreEvents.Find("SmallTalks").Find("FailedGroceries").Find("GameObject").GetComponent<Dialogue>().Story.Content.DialogueSkin;
+            
+            // Set the dialogue skin
+            try
+            {
+                var referenceDialogue = Core.coreEvents.Find("SmallTalks")?.Find("FailedGroceries")?.Find("GameObject")?.GetComponent<Dialogue>();
+                if (referenceDialogue != null)
+                {
+                    dialogueInstance.GetComponent<Dialogue>().Story.Content.DialogueSkin = referenceDialogue.Story.Content.DialogueSkin;
+                }
+                else
+                {
+                    Debug.LogWarning($"Could not find reference dialogue for skin. Dialogue '{bundleAsset}' may not have proper skin.");
+                }
+            }
+            catch (Exception e)
+            {
+                Debug.LogError($"Error setting dialogue skin for '{bundleAsset}': {e.Message}");
+            }
+            
+            Debug.Log($"Successfully created dialogue: {bundleAsset}");
             return dialogueInstance;
         }
         public static GameObject GetActorOverrideSpeechSkinValue(GameObject dialogueGO, string actorName)
@@ -588,7 +658,7 @@ namespace SMSAndroidsCore
                         if (mValueField != null)
                         {
                             mValueField.SetValue(speechSkin, newSkinPrefab);
-                            Debug.Log($"Successfully set override speech skin for actor '{actorName}' in dialogue '{dialogueGO.name}' to '{(newSkinPrefab ? newSkinPrefab.name : "null")}'.");
+                            Debug.Log($"Set override speech skin for actor '{actorName}' to '{(newSkinPrefab ? newSkinPrefab.name : "null")}'.");
                         }
                         else
                         {

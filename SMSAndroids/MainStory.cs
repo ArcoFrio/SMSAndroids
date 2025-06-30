@@ -76,6 +76,10 @@ namespace SMSAndroidsCore
 
                 if (loadedStory)
                 {
+                    if (SaveManager.GetBool("SecretBeach_GKSeen") != true && SaveManager.GetInt("SecretBeach_RelaxedAmount") > 2)
+                    {
+                        SaveManager.SetBool("SecretBeach_GKSeen", true);
+                    }
 //------------------------------------------------------------------------------------------------ SECRET BEACH
                     if (!actionTodaySB)
                     {
@@ -92,7 +96,8 @@ namespace SMSAndroidsCore
                             actionTodaySB = true;
                         }
 //------------------------------------------------------------------------------------------------ SB Main
-                        if (!Dialogues.dialoguePlaying && Places.secretBeachRoomtalk.activeSelf && SaveManager.GetBool("SecretBeach_FirstVisited") && SaveManager.GetInt("SecretBeach_RelaxedAmount") != 2)
+                        if (!Dialogues.dialoguePlaying && Places.secretBeachRoomtalk.activeSelf && SaveManager.GetBool("SecretBeach_FirstVisited") && SaveManager.GetInt("SecretBeach_RelaxedAmount") != 2 && 
+                            !(SaveManager.GetBool("SecretBeach_UnlockedLab") != true && SaveManager.GetInt("SecretBeach_RelaxedAmount") > 2))
                         {
                             StartDialogueSequence(Dialogues.sBDialogueMain);
                         }
@@ -145,6 +150,7 @@ namespace SMSAndroidsCore
                         if (Dialogues.sBDialogueMainGKScene2.activeSelf)
                         {
                             Places.secretBeachLevel.GetComponent<MoveRelative2Mouse>().enabled = false;
+                            Places.secretBeachLevelBG.GetComponent<MoveRelative2Mouse>().enabled = false;
                             if (Places.secretBeachLevel.transform.position.y > -17)
                             {
                                 Places.secretBeachLevel.transform.position = Vector2.SmoothDamp(Places.secretBeachLevel.transform.position, new Vector2(0, -17), ref refVelocity, 1.5f);
@@ -174,9 +180,36 @@ namespace SMSAndroidsCore
                             Places.secretBeachLevel.transform.position = new Vector2(Places.secretBeachLevel.transform.position.x, 0);
                             Dialogues.sBDialogueMainGKDialogueFinisher.SetActive(false);
                             Places.secretBeachLevel.GetComponent<MoveRelative2Mouse>().enabled = true;
+                            Places.secretBeachLevelBG.GetComponent<MoveRelative2Mouse>().enabled = true;
                             actionTodaySB = true;
                         }
-//------------------------------------------------------------------------------------------------ SB Event Voyeur
+//------------------------------------------------------------------------------------------------ SB Story 1
+                        if (!Dialogues.dialoguePlaying && Places.secretBeachRoomtalk.activeSelf && SaveManager.GetBool("SecretBeach_UnlockedLab") != true && SaveManager.GetInt("SecretBeach_RelaxedAmount") > 2)
+                        {
+                            SaveManager.SetBool("SecretBeach_UnlockedLab", true);
+                            StartDialogueSequence(Dialogues.sBDialogueStory01);
+                        }
+                        if (Dialogues.sBDialogueStory01Scene1.activeSelf)
+                        {
+                            Dialogues.sBDialogueStory01Scene1.SetActive(false);
+                            Characters.amberSwim.SetActive(true);
+                            currentActiveBust = Characters.amberSwim;
+                            currentActiveBustMBase = currentActiveBust.transform.Find("MBase1").gameObject;
+                        }
+                        if (Dialogues.sBDialogueStory01Scene2.activeSelf)
+                        {
+                            Dialogues.sBDialogueStory01Scene2.SetActive(false);
+                            Scenes.amberStareScene1.SetActive(true);
+                        }
+                        if (Dialogues.sBDialogueStory01DialogueFinisher.activeSelf)
+                        {
+                            Invoke(nameof(EndDialogueSequence), 1.0f);
+                            Dialogues.sBDialogueStory01DialogueFinisher.SetActive(false);
+                            Characters.amberSwim.transform.Find("MBase1").Find("Leave").gameObject.SetActive(true);
+                            Scenes.amberStareScene1.SetActive(false);
+                            actionTodaySB = true;
+                        }
+                        //------------------------------------------------------------------------------------------------ SB Event Voyeur
                         if (Dialogues.anisBeachDialogueScene2.activeSelf && !Dialogues.anisBeachDialogueScene3.activeSelf && !Characters.anisSwimWet.activeSelf ) { ChangeActiveBust(Characters.anisSwim, Characters.anisSwimWet); }
                         if (Dialogues.anisBeachDialogueScene3.activeSelf && !Characters.anisSwimSlip.activeSelf) { ChangeActiveBust(Characters.anisSwimWet, Characters.anisSwimSlip); }
                         if (Dialogues.anisBeachDialogueFinisher.activeSelf) { Characters.anisSwimSlip.transform.Find("MBase1").Find("Leave").gameObject.SetActive(true); }
@@ -226,7 +259,7 @@ namespace SMSAndroidsCore
                         if (Dialogues.yanBeachDialogueScene4.activeSelf && !Characters.yanSwimSlip.activeSelf) { ChangeActiveBust(Characters.yanSwim, Characters.yanSwimSlip); }
                         if (Dialogues.yanBeachDialogueFinisher.activeSelf) { Characters.yanSwimSlip.transform.Find("MBase1").Find("Leave").gameObject.SetActive(true); }
 
-                        if (currentActiveBust != null) { Scenes.DialogueScenePlayer(Core.cGManagerSexy, currentVoyeurTarget + "Beach", currentActiveDialogue); }
+                        if (currentActiveBust != null && voyeurDialoguePlaying) { Scenes.DialogueScenePlayer(Core.cGManagerSexy, currentVoyeurTarget + "Beach", currentActiveDialogue); }
                         if (currentActiveBust != null && currentActiveDialogueSpriteFocus.activeSelf && currentActiveBustMBase.GetComponent<SpriteRenderer>().sortingOrder != 17) { ChangeBustSortingOrder(currentActiveBustMBase, 17); }
                         if (currentActiveBust != null && !currentActiveDialogueSpriteFocus.activeSelf && currentActiveBustMBase.GetComponent<SpriteRenderer>().sortingOrder != 0) { ChangeBustSortingOrder(currentActiveBustMBase, 0); }
 
@@ -272,6 +305,7 @@ namespace SMSAndroidsCore
         }
         private void PlayDialogueStep()
         {
+            Debug.Log("Playing " + dialogueToActivate.name);
             this.dialogueToActivate.transform.Find("DialogueActivator").gameObject.SetActive(true);
         }
         public void EndDialogueSequence()

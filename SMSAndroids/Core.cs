@@ -151,7 +151,7 @@ namespace SMSAndroidsCore
 
                     Logger.LogInfo("----- CORE LOADED -----");
                     loadedCore = true;
-                    //Debugging.PrintDialogueComponentDeep(roomTalk.Find("Bath").Find("AnnaInShower").gameObject, 10);
+                    //Debugging.PrintConditionsAndTriggers(Core.gameplay?.Find("TransferScene")?.gameObject);
                 }
             }
             if (currentScene.name == "GameStart")

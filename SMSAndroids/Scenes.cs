@@ -37,6 +37,9 @@ namespace SMSAndroidsCore
         public const string pluginGuid = "treboy.starmakerstory.smsandroidscore.scenes";
         #endregion
 
+        public static GameObject amberStareScene1;
+
+        #region Voyeur Scene Variables
         public static GameObject anisBeachScene1;
         public static GameObject anisBeachScene2;
         public static GameObject anisBeachScene3;
@@ -106,6 +109,7 @@ namespace SMSAndroidsCore
         public static GameObject yanBeachScene2;
         public static GameObject yanBeachScene3;
         public static GameObject yanBeachScene4;
+        #endregion
 
         public static bool loadedScenes = false;
         public void Update()
@@ -114,6 +118,8 @@ namespace SMSAndroidsCore
             {
                 if (!loadedScenes)
                 {
+                    amberStareScene1 = CreateNewPicScene("AmberStareScene01", Core.scenePath + "Amber\\AmberStareScene01.PNG");
+
                     anisBeachScene1 = CreateNewPicScene("AnisBeachScene01", Core.scenePath + "Anis\\AnisBeachScene01.PNG");
                     anisBeachScene2 = CreateNewPicScene("AnisBeachScene02", Core.scenePath + "Anis\\AnisBeachScene02.PNG");
                     anisBeachScene3 = CreateNewPicScene("AnisBeachScene03", Core.scenePath + "Anis\\AnisBeachScene03.PNG");

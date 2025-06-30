@@ -37,16 +37,26 @@ namespace SMSAndroidsCore
         public const string pluginGuid = "treboy.starmakerstory.smsandroidscore.places";
         #endregion
         
-        public static GameObject buttonSecretBeach;
         public static GameObject buttonBeach;
+        public static GameObject buttonSecretBeach;
+        public static GameObject buttonMountainLab;
+        public static GameObject buttonMountainLabRooms1;
 
         public static GameObject secretBeachLevel;
+        public static GameObject secretBeachLevelBG;
         public static GameObject secretBeachRoomtalk;
         public static GameObject secretBeachGatekeeper;
         public static GameObject secretBeachGatekeeperB;
         public static GameObject secretBeachFlash;
         public static GameObject secretBeachSky;
+
+        public static GameObject mountainLabLevel;
+        public static GameObject mountainLabRoomtalk;
+        public static GameObject mountainLabRooms1Level;
+        public static GameObject mountainLabRooms1Roomtalk;
+
         public Vector2 originLevelPos = Vector2.zero;
+        public int vanillaLevelCount;
 
         public static bool loadedPlaces = false;
         private GameObject currentRoomTalk;
@@ -56,12 +66,24 @@ namespace SMSAndroidsCore
             {
                 if (!loadedPlaces && Core.loadedCore)
                 {
-                    CreateNewPlace(900, "SecretBeach", "Remote Area");
-                    buttonSecretBeach = Core.mainCanvas.Find("Navigator").Find("MapButtons").Find("900_SecretBeach").gameObject;
+                    vanillaLevelCount = Core.level.childCount;
+
+                    CreateNewPlace(900, "SecretBeach", "Remote Area", 0.4f, 0.3f);
+                    CreateNewPlace(901, "MountainLab", "Underground Lab", 0.4f, 0.3f);
+                    CreateNewPlace(902, "MountainLabRooms1", "Sector A", 0.4f, 0.3f);
+
                     buttonBeach = Core.mainCanvas.Find("Navigator").Find("MapButtons").Find("14_beach").gameObject;
+                    buttonSecretBeach = Core.mainCanvas.Find("Navigator").Find("MapButtons").Find("900_SecretBeach").gameObject;
+                    buttonMountainLab = Core.mainCanvas.Find("Navigator").Find("MapButtons").Find("901_MountainLab").gameObject;
+                    buttonMountainLabRooms1 = Core.mainCanvas.Find("Navigator").Find("MapButtons").Find("902_MountainLabRooms1").gameObject;
 
                     secretBeachLevel = Core.level.Find("900_SecretBeach").gameObject;
+                    secretBeachLevelBG = secretBeachLevel.transform.GetChild(1).gameObject;
                     secretBeachRoomtalk = Core.roomTalk.Find("SecretBeach").gameObject;
+                    mountainLabLevel = Core.level.Find("901_MountainLab").gameObject;
+                    mountainLabRoomtalk = Core.roomTalk.Find("MountainLab").gameObject;
+                    mountainLabRooms1Level = Core.level.Find("902_MountainLabRooms1").gameObject;
+                    mountainLabRooms1Roomtalk = Core.roomTalk.Find("MountainLabRooms1").gameObject;
 
                     secretBeachSky = GameObject.Instantiate(Places.secretBeachLevel.transform.GetChild(1).gameObject, Places.secretBeachLevel.transform);
                     secretBeachFlash = GameObject.Instantiate(Places.secretBeachLevel.transform.GetChild(1).gameObject, Places.secretBeachLevel.transform);
@@ -78,7 +100,6 @@ namespace SMSAndroidsCore
                     secretBeachSky.transform.position = new Vector2(secretBeachSky.transform.position.x, 15);
                     secretBeachFlash.transform.position = new Vector2(secretBeachFlash.transform.position.x, 15);
                     secretBeachGatekeeper.transform.position = new Vector2(secretBeachSky.transform.position.x, 18);
-                    Places.secretBeachLevel.transform.GetChild(1).GetComponent<MoveRelative2Mouse>().enabled = false;
                     secretBeachSky.GetComponent<MoveRelative2Mouse>().enabled = false;
                     secretBeachFlash.GetComponent<MoveRelative2Mouse>().enabled = false;
                     secretBeachFlash.GetComponent<SpriteRenderer>().sortingOrder = -9;
@@ -110,14 +131,31 @@ namespace SMSAndroidsCore
 
             if (Core.loadedBases)
             {
-                if (Core.levelBeach.activeSelf && !buttonSecretBeach.activeSelf)
+                if (!buttonSecretBeach.activeSelf && (Core.levelBeach.activeSelf || mountainLabLevel.activeSelf))
                 {
                     buttonSecretBeach.SetActive(true);
                 }
-                if (!Core.levelBeach.activeSelf && buttonSecretBeach.activeSelf)
+                if (buttonSecretBeach.activeSelf && (!Core.levelBeach.activeSelf && !mountainLabLevel.activeSelf))
                 {
                     buttonSecretBeach.SetActive(false);
                 }
+                if (!buttonMountainLab.activeSelf && (secretBeachLevel.activeSelf || mountainLabRooms1Level.activeSelf) && SaveManager.GetBool("SecretBeach_UnlockedLab"))
+                {
+                    buttonMountainLab.SetActive(true);
+                }
+                if (buttonMountainLab.activeSelf && (!secretBeachLevel.activeSelf && !mountainLabRooms1Level.activeSelf))
+                {
+                    buttonMountainLab.SetActive(false);
+                }
+                if (!buttonMountainLabRooms1.activeSelf && mountainLabLevel.activeSelf)
+                {
+                    buttonMountainLabRooms1.SetActive(true);
+                }
+                if (buttonMountainLabRooms1.activeSelf && !mountainLabLevel.activeSelf)
+                {
+                    buttonMountainLabRooms1.SetActive(false);
+                }
+
                 if (secretBeachLevel.activeSelf && !buttonBeach.activeSelf)
                 {
                     buttonBeach.SetActive(true);
@@ -125,8 +163,18 @@ namespace SMSAndroidsCore
 
                 if (buttonSecretBeach.transform.GetChild(0).gameObject.activeSelf)
                 {
-                    ClickMapButton(secretBeachRoomtalk, 900);
+                    ClickMapButton(secretBeachRoomtalk, 0);
                     buttonSecretBeach.transform.GetChild(0).gameObject.SetActive(false);
+                }
+                if (buttonMountainLab.transform.GetChild(0).gameObject.activeSelf)
+                {
+                    ClickMapButton(mountainLabRoomtalk, 1);
+                    buttonMountainLab.transform.GetChild(0).gameObject.SetActive(false);
+                }
+                if (buttonMountainLabRooms1.transform.GetChild(0).gameObject.activeSelf)
+                {
+                    ClickMapButton(mountainLabRooms1Roomtalk, 2);
+                    buttonMountainLabRooms1.transform.GetChild(0).gameObject.SetActive(false);
                 }
 
                 if (Places.secretBeachLevel.activeSelf)
@@ -136,7 +184,7 @@ namespace SMSAndroidsCore
             }
         }
 
-        public void CreateNewPlace(int index, string name, string buttonText)
+        public void CreateNewPlace(int index, string name, string buttonText, float moveRelativeForeground, float moveRelativeBackground)
         {
             // Variables
             GameObject baseMapButton = GameObject.Find("9_MainCanvas").transform.Find("Navigator").Find("MapButtons").Find("14_beach").gameObject;
@@ -158,7 +206,7 @@ namespace SMSAndroidsCore
             mapButtonKBNumber.GetComponent<TextMeshProUGUI>().text = "2";
 
             // Level
-            GameObject level = CreateNewLevel(index + "_" + name, Core.locationPath, name + ".PNG", name + "B.PNG", name + "Mask.PNG");
+            GameObject level = CreateNewLevel(index + "_" + name, Core.locationPath, name + ".PNG", name + "B.PNG", name + "Mask.PNG", moveRelativeForeground, moveRelativeBackground);
             Destroy(level.GetComponent<Trigger>());
 
             // RoomTalk
@@ -170,12 +218,14 @@ namespace SMSAndroidsCore
             }
             Destroy(roomTalk.GetComponent<Conditions>());
         }
-        public GameObject CreateNewLevel(string name, string pathToCG, string baseSprite, string secondarySprite, string maskSprite)
+        public GameObject CreateNewLevel(string name, string pathToCG, string baseSprite, string secondarySprite, string maskSprite, float moveRelativeForeground, float moveRelativeBackground)
         {
             GameObject newLevel = GameObject.Instantiate(GameObject.Find("5_Levels").transform.Find("14_Beach").gameObject, GameObject.Find("5_Levels").transform);
             newLevel.name = name;
+            newLevel.GetComponent<MoveRelative2Mouse>().moveModifier = moveRelativeForeground;
             GameObject secondaryTex = newLevel.transform.GetChild(1).gameObject;
             secondaryTex.name = name;
+            secondaryTex.GetComponent<MoveRelative2Mouse>().moveModifier = moveRelativeBackground;
             GameObject NPCs = newLevel.transform.GetChild(2).gameObject;
             foreach (Transform npc in NPCs.transform)
             {
@@ -225,7 +275,7 @@ namespace SMSAndroidsCore
             {
                 currentRoomTalk = roomTalk;
                 roomTalk.SetActive(true);
-                Core.FindAndModifyVariableDouble("Upcoming-Level", index);
+                Core.FindAndModifyVariableDouble("Upcoming-Level", vanillaLevelCount + index);
                 Core.FindAndModifyVariableBool("Start-Transfer", true);
                 
                 var triggerChangeLevel = Core.gameplay?.Find("TransferScene")?.gameObject;
@@ -234,6 +284,7 @@ namespace SMSAndroidsCore
                     var triggerComponent = triggerChangeLevel.GetComponent<Trigger>();
                     if (triggerComponent != null)
                     {
+                        Debug.Log("[Places] Executing TransferScene trigger");
                         triggerComponent.Execute();
                     }
                 }

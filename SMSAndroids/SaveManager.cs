@@ -58,7 +58,9 @@ namespace SMSAndroidsCore
         {
             // Secret Beach variables
             { "SecretBeach_FirstVisited", false },
+            { "SecretBeach_GKSeen", false },
             { "SecretBeach_RelaxedAmount", 0 },
+            { "SecretBeach_UnlockedLab", false },
             
             // Voyeur variables for each character
             { "Voyeur_SeenAnis", false },
@@ -77,7 +79,7 @@ namespace SMSAndroidsCore
             { "Voyeur_SeenYan", false },
             
             // General mod variables
-            { "Mod_Version", "0.4.0" }
+            { "Mod_Version", Core.pluginVersion }
         };
 
         public void Awake()
