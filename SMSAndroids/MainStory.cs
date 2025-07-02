@@ -80,8 +80,12 @@ namespace SMSAndroidsCore
                     {
                         SaveManager.SetBool("SecretBeach_GKSeen", true);
                     }
+                    if (Places.GetBadWeather())
+                    {
+
+                    }
 //------------------------------------------------------------------------------------------------ SECRET BEACH
-                    if (!actionTodaySB)
+                    if (!actionTodaySB && !Places.GetBadWeather())
                     {
 //------------------------------------------------------------------------------------------------ SB First
                         if (!Dialogues.dialoguePlaying && Places.secretBeachRoomtalk.activeSelf && !SaveManager.GetBool("SecretBeach_FirstVisited"))
@@ -209,7 +213,7 @@ namespace SMSAndroidsCore
                             Scenes.amberStareScene1.SetActive(false);
                             actionTodaySB = true;
                         }
-                        //------------------------------------------------------------------------------------------------ SB Event Voyeur
+//------------------------------------------------------------------------------------------------ SB Event Voyeur
                         if (Dialogues.anisBeachDialogueScene2.activeSelf && !Dialogues.anisBeachDialogueScene3.activeSelf && !Characters.anisSwimWet.activeSelf ) { ChangeActiveBust(Characters.anisSwim, Characters.anisSwimWet); }
                         if (Dialogues.anisBeachDialogueScene3.activeSelf && !Characters.anisSwimSlip.activeSelf) { ChangeActiveBust(Characters.anisSwimWet, Characters.anisSwimSlip); }
                         if (Dialogues.anisBeachDialogueFinisher.activeSelf) { Characters.anisSwimSlip.transform.Find("MBase1").Find("Leave").gameObject.SetActive(true); }
@@ -260,8 +264,8 @@ namespace SMSAndroidsCore
                         if (Dialogues.yanBeachDialogueFinisher.activeSelf) { Characters.yanSwimSlip.transform.Find("MBase1").Find("Leave").gameObject.SetActive(true); }
 
                         if (currentActiveBust != null && voyeurDialoguePlaying) { Scenes.DialogueScenePlayer(Core.cGManagerSexy, currentVoyeurTarget + "Beach", currentActiveDialogue); }
-                        if (currentActiveBust != null && currentActiveDialogueSpriteFocus.activeSelf && currentActiveBustMBase.GetComponent<SpriteRenderer>().sortingOrder != 17) { ChangeBustSortingOrder(currentActiveBustMBase, 17); }
-                        if (currentActiveBust != null && !currentActiveDialogueSpriteFocus.activeSelf && currentActiveBustMBase.GetComponent<SpriteRenderer>().sortingOrder != 0) { ChangeBustSortingOrder(currentActiveBustMBase, 0); }
+                        if (currentActiveBust != null && currentActiveDialogueSpriteFocus.activeSelf && currentActiveBustMBase.GetComponent<SpriteRenderer>().sortingOrder != 17) { SpriteFocusChange(true); }
+                        if (currentActiveBust != null && !currentActiveDialogueSpriteFocus.activeSelf && currentActiveBustMBase.GetComponent<SpriteRenderer>().sortingOrder != 0) { SpriteFocusChange(false); }
 
                         if (voyeurDialoguePlaying)
                         {
@@ -306,11 +310,13 @@ namespace SMSAndroidsCore
         private void PlayDialogueStep()
         {
             Debug.Log("Playing " + dialogueToActivate.name);
+            this.dialogueToActivate.GetComponent<Dialogue>().EventStartNext += OnDialogueLineStart;
             this.dialogueToActivate.transform.Find("DialogueActivator").gameObject.SetActive(true);
         }
         public void EndDialogueSequence()
         {
             Signals.Emit(fadeUISignal);
+            this.dialogueToActivate.GetComponent<Dialogue>().EventStartNext -= OnDialogueLineStart;
             Invoke(nameof(FinishStep), 0.5f);
         }
         private void FinishStep()
@@ -340,7 +346,7 @@ namespace SMSAndroidsCore
             currentActiveBust = newBust;
             currentActiveBustMBase = newBust.transform.Find("MBase1").gameObject;
         }
-        public void ChangeBustSortingOrder(GameObject mBase, int order)
+        public static void ChangeBustSortingOrder(GameObject mBase, int order)
         {
             // Check if mBase is null
             if (mBase == null)
@@ -368,6 +374,248 @@ namespace SMSAndroidsCore
                 {
                     wetSpriteRenderer.sortingOrder = order + 1;
                 }
+            }
+        }
+        public static void SpriteFocusChange(bool activate)
+        {
+            if (activate)
+            {
+                ChangeBustSortingOrder(currentActiveBustMBase, 17);
+                ChangeBustSortingOrder(currentActiveBustMBase.transform.Find("Expressions").Find("Angry").gameObject, 22);
+                ChangeBustSortingOrder(currentActiveBustMBase.transform.Find("Expressions").Find("Happy").gameObject, 22);
+                ChangeBustSortingOrder(currentActiveBustMBase.transform.Find("Expressions").Find("Flirty").gameObject, 22);
+                ChangeBustSortingOrder(currentActiveBustMBase.transform.Find("Expressions").Find("Sad").gameObject, 22);
+                ChangeBustSortingOrder(currentActiveBustMBase.transform.Find("Mouth").Find("1").gameObject, 23);
+                ChangeBustSortingOrder(currentActiveBustMBase.transform.Find("Mouth").Find("2").gameObject, 23);
+                ChangeBustSortingOrder(currentActiveBustMBase.transform.Find("Mouth").Find("3").gameObject, 23);
+                ChangeBustSortingOrder(currentActiveBustMBase.transform.Find("Mouth").Find("4").gameObject, 23);
+            }
+            else
+            {
+                ChangeBustSortingOrder(currentActiveBustMBase, 0);
+                ChangeBustSortingOrder(currentActiveBustMBase.transform.Find("Expressions").Find("Angry").gameObject, 5);
+                ChangeBustSortingOrder(currentActiveBustMBase.transform.Find("Expressions").Find("Happy").gameObject, 5);
+                ChangeBustSortingOrder(currentActiveBustMBase.transform.Find("Expressions").Find("Flirty").gameObject, 5);
+                ChangeBustSortingOrder(currentActiveBustMBase.transform.Find("Expressions").Find("Sad").gameObject, 5);
+                ChangeBustSortingOrder(currentActiveBustMBase.transform.Find("Mouth").Find("1").gameObject, 6);
+                ChangeBustSortingOrder(currentActiveBustMBase.transform.Find("Mouth").Find("2").gameObject, 6);
+                ChangeBustSortingOrder(currentActiveBustMBase.transform.Find("Mouth").Find("3").gameObject, 6);
+                ChangeBustSortingOrder(currentActiveBustMBase.transform.Find("Mouth").Find("4").gameObject, 6);
+            }
+        }
+        public static void OnDialogueLineStart(int nodeID)
+        {
+            string actor = GetCurrentSpeakingActor();
+            string expression = GetCurrentActorExpression();
+
+            if (!string.IsNullOrEmpty(actor) && !string.IsNullOrEmpty(expression))
+            {
+                Debug.Log($"[OnDialogueLineStart] Actor: {actor}, Expression: {expression}");
+            }
+
+            // Set the current active bust based on the speaking actor
+            if (!string.IsNullOrEmpty(actor) && actor != "PlayerActor")
+            {
+                GameObject bustForActor = GetBustForActor(actor);
+                if (bustForActor != null)
+                {
+                    currentActiveBust = bustForActor;
+                    currentActiveBustMBase = bustForActor.transform.Find("MBase1").gameObject;
+                    Debug.Log($"[OnDialogueLineStart] Set currentActiveBust to: {bustForActor.name}");
+
+                    currentActiveBustMBase.transform.Find("Mouth").gameObject.SetActive(true);
+                    if (string.IsNullOrEmpty(expression) || expression == "my-expression" || expression == "neutral")
+                    {
+                        // Disable all expression child GameObjects
+                        Transform expressionsTransform = currentActiveBustMBase.transform.Find("Expressions");
+                        if (expressionsTransform != null)
+                        {
+                            foreach (Transform child in expressionsTransform)
+                            {
+                                child.gameObject.SetActive(false);
+                            }
+                        }
+                    }
+                    else
+                    {
+                        currentActiveBustMBase.transform.Find("Expressions").Find(expression).gameObject.SetActive(true);
+                    }
+                }
+            }
+        }
+
+        public static string GetCurrentSpeakingActor()
+        {
+            try
+            {
+                if (currentActiveDialogue == null)
+                    return null;
+
+                var dialogue = currentActiveDialogue.GetComponent<Dialogue>();
+                if (dialogue == null)
+                    return null;
+
+                // Get the story
+                var storyProp = dialogue.GetType().GetProperty("Story", BindingFlags.Public | BindingFlags.Instance);
+                var story = storyProp?.GetValue(dialogue);
+                if (story == null)
+                    return null;
+
+                // Get the current ID from the story
+                var currentIdField = story.GetType().GetField("m_CurrentId", BindingFlags.NonPublic | BindingFlags.Instance);
+                var currentId = currentIdField?.GetValue(story);
+                if (currentId == null)
+                    return null;
+
+                int nodeId = (int)currentId;
+
+                // Get the content
+                var contentProp = story.GetType().GetProperty("Content", BindingFlags.Public | BindingFlags.Instance);
+                var content = contentProp?.GetValue(story);
+                if (content == null)
+                    return null;
+
+                // Get the specific node by ID
+                var getMethod = content.GetType().GetMethod("Get", BindingFlags.Public | BindingFlags.Instance);
+                var node = getMethod?.Invoke(content, new object[] { nodeId });
+                if (node == null)
+                    return null;
+
+                // Get the actor from the node
+                var actorProp = node.GetType().GetProperty("Actor", BindingFlags.Public | BindingFlags.Instance);
+                var actor = actorProp?.GetValue(node);
+                if (actor == null)
+                    return null;
+
+                var nameProp = actor.GetType().GetProperty("name", BindingFlags.Public | BindingFlags.Instance);
+                return nameProp?.GetValue(actor) as string;
+            }
+            catch (Exception e)
+            {
+                Debug.LogWarning($"[GetCurrentSpeakingActor] Error getting current speaking actor: {e.Message}");
+                return null;
+            }
+        }
+
+        public static string GetCurrentActorExpression()
+        {
+            try
+            {
+                if (currentActiveDialogue == null)
+                    return null;
+
+                var dialogue = currentActiveDialogue.GetComponent<Dialogue>();
+                if (dialogue == null)
+                    return null;
+
+                // Get the story
+                var storyProp = dialogue.GetType().GetProperty("Story", BindingFlags.Public | BindingFlags.Instance);
+                var story = storyProp?.GetValue(dialogue);
+                if (story == null)
+                    return null;
+
+                // Get the current ID from the story
+                var currentIdField = story.GetType().GetField("m_CurrentId", BindingFlags.NonPublic | BindingFlags.Instance);
+                var currentId = currentIdField?.GetValue(story);
+                if (currentId == null)
+                    return null;
+
+                int nodeId = (int)currentId;
+
+                // Get the content
+                var contentProp = story.GetType().GetProperty("Content", BindingFlags.Public | BindingFlags.Instance);
+                var content = contentProp?.GetValue(story);
+                if (content == null)
+                    return null;
+
+                // Get the specific node by ID
+                var getMethod = content.GetType().GetMethod("Get", BindingFlags.Public | BindingFlags.Instance);
+                var node = getMethod?.Invoke(content, new object[] { nodeId });
+                if (node == null)
+                    return null;
+
+                // Get the actor from the node
+                var actorProp = node.GetType().GetProperty("Actor", BindingFlags.Public | BindingFlags.Instance);
+                var actor = actorProp?.GetValue(node);
+                if (actor == null)
+                    return null;
+
+                // Get the expression index from the node
+                var expressionProp = node.GetType().GetProperty("Expression", BindingFlags.Public | BindingFlags.Instance);
+                var expressionIndex = expressionProp?.GetValue(node);
+                if (expressionIndex == null)
+                    return null;
+
+                int index = (int)expressionIndex;
+
+                // Get the expressions from the actor
+                var expressionsField = actor.GetType().GetField("m_Expressions", BindingFlags.NonPublic | BindingFlags.Instance);
+                var expressions = expressionsField?.GetValue(actor);
+                if (expressions == null)
+                    return null;
+
+                // Get the expression by index
+                var fromIndexMethod = expressions.GetType().GetMethod("FromIndex", BindingFlags.Public | BindingFlags.Instance);
+                var expression = fromIndexMethod?.Invoke(expressions, new object[] { index });
+                if (expression == null)
+                    return null;
+
+                // Get the ID from the expression
+                var idProp = expression.GetType().GetProperty("Id", BindingFlags.Public | BindingFlags.Instance);
+                var id = idProp?.GetValue(expression);
+                return id?.ToString();
+            }
+            catch (Exception e)
+            {
+                Debug.LogWarning($"[GetCurrentActorExpression] Error getting current actor expression: {e.Message}");
+                return null;
+            }
+        }
+
+        public static GameObject GetBustForActor(string actorName)
+        {
+            try
+            {
+                if (string.IsNullOrEmpty(actorName) || Core.bustManager == null)
+                    return null;
+
+                // Extract character name (remove "Actor" suffix)
+                string characterName = actorName.Replace("Actor", "");
+                
+                // Find all busts that start with the character name
+                List<GameObject> matchingBusts = new List<GameObject>();
+                
+                foreach (Transform child in Core.bustManager)
+                {
+                    if (child.name.StartsWith(characterName, StringComparison.OrdinalIgnoreCase))
+                    {
+                        matchingBusts.Add(child.gameObject);
+                    }
+                }
+
+                if (matchingBusts.Count == 0)
+                {
+                    Debug.LogWarning($"[GetBustForActor] No busts found for character: {characterName}");
+                    return null;
+                }
+
+                // Find the active bust among matching busts
+                GameObject activeBust = matchingBusts.FirstOrDefault(bust => bust.activeSelf);
+                
+                if (activeBust != null)
+                {
+                    Debug.Log($"[GetBustForActor] Found active bust for {characterName}: {activeBust.name}");
+                    return activeBust;
+                }
+
+                // If no active bust found, return the first matching bust (could be useful for fallback)
+                Debug.LogWarning($"[GetBustForActor] No active bust found for {characterName}, but found {matchingBusts.Count} matching busts: {string.Join(", ", matchingBusts.Select(b => b.name))}");
+                return matchingBusts.FirstOrDefault();
+            }
+            catch (Exception e)
+            {
+                Debug.LogWarning($"[GetBustForActor] Error finding bust for actor {actorName}: {e.Message}");
+                return null;
             }
         }
     }

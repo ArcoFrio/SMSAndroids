@@ -151,7 +151,6 @@ namespace SMSAndroidsCore
 
                     Logger.LogInfo("----- CORE LOADED -----");
                     loadedCore = true;
-                    //Debugging.PrintConditionsAndTriggers(Core.gameplay?.Find("TransferScene")?.gameObject);
                 }
             }
             if (currentScene.name == "GameStart")
@@ -387,6 +386,52 @@ namespace SMSAndroidsCore
 
             Debug.LogError($"Variable '{variableNameToFind}' not found in any global variable set");
             return false;
+        }
+        public static double GetVariableNumber(string variableNameToFind)
+        {
+            var manager = GlobalNameVariablesManager.Instance;
+            if (manager == null)
+            {
+                Debug.LogError("GlobalNameVariablesManager not initialized");
+                return 0.0;
+            }
+
+            // Access private Values dictionary
+            PropertyInfo valuesProp = typeof(GlobalNameVariablesManager).GetProperty(
+                "Values",
+                BindingFlags.NonPublic | BindingFlags.Instance
+            );
+
+            var values = valuesProp.GetValue(manager) as Dictionary<IdString, NameVariableRuntime>;
+            if (values == null) return 0.0;
+
+            foreach (var pair in values)
+            {
+                // Access the runtime's Variables dictionary
+                PropertyInfo varsProp = typeof(NameVariableRuntime).GetProperty(
+                    "Variables",
+                    BindingFlags.NonPublic | BindingFlags.Instance
+                );
+
+                var variables = varsProp.GetValue(pair.Value) as Dictionary<string, NameVariable>;
+                if (variables == null) continue;
+
+                if (variables.TryGetValue(variableNameToFind, out var nameVar))
+                {
+                    try
+                    {
+                        return Convert.ToDouble(nameVar.Value);
+                    }
+                    catch (Exception)
+                    {
+                        Debug.LogWarning($"Variable '{variableNameToFind}' found but could not be converted to a number. Value: {nameVar.Value}");
+                        return 0.0;
+                    }
+                }
+            }
+
+            Debug.LogError($"Variable '{variableNameToFind}' not found in any global variable set");
+            return 0.0;
         }
         public static void AddGameObjectToLocalListVariables(GameObject targetGameObject, GameObject valueToAdd)
         {

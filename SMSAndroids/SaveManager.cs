@@ -132,6 +132,7 @@ namespace SMSAndroidsCore
                     MainStory.relaxed = false;
                     MainStory.actionTodaySB = false;
                     MainStory.voyeurLotteryNumber = Core.GetRandomNumber(100);
+                    Schedule.day = Core.GetVariableNumber("Day");
                     afterSleepEventsProc = false;
                 }
 

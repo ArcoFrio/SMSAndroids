@@ -291,7 +291,7 @@ namespace SMSAndroidsCore
             }
         }
 
-        public bool GetBadWeather()
+        public static bool GetBadWeather()
         {
             if (Core.GetVariableBool("rainy-day") || Core.GetVariableBool("snowy-day"))
             {

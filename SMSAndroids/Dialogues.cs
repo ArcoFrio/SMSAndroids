@@ -36,8 +36,14 @@ namespace SMSAndroidsCore
         #region Plugin Info
         public const string pluginGuid = "treboy.starmakerstory.smsandroidscore.dialogues";
         #endregion
-        public static GameObject defaultOverrideSpeechSkinM;
-        public static GameObject defaultOverrideSpeechSkinF;
+        public static GameObject overrideSpeechSkinBlue;
+        public static GameObject overrideSpeechSkinGreen;
+        public static GameObject overrideSpeechSkinPink;
+        public static GameObject overrideSpeechSkinYellow;
+
+        public static GameObject badWeatherDialogue;
+        public static GameObject badWeatherDialogueActivator;
+        public static GameObject badWeatherDialogueFinisher;
 
         public static GameObject sBDialogueMainFirst;
         public static GameObject sBDialogueMainFirstScene1;
@@ -244,10 +250,18 @@ namespace SMSAndroidsCore
         {
             if (Core.currentScene.name == "CoreGameScene")
             {
-                if (!loadedDialogues && Places.loadedPlaces)
+                if (!loadedDialogues && Places.loadedPlaces) 
                 {
-                    defaultOverrideSpeechSkinM = GetActorOverrideSpeechSkinValue(Core.roomTalk.Find("Bath").Find("NoOneInShower").gameObject, "You");
-                    defaultOverrideSpeechSkinF = GetActorOverrideSpeechSkinValue(Core.roomTalk.Find("Bath").Find("AnnaInShower").gameObject, "Anna");
+                    overrideSpeechSkinBlue = GetActorOverrideSpeechSkinValue(Core.roomTalk.Find("Bath").Find("AnnaAndAdrianFirsttime").gameObject, "Adrian");
+                    overrideSpeechSkinGreen = GetActorOverrideSpeechSkinValue(Core.roomTalk.Find("Bath").Find("NoOneInShower").gameObject, "You");
+                    overrideSpeechSkinPink = GetActorOverrideSpeechSkinValue(Core.roomTalk.Find("Beach").Find("AmeliaBeach").gameObject, "Amelia");
+                    overrideSpeechSkinYellow = GetActorOverrideSpeechSkinValue(Core.roomTalk.Find("Bath").Find("AnnaInShower").gameObject, "Anna");
+
+                    Debugging.PrintAllActorExpressionsFromDialogue(Core.roomTalk.Find("Bath").Find("AnnaInShower").gameObject, "Anna");
+
+                    badWeatherDialogue = CreateNewDialogue("BadWeather", Places.secretBeachRoomtalk.transform);
+                    badWeatherDialogueActivator = badWeatherDialogue.transform.Find("DialogueActivator").gameObject;
+                    badWeatherDialogueFinisher = badWeatherDialogue.transform.Find("DialogueFinisher").gameObject;
 
                     sBDialogueMainFirst = CreateNewDialogue("SBDialogueMainFirst", Places.secretBeachRoomtalk.transform);
                     sBDialogueMainFirstScene1 = sBDialogueMainFirst.transform.Find("Scene1").gameObject;
@@ -259,7 +273,6 @@ namespace SMSAndroidsCore
                     sBDialogueMainFirstDialogueFinisher = sBDialogueMainFirst.transform.Find("DialogueFinisher").gameObject;
                     sBDialogueMainFirstMouthActivator = sBDialogueMainFirst.transform.Find("MouthActivator").gameObject;
                     sBDialogueMainFirstSpriteFocus = sBDialogueMainFirst.transform.Find("SpriteFocus").gameObject;
-                    SetActorOverrideSpeechSkinValue(sBDialogueMainFirst, "PlayerActor", defaultOverrideSpeechSkinM);
 
                     sBDialogueMain = CreateNewDialogue("SBDialogueMain", Places.secretBeachRoomtalk.transform);
                     sBDialogueMainScene1 = sBDialogueMain.transform.Find("Scene1").gameObject;
@@ -293,7 +306,6 @@ namespace SMSAndroidsCore
                     sBDialogueStory01DialogueFinisher = sBDialogueStory01.transform.Find("DialogueFinisher").gameObject;
                     sBDialogueStory01MouthActivator = sBDialogueStory01.transform.Find("MouthActivator").gameObject;
                     sBDialogueStory01SpriteFocus = sBDialogueStory01.transform.Find("SpriteFocus").gameObject;
-                    SetActorOverrideSpeechSkinValue(sBDialogueStory01, "AmberActor", defaultOverrideSpeechSkinF);
 
                     #region Voyeur Initialization
                     anisBeachDialogue = CreateNewDialogue("AnisDialogueBeach01", Places.secretBeachRoomtalk.transform);
@@ -306,7 +318,6 @@ namespace SMSAndroidsCore
                     anisBeachDialogueFinisher = anisBeachDialogue.transform.Find("DialogueFinisher").gameObject;
                     anisBeachDialogueMouthActivator = anisBeachDialogue.transform.Find("MouthActivator").gameObject;
                     anisBeachDialogueSpriteFocus = anisBeachDialogue.transform.Find("SpriteFocus").gameObject;
-                    SetActorOverrideSpeechSkinValue(anisBeachDialogue, "AnisActor", defaultOverrideSpeechSkinF);
 
                     frimaBeachDialogue = CreateNewDialogue("FrimaDialogueBeach01", Places.secretBeachRoomtalk.transform);
                     frimaBeachDialogueScene1 = frimaBeachDialogue.transform.Find("Scene1").gameObject;
@@ -318,7 +329,6 @@ namespace SMSAndroidsCore
                     frimaBeachDialogueFinisher = frimaBeachDialogue.transform.Find("DialogueFinisher").gameObject;
                     frimaBeachDialogueMouthActivator = frimaBeachDialogue.transform.Find("MouthActivator").gameObject;
                     frimaBeachDialogueSpriteFocus = frimaBeachDialogue.transform.Find("SpriteFocus").gameObject;
-                    SetActorOverrideSpeechSkinValue(frimaBeachDialogue, "FrimaActor", defaultOverrideSpeechSkinF);
 
                     guiltyBeachDialogue = CreateNewDialogue("GuiltyDialogueBeach01", Places.secretBeachRoomtalk.transform);
                     guiltyBeachDialogueScene1 = guiltyBeachDialogue.transform.Find("Scene1").gameObject;
@@ -330,7 +340,6 @@ namespace SMSAndroidsCore
                     guiltyBeachDialogueFinisher = guiltyBeachDialogue.transform.Find("DialogueFinisher").gameObject;
                     guiltyBeachDialogueMouthActivator = guiltyBeachDialogue.transform.Find("MouthActivator").gameObject;
                     guiltyBeachDialogueSpriteFocus = guiltyBeachDialogue.transform.Find("SpriteFocus").gameObject;
-                    SetActorOverrideSpeechSkinValue(guiltyBeachDialogue, "GuiltyActor", defaultOverrideSpeechSkinF);
 
                     helmBeachDialogue = CreateNewDialogue("HelmDialogueBeach01", Places.secretBeachRoomtalk.transform);
                     helmBeachDialogueScene1 = helmBeachDialogue.transform.Find("Scene1").gameObject;
@@ -342,7 +351,6 @@ namespace SMSAndroidsCore
                     helmBeachDialogueFinisher = helmBeachDialogue.transform.Find("DialogueFinisher").gameObject;
                     helmBeachDialogueMouthActivator = helmBeachDialogue.transform.Find("MouthActivator").gameObject;
                     helmBeachDialogueSpriteFocus = helmBeachDialogue.transform.Find("SpriteFocus").gameObject;
-                    SetActorOverrideSpeechSkinValue(helmBeachDialogue, "HelmActor", defaultOverrideSpeechSkinF);
 
                     maidenBeachDialogue = CreateNewDialogue("MaidenDialogueBeach01", Places.secretBeachRoomtalk.transform);
                     maidenBeachDialogueScene1 = maidenBeachDialogue.transform.Find("Scene1").gameObject;
@@ -354,7 +362,6 @@ namespace SMSAndroidsCore
                     maidenBeachDialogueFinisher = maidenBeachDialogue.transform.Find("DialogueFinisher").gameObject;
                     maidenBeachDialogueMouthActivator = maidenBeachDialogue.transform.Find("MouthActivator").gameObject;
                     maidenBeachDialogueSpriteFocus = maidenBeachDialogue.transform.Find("SpriteFocus").gameObject;
-                    SetActorOverrideSpeechSkinValue(maidenBeachDialogue, "MaidenActor", defaultOverrideSpeechSkinF);
 
                     maryBeachDialogue = CreateNewDialogue("MaryDialogueBeach01", Places.secretBeachRoomtalk.transform);
                     maryBeachDialogueScene1 = maryBeachDialogue.transform.Find("Scene1").gameObject;
@@ -366,7 +373,6 @@ namespace SMSAndroidsCore
                     maryBeachDialogueFinisher = maryBeachDialogue.transform.Find("DialogueFinisher").gameObject;
                     maryBeachDialogueMouthActivator = maryBeachDialogue.transform.Find("MouthActivator").gameObject;
                     maryBeachDialogueSpriteFocus = maryBeachDialogue.transform.Find("SpriteFocus").gameObject;
-                    SetActorOverrideSpeechSkinValue(maryBeachDialogue, "MaryActor", defaultOverrideSpeechSkinF);
 
                     mastBeachDialogue = CreateNewDialogue("MastDialogueBeach01", Places.secretBeachRoomtalk.transform);
                     mastBeachDialogueScene1 = mastBeachDialogue.transform.Find("Scene1").gameObject;
@@ -378,7 +384,6 @@ namespace SMSAndroidsCore
                     mastBeachDialogueFinisher = mastBeachDialogue.transform.Find("DialogueFinisher").gameObject;
                     mastBeachDialogueMouthActivator = mastBeachDialogue.transform.Find("MouthActivator").gameObject;
                     mastBeachDialogueSpriteFocus = mastBeachDialogue.transform.Find("SpriteFocus").gameObject;
-                    SetActorOverrideSpeechSkinValue(mastBeachDialogue, "MastActor", defaultOverrideSpeechSkinF);
 
                     neonBeachDialogue = CreateNewDialogue("NeonDialogueBeach01", Places.secretBeachRoomtalk.transform);
                     neonBeachDialogueScene1 = neonBeachDialogue.transform.Find("Scene1").gameObject;
@@ -390,7 +395,6 @@ namespace SMSAndroidsCore
                     neonBeachDialogueFinisher = neonBeachDialogue.transform.Find("DialogueFinisher").gameObject;
                     neonBeachDialogueMouthActivator = neonBeachDialogue.transform.Find("MouthActivator").gameObject;
                     neonBeachDialogueSpriteFocus = neonBeachDialogue.transform.Find("SpriteFocus").gameObject;
-                    SetActorOverrideSpeechSkinValue(neonBeachDialogue, "NeonActor", defaultOverrideSpeechSkinF);
 
                     pepperBeachDialogue = CreateNewDialogue("PepperDialogueBeach01", Places.secretBeachRoomtalk.transform);
                     pepperBeachDialogueScene1 = pepperBeachDialogue.transform.Find("Scene1").gameObject;
@@ -402,7 +406,6 @@ namespace SMSAndroidsCore
                     pepperBeachDialogueFinisher = pepperBeachDialogue.transform.Find("DialogueFinisher").gameObject;
                     pepperBeachDialogueMouthActivator = pepperBeachDialogue.transform.Find("MouthActivator").gameObject;
                     pepperBeachDialogueSpriteFocus = pepperBeachDialogue.transform.Find("SpriteFocus").gameObject;
-                    SetActorOverrideSpeechSkinValue(pepperBeachDialogue, "PepperActor", defaultOverrideSpeechSkinF);
 
                     rapiBeachDialogue = CreateNewDialogue("RapiDialogueBeach01", Places.secretBeachRoomtalk.transform);
                     rapiBeachDialogueScene1 = rapiBeachDialogue.transform.Find("Scene1").gameObject;
@@ -414,7 +417,6 @@ namespace SMSAndroidsCore
                     rapiBeachDialogueFinisher = rapiBeachDialogue.transform.Find("DialogueFinisher").gameObject;
                     rapiBeachDialogueMouthActivator = rapiBeachDialogue.transform.Find("MouthActivator").gameObject;
                     rapiBeachDialogueSpriteFocus = rapiBeachDialogue.transform.Find("SpriteFocus").gameObject;
-                    SetActorOverrideSpeechSkinValue(rapiBeachDialogue, "RapiActor", defaultOverrideSpeechSkinF);
 
                     rosannaBeachDialogue = CreateNewDialogue("RosannaDialogueBeach01", Places.secretBeachRoomtalk.transform);
                     rosannaBeachDialogueScene1 = rosannaBeachDialogue.transform.Find("Scene1").gameObject;
@@ -426,7 +428,6 @@ namespace SMSAndroidsCore
                     rosannaBeachDialogueFinisher = rosannaBeachDialogue.transform.Find("DialogueFinisher").gameObject;
                     rosannaBeachDialogueMouthActivator = rosannaBeachDialogue.transform.Find("MouthActivator").gameObject;
                     rosannaBeachDialogueSpriteFocus = rosannaBeachDialogue.transform.Find("SpriteFocus").gameObject;
-                    SetActorOverrideSpeechSkinValue(rosannaBeachDialogue, "RosannaActor", defaultOverrideSpeechSkinF);
 
                     sakuraBeachDialogue = CreateNewDialogue("SakuraDialogueBeach01", Places.secretBeachRoomtalk.transform);
                     sakuraBeachDialogueScene1 = sakuraBeachDialogue.transform.Find("Scene1").gameObject;
@@ -438,7 +439,6 @@ namespace SMSAndroidsCore
                     sakuraBeachDialogueFinisher = sakuraBeachDialogue.transform.Find("DialogueFinisher").gameObject;
                     sakuraBeachDialogueMouthActivator = sakuraBeachDialogue.transform.Find("MouthActivator").gameObject;
                     sakuraBeachDialogueSpriteFocus = sakuraBeachDialogue.transform.Find("SpriteFocus").gameObject;
-                    SetActorOverrideSpeechSkinValue(sakuraBeachDialogue, "SakuraActor", defaultOverrideSpeechSkinF);
 
                     viperBeachDialogue = CreateNewDialogue("ViperDialogueBeach01", Places.secretBeachRoomtalk.transform);
                     viperBeachDialogueScene1 = viperBeachDialogue.transform.Find("Scene1").gameObject;
@@ -450,7 +450,6 @@ namespace SMSAndroidsCore
                     viperBeachDialogueFinisher = viperBeachDialogue.transform.Find("DialogueFinisher").gameObject;
                     viperBeachDialogueMouthActivator = viperBeachDialogue.transform.Find("MouthActivator").gameObject;
                     viperBeachDialogueSpriteFocus = viperBeachDialogue.transform.Find("SpriteFocus").gameObject;
-                    SetActorOverrideSpeechSkinValue(viperBeachDialogue, "ViperActor", defaultOverrideSpeechSkinF);
 
                     yanBeachDialogue = CreateNewDialogue("YanDialogueBeach01", Places.secretBeachRoomtalk.transform);
                     yanBeachDialogueScene1 = yanBeachDialogue.transform.Find("Scene1").gameObject;
@@ -462,8 +461,10 @@ namespace SMSAndroidsCore
                     yanBeachDialogueFinisher = yanBeachDialogue.transform.Find("DialogueFinisher").gameObject;
                     yanBeachDialogueMouthActivator = yanBeachDialogue.transform.Find("MouthActivator").gameObject;
                     yanBeachDialogueSpriteFocus = yanBeachDialogue.transform.Find("SpriteFocus").gameObject;
-                    SetActorOverrideSpeechSkinValue(yanBeachDialogue, "YanActor", defaultOverrideSpeechSkinF);
                     #endregion
+
+                    SetActorOverrideSpeechSkinValue(sBDialogueMainFirst, "PlayerActor", overrideSpeechSkinGreen);
+                    SetActorOverrideSpeechSkinValue(sBDialogueStory01, "AmberActor", overrideSpeechSkinYellow);
 
                     Logger.LogInfo("----- DIALOGUES LOADED -----");
                     loadedDialogues = true;
@@ -673,6 +674,414 @@ namespace SMSAndroidsCore
             if (!actorFound)
             {
                 Debug.LogError($"Actor with name '{actorName}' not found in dialogue '{dialogueGO.name}'.");
+            }
+        }
+
+        public class ExpressionInfo
+        {
+            public string Id;
+            public string Name;
+            public Sprite Sprite; // or Texture2D, if that's what is used
+        }
+
+        public static List<ExpressionInfo> GetAllActorExpressions(Actor actor)
+        {
+            var result = new List<ExpressionInfo>();
+            if (actor == null) return result;
+
+            var expressions = actor.GetType().GetField("m_Expressions", BindingFlags.NonPublic | BindingFlags.Instance)?.GetValue(actor);
+            if (expressions == null) return result;
+
+            var lengthProp = expressions.GetType().GetProperty("Length", BindingFlags.Public | BindingFlags.Instance);
+            int length = (int)(lengthProp?.GetValue(expressions) ?? 0);
+
+            var fromIndexMethod = expressions.GetType().GetMethod("FromIndex", BindingFlags.Public | BindingFlags.Instance);
+
+            for (int i = 0; i < length; i++)
+            {
+                var expression = fromIndexMethod.Invoke(expressions, new object[] { i });
+                if (expression != null)
+                {
+                    var idProp = expression.GetType().GetProperty("Id", BindingFlags.Public | BindingFlags.Instance);
+                    var nameProp = expression.GetType().GetProperty("Name", BindingFlags.Public | BindingFlags.Instance);
+                    var spriteProp = expression.GetType().GetProperty("Sprite", BindingFlags.Public | BindingFlags.Instance); // or Texture
+
+                    result.Add(new ExpressionInfo
+                    {
+                        Id = idProp?.GetValue(expression)?.ToString(),
+                        Name = nameProp?.GetValue(expression)?.ToString(),
+                        Sprite = spriteProp?.GetValue(expression) as Sprite
+                    });
+                }
+            }
+            return result;
+        }
+
+        public static void AddExpressionSetInstructionToOnStart(GameObject dialogueGO, string actorName, int expressionIndex, int value)
+        {
+            if (dialogueGO == null)
+            {
+                Debug.LogError("[AddExpressionSetInstructionToOnStart] dialogueGO is null.");
+                return;
+            }
+
+            // 1. Extract character name from actor name (remove "Actor" suffix)
+            string characterName = actorName;
+            if (actorName.EndsWith("Actor"))
+            {
+                characterName = actorName.Substring(0, actorName.Length - 5); // Remove "Actor" suffix
+            }
+
+            // 2. Compose the variable name
+            string variableName = characterName + "-expression";
+
+            // 3. Check if the global name variable exists and create it if it doesn't
+            var manager = GlobalNameVariablesManager.Instance;
+            if (manager == null)
+            {
+                Debug.LogError("[AddExpressionSetInstructionToOnStart] GlobalNameVariablesManager not initialized");
+                return;
+            }
+
+            PropertyInfo valuesProp = typeof(GlobalNameVariablesManager).GetProperty("Values", BindingFlags.NonPublic | BindingFlags.Instance);
+            var values = valuesProp.GetValue(manager) as Dictionary<IdString, NameVariableRuntime>;
+            bool exists = false;
+            NameVariableRuntime targetRuntime = null;
+            
+            if (values != null)
+            {
+                foreach (var pair in values)
+                {
+                    PropertyInfo varsProp = typeof(NameVariableRuntime).GetProperty("Variables", BindingFlags.NonPublic | BindingFlags.Instance);
+                    var variables = varsProp.GetValue(pair.Value) as Dictionary<string, NameVariable>;
+                    if (variables != null && variables.ContainsKey(variableName))
+                    {
+                        exists = true;
+                        targetRuntime = pair.Value;
+                        break;
+                    }
+                }
+            }
+
+            // 4. Create the variable if it doesn't exist
+            if (!exists)
+            {
+                Debug.Log($"[AddExpressionSetInstructionToOnStart] Creating global variable '{variableName}'");
+                
+                // Get the first available runtime to add the variable to
+                if (values != null && values.Count > 0)
+                {
+                    targetRuntime = values.First().Value;
+                    PropertyInfo varsProp = typeof(NameVariableRuntime).GetProperty("Variables", BindingFlags.NonPublic | BindingFlags.Instance);
+                    var variables = varsProp.GetValue(targetRuntime) as Dictionary<string, NameVariable>;
+                    
+                    if (variables != null)
+                    {
+                        // Create a new NameVariable for numbers
+                        var nameVarType = Type.GetType("GameCreator.Runtime.Variables.NameVariable, GameCreator.Runtime.Variables");
+                        if (nameVarType != null)
+                        {
+                            var newVariable = Activator.CreateInstance(nameVarType);
+                            
+                            // Create a proper TValue for numbers
+                            var tValueType = Type.GetType("GameCreator.Runtime.Variables.TValue, GameCreator.Runtime.Variables");
+                            var createValueMethod = tValueType?.GetMethod("CreateValue", BindingFlags.Public | BindingFlags.Static);
+                            if (createValueMethod != null)
+                            {
+                                // Find the type ID for numbers (usually "number" or similar)
+                                var typeIDType = Type.GetType("GameCreator.Runtime.Common.IdString, GameCreator.Runtime.Common");
+                                var typeID = Activator.CreateInstance(typeIDType, "number");
+                                var tValue = createValueMethod.Invoke(null, new object[] { typeID, 0.0 });
+                                
+                                // Set the m_Value field
+                                var mValueField = newVariable.GetType().GetField("m_Value", BindingFlags.NonPublic | BindingFlags.Instance);
+                                mValueField?.SetValue(newVariable, tValue);
+                                
+                                // Set the m_Name field
+                                var mNameField = newVariable.GetType().GetField("m_Name", BindingFlags.NonPublic | BindingFlags.Instance);
+                                var nameIdString = Activator.CreateInstance(typeIDType, variableName);
+                                mNameField?.SetValue(newVariable, nameIdString);
+                                
+                                variables[variableName] = newVariable as NameVariable;
+                                exists = true;
+                                Debug.Log($"[AddExpressionSetInstructionToOnStart] Successfully created global variable '{variableName}'");
+                            }
+                        }
+                    }
+                }
+                
+                if (!exists)
+                {
+                    Debug.LogError($"[AddExpressionSetInstructionToOnStart] Failed to create global variable '{variableName}'");
+                    return;
+                }
+            }
+
+            // 3. Get the Actor from the dialogue (similar to SetActorOverrideSpeechSkinValue)
+            var dialogue = dialogueGO.GetComponent(typeof(GameCreator.Runtime.Dialogue.Dialogue));
+            if (dialogue == null)
+            {
+                Debug.LogError($"[AddExpressionSetInstructionToOnStart] Dialogue component not found on {dialogueGO.name}");
+                return;
+            }
+
+            var storyProp = dialogue.GetType().GetProperty("Story", BindingFlags.Public | BindingFlags.Instance);
+            var story = storyProp?.GetValue(dialogue);
+            if (story == null)
+            {
+                Debug.LogError("[AddExpressionSetInstructionToOnStart] Dialogue.Story is null.");
+                return;
+            }
+
+            var contentProp = story.GetType().GetProperty("Content", BindingFlags.Public | BindingFlags.Instance);
+            var content = contentProp?.GetValue(story);
+            if (content == null)
+            {
+                Debug.LogError("[AddExpressionSetInstructionToOnStart] Dialogue.Story.Content is null.");
+                return;
+            }
+
+            var rolesField = content.GetType().GetField("m_Roles", BindingFlags.NonPublic | BindingFlags.Instance);
+            var roles = rolesField?.GetValue(content) as Array;
+            if (roles == null)
+            {
+                Debug.LogError("[AddExpressionSetInstructionToOnStart] Could not find Roles in Dialogue content.");
+                return;
+            }
+
+            Actor targetActor = null;
+            foreach (var roleObj in roles)
+            {
+                if (roleObj == null) continue;
+
+                var actorField = roleObj.GetType().GetField("m_Actor", BindingFlags.NonPublic | BindingFlags.Instance);
+                var actor = actorField?.GetValue(roleObj) as Actor;
+                if (actor != null)
+                {
+                    var nameProp = actor.GetType().GetProperty("name", BindingFlags.Public | BindingFlags.Instance);
+                    string thisActorName = nameProp?.GetValue(actor) as string;
+                    if (thisActorName == actorName)
+                    {
+                        targetActor = actor;
+                        break;
+                    }
+                }
+            }
+
+            if (targetActor == null)
+            {
+                Debug.LogError($"[AddExpressionSetInstructionToOnStart] Actor '{actorName}' not found in dialogue '{dialogueGO.name}'.");
+                return;
+            }
+
+            // 4. Get the expressions from the actor
+            var expressionsField = targetActor.GetType().GetField("m_Expressions", BindingFlags.NonPublic | BindingFlags.Instance);
+            var expressions = expressionsField?.GetValue(targetActor);
+            if (expressions == null)
+            {
+                Debug.LogError($"[AddExpressionSetInstructionToOnStart] No expressions found for actor: {actorName}");
+                return;
+            }
+
+            // 5. Get the specific expression by index
+            var fromIndexMethod = expressions.GetType().GetMethod("FromIndex", BindingFlags.Public | BindingFlags.Instance);
+            var expression = fromIndexMethod?.Invoke(expressions, new object[] { expressionIndex });
+            if (expression == null)
+            {
+                Debug.LogError($"[AddExpressionSetInstructionToOnStart] Expression at index {expressionIndex} not found for actor: {actorName}");
+                return;
+            }
+
+            try
+            {
+                // 6. Create a new InstructionArithmeticSetNumber
+                var instrType = Type.GetType("GameCreator.Runtime.VisualScripting.InstructionArithmeticSetNumber, GameCreator.Runtime.VisualScripting, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null");
+                if (instrType == null)
+                {
+                    // Try alternative type names
+                    instrType = Type.GetType("GameCreator.Runtime.VisualScripting.InstructionArithmeticSetNumber");
+                    if (instrType == null)
+                    {
+                        // Try to find it in loaded assemblies
+                        foreach (var assembly in AppDomain.CurrentDomain.GetAssemblies())
+                        {
+                            if (assembly.FullName.Contains("GameCreator"))
+                            {
+                                instrType = assembly.GetType("GameCreator.Runtime.VisualScripting.InstructionArithmeticSetNumber");
+                                if (instrType != null) break;
+                            }
+                        }
+                    }
+                }
+                
+                if (instrType == null)
+                {
+                    Debug.LogError("[AddExpressionSetInstructionToOnStart] Could not find InstructionArithmeticSetNumber type");
+                    return;
+                }
+                var newInstr = Activator.CreateInstance(instrType);
+
+                // 7. Set up m_Set (SetNumberGlobalName)
+                var setType = Type.GetType("GameCreator.Runtime.Variables.SetNumberGlobalName, GameCreator.Runtime.Variables");
+                if (setType == null)
+                {
+                    // Try alternative type names
+                    setType = Type.GetType("GameCreator.Runtime.Variables.SetNumberGlobalName");
+                    if (setType == null)
+                    {
+                        // Try to find it in loaded assemblies
+                        foreach (var assembly in AppDomain.CurrentDomain.GetAssemblies())
+                        {
+                            if (assembly.FullName.Contains("GameCreator"))
+                            {
+                                setType = assembly.GetType("GameCreator.Runtime.Variables.SetNumberGlobalName");
+                                if (setType != null) break;
+                            }
+                        }
+                    }
+                }
+                
+                if (setType == null)
+                {
+                    Debug.LogError("[AddExpressionSetInstructionToOnStart] Could not find SetNumberGlobalName type");
+                    return;
+                }
+                var setInstance = Activator.CreateInstance(setType);
+                var mVarField = setType.GetField("m_Variable", BindingFlags.NonPublic | BindingFlags.Instance);
+                if (mVarField != null)
+                {
+                    var fieldSetGlobalNameType = mVarField.FieldType;
+                    var fieldSetGlobalName = Activator.CreateInstance(fieldSetGlobalNameType, 2); // 2 = TYPE_ID for numbers
+                    var mNameField = fieldSetGlobalNameType.GetField("m_Name", BindingFlags.NonPublic | BindingFlags.Instance);
+                    if (mNameField != null)
+                    {
+                        mNameField.SetValue(fieldSetGlobalName, variableName);
+                    }
+                    mVarField.SetValue(setInstance, fieldSetGlobalName);
+                }
+
+                var propertySetNumberType = Type.GetType("GameCreator.Runtime.Common.PropertySetNumber, GameCreator.Runtime.Common");
+                if (propertySetNumberType == null)
+                {
+                    // Try alternative type names
+                    propertySetNumberType = Type.GetType("GameCreator.Runtime.Common.PropertySetNumber");
+                    if (propertySetNumberType == null)
+                    {
+                        // Try to find it in loaded assemblies
+                        foreach (var assembly in AppDomain.CurrentDomain.GetAssemblies())
+                        {
+                            if (assembly.FullName.Contains("GameCreator"))
+                            {
+                                propertySetNumberType = assembly.GetType("GameCreator.Runtime.Common.PropertySetNumber");
+                                if (propertySetNumberType != null) break;
+                            }
+                        }
+                    }
+                }
+                
+                if (propertySetNumberType == null)
+                {
+                    Debug.LogError("[AddExpressionSetInstructionToOnStart] Could not find PropertySetNumber type");
+                    return;
+                }
+                var propertySetNumber = Activator.CreateInstance(propertySetNumberType, setInstance);
+
+                var setField = instrType.GetField("m_Set", BindingFlags.NonPublic | BindingFlags.Instance);
+                if (setField != null)
+                {
+                    setField.SetValue(newInstr, propertySetNumber);
+                }
+
+                // 8. Set up m_From (GetDecimalDecimal)
+                var getDecimalType = Type.GetType("GameCreator.Runtime.Common.GetDecimalDecimal, GameCreator.Runtime.Common");
+                if (getDecimalType == null)
+                {
+                    // Try alternative type names
+                    getDecimalType = Type.GetType("GameCreator.Runtime.Common.GetDecimalDecimal");
+                    if (getDecimalType == null)
+                    {
+                        // Try to find it in loaded assemblies
+                        foreach (var assembly in AppDomain.CurrentDomain.GetAssemblies())
+                        {
+                            if (assembly.FullName.Contains("GameCreator"))
+                            {
+                                getDecimalType = assembly.GetType("GameCreator.Runtime.Common.GetDecimalDecimal");
+                                if (getDecimalType != null) break;
+                            }
+                        }
+                    }
+                }
+                
+                if (getDecimalType == null)
+                {
+                    Debug.LogError("[AddExpressionSetInstructionToOnStart] Could not find GetDecimalDecimal type");
+                    return;
+                }
+                
+                var getDecimal = Activator.CreateInstance(getDecimalType, (double)value);
+                var propertyGetDecimalType = Type.GetType("GameCreator.Runtime.Common.PropertyGetDecimal, GameCreator.Runtime.Common");
+                if (propertyGetDecimalType == null)
+                {
+                    // Try alternative type names
+                    propertyGetDecimalType = Type.GetType("GameCreator.Runtime.Common.PropertyGetDecimal");
+                    if (propertyGetDecimalType == null)
+                    {
+                        // Try to find it in loaded assemblies
+                        foreach (var assembly in AppDomain.CurrentDomain.GetAssemblies())
+                        {
+                            if (assembly.FullName.Contains("GameCreator"))
+                            {
+                                propertyGetDecimalType = assembly.GetType("GameCreator.Runtime.Common.PropertyGetDecimal");
+                                if (propertyGetDecimalType != null) break;
+                            }
+                        }
+                    }
+                }
+                
+                if (propertyGetDecimalType == null)
+                {
+                    Debug.LogError("[AddExpressionSetInstructionToOnStart] Could not find PropertyGetDecimal type");
+                    return;
+                }
+                var propertyGetDecimal = Activator.CreateInstance(propertyGetDecimalType, getDecimal);
+
+                var fromField = instrType.GetField("m_From", BindingFlags.NonPublic | BindingFlags.Instance);
+                if (fromField != null)
+                {
+                    fromField.SetValue(newInstr, propertyGetDecimal);
+                }
+
+                // 9. Add to the On Start InstructionList
+                var onStartField = expression.GetType().GetField("m_InstructionsOnStart", BindingFlags.NonPublic | BindingFlags.Instance);
+                var onStart = onStartField?.GetValue(expression);
+                if (onStart == null)
+                {
+                    Debug.LogError("[AddExpressionSetInstructionToOnStart] Could not access m_InstructionsOnStart field");
+                    return;
+                }
+
+                var instrListField = onStart.GetType().GetField("m_Instructions", BindingFlags.NonPublic | BindingFlags.Instance);
+                var instrList = instrListField?.GetValue(onStart);
+                if (instrList == null)
+                {
+                    Debug.LogError("[AddExpressionSetInstructionToOnStart] Could not access m_Instructions field");
+                    return;
+                }
+
+                var addMethod = instrList.GetType().GetMethod("Add", BindingFlags.Public | BindingFlags.Instance);
+                if (addMethod != null)
+                {
+                    addMethod.Invoke(instrList, new object[] { newInstr });
+                    Debug.Log($"[AddExpressionSetInstructionToOnStart] Successfully added InstructionArithmeticSetNumber to OnStart for variable '{variableName}' with value {value} on {actorName} expression {expressionIndex} in dialogue '{dialogueGO.name}'.");
+                }
+                else
+                {
+                    Debug.LogError("[AddExpressionSetInstructionToOnStart] Could not find Add method on InstructionList");
+                }
+            }
+            catch (Exception e)
+            {
+                Debug.LogError($"[AddExpressionSetInstructionToOnStart] Error creating instruction: {e.Message}");
             }
         }
     }

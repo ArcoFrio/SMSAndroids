@@ -39,7 +39,7 @@ namespace SMSAndroidsCore
 
         private Dictionary<IdString, GlobalVariableChangeTracker> variableTrackers = new Dictionary<IdString, GlobalVariableChangeTracker>();
         private float monitoringInterval = 0.1f; // Check every 0.1 seconds
-        private bool isMonitoring = false;
+        public  bool isMonitoring = false;
         private Coroutine monitoringCoroutine;
 
         // Scene change tracking
@@ -92,8 +92,8 @@ namespace SMSAndroidsCore
             if (Core.currentScene.name == "CoreGameScene")
             {
             }
-                // Check for J key press to trigger Debug
-                if (Input.GetKeyDown(KeyCode.J))
+            // Check for J key press to trigger Debug
+            if (Input.GetKeyDown(KeyCode.J))
             {
                 var mapButtons = Core.mainCanvas?.Find("Navigator")?.Find("MapButtons")?.gameObject;
                 if (mapButtons != null)
@@ -1023,6 +1023,282 @@ namespace SMSAndroidsCore
                 catch { value = "(unreadable)"; }
                 PrintObjectRecursive(value, prop.Name, depth + 1, maxDepth, visited);
             }
+        }
+
+        public static void PrintAllActorExpressions(Actor actor)
+        {
+            if (actor == null)
+            {
+                Debug.Log("[PrintAllActorExpressions] Actor is null.");
+                return;
+            }
+
+            var expressions = actor.GetType().GetField("m_Expressions", BindingFlags.NonPublic | BindingFlags.Instance)?.GetValue(actor);
+            if (expressions == null)
+            {
+                Debug.Log($"[PrintAllActorExpressions] No expressions found for actor: {actor.name}");
+                return;
+            }
+
+            var lengthProp = expressions.GetType().GetProperty("Length", BindingFlags.Public | BindingFlags.Instance);
+            int length = (int)(lengthProp?.GetValue(expressions) ?? 0);
+
+            var fromIndexMethod = expressions.GetType().GetMethod("FromIndex", BindingFlags.Public | BindingFlags.Instance);
+
+            Debug.Log($"[PrintAllActorExpressions] Expressions for actor: {actor.name} (Total: {length})");
+            for (int i = 0; i < length; i++)
+            {
+                var expression = fromIndexMethod.Invoke(expressions, new object[] { i });
+                if (expression != null)
+                {
+                    var idProp = expression.GetType().GetProperty("Id", BindingFlags.Public | BindingFlags.Instance);
+                    var id = idProp?.GetValue(expression)?.ToString() ?? "(null)";
+
+                    // Sprite
+                    var spriteField = expression.GetType().GetField("m_Sprite", BindingFlags.NonPublic | BindingFlags.Instance);
+                    var spriteObj = spriteField?.GetValue(expression);
+                    string spriteInfo = "(null)";
+                    if (spriteObj != null)
+                    {
+                        var getMethod = spriteObj.GetType().GetMethod("Get", new[] { typeof(GameCreator.Runtime.Common.Args) });
+                        if (getMethod != null)
+                        {
+                            var sprite = getMethod.Invoke(spriteObj, new object[] { null });
+                            spriteInfo = sprite != null ? sprite.ToString() : "(null)";
+                        }
+                    }
+
+                    // Speech Skin
+                    var speechSkinField = expression.GetType().GetField("m_OverrideSpeechSkin", BindingFlags.NonPublic | BindingFlags.Instance);
+                    var speechSkin = speechSkinField?.GetValue(expression);
+                    string speechSkinInfo = "(none)";
+                    if (speechSkin != null)
+                    {
+                        var prefabProp = speechSkin.GetType().GetProperty("Value", BindingFlags.Public | BindingFlags.Instance);
+                        var prefab = prefabProp?.GetValue(speechSkin) as GameObject;
+                        speechSkinInfo = prefab != null ? prefab.name : "(has SpeechSkin, prefab is null)";
+                    }
+
+                    // On Start Instructions
+                    var onStartField = expression.GetType().GetField("m_InstructionsOnStart", BindingFlags.NonPublic | BindingFlags.Instance);
+                    var onStart = onStartField?.GetValue(expression);
+                    string onStartInfo = "(none)";
+                    if (onStart != null)
+                    {
+                        var instrListField = onStart.GetType().GetField("m_Instructions", BindingFlags.NonPublic | BindingFlags.Instance);
+                        var instrList = instrListField?.GetValue(onStart);
+                        if (instrList != null)
+                        {
+                            var instrLengthProp = instrList.GetType().GetProperty("Length", BindingFlags.Public | BindingFlags.Instance);
+                            int instrLength = (int)(instrLengthProp?.GetValue(instrList) ?? 0);
+                            onStartInfo = $"{instrLength} instruction(s)";
+                            for (int j = 0; j < instrLength; j++)
+                            {
+                                var getInstrMethod = instrList.GetType().GetMethod("Get", new[] { typeof(int) });
+                                var instr = getInstrMethod?.Invoke(instrList, new object[] { j });
+                                if (instr != null)
+                                {
+                                    string instrDetails = $"      [{j}] {instr.GetType().Name}: {instr}";
+                                    // Special details for InstructionArithmeticSetNumber
+                                    if (instr.GetType().Name == "InstructionArithmeticSetNumber")
+                                    {
+                                        // Title
+                                        var titleProp = instr.GetType().GetProperty("Title", BindingFlags.Public | BindingFlags.Instance);
+                                        string title = titleProp?.GetValue(instr)?.ToString() ?? "(null)";
+                                        instrDetails += $"\n        Title: {title}";
+                                        // m_Set
+                                        var setField = instr.GetType().GetField("m_Set", BindingFlags.NonPublic | BindingFlags.Instance);
+                                        var setObj = setField?.GetValue(instr);
+                                        string setInfo = "(null)";
+                                        if (setObj != null)
+                                        {
+                                            var mPropertyField = setObj.GetType().GetField("m_Property", BindingFlags.NonPublic | BindingFlags.Instance);
+                                            var mProperty = mPropertyField?.GetValue(setObj);
+                                            if (mProperty != null)
+                                            {
+                                                string setType = mProperty.GetType().Name;
+                                                // Try to get m_Variable field if present
+                                                var mVarField = mProperty.GetType().GetField("m_Variable", BindingFlags.NonPublic | BindingFlags.Instance);
+                                                string varName = mVarField != null ? mVarField.GetValue(mProperty)?.ToString() : null;
+                                                setInfo = $"{setType}" + (varName != null ? $" (variable: {varName})" : "");
+                                            }
+                                        }
+                                        instrDetails += $"\n        Set Target: {setInfo}";
+                                        // m_From
+                                        var fromField = instr.GetType().GetField("m_From", BindingFlags.NonPublic | BindingFlags.Instance);
+                                        var fromObj = fromField?.GetValue(instr);
+                                        string fromInfo = "(null)";
+                                        if (fromObj != null)
+                                        {
+                                            var mPropertyField = fromObj.GetType().GetField("m_Property", BindingFlags.NonPublic | BindingFlags.Instance);
+                                            var mProperty = mPropertyField?.GetValue(fromObj);
+                                            if (mProperty != null)
+                                            {
+                                                string fromType = mProperty.GetType().Name;
+                                                // Try to get m_Value or m_Variable field if present
+                                                var mValueField = mProperty.GetType().GetField("m_Value", BindingFlags.NonPublic | BindingFlags.Instance);
+                                                var mVarField = mProperty.GetType().GetField("m_Variable", BindingFlags.NonPublic | BindingFlags.Instance);
+                                                if (mValueField != null)
+                                                {
+                                                    var val = mValueField.GetValue(mProperty);
+                                                    fromInfo = $"{fromType} (value: {val})";
+                                                }
+                                                else if (mVarField != null)
+                                                {
+                                                    var varName = mVarField.GetValue(mProperty)?.ToString();
+                                                    fromInfo = $"{fromType} (variable: {varName})";
+                                                }
+                                                else
+                                                {
+                                                    fromInfo = fromType;
+                                                }
+                                            }
+                                        }
+                                        instrDetails += $"\n        From Value: {fromInfo}";
+                                    }
+                                    onStartInfo += $"\n{instrDetails}";
+                                }
+                            }
+                        }
+                    }
+
+                    // On End Instructions
+                    var onEndField = expression.GetType().GetField("m_InstructionsOnEnd", BindingFlags.NonPublic | BindingFlags.Instance);
+                    var onEnd = onEndField?.GetValue(expression);
+                    string onEndInfo = "(none)";
+                    if (onEnd != null)
+                    {
+                        var instrListField = onEnd.GetType().GetField("m_Instructions", BindingFlags.NonPublic | BindingFlags.Instance);
+                        var instrList = instrListField?.GetValue(onEnd);
+                        if (instrList != null)
+                        {
+                            var instrLengthProp = instrList.GetType().GetProperty("Length", BindingFlags.Public | BindingFlags.Instance);
+                            int instrLength = (int)(instrLengthProp?.GetValue(instrList) ?? 0);
+                            onEndInfo = $"{instrLength} instruction(s)";
+                            for (int j = 0; j < instrLength; j++)
+                            {
+                                var getInstrMethod = instrList.GetType().GetMethod("Get", new[] { typeof(int) });
+                                var instr = getInstrMethod?.Invoke(instrList, new object[] { j });
+                                if (instr != null)
+                                {
+                                    string instrDetails = $"      [{j}] {instr.GetType().Name}: {instr}";
+                                    // Special details for InstructionArithmeticSetNumber
+                                    if (instr.GetType().Name == "InstructionArithmeticSetNumber")
+                                    {
+                                        // Title
+                                        var titleProp = instr.GetType().GetProperty("Title", BindingFlags.Public | BindingFlags.Instance);
+                                        string title = titleProp?.GetValue(instr)?.ToString() ?? "(null)";
+                                        instrDetails += $"\n        Title: {title}";
+                                        // m_Set
+                                        var setField = instr.GetType().GetField("m_Set", BindingFlags.NonPublic | BindingFlags.Instance);
+                                        var setObj = setField?.GetValue(instr);
+                                        string setInfo = "(null)";
+                                        if (setObj != null)
+                                        {
+                                            var mPropertyField = setObj.GetType().GetField("m_Property", BindingFlags.NonPublic | BindingFlags.Instance);
+                                            var mProperty = mPropertyField?.GetValue(setObj);
+                                            if (mProperty != null)
+                                            {
+                                                string setType = mProperty.GetType().Name;
+                                                // Try to get m_Variable field if present
+                                                var mVarField = mProperty.GetType().GetField("m_Variable", BindingFlags.NonPublic | BindingFlags.Instance);
+                                                string varName = mVarField != null ? mVarField.GetValue(mProperty)?.ToString() : null;
+                                                setInfo = $"{setType}" + (varName != null ? $" (variable: {varName})" : "");
+                                            }
+                                        }
+                                        instrDetails += $"\n        Set Target: {setInfo}";
+                                        // m_From
+                                        var fromField = instr.GetType().GetField("m_From", BindingFlags.NonPublic | BindingFlags.Instance);
+                                        var fromObj = fromField?.GetValue(instr);
+                                        string fromInfo = "(null)";
+                                        if (fromObj != null)
+                                        {
+                                            var mPropertyField = fromObj.GetType().GetField("m_Property", BindingFlags.NonPublic | BindingFlags.Instance);
+                                            var mProperty = mPropertyField?.GetValue(fromObj);
+                                            if (mProperty != null)
+                                            {
+                                                string fromType = mProperty.GetType().Name;
+                                                // Try to get m_Value or m_Variable field if present
+                                                var mValueField = mProperty.GetType().GetField("m_Value", BindingFlags.NonPublic | BindingFlags.Instance);
+                                                var mVarField = mProperty.GetType().GetField("m_Variable", BindingFlags.NonPublic | BindingFlags.Instance);
+                                                if (mValueField != null)
+                                                {
+                                                    var val = mValueField.GetValue(mProperty);
+                                                    fromInfo = $"{fromType} (value: {val})";
+                                                }
+                                                else if (mVarField != null)
+                                                {
+                                                    var varName = mVarField.GetValue(mProperty)?.ToString();
+                                                    fromInfo = $"{fromType} (variable: {varName})";
+                                                }
+                                                else
+                                                {
+                                                    fromInfo = fromType;
+                                                }
+                                            }
+                                        }
+                                        instrDetails += $"\n        From Value: {fromInfo}";
+                                    }
+                                    onEndInfo += $"\n{instrDetails}";
+                                }
+                            }
+                        }
+                    }
+
+                    Debug.Log($"  Expression {i}: ID='{id}', Sprite={spriteInfo}\n    SpeechSkin: {speechSkinInfo}\n    OnStart: {onStartInfo}\n    OnEnd: {onEndInfo}");
+                }
+                else
+                {
+                    Debug.Log($"  Expression {i}: (null)");
+                }
+            }
+        }
+
+        public static void PrintAllActorExpressionsFromDialogue(GameObject dialogueGO, string actorName)
+        {
+            if (dialogueGO == null)
+            {
+                Debug.LogWarning("[PrintAllActorExpressionsFromDialogue] dialogueGO is null.");
+                return;
+            }
+
+            var dialogue = dialogueGO.GetComponent(typeof(GameCreator.Runtime.Dialogue.Dialogue));
+            if (dialogue == null)
+            {
+                Debug.LogWarning($"[PrintAllActorExpressionsFromDialogue] Dialogue component not found on {dialogueGO.name}.");
+                return;
+            }
+
+            var storyProp = dialogue.GetType().GetProperty("Story", BindingFlags.Public | BindingFlags.Instance);
+            var story = storyProp?.GetValue(dialogue);
+            var contentProp = story?.GetType().GetProperty("Content", BindingFlags.Public | BindingFlags.Instance);
+            var content = contentProp?.GetValue(story);
+
+            var rolesField = content?.GetType().GetField("m_Roles", BindingFlags.NonPublic | BindingFlags.Instance);
+            var roles = rolesField?.GetValue(content) as Array;
+            if (roles == null)
+            {
+                Debug.LogWarning($"[PrintAllActorExpressionsFromDialogue] No roles found in dialogue content for {dialogueGO.name}.");
+                return;
+            }
+
+            foreach (var roleObj in roles)
+            {
+                var actorField = roleObj.GetType().GetField("m_Actor", BindingFlags.NonPublic | BindingFlags.Instance);
+                var actor = actorField?.GetValue(roleObj) as Actor;
+                if (actor != null)
+                {
+                    var nameProp = actor.GetType().GetProperty("name", BindingFlags.Public | BindingFlags.Instance);
+                    string thisActorName = nameProp?.GetValue(actor) as string;
+                    if (thisActorName == actorName)
+                    {
+                        Debug.Log($"[PrintAllActorExpressionsFromDialogue] Found actor '{actorName}' in dialogue '{dialogueGO.name}'.");
+                        PrintAllActorExpressions(actor);
+                        return;
+                    }
+                }
+            }
+            Debug.LogWarning($"[PrintAllActorExpressionsFromDialogue] Actor '{actorName}' not found in dialogue '{dialogueGO.name}'.");
         }
     }
 }
