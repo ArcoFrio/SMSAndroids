@@ -61,6 +61,9 @@ namespace SMSAndroidsCore
             { "SecretBeach_GKSeen", false },
             { "SecretBeach_RelaxedAmount", 0 },
             { "SecretBeach_UnlockedLab", false },
+
+            // Mountain Lab variables
+            { "MountainLab_FirstVisited", false },
             
             // Voyeur variables for each character
             { "Voyeur_SeenAnis", false },

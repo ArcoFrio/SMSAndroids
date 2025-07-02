@@ -45,6 +45,7 @@ namespace SMSAndroidsCore
         public static GameObject badWeatherDialogueActivator;
         public static GameObject badWeatherDialogueFinisher;
 
+        #region Secret Beach Variables
         public static GameObject sBDialogueMainFirst;
         public static GameObject sBDialogueMainFirstScene1;
         public static GameObject sBDialogueMainFirstScene2;
@@ -88,7 +89,19 @@ namespace SMSAndroidsCore
         public static GameObject sBDialogueStory01DialogueFinisher;
         public static GameObject sBDialogueStory01MouthActivator;
         public static GameObject sBDialogueStory01SpriteFocus;
-
+        #endregion
+        #region Mountain Lab Variables
+        public static GameObject mLDialogueMainFirst;
+        public static GameObject mLDialogueMainFirstScene1;
+        public static GameObject mLDialogueMainFirstScene2;
+        public static GameObject mLDialogueMainFirstScene3;
+        public static GameObject mLDialogueMainFirstScene4;
+        public static GameObject mLDialogueMainFirstScene5;
+        public static GameObject mLDialogueMainFirstDialogueActivator;
+        public static GameObject mLDialogueMainFirstDialogueFinisher;
+        public static GameObject mLDialogueMainFirstMouthActivator;
+        public static GameObject mLDialogueMainFirstSpriteFocus;
+        #endregion
         #region Voyeur Variables
         public static GameObject anisBeachDialogue;
         public static GameObject anisBeachDialogueScene1;
@@ -263,6 +276,7 @@ namespace SMSAndroidsCore
                     badWeatherDialogueActivator = badWeatherDialogue.transform.Find("DialogueActivator").gameObject;
                     badWeatherDialogueFinisher = badWeatherDialogue.transform.Find("DialogueFinisher").gameObject;
 
+                    #region Secret Beach Initialization
                     sBDialogueMainFirst = CreateNewDialogue("SBDialogueMainFirst", Places.secretBeachRoomtalk.transform);
                     sBDialogueMainFirstScene1 = sBDialogueMainFirst.transform.Find("Scene1").gameObject;
                     sBDialogueMainFirstScene2 = sBDialogueMainFirst.transform.Find("Scene2").gameObject;
@@ -306,7 +320,19 @@ namespace SMSAndroidsCore
                     sBDialogueStory01DialogueFinisher = sBDialogueStory01.transform.Find("DialogueFinisher").gameObject;
                     sBDialogueStory01MouthActivator = sBDialogueStory01.transform.Find("MouthActivator").gameObject;
                     sBDialogueStory01SpriteFocus = sBDialogueStory01.transform.Find("SpriteFocus").gameObject;
-
+                    #endregion
+                    #region Mountain Lab Initialization
+                    mLDialogueMainFirst = CreateNewDialogue("MLDialogueStory02", Places.secretBeachRoomtalk.transform);
+                    mLDialogueMainFirstScene1 = mLDialogueMainFirst.transform.Find("Scene1").gameObject;
+                    mLDialogueMainFirstScene2 = mLDialogueMainFirst.transform.Find("Scene2").gameObject;
+                    mLDialogueMainFirstScene3 = mLDialogueMainFirst.transform.Find("Scene3").gameObject;
+                    mLDialogueMainFirstScene4 = mLDialogueMainFirst.transform.Find("Scene4").gameObject;
+                    mLDialogueMainFirstScene5 = mLDialogueMainFirst.transform.Find("Scene5").gameObject;
+                    mLDialogueMainFirstDialogueActivator = mLDialogueMainFirst.transform.Find("DialogueActivator").gameObject;
+                    mLDialogueMainFirstDialogueFinisher = mLDialogueMainFirst.transform.Find("DialogueFinisher").gameObject;
+                    mLDialogueMainFirstMouthActivator = mLDialogueMainFirst.transform.Find("MouthActivator").gameObject;
+                    mLDialogueMainFirstSpriteFocus = mLDialogueMainFirst.transform.Find("SpriteFocus").gameObject;
+                    #endregion
                     #region Voyeur Initialization
                     anisBeachDialogue = CreateNewDialogue("AnisDialogueBeach01", Places.secretBeachRoomtalk.transform);
                     anisBeachDialogueScene1 = anisBeachDialogue.transform.Find("Scene1").gameObject;

@@ -80,10 +80,38 @@ namespace SMSAndroidsCore
                     {
                         SaveManager.SetBool("SecretBeach_GKSeen", true);
                     }
-                    if (Places.GetBadWeather())
-                    {
 
+                    if (!Dialogues.dialoguePlaying && Places.GetBadWeather())
+                    {
+                        StartDialogueSequence(Dialogues.badWeatherDialogue);
                     }
+                    if (Dialogues.badWeatherDialogueFinisher.activeSelf)
+                    {
+                        Invoke(nameof(EndDialogueSequence), 1.0f);
+                        Dialogues.badWeatherDialogueFinisher.SetActive(false);
+                    }
+
+
+
+//------------------------------------------------------------------------------------------------ MOUNTAIN LAB
+                    if (!Dialogues.dialoguePlaying && Places.mountainLabRoomtalk.activeSelf && !SaveManager.GetBool("MountainLab_FirstVisited"))
+                    {
+                        StartDialogueSequence(Dialogues.mLDialogueMainFirst);
+                        Characters.amberSwim.SetActive(true);
+                    }
+                    if (Dialogues.mLDialogueMainFirstScene1.activeSelf)
+                    {
+                        Characters.amberSwim.transform.Find("MBase1").Find("Leave").gameObject.SetActive(true);
+                    }
+                    if (Dialogues.mLDialogueMainFirstDialogueFinisher.activeSelf)
+                    {
+                        Invoke(nameof(EndDialogueSequence), 1.0f);
+                        Dialogues.mLDialogueMainFirstDialogueFinisher.SetActive(false);
+                        SaveManager.SetBool("MountainLab_FirstVisited", true);
+                    }
+
+
+
 //------------------------------------------------------------------------------------------------ SECRET BEACH
                     if (!actionTodaySB && !Places.GetBadWeather())
                     {
@@ -101,7 +129,7 @@ namespace SMSAndroidsCore
                         }
 //------------------------------------------------------------------------------------------------ SB Main
                         if (!Dialogues.dialoguePlaying && Places.secretBeachRoomtalk.activeSelf && SaveManager.GetBool("SecretBeach_FirstVisited") && SaveManager.GetInt("SecretBeach_RelaxedAmount") != 2 && 
-                            !(SaveManager.GetBool("SecretBeach_UnlockedLab") != true && SaveManager.GetInt("SecretBeach_RelaxedAmount") > 2))
+                            !(SaveManager.GetBool("MountainLab_FirstVisited") != true && SaveManager.GetInt("SecretBeach_RelaxedAmount") > 2))
                         {
                             StartDialogueSequence(Dialogues.sBDialogueMain);
                         }
@@ -197,8 +225,6 @@ namespace SMSAndroidsCore
                         {
                             Dialogues.sBDialogueStory01Scene1.SetActive(false);
                             Characters.amberSwim.SetActive(true);
-                            currentActiveBust = Characters.amberSwim;
-                            currentActiveBustMBase = currentActiveBust.transform.Find("MBase1").gameObject;
                         }
                         if (Dialogues.sBDialogueStory01Scene2.activeSelf)
                         {
