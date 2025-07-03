@@ -59,7 +59,7 @@ namespace SMSAndroidsCore
         public int vanillaLevelCount;
 
         public static bool loadedPlaces = false;
-        private GameObject currentRoomTalk;
+        public static GameObject currentRoomTalk;
         public void Update()
         {
             if (Core.currentScene.name == "CoreGameScene")
@@ -274,7 +274,6 @@ namespace SMSAndroidsCore
             if (!Core.GetVariableBool("Lock-Game"))
             {
                 currentRoomTalk = roomTalk;
-                roomTalk.SetActive(true);
                 Core.FindAndModifyVariableDouble("Upcoming-Level", vanillaLevelCount + index);
                 Core.FindAndModifyVariableBool("Start-Transfer", true);
                 
@@ -288,9 +287,14 @@ namespace SMSAndroidsCore
                         triggerComponent.Execute();
                     }
                 }
+
+                Invoke(nameof(EnableRoomTalk), 1.5f);
             }
         }
-
+        private void EnableRoomTalk()
+        {
+            currentRoomTalk.SetActive(true);
+        }
         public static bool GetBadWeather()
         {
             if (Core.GetVariableBool("rainy-day") || Core.GetVariableBool("snowy-day"))

@@ -44,6 +44,7 @@ namespace SMSAndroidsCore
         public static bool loadedCore = false;
         public static bool loadedBases = false;
         public static GameObject afterSleepEvents;
+        public static GameObject affectionIncrease;
         public static GameObject baseBust;
         public static GameObject introMomentNewGame;
         public static GameObject levelBeach;
@@ -68,6 +69,7 @@ namespace SMSAndroidsCore
         public static string savesPath = "BepInEx\\plugins\\SMSAndroidsCore\\Saves\\";
         public static string scenePath = "BepInEx\\plugins\\SMSAndroidsCore\\Scenes\\";
         public static string exePath;
+        public static Transform attractorCanvas;
         public static Transform bustManager;
         public static Transform cGManagerSexy;
         public static Transform coreEvents;
@@ -125,6 +127,7 @@ namespace SMSAndroidsCore
                     saveLoadManager = GameObject.FindFirstObjectByType<SaveLoadManager>();
                     loadedSaveFile = saveLoadManager.SlotLoaded;
 
+                    attractorCanvas = GameObject.Find("Attractor_Canvas").transform;
                     bustManager = GameObject.Find("2_Bust_Manager").transform;
                     cGManagerSexy = GameObject.Find("4_CG_Manager-Sexy").transform;
                     level = GameObject.Find("5_Levels").transform;
@@ -148,6 +151,11 @@ namespace SMSAndroidsCore
                     saveButton6 = saveLoadSystem.transform.Find("ButtonList").GetChild(5).Find("Button (2)").gameObject;
                     saveButton7 = saveLoadSystem.transform.Find("ButtonList").GetChild(6).Find("Button (2)").gameObject;
                     saveButton8 = saveLoadSystem.transform.Find("ButtonList").GetChild(7).Find("Button (2)").gameObject;
+
+                    affectionIncrease = GameObject.Instantiate(effects.Find("CFXR2 Expression Loving (Timed)").gameObject, effects);
+                    affectionIncrease.name = "CFXR2 Expression Affectionate (Timed)";
+                    affectionIncrease.GetComponent<ParticleSystem>().startColor = new Color(1.0f, 0.6f, 0.9f);
+                    affectionIncrease.transform.Find("Hearts").gameObject.GetComponent<ParticleSystem>().startColor = new Color(1.0f, 0.35f, 0.7f);
 
                     Logger.LogInfo("----- CORE LOADED -----");
                     loadedCore = true;

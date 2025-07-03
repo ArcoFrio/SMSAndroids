@@ -94,6 +94,7 @@ namespace SMSAndroidsCore
 
 
 //------------------------------------------------------------------------------------------------ MOUNTAIN LAB
+//------------------------------------------------------------------------------------------------ ML Story 2
                     if (!Dialogues.dialoguePlaying && Places.mountainLabRoomtalk.activeSelf && !SaveManager.GetBool("MountainLab_FirstVisited"))
                     {
                         StartDialogueSequence(Dialogues.mLDialogueMainFirst);
@@ -101,13 +102,43 @@ namespace SMSAndroidsCore
                     }
                     if (Dialogues.mLDialogueMainFirstScene1.activeSelf)
                     {
+                        Dialogues.mLDialogueMainFirstScene1.SetActive(false);
                         Characters.amberSwim.transform.Find("MBase1").Find("Leave").gameObject.SetActive(true);
+                    }
+                    if (Dialogues.mLDialogueMainFirstScene5.activeSelf)
+                    {
+                        Dialogues.mLDialogueMainFirstScene5.SetActive(false);
+                        Core.affectionIncrease.SetActive(true);
+                        SaveManager.SetInt("Affection_Amber", SaveManager.GetInt("Affection_Amber") + 1);
                     }
                     if (Dialogues.mLDialogueMainFirstDialogueFinisher.activeSelf)
                     {
                         Invoke(nameof(EndDialogueSequence), 1.0f);
                         Dialogues.mLDialogueMainFirstDialogueFinisher.SetActive(false);
                         SaveManager.SetBool("MountainLab_FirstVisited", true);
+                    }
+//------------------------------------------------------------------------------------------------ ML Story 3
+                    if (!Dialogues.dialoguePlaying && Places.mountainLabRoomtalk.activeSelf && SaveManager.GetBool("MountainLab_FirstVisited") && !SaveManager.GetBool("MountainLab_FirstVisitor") && SaveManager.AnyBoolVariableWithNameContains("Voyeur_Seen"))
+                    {
+                        StartDialogueSequence(Dialogues.mLDialogueMainStory03);
+                        Characters.amber.SetActive(true);
+                    }
+                    if (Dialogues.mLDialogueMainStory03DialogueFinisher.activeSelf)
+                    {
+                        Invoke(nameof(EndDialogueSequence), 1.0f);
+                        Dialogues.mLDialogueMainStory03DialogueFinisher.SetActive(false);
+                        SaveManager.SetBool("MountainLab_FirstVisitor", true);
+                    }
+//------------------------------------------------------------------------------------------------ ML Default
+                    if (!Dialogues.dialoguePlaying && Places.mountainLabRoomtalk.activeSelf && SaveManager.GetBool("MountainLab_FirstVisited"))
+                    {
+                        StartDialogueSequence(Dialogues.mLDialogueMainDefault);
+                        Characters.amber.SetActive(true);
+                    }
+                    if (Dialogues.mLDialogueMainDefaultDialogueFinisher.activeSelf)
+                    {
+                        Invoke(nameof(EndDialogueSequence), 1.0f);
+                        Dialogues.mLDialogueMainDefaultDialogueFinisher.SetActive(false);
                     }
 
 

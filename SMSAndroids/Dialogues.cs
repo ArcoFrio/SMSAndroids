@@ -101,6 +101,28 @@ namespace SMSAndroidsCore
         public static GameObject mLDialogueMainFirstDialogueFinisher;
         public static GameObject mLDialogueMainFirstMouthActivator;
         public static GameObject mLDialogueMainFirstSpriteFocus;
+
+        public static GameObject mLDialogueMainDefault;
+        public static GameObject mLDialogueMainDefaultScene1;
+        public static GameObject mLDialogueMainDefaultScene2;
+        public static GameObject mLDialogueMainDefaultScene3;
+        public static GameObject mLDialogueMainDefaultScene4;
+        public static GameObject mLDialogueMainDefaultScene5;
+        public static GameObject mLDialogueMainDefaultDialogueActivator;
+        public static GameObject mLDialogueMainDefaultDialogueFinisher;
+        public static GameObject mLDialogueMainDefaultMouthActivator;
+        public static GameObject mLDialogueMainDefaultSpriteFocus;
+
+        public static GameObject mLDialogueMainStory03;
+        public static GameObject mLDialogueMainStory03Scene1;
+        public static GameObject mLDialogueMainStory03Scene2;
+        public static GameObject mLDialogueMainStory03Scene3;
+        public static GameObject mLDialogueMainStory03Scene4;
+        public static GameObject mLDialogueMainStory03Scene5;
+        public static GameObject mLDialogueMainStory03DialogueActivator;
+        public static GameObject mLDialogueMainStory03DialogueFinisher;
+        public static GameObject mLDialogueMainStory03MouthActivator;
+        public static GameObject mLDialogueMainStory03SpriteFocus;
         #endregion
         #region Voyeur Variables
         public static GameObject anisBeachDialogue;
@@ -270,8 +292,6 @@ namespace SMSAndroidsCore
                     overrideSpeechSkinPink = GetActorOverrideSpeechSkinValue(Core.roomTalk.Find("Beach").Find("AmeliaBeach").gameObject, "Amelia");
                     overrideSpeechSkinYellow = GetActorOverrideSpeechSkinValue(Core.roomTalk.Find("Bath").Find("AnnaInShower").gameObject, "Anna");
 
-                    Debugging.PrintAllActorExpressionsFromDialogue(Core.roomTalk.Find("Bath").Find("AnnaInShower").gameObject, "Anna");
-
                     badWeatherDialogue = CreateNewDialogue("BadWeather", Places.secretBeachRoomtalk.transform);
                     badWeatherDialogueActivator = badWeatherDialogue.transform.Find("DialogueActivator").gameObject;
                     badWeatherDialogueFinisher = badWeatherDialogue.transform.Find("DialogueFinisher").gameObject;
@@ -322,7 +342,7 @@ namespace SMSAndroidsCore
                     sBDialogueStory01SpriteFocus = sBDialogueStory01.transform.Find("SpriteFocus").gameObject;
                     #endregion
                     #region Mountain Lab Initialization
-                    mLDialogueMainFirst = CreateNewDialogue("MLDialogueStory02", Places.secretBeachRoomtalk.transform);
+                    mLDialogueMainFirst = CreateNewDialogue("MLDialogueStory02", Places.mountainLabRoomtalk.transform);
                     mLDialogueMainFirstScene1 = mLDialogueMainFirst.transform.Find("Scene1").gameObject;
                     mLDialogueMainFirstScene2 = mLDialogueMainFirst.transform.Find("Scene2").gameObject;
                     mLDialogueMainFirstScene3 = mLDialogueMainFirst.transform.Find("Scene3").gameObject;
@@ -332,6 +352,28 @@ namespace SMSAndroidsCore
                     mLDialogueMainFirstDialogueFinisher = mLDialogueMainFirst.transform.Find("DialogueFinisher").gameObject;
                     mLDialogueMainFirstMouthActivator = mLDialogueMainFirst.transform.Find("MouthActivator").gameObject;
                     mLDialogueMainFirstSpriteFocus = mLDialogueMainFirst.transform.Find("SpriteFocus").gameObject;
+
+                    mLDialogueMainDefault = CreateNewDialogue("MLDialogueDefault", Places.mountainLabRoomtalk.transform);
+                    mLDialogueMainDefaultScene1 = mLDialogueMainDefault.transform.Find("Scene1").gameObject;
+                    mLDialogueMainDefaultScene2 = mLDialogueMainDefault.transform.Find("Scene2").gameObject;
+                    mLDialogueMainDefaultScene3 = mLDialogueMainDefault.transform.Find("Scene3").gameObject;
+                    mLDialogueMainDefaultScene4 = mLDialogueMainDefault.transform.Find("Scene4").gameObject;
+                    mLDialogueMainDefaultScene5 = mLDialogueMainDefault.transform.Find("Scene5").gameObject;
+                    mLDialogueMainDefaultDialogueActivator = mLDialogueMainDefault.transform.Find("DialogueActivator").gameObject;
+                    mLDialogueMainDefaultDialogueFinisher = mLDialogueMainDefault.transform.Find("DialogueFinisher").gameObject;
+                    mLDialogueMainDefaultMouthActivator = mLDialogueMainDefault.transform.Find("MouthActivator").gameObject;
+                    mLDialogueMainDefaultSpriteFocus = mLDialogueMainDefault.transform.Find("SpriteFocus").gameObject;
+
+                    mLDialogueMainStory03 = CreateNewDialogue("MLDialogueStory03", Places.mountainLabRoomtalk.transform);
+                    mLDialogueMainStory03Scene1 = mLDialogueMainStory03.transform.Find("Scene1").gameObject;
+                    mLDialogueMainStory03Scene2 = mLDialogueMainStory03.transform.Find("Scene2").gameObject;
+                    mLDialogueMainStory03Scene3 = mLDialogueMainStory03.transform.Find("Scene3").gameObject;
+                    mLDialogueMainStory03Scene4 = mLDialogueMainStory03.transform.Find("Scene4").gameObject;
+                    mLDialogueMainStory03Scene5 = mLDialogueMainStory03.transform.Find("Scene5").gameObject;
+                    mLDialogueMainStory03DialogueActivator = mLDialogueMainStory03.transform.Find("DialogueActivator").gameObject;
+                    mLDialogueMainStory03DialogueFinisher = mLDialogueMainStory03.transform.Find("DialogueFinisher").gameObject;
+                    mLDialogueMainStory03MouthActivator = mLDialogueMainStory03.transform.Find("MouthActivator").gameObject;
+                    mLDialogueMainStory03SpriteFocus = mLDialogueMainStory03.transform.Find("SpriteFocus").gameObject;
                     #endregion
                     #region Voyeur Initialization
                     anisBeachDialogue = CreateNewDialogue("AnisDialogueBeach01", Places.secretBeachRoomtalk.transform);

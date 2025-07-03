@@ -64,8 +64,12 @@ namespace SMSAndroidsCore
 
             // Mountain Lab variables
             { "MountainLab_FirstVisited", false },
+            { "MountainLab_FirstVisitor", false },
             
-            // Voyeur variables for each character
+            // Affection variable
+            { "Affection_Amber", 0 },
+
+            // Voyeur variables
             { "Voyeur_SeenAnis", false },
             { "Voyeur_SeenFrima", false },
             { "Voyeur_SeenGuilty", false },
@@ -98,6 +102,7 @@ namespace SMSAndroidsCore
             modSaveThisSession = false;
             MainStory.actionTodaySB = false;
             MainStory.voyeurLotteryNumber = Core.GetRandomNumber(100);
+            Debug.Log("Voyeur Lottery Number: " + MainStory.voyeurLotteryNumber);
             StartCoroutine(WaitAndLoadSaveFile());
         }
 
@@ -135,6 +140,7 @@ namespace SMSAndroidsCore
                     MainStory.relaxed = false;
                     MainStory.actionTodaySB = false;
                     MainStory.voyeurLotteryNumber = Core.GetRandomNumber(100);
+                    Debug.Log("Voyeur Lottery Number: " + MainStory.voyeurLotteryNumber);
                     Schedule.day = Core.GetVariableNumber("Day");
                     afterSleepEventsProc = false;
                 }
@@ -292,6 +298,23 @@ namespace SMSAndroidsCore
         {
             if (instance == null) return;
             instance.ResetToDefaultsInternal();
+        }
+
+        /// <summary>
+        /// Returns true if any bool save variable whose name contains the given substring is true.
+        /// </summary>
+        public static bool AnyBoolVariableWithNameContains(string substring)
+        {
+            if (instance == null || string.IsNullOrEmpty(substring)) return false;
+            string substringLower = substring.ToLower();
+            foreach (var kvp in instance.currentSlotCache)
+            {
+                if (kvp.Key.ToLower().Contains(substringLower) && kvp.Value is bool b && b)
+                {
+                    return true;
+                }
+            }
+            return false;
         }
 
         #endregion
