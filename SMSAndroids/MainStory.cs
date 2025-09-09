@@ -211,7 +211,7 @@ namespace SMSAndroidsCore
                             }
                             else
                             {
-                                if (!Dialogues.dialoguePlaying && !evaluatingLevelDialogue && Places.levelMall.activeSelf && SaveManager.GetBool("Voyeur_SeenAnis"))
+                                if (!Dialogues.dialoguePlaying && !evaluatingLevelDialogue && Places.levelMall.activeSelf && SaveManager.GetBool("MountainLab_GKExplanation"))
                                 {
                                     evaluatingLevelDialogue = true;
                                     lastEvaluatedLevel = Places.levelMall;
@@ -809,7 +809,7 @@ namespace SMSAndroidsCore
                             }
                             else
                             {
-                                if (!Dialogues.dialoguePlaying && !evaluatingLevelDialogue && Places.levelTemple.activeSelf && SaveManager.GetBool("Voyeur_SeenNeon"))
+                                if (!Dialogues.dialoguePlaying && !evaluatingLevelDialogue && Places.levelTemple.activeSelf && SaveManager.GetBool("MountainLab_GKExplanation"))
                                 {
                                     evaluatingLevelDialogue = true;
                                     lastEvaluatedLevel = Places.levelTemple;
@@ -915,7 +915,7 @@ namespace SMSAndroidsCore
                             }
                             else
                             {
-                                if (!Dialogues.dialoguePlaying && !evaluatingLevelDialogue && Places.levelGasStation.activeSelf && SaveManager.GetBool("Voyeur_SeenRapi"))
+                                if (!Dialogues.dialoguePlaying && !evaluatingLevelDialogue && Places.levelGasStation.activeSelf && SaveManager.GetBool("MountainLab_GKExplanation"))
                                 {
                                     evaluatingLevelDialogue = true;
                                     lastEvaluatedLevel = Places.levelGasStation;
