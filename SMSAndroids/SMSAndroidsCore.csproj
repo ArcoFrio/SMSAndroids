@@ -17,7 +17,7 @@
     <DebugSymbols>false</DebugSymbols>
     <DebugType>none</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>D:\Downloads\SkyrimM\spec\uTorrent\Starmaker Story 1.6b\BepInEx\plugins\</OutputPath>
+    <OutputPath>D:\Downloads\SkyrimM\spec\uTorrent\Starmaker Story 1.7\BepInEx\plugins\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -182,9 +182,11 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ButtonHover.cs" />
     <Compile Include="Characters.cs" />
     <Compile Include="Debugging.cs" />
     <Compile Include="Dialogues.cs" />
+    <Compile Include="GridLayoutGroup.cs" />
     <Compile Include="MainStory.cs" />
     <Compile Include="Core.cs" />
     <Compile Include="Places.cs" />
@@ -192,6 +194,7 @@
     <Compile Include="SaveManager.cs" />
     <Compile Include="Scenes.cs" />
     <Compile Include="Schedule.cs" />
+    <Compile Include="Wallpaper.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

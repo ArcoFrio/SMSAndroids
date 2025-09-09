@@ -36,18 +36,21 @@ namespace SMSAndroidsCore
         #region Plugin Info
         public const string pluginGuid = "treboy.starmakerstory.smsandroidscore.core";
         public const string pluginName = "Androids Core";
-        public const string pluginVersion = "0.4.0";
+        public const string pluginVersion = "0.5.1";
         #endregion
 
         public static AssetBundle dialogueBundle;
         public static AssetBundle otherBundle;
         public static bool loadedCore = false;
         public static bool loadedBases = false;
+        public static bool loadedMenu = false;
         public static GameObject afterSleepEvents;
         public static GameObject affectionIncrease;
         public static GameObject baseBust;
+        public static GameObject disableAllBusts;
         public static GameObject introMomentNewGame;
         public static GameObject levelBeach;
+        public static GameObject menuModHeader;
         public static GameObject saveButton1;
         public static GameObject saveButton2;
         public static GameObject saveButton3;
@@ -68,6 +71,7 @@ namespace SMSAndroidsCore
         public static string locationPath = "BepInEx\\plugins\\SMSAndroidsCore\\Locations\\";
         public static string savesPath = "BepInEx\\plugins\\SMSAndroidsCore\\Saves\\";
         public static string scenePath = "BepInEx\\plugins\\SMSAndroidsCore\\Scenes\\";
+        public static string wallpaperPath = "BepInEx\\plugins\\SMSAndroidsCore\\Wallpaper\\";
         public static string exePath;
         public static Transform attractorCanvas;
         public static Transform bustManager;
@@ -81,8 +85,6 @@ namespace SMSAndroidsCore
 
         public void Awake()
         {
-            Logger.LogInfo("Awake");
-
             exePath = Application.dataPath;
             if (Application.platform == RuntimePlatform.OSXPlayer)
             {
@@ -94,8 +96,6 @@ namespace SMSAndroidsCore
             }
             dialogueBundle = AssetBundle.LoadFromFile(exePath + assetPath + "dialoguebundle");
             otherBundle = AssetBundle.LoadFromFile(exePath + assetPath + "otherbundle");
-
-            Logger.LogInfo("Asset Bundles loaded.");
 
             SceneManager.sceneLoaded += OnSceneLoaded;
         }
@@ -138,6 +138,7 @@ namespace SMSAndroidsCore
                     gameplay = GameObject.Find("10_Gameplay").transform;
 
                     baseBust = bustManager.Find("Anna_YellowSexy").gameObject;
+                    disableAllBusts = GameObject.Find("Disable_All_chars");
                     levelBeach = level.Find("14_Beach").gameObject;
                     afterSleepEvents = mainCanvas.Find("AfterSleepEvents").gameObject;
                     introMomentNewGame = mainCanvas.transform.Find("Starmaker").Find("Intro_Moment").gameObject;
@@ -158,11 +159,20 @@ namespace SMSAndroidsCore
                     affectionIncrease.transform.Find("Hearts").gameObject.GetComponent<ParticleSystem>().startColor = new Color(1.0f, 0.35f, 0.7f);
 
                     Logger.LogInfo("----- CORE LOADED -----");
+                    loadedMenu = false;
                     loadedCore = true;
+
+                    //Debugging.PrintConditionsAndTriggers(Core.level.Find("58_Subpark").gameObject);
                 }
             }
             if (currentScene.name == "GameStart")
             {
+                if (!loadedMenu)
+                {
+                    Invoke(nameof(CreateModHeader), 3.0f);
+                    //Logger.LogInfo("----- MENU LOADED -----");
+                    loadedMenu = true;
+                }
                 if (loadedCore)
                 {
                     Logger.LogInfo("----- CORE UNLOADED -----");
@@ -170,7 +180,23 @@ namespace SMSAndroidsCore
                 }
             }
         }
+
         
+        public void CreateModHeader()
+        {
+            GameObject originalText = GameObject.Find("Part_One").transform.Find("Canvas_MM").Find("MainMenu").Find("Text (TMP)").gameObject;
+            menuModHeader = GameObject.Instantiate(originalText, GameObject.Find("Part_One").transform.Find("Canvas_MM").Find("MainMenu"));
+            menuModHeader.GetComponent<TextMeshProUGUI>().text = "Androids Mod " + pluginVersion + " for 1.7";
+            menuModHeader.GetComponent<TextMeshProUGUI>().fontSize = 40;
+            menuModHeader.GetComponent<TextMeshProUGUI>().fontSizeMin = 26;
+            menuModHeader.GetComponent<TextMeshProUGUI>().fontSizeMax = 84;
+            //menuModHeader.GetComponent<TextMeshProUGUI>().outlineColor = new Color32(235, 192, 52, 255);
+            RectTransform originalRectTransform = originalText.GetComponent<RectTransform>();
+            RectTransform newRectTransform = menuModHeader.GetComponent<RectTransform>();
+            newRectTransform.anchoredPosition = originalRectTransform.anchoredPosition - new Vector2(-100, 35);
+            newRectTransform.sizeDelta = new Vector2(400, 50);
+            Debug.Log(menuModHeader.GetComponent<TextMeshProUGUI>().text);
+        }
         public static void FindAndModifyVariableDouble(string variableNameToFind, Double newValue)
         {
             var manager = GlobalNameVariablesManager.Instance;

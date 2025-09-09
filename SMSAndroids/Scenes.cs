@@ -37,78 +37,113 @@ namespace SMSAndroidsCore
         public const string pluginGuid = "treboy.starmakerstory.smsandroidscore.scenes";
         #endregion
 
-        public static GameObject amberStareScene1;
+        public static GameObject amberEventHospitalhallwayScene01;
+        public static GameObject amberEventHospitalhallwayScene02;
+        public static GameObject amberStorySecretbeachScene01;
+
+        public static GameObject anisEventMallScene01;
+        public static GameObject centiEventKenshomeScene01;
+        public static GameObject dorothyEventParkScene01;
+        public static GameObject eleggEventDowntownScene01;
+        public static GameObject frimaEventHotelScene01;
+        public static GameObject guiltyEventParkinglotScene01;
+        public static GameObject helmEventBeachScene01;
+        public static GameObject maidenEventAlleyScene01;
+        public static GameObject maryEventHospitalhallwayScene01;
+        public static GameObject mastEventBeachScene01;
+        public static GameObject neonEventTempleScene01;
+        public static GameObject pepperEventHospitalScene01;
+        public static GameObject rapiEventGasstationScene01;
+        public static GameObject rosannaEventGabrielsmansionScene01;
+        public static GameObject sakuraEventForestScene01;
+        public static GameObject viperEventVillaScene01;
+        public static GameObject yanEventMallScene01;
 
         #region Voyeur Scene Variables
-        public static GameObject anisBeachScene1;
-        public static GameObject anisBeachScene2;
-        public static GameObject anisBeachScene3;
-        public static GameObject anisBeachScene4;
+        public static GameObject anisVoyeurSecretbeachScene01;
+        public static GameObject anisVoyeurSecretbeachScene02;
+        public static GameObject anisVoyeurSecretbeachScene03;
+        public static GameObject anisVoyeurSecretbeachScene04;
 
-        public static GameObject frimaBeachScene1;
-        public static GameObject frimaBeachScene2;
-        public static GameObject frimaBeachScene3;
-        public static GameObject frimaBeachScene4;
+        public static GameObject centiVoyeurSecretbeachScene01;
+        public static GameObject centiVoyeurSecretbeachScene02;
+        public static GameObject centiVoyeurSecretbeachScene03;
+        public static GameObject centiVoyeurSecretbeachScene04;
 
-        public static GameObject guiltyBeachScene1;
-        public static GameObject guiltyBeachScene2;
-        public static GameObject guiltyBeachScene3;
-        public static GameObject guiltyBeachScene4;
+        public static GameObject dorothyVoyeurSecretbeachScene01;
+        public static GameObject dorothyVoyeurSecretbeachScene02;
+        public static GameObject dorothyVoyeurSecretbeachScene03;
+        public static GameObject dorothyVoyeurSecretbeachScene04;
 
-        public static GameObject helmBeachScene1;
-        public static GameObject helmBeachScene2;
-        public static GameObject helmBeachScene3;
-        public static GameObject helmBeachScene4;
+        public static GameObject eleggVoyeurSecretbeachScene01;
+        public static GameObject eleggVoyeurSecretbeachScene02;
+        public static GameObject eleggVoyeurSecretbeachScene03;
+        public static GameObject eleggVoyeurSecretbeachScene04;
 
-        public static GameObject maidenBeachScene1;
-        public static GameObject maidenBeachScene2;
-        public static GameObject maidenBeachScene3;
-        public static GameObject maidenBeachScene4;
+        public static GameObject frimaVoyeurSecretbeachScene01;
+        public static GameObject frimaVoyeurSecretbeachScene02;
+        public static GameObject frimaVoyeurSecretbeachScene03;
+        public static GameObject frimaVoyeurSecretbeachScene04;
 
-        public static GameObject maryBeachScene1;
-        public static GameObject maryBeachScene2;
-        public static GameObject maryBeachScene3;
-        public static GameObject maryBeachScene4;
+        public static GameObject guiltyVoyeurSecretbeachScene01;
+        public static GameObject guiltyVoyeurSecretbeachScene02;
+        public static GameObject guiltyVoyeurSecretbeachScene03;
+        public static GameObject guiltyVoyeurSecretbeachScene04;
 
-        public static GameObject mastBeachScene1;
-        public static GameObject mastBeachScene2;
-        public static GameObject mastBeachScene3;
-        public static GameObject mastBeachScene4;
+        public static GameObject helmVoyeurSecretbeachScene01;
+        public static GameObject helmVoyeurSecretbeachScene02;
+        public static GameObject helmVoyeurSecretbeachScene03;
+        public static GameObject helmVoyeurSecretbeachScene04;
 
-        public static GameObject neonBeachScene1;
-        public static GameObject neonBeachScene2;
-        public static GameObject neonBeachScene3;
-        public static GameObject neonBeachScene4;
+        public static GameObject maidenVoyeurSecretbeachScene01;
+        public static GameObject maidenVoyeurSecretbeachScene02;
+        public static GameObject maidenVoyeurSecretbeachScene03;
+        public static GameObject maidenVoyeurSecretbeachScene04;
 
-        public static GameObject pepperBeachScene1;
-        public static GameObject pepperBeachScene2;
-        public static GameObject pepperBeachScene3;
-        public static GameObject pepperBeachScene4;
+        public static GameObject maryVoyeurSecretbeachScene01;
+        public static GameObject maryVoyeurSecretbeachScene02;
+        public static GameObject maryVoyeurSecretbeachScene03;
+        public static GameObject maryVoyeurSecretbeachScene04;
 
-        public static GameObject rapiBeachScene1;
-        public static GameObject rapiBeachScene2;
-        public static GameObject rapiBeachScene3;
-        public static GameObject rapiBeachScene4;
+        public static GameObject mastVoyeurSecretbeachScene01;
+        public static GameObject mastVoyeurSecretbeachScene02;
+        public static GameObject mastVoyeurSecretbeachScene03;
+        public static GameObject mastVoyeurSecretbeachScene04;
 
-        public static GameObject rosannaBeachScene1;
-        public static GameObject rosannaBeachScene2;
-        public static GameObject rosannaBeachScene3;
-        public static GameObject rosannaBeachScene4;
+        public static GameObject neonVoyeurSecretbeachScene01;
+        public static GameObject neonVoyeurSecretbeachScene02;
+        public static GameObject neonVoyeurSecretbeachScene03;
+        public static GameObject neonVoyeurSecretbeachScene04;
 
-        public static GameObject sakuraBeachScene1;
-        public static GameObject sakuraBeachScene2;
-        public static GameObject sakuraBeachScene3;
-        public static GameObject sakuraBeachScene4;
+        public static GameObject pepperVoyeurSecretbeachScene01;
+        public static GameObject pepperVoyeurSecretbeachScene02;
+        public static GameObject pepperVoyeurSecretbeachScene03;
+        public static GameObject pepperVoyeurSecretbeachScene04;
 
-        public static GameObject viperBeachScene1;
-        public static GameObject viperBeachScene2;
-        public static GameObject viperBeachScene3;
-        public static GameObject viperBeachScene4;
+        public static GameObject rapiVoyeurSecretbeachScene01;
+        public static GameObject rapiVoyeurSecretbeachScene02;
+        public static GameObject rapiVoyeurSecretbeachScene03;
+        public static GameObject rapiVoyeurSecretbeachScene04;
 
-        public static GameObject yanBeachScene1;
-        public static GameObject yanBeachScene2;
-        public static GameObject yanBeachScene3;
-        public static GameObject yanBeachScene4;
+        public static GameObject rosannaVoyeurSecretbeachScene01;
+        public static GameObject rosannaVoyeurSecretbeachScene02;
+        public static GameObject rosannaVoyeurSecretbeachScene03;
+        public static GameObject rosannaVoyeurSecretbeachScene04;
+
+        public static GameObject sakuraVoyeurSecretbeachScene01;
+        public static GameObject sakuraVoyeurSecretbeachScene02;
+        public static GameObject sakuraVoyeurSecretbeachScene03;
+        public static GameObject sakuraVoyeurSecretbeachScene04;
+
+        public static GameObject viperVoyeurSecretbeachScene01;
+        public static GameObject viperVoyeurSecretbeachScene02;
+        public static GameObject viperVoyeurSecretbeachScene03;
+        public static GameObject viperVoyeurSecretbeachScene04;
+
+        public static GameObject yanVoyeurSecretbeachScene01;
+        public static GameObject yanVoyeurSecretbeachScene02;
+        public static GameObject yanVoyeurSecretbeachScene03;
+        public static GameObject yanVoyeurSecretbeachScene04;
         #endregion
 
         public static bool loadedScenes = false;
@@ -118,78 +153,113 @@ namespace SMSAndroidsCore
             {
                 if (!loadedScenes)
                 {
-                    amberStareScene1 = CreateNewPicScene("AmberStareScene01", Core.scenePath + "Amber\\AmberStareScene01.PNG");
+                    amberEventHospitalhallwayScene01 = CreateNewPicScene("AmberEventHospitalhallwayScene01", Core.scenePath + "Amber\\AmberEventHospitalhallwayScene01.PNG");
+                    amberEventHospitalhallwayScene02 = CreateNewPicScene("AmberEventHospitalhallwayScene02", Core.scenePath + "Amber\\AmberEventHospitalhallwayScene02.PNG");
+                    amberStorySecretbeachScene01 = CreateNewPicScene("AmberStorySecretbeachScene01", Core.scenePath + "Amber\\AmberStorySecretbeachScene01.PNG");
 
-                    anisBeachScene1 = CreateNewPicScene("AnisBeachScene01", Core.scenePath + "Anis\\AnisBeachScene01.PNG");
-                    anisBeachScene2 = CreateNewPicScene("AnisBeachScene02", Core.scenePath + "Anis\\AnisBeachScene02.PNG");
-                    anisBeachScene3 = CreateNewPicScene("AnisBeachScene03", Core.scenePath + "Anis\\AnisBeachScene03.PNG");
-                    anisBeachScene4 = CreateNewPicScene("AnisBeachScene04", Core.scenePath + "Anis\\AnisBeachScene04.PNG");
+                    anisEventMallScene01 = CreateNewPicScene("AnisEventMallScene01", Core.scenePath + "Anis\\AnisEventMallScene01.PNG");
+                    anisVoyeurSecretbeachScene01 = CreateNewPicScene("AnisVoyeurSecretbeachScene01", Core.scenePath + "Anis\\AnisVoyeurSecretbeachScene01.PNG");
+                    anisVoyeurSecretbeachScene02 = CreateNewPicScene("AnisVoyeurSecretbeachScene02", Core.scenePath + "Anis\\AnisVoyeurSecretbeachScene02.PNG");
+                    anisVoyeurSecretbeachScene03 = CreateNewPicScene("AnisVoyeurSecretbeachScene03", Core.scenePath + "Anis\\AnisVoyeurSecretbeachScene03.PNG");
+                    anisVoyeurSecretbeachScene04 = CreateNewPicScene("AnisVoyeurSecretbeachScene04", Core.scenePath + "Anis\\AnisVoyeurSecretbeachScene04.PNG");
 
-                    frimaBeachScene1 = CreateNewPicScene("FrimaBeachScene01", Core.scenePath + "Frima\\FrimaBeachScene01.PNG");
-                    frimaBeachScene2 = CreateNewPicScene("FrimaBeachScene02", Core.scenePath + "Frima\\FrimaBeachScene02.PNG");
-                    frimaBeachScene3 = CreateNewPicScene("FrimaBeachScene03", Core.scenePath + "Frima\\FrimaBeachScene03.PNG");
-                    frimaBeachScene4 = CreateNewPicScene("FrimaBeachScene04", Core.scenePath + "Frima\\FrimaBeachScene04.PNG");
+                    centiEventKenshomeScene01 = CreateNewPicScene("CentiEventKenshomeScene01", Core.scenePath + "Centi\\CentiEventKenshomeScene01.PNG");
+                    centiVoyeurSecretbeachScene01 = CreateNewPicScene("CentiVoyeurSecretbeachScene01", Core.scenePath + "Centi\\CentiVoyeurSecretbeachScene01.PNG");
+                    centiVoyeurSecretbeachScene02 = CreateNewPicScene("CentiVoyeurSecretbeachScene02", Core.scenePath + "Centi\\CentiVoyeurSecretbeachScene02.PNG");
+                    centiVoyeurSecretbeachScene03 = CreateNewPicScene("CentiVoyeurSecretbeachScene03", Core.scenePath + "Centi\\CentiVoyeurSecretbeachScene03.PNG");
+                    centiVoyeurSecretbeachScene04 = CreateNewPicScene("CentiVoyeurSecretbeachScene04", Core.scenePath + "Centi\\CentiVoyeurSecretbeachScene04.PNG");
 
-                    guiltyBeachScene1 = CreateNewPicScene("GuiltyBeachScene01", Core.scenePath + "Guilty\\GuiltyBeachScene01.PNG");
-                    guiltyBeachScene2 = CreateNewPicScene("GuiltyBeachScene02", Core.scenePath + "Guilty\\GuiltyBeachScene02.PNG");
-                    guiltyBeachScene3 = CreateNewPicScene("GuiltyBeachScene03", Core.scenePath + "Guilty\\GuiltyBeachScene03.PNG");
-                    guiltyBeachScene4 = CreateNewPicScene("GuiltyBeachScene04", Core.scenePath + "Guilty\\GuiltyBeachScene04.PNG");
+                    dorothyEventParkScene01 = CreateNewPicScene("DorothyEventParkScene01", Core.scenePath + "Dorothy\\DorothyEventParkScene01.PNG");
+                    dorothyVoyeurSecretbeachScene01 = CreateNewPicScene("DorothyVoyeurSecretbeachScene01", Core.scenePath + "Dorothy\\DorothyVoyeurSecretbeachScene01.PNG");
+                    dorothyVoyeurSecretbeachScene02 = CreateNewPicScene("DorothyVoyeurSecretbeachScene02", Core.scenePath + "Dorothy\\DorothyVoyeurSecretbeachScene02.PNG");
+                    dorothyVoyeurSecretbeachScene03 = CreateNewPicScene("DorothyVoyeurSecretbeachScene03", Core.scenePath + "Dorothy\\DorothyVoyeurSecretbeachScene03.PNG");
+                    dorothyVoyeurSecretbeachScene04 = CreateNewPicScene("DorothyVoyeurSecretbeachScene04", Core.scenePath + "Dorothy\\DorothyVoyeurSecretbeachScene04.PNG");
 
-                    helmBeachScene1 = CreateNewPicScene("HelmBeachScene01", Core.scenePath + "Helm\\HelmBeachScene01.PNG");
-                    helmBeachScene2 = CreateNewPicScene("HelmBeachScene02", Core.scenePath + "Helm\\HelmBeachScene02.PNG");
-                    helmBeachScene3 = CreateNewPicScene("HelmBeachScene03", Core.scenePath + "Helm\\HelmBeachScene03.PNG");
-                    helmBeachScene4 = CreateNewPicScene("HelmBeachScene04", Core.scenePath + "Helm\\HelmBeachScene04.PNG");
+                    eleggEventDowntownScene01 = CreateNewPicScene("EleggEventDowntownScene01", Core.scenePath + "Elegg\\EleggEventDowntownScene01.PNG");
+                    eleggVoyeurSecretbeachScene01 = CreateNewPicScene("EleggVoyeurSecretbeachScene01", Core.scenePath + "Elegg\\EleggVoyeurSecretbeachScene01.PNG");
+                    eleggVoyeurSecretbeachScene02 = CreateNewPicScene("EleggVoyeurSecretbeachScene02", Core.scenePath + "Elegg\\EleggVoyeurSecretbeachScene02.PNG");
+                    eleggVoyeurSecretbeachScene03 = CreateNewPicScene("EleggVoyeurSecretbeachScene03", Core.scenePath + "Elegg\\EleggVoyeurSecretbeachScene03.PNG");
+                    eleggVoyeurSecretbeachScene04 = CreateNewPicScene("EleggVoyeurSecretbeachScene04", Core.scenePath + "Elegg\\EleggVoyeurSecretbeachScene04.PNG");
 
-                    maidenBeachScene1 = CreateNewPicScene("MaidenBeachScene01", Core.scenePath + "Maiden\\MaidenBeachScene01.PNG");
-                    maidenBeachScene2 = CreateNewPicScene("MaidenBeachScene02", Core.scenePath + "Maiden\\MaidenBeachScene02.PNG");
-                    maidenBeachScene3 = CreateNewPicScene("MaidenBeachScene03", Core.scenePath + "Maiden\\MaidenBeachScene03.PNG");
-                    maidenBeachScene4 = CreateNewPicScene("MaidenBeachScene04", Core.scenePath + "Maiden\\MaidenBeachScene04.PNG");
+                    frimaEventHotelScene01 = CreateNewPicScene("FrimaEventHotelScene01", Core.scenePath + "Frima\\FrimaEventHotelScene01.PNG");
+                    frimaVoyeurSecretbeachScene01 = CreateNewPicScene("FrimaVoyeurSecretbeachScene01", Core.scenePath + "Frima\\FrimaVoyeurSecretbeachScene01.PNG");
+                    frimaVoyeurSecretbeachScene02 = CreateNewPicScene("FrimaVoyeurSecretbeachScene02", Core.scenePath + "Frima\\FrimaVoyeurSecretbeachScene02.PNG");
+                    frimaVoyeurSecretbeachScene03 = CreateNewPicScene("FrimaVoyeurSecretbeachScene03", Core.scenePath + "Frima\\FrimaVoyeurSecretbeachScene03.PNG");
+                    frimaVoyeurSecretbeachScene04 = CreateNewPicScene("FrimaVoyeurSecretbeachScene04", Core.scenePath + "Frima\\FrimaVoyeurSecretbeachScene04.PNG");
 
-                    maryBeachScene1 = CreateNewPicScene("MaryBeachScene01", Core.scenePath + "Mary\\MaryBeachScene01.PNG");
-                    maryBeachScene2 = CreateNewPicScene("MaryBeachScene02", Core.scenePath + "Mary\\MaryBeachScene02.PNG");
-                    maryBeachScene3 = CreateNewPicScene("MaryBeachScene03", Core.scenePath + "Mary\\MaryBeachScene03.PNG");
-                    maryBeachScene4 = CreateNewPicScene("MaryBeachScene04", Core.scenePath + "Mary\\MaryBeachScene04.PNG");
+                    guiltyEventParkinglotScene01 = CreateNewPicScene("GuiltyEventParkinglotScene01", Core.scenePath + "Guilty\\GuiltyEventParkinglotScene01.PNG");
+                    guiltyVoyeurSecretbeachScene01 = CreateNewPicScene("GuiltyVoyeurSecretbeachScene01", Core.scenePath + "Guilty\\GuiltyVoyeurSecretbeachScene01.PNG");
+                    guiltyVoyeurSecretbeachScene02 = CreateNewPicScene("GuiltyVoyeurSecretbeachScene02", Core.scenePath + "Guilty\\GuiltyVoyeurSecretbeachScene02.PNG");
+                    guiltyVoyeurSecretbeachScene03 = CreateNewPicScene("GuiltyVoyeurSecretbeachScene03", Core.scenePath + "Guilty\\GuiltyVoyeurSecretbeachScene03.PNG");
+                    guiltyVoyeurSecretbeachScene04 = CreateNewPicScene("GuiltyVoyeurSecretbeachScene04", Core.scenePath + "Guilty\\GuiltyVoyeurSecretbeachScene04.PNG");
 
-                    mastBeachScene1 = CreateNewPicScene("MastBeachScene01", Core.scenePath + "Mast\\MastBeachScene01.PNG");
-                    mastBeachScene2 = CreateNewPicScene("MastBeachScene02", Core.scenePath + "Mast\\MastBeachScene02.PNG");
-                    mastBeachScene3 = CreateNewPicScene("MastBeachScene03", Core.scenePath + "Mast\\MastBeachScene03.PNG");
-                    mastBeachScene4 = CreateNewPicScene("MastBeachScene04", Core.scenePath + "Mast\\MastBeachScene04.PNG");
+                    helmEventBeachScene01 = CreateNewPicScene("HelmEventBeachScene01", Core.scenePath + "Helm\\HelmEventBeachScene01.PNG");
+                    helmVoyeurSecretbeachScene01 = CreateNewPicScene("HelmVoyeurSecretbeachScene01", Core.scenePath + "Helm\\HelmVoyeurSecretbeachScene01.PNG");
+                    helmVoyeurSecretbeachScene02 = CreateNewPicScene("HelmVoyeurSecretbeachScene02", Core.scenePath + "Helm\\HelmVoyeurSecretbeachScene02.PNG");
+                    helmVoyeurSecretbeachScene03 = CreateNewPicScene("HelmVoyeurSecretbeachScene03", Core.scenePath + "Helm\\HelmVoyeurSecretbeachScene03.PNG");
+                    helmVoyeurSecretbeachScene04 = CreateNewPicScene("HelmVoyeurSecretbeachScene04", Core.scenePath + "Helm\\HelmVoyeurSecretbeachScene04.PNG");
 
-                    neonBeachScene1 = CreateNewPicScene("NeonBeachScene01", Core.scenePath + "Neon\\NeonBeachScene01.PNG");
-                    neonBeachScene2 = CreateNewPicScene("NeonBeachScene02", Core.scenePath + "Neon\\NeonBeachScene02.PNG");
-                    neonBeachScene3 = CreateNewPicScene("NeonBeachScene03", Core.scenePath + "Neon\\NeonBeachScene03.PNG");
-                    neonBeachScene4 = CreateNewPicScene("NeonBeachScene04", Core.scenePath + "Neon\\NeonBeachScene04.PNG");
+                    maidenEventAlleyScene01 = CreateNewPicScene("MaidenEventAlleyScene01", Core.scenePath + "Maiden\\MaidenEventAlleyScene01.PNG");
+                    maidenVoyeurSecretbeachScene01 = CreateNewPicScene("MaidenVoyeurSecretbeachScene01", Core.scenePath + "Maiden\\MaidenVoyeurSecretbeachScene01.PNG");
+                    maidenVoyeurSecretbeachScene02 = CreateNewPicScene("MaidenVoyeurSecretbeachScene02", Core.scenePath + "Maiden\\MaidenVoyeurSecretbeachScene02.PNG");
+                    maidenVoyeurSecretbeachScene03 = CreateNewPicScene("MaidenVoyeurSecretbeachScene03", Core.scenePath + "Maiden\\MaidenVoyeurSecretbeachScene03.PNG");
+                    maidenVoyeurSecretbeachScene04 = CreateNewPicScene("MaidenVoyeurSecretbeachScene04", Core.scenePath + "Maiden\\MaidenVoyeurSecretbeachScene04.PNG");
 
-                    pepperBeachScene1 = CreateNewPicScene("PepperBeachScene01", Core.scenePath + "Pepper\\PepperBeachScene01.PNG");
-                    pepperBeachScene2 = CreateNewPicScene("PepperBeachScene02", Core.scenePath + "Pepper\\PepperBeachScene02.PNG");
-                    pepperBeachScene3 = CreateNewPicScene("PepperBeachScene03", Core.scenePath + "Pepper\\PepperBeachScene03.PNG");
-                    pepperBeachScene4 = CreateNewPicScene("PepperBeachScene04", Core.scenePath + "Pepper\\PepperBeachScene04.PNG");
+                    maryEventHospitalhallwayScene01 = CreateNewPicScene("MaryEventHospitalhallwayScene01", Core.scenePath + "Mary\\MaryEventHospitalhallwayScene01.PNG");
+                    maryVoyeurSecretbeachScene01 = CreateNewPicScene("MaryVoyeurSecretbeachScene01", Core.scenePath + "Mary\\MaryVoyeurSecretbeachScene01.PNG");
+                    maryVoyeurSecretbeachScene02 = CreateNewPicScene("MaryVoyeurSecretbeachScene02", Core.scenePath + "Mary\\MaryVoyeurSecretbeachScene02.PNG");
+                    maryVoyeurSecretbeachScene03 = CreateNewPicScene("MaryVoyeurSecretbeachScene03", Core.scenePath + "Mary\\MaryVoyeurSecretbeachScene03.PNG");
+                    maryVoyeurSecretbeachScene04 = CreateNewPicScene("MaryVoyeurSecretbeachScene04", Core.scenePath + "Mary\\MaryVoyeurSecretbeachScene04.PNG");
 
-                    rapiBeachScene1 = CreateNewPicScene("RapiBeachScene01", Core.scenePath + "Rapi\\RapiBeachScene01.PNG");
-                    rapiBeachScene2 = CreateNewPicScene("RapiBeachScene02", Core.scenePath + "Rapi\\RapiBeachScene02.PNG");
-                    rapiBeachScene3 = CreateNewPicScene("RapiBeachScene03", Core.scenePath + "Rapi\\RapiBeachScene03.PNG");
-                    rapiBeachScene4 = CreateNewPicScene("RapiBeachScene04", Core.scenePath + "Rapi\\RapiBeachScene04.PNG");
+                    mastEventBeachScene01 = CreateNewPicScene("MastEventBeachScene01", Core.scenePath + "Mast\\MastEventBeachScene01.PNG");
+                    mastVoyeurSecretbeachScene01 = CreateNewPicScene("MastVoyeurSecretbeachScene01", Core.scenePath + "Mast\\MastVoyeurSecretbeachScene01.PNG");
+                    mastVoyeurSecretbeachScene02 = CreateNewPicScene("MastVoyeurSecretbeachScene02", Core.scenePath + "Mast\\MastVoyeurSecretbeachScene02.PNG");
+                    mastVoyeurSecretbeachScene03 = CreateNewPicScene("MastVoyeurSecretbeachScene03", Core.scenePath + "Mast\\MastVoyeurSecretbeachScene03.PNG");
+                    mastVoyeurSecretbeachScene04 = CreateNewPicScene("MastVoyeurSecretbeachScene04", Core.scenePath + "Mast\\MastVoyeurSecretbeachScene04.PNG");
 
-                    rosannaBeachScene1 = CreateNewPicScene("RosannaBeachScene01", Core.scenePath + "Rosanna\\RosannaBeachScene01.PNG");
-                    rosannaBeachScene2 = CreateNewPicScene("RosannaBeachScene02", Core.scenePath + "Rosanna\\RosannaBeachScene02.PNG");
-                    rosannaBeachScene3 = CreateNewPicScene("RosannaBeachScene03", Core.scenePath + "Rosanna\\RosannaBeachScene03.PNG");
-                    rosannaBeachScene4 = CreateNewPicScene("RosannaBeachScene04", Core.scenePath + "Rosanna\\RosannaBeachScene04.PNG");
+                    neonEventTempleScene01 = CreateNewPicScene("NeonEventTempleScene01", Core.scenePath + "Neon\\NeonEventTempleScene01.PNG");
+                    neonVoyeurSecretbeachScene01 = CreateNewPicScene("NeonVoyeurSecretbeachScene01", Core.scenePath + "Neon\\NeonVoyeurSecretbeachScene01.PNG");
+                    neonVoyeurSecretbeachScene02 = CreateNewPicScene("NeonVoyeurSecretbeachScene02", Core.scenePath + "Neon\\NeonVoyeurSecretbeachScene02.PNG");
+                    neonVoyeurSecretbeachScene03 = CreateNewPicScene("NeonVoyeurSecretbeachScene03", Core.scenePath + "Neon\\NeonVoyeurSecretbeachScene03.PNG");
+                    neonVoyeurSecretbeachScene04 = CreateNewPicScene("NeonVoyeurSecretbeachScene04", Core.scenePath + "Neon\\NeonVoyeurSecretbeachScene04.PNG");
 
-                    sakuraBeachScene1 = CreateNewPicScene("SakuraBeachScene01", Core.scenePath + "Sakura\\SakuraBeachScene01.PNG");
-                    sakuraBeachScene2 = CreateNewPicScene("SakuraBeachScene02", Core.scenePath + "Sakura\\SakuraBeachScene02.PNG");
-                    sakuraBeachScene3 = CreateNewPicScene("SakuraBeachScene03", Core.scenePath + "Sakura\\SakuraBeachScene03.PNG");
-                    sakuraBeachScene4 = CreateNewPicScene("SakuraBeachScene04", Core.scenePath + "Sakura\\SakuraBeachScene04.PNG");
+                    pepperEventHospitalScene01 = CreateNewPicScene("PepperEventHospitalScene01", Core.scenePath + "Pepper\\PepperEventHospitalScene01.PNG");
+                    pepperVoyeurSecretbeachScene01 = CreateNewPicScene("PepperVoyeurSecretbeachScene01", Core.scenePath + "Pepper\\PepperVoyeurSecretbeachScene01.PNG");
+                    pepperVoyeurSecretbeachScene02 = CreateNewPicScene("PepperVoyeurSecretbeachScene02", Core.scenePath + "Pepper\\PepperVoyeurSecretbeachScene02.PNG");
+                    pepperVoyeurSecretbeachScene03 = CreateNewPicScene("PepperVoyeurSecretbeachScene03", Core.scenePath + "Pepper\\PepperVoyeurSecretbeachScene03.PNG");
+                    pepperVoyeurSecretbeachScene04 = CreateNewPicScene("PepperVoyeurSecretbeachScene04", Core.scenePath + "Pepper\\PepperVoyeurSecretbeachScene04.PNG");
 
-                    viperBeachScene1 = CreateNewPicScene("ViperBeachScene01", Core.scenePath + "Viper\\ViperBeachScene01.PNG");
-                    viperBeachScene2 = CreateNewPicScene("ViperBeachScene02", Core.scenePath + "Viper\\ViperBeachScene02.PNG");
-                    viperBeachScene3 = CreateNewPicScene("ViperBeachScene03", Core.scenePath + "Viper\\ViperBeachScene03.PNG");
-                    viperBeachScene4 = CreateNewPicScene("ViperBeachScene04", Core.scenePath + "Viper\\ViperBeachScene04.PNG");
+                    rapiEventGasstationScene01 = CreateNewPicScene("RapiEventGasstationScene01", Core.scenePath + "Rapi\\RapiEventGasstationScene01.PNG");
+                    rapiVoyeurSecretbeachScene01 = CreateNewPicScene("RapiVoyeurSecretbeachScene01", Core.scenePath + "Rapi\\RapiVoyeurSecretbeachScene01.PNG");
+                    rapiVoyeurSecretbeachScene02 = CreateNewPicScene("RapiVoyeurSecretbeachScene02", Core.scenePath + "Rapi\\RapiVoyeurSecretbeachScene02.PNG");
+                    rapiVoyeurSecretbeachScene03 = CreateNewPicScene("RapiVoyeurSecretbeachScene03", Core.scenePath + "Rapi\\RapiVoyeurSecretbeachScene03.PNG");
+                    rapiVoyeurSecretbeachScene04 = CreateNewPicScene("RapiVoyeurSecretbeachScene04", Core.scenePath + "Rapi\\RapiVoyeurSecretbeachScene04.PNG");
 
-                    yanBeachScene1 = CreateNewPicScene("YanBeachScene01", Core.scenePath + "Yan\\YanBeachScene01.PNG");
-                    yanBeachScene2 = CreateNewPicScene("YanBeachScene02", Core.scenePath + "Yan\\YanBeachScene02.PNG");
-                    yanBeachScene3 = CreateNewPicScene("YanBeachScene03", Core.scenePath + "Yan\\YanBeachScene03.PNG");
-                    yanBeachScene4 = CreateNewPicScene("YanBeachScene04", Core.scenePath + "Yan\\YanBeachScene04.PNG");
+                    rosannaEventGabrielsmansionScene01 = CreateNewPicScene("RosannaEventGabrielsmansionScene01", Core.scenePath + "Rosanna\\RosannaEventGabrielsmansionScene01.PNG");
+                    rosannaVoyeurSecretbeachScene01 = CreateNewPicScene("RosannaVoyeurSecretbeachScene01", Core.scenePath + "Rosanna\\RosannaVoyeurSecretbeachScene01.PNG");
+                    rosannaVoyeurSecretbeachScene02 = CreateNewPicScene("RosannaVoyeurSecretbeachScene02", Core.scenePath + "Rosanna\\RosannaVoyeurSecretbeachScene02.PNG");
+                    rosannaVoyeurSecretbeachScene03 = CreateNewPicScene("RosannaVoyeurSecretbeachScene03", Core.scenePath + "Rosanna\\RosannaVoyeurSecretbeachScene03.PNG");
+                    rosannaVoyeurSecretbeachScene04 = CreateNewPicScene("RosannaVoyeurSecretbeachScene04", Core.scenePath + "Rosanna\\RosannaVoyeurSecretbeachScene04.PNG");
 
+                    sakuraEventForestScene01 = CreateNewPicScene("SakuraEventForestScene01", Core.scenePath + "Sakura\\SakuraEventForestScene01.PNG");
+                    sakuraVoyeurSecretbeachScene01 = CreateNewPicScene("SakuraVoyeurSecretbeachScene01", Core.scenePath + "Sakura\\SakuraVoyeurSecretbeachScene01.PNG");
+                    sakuraVoyeurSecretbeachScene02 = CreateNewPicScene("SakuraVoyeurSecretbeachScene02", Core.scenePath + "Sakura\\SakuraVoyeurSecretbeachScene02.PNG");
+                    sakuraVoyeurSecretbeachScene03 = CreateNewPicScene("SakuraVoyeurSecretbeachScene03", Core.scenePath + "Sakura\\SakuraVoyeurSecretbeachScene03.PNG");
+                    sakuraVoyeurSecretbeachScene04 = CreateNewPicScene("SakuraVoyeurSecretbeachScene04", Core.scenePath + "Sakura\\SakuraVoyeurSecretbeachScene04.PNG");
+
+                    viperEventVillaScene01 = CreateNewPicScene("ViperEventVillaScene01", Core.scenePath + "Viper\\ViperEventVillaScene01.PNG");
+                    viperVoyeurSecretbeachScene01 = CreateNewPicScene("ViperVoyeurSecretbeachScene01", Core.scenePath + "Viper\\ViperVoyeurSecretbeachScene01.PNG");
+                    viperVoyeurSecretbeachScene02 = CreateNewPicScene("ViperVoyeurSecretbeachScene02", Core.scenePath + "Viper\\ViperVoyeurSecretbeachScene02.PNG");
+                    viperVoyeurSecretbeachScene03 = CreateNewPicScene("ViperVoyeurSecretbeachScene03", Core.scenePath + "Viper\\ViperVoyeurSecretbeachScene03.PNG");
+                    viperVoyeurSecretbeachScene04 = CreateNewPicScene("ViperVoyeurSecretbeachScene04", Core.scenePath + "Viper\\ViperVoyeurSecretbeachScene04.PNG");
+
+                    yanEventMallScene01 = CreateNewPicScene("YanEventMallScene01", Core.scenePath + "Yan\\YanEventMallScene01.PNG");
+                    yanVoyeurSecretbeachScene01 = CreateNewPicScene("YanVoyeurSecretbeachScene01", Core.scenePath + "Yan\\YanVoyeurSecretbeachScene01.PNG");
+                    yanVoyeurSecretbeachScene02 = CreateNewPicScene("YanVoyeurSecretbeachScene02", Core.scenePath + "Yan\\YanVoyeurSecretbeachScene02.PNG");
+                    yanVoyeurSecretbeachScene03 = CreateNewPicScene("YanVoyeurSecretbeachScene03", Core.scenePath + "Yan\\YanVoyeurSecretbeachScene03.PNG");
+                    yanVoyeurSecretbeachScene04 = CreateNewPicScene("YanVoyeurSecretbeachScene04", Core.scenePath + "Yan\\YanVoyeurSecretbeachScene04.PNG");
+
+                    Core.cGManagerSexy.GetComponent<SpriteRendererLayoutManager>().RefreshCache();
                     Logger.LogInfo("----- SCENES LOADED -----");
                     loadedScenes = true;
                 }

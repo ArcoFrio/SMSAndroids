@@ -41,6 +41,7 @@ namespace SMSAndroidsCore
         private float monitoringInterval = 0.1f; // Check every 0.1 seconds
         public  bool isMonitoring = false;
         private Coroutine monitoringCoroutine;
+        private bool monitorRoomTalk = false; // Switch for activating/deactivating monitoring
 
         // Scene change tracking
         private string lastSceneName = "";
@@ -53,7 +54,7 @@ namespace SMSAndroidsCore
             SceneManager.sceneLoaded += OnSceneLoaded;
             SceneManager.sceneUnloaded += OnSceneUnloaded;
             
-            Logger.LogInfo("Scene change monitoring initialized");
+            //Logger.LogInfo("Scene change monitoring initialized");
         }
 
         public void OnDestroy()
@@ -93,42 +94,204 @@ namespace SMSAndroidsCore
             {
             }
             // Check for J key press to trigger Debug
-            if (Input.GetKeyDown(KeyCode.J))
-            {
-                var mapButtons = Core.mainCanvas?.Find("Navigator")?.Find("MapButtons")?.gameObject;
-                if (mapButtons != null)
-                {
-                    PrintLocalListVariablesValues(mapButtons);
-                }
-                else
-                {
-                    Debug.LogError("MapButtons GameObject not found!");
-                }
-            }
+            //if (Input.GetKeyDown(KeyCode.J))
+            //{
+            //    var mapButtons = Core.mainCanvas?.Find("Navigator")?.Find("MapButtons")?.gameObject;
+            //    if (mapButtons != null)
+            //    {
+            //        PrintLocalListVariablesValues(mapButtons);
+            //    }
+            //    else
+            //    {
+            //        Debug.LogError("MapButtons GameObject not found!");
+            //    }
+            //}
 
             // Check for K key to toggle scene change logging
-            if (Input.GetKeyDown(KeyCode.K))
-            {
-                sceneChangeLoggingEnabled = !sceneChangeLoggingEnabled;
-                Debug.Log($"[Scene Change] Scene change logging {(sceneChangeLoggingEnabled ? "ENABLED" : "DISABLED")}");
-            }
+            //if (Input.GetKeyDown(KeyCode.K))
+            //{
+            //    sceneChangeLoggingEnabled = !sceneChangeLoggingEnabled;
+            //    Debug.Log($"[Scene Change] Scene change logging {(sceneChangeLoggingEnabled ? "ENABLED" : "DISABLED")}");
+            //}
 
-            // Check for L key to print current scene info
-            if (Input.GetKeyDown(KeyCode.L))
-            {
-                var currentScene = SceneManager.GetActiveScene();
-                Debug.Log($"[Scene Change] Current Scene: '{currentScene.name}' (Build Index: {currentScene.buildIndex})");
-                Debug.Log($"[Scene Change] Last Scene: '{lastSceneName}' (Build Index: {lastSceneBuildIndex})");
-                Debug.Log($"[Scene Change] Total loaded scenes: {SceneManager.sceneCount}");
+            //// Check for L key to print current scene info
+            //if (Input.GetKeyDown(KeyCode.L))
+            //{
+            //    var currentScene = SceneManager.GetActiveScene();
+            //    Debug.Log($"[Scene Change] Current Scene: '{currentScene.name}' (Build Index: {currentScene.buildIndex})");
+            //    Debug.Log($"[Scene Change] Last Scene: '{lastSceneName}' (Build Index: {lastSceneBuildIndex})");
+            //    Debug.Log($"[Scene Change] Total loaded scenes: {SceneManager.sceneCount}");
                 
-                // List all loaded scenes
-                for (int i = 0; i < SceneManager.sceneCount; i++)
+            //    // List all loaded scenes
+            //    for (int i = 0; i < SceneManager.sceneCount; i++)
+            //    {
+            //        var scene = SceneManager.GetSceneAt(i);
+            //        Debug.Log($"[Scene Change] Loaded Scene {i}: '{scene.name}' (Build Index: {scene.buildIndex}, IsLoaded: {scene.isLoaded})");
+            //    }
+            //}
+
+            // // Check for M key to toggle room talk monitoring
+            //if (Input.GetKeyDown(KeyCode.M))
+            //{
+            //    monitorRoomTalk = !monitorRoomTalk;
+            //    Debug.Log($"[Debugging] RoomTalk monitoring {(monitorRoomTalk ? "ENABLED" : "DISABLED")}");
+            //}
+
+            //if (monitorRoomTalk && Core.roomTalk != null)
+            //{
+            //    CheckRoomTalkChildren();
+            //}
+        }
+
+        private readonly HashSet<GameObject> checkedRoomTalkChildren = new HashSet<GameObject>();
+
+        private void CheckRoomTalkChildren()
+        {
+            foreach (Transform child in Core.roomTalk)
+            {
+                GameObject childGO = child.gameObject;
+
+                if (childGO == null || childGO.name == "Always_Active")
                 {
-                    var scene = SceneManager.GetSceneAt(i);
-                    Debug.Log($"[Scene Change] Loaded Scene {i}: '{scene.name}' (Build Index: {scene.buildIndex}, IsLoaded: {scene.isLoaded})");
+                    continue;
+                }
+
+                if (childGO.activeSelf && !checkedRoomTalkChildren.Contains(childGO))
+                {
+                    // Run the CheckAllConditions method for this child
+                    Debug.Log($"[Debugging] Running CheckAllConditions for {childGO.name}");
+                    bool conditionsMet = Places.CheckAllConditions(childGO, new GameCreator.Runtime.Common.Args(childGO));
+
+                    Debug.Log($"[Debugging] Conditions met for {childGO.name}: {conditionsMet}");
+
+                    // Print Conditions only
+                    PrintConditions(childGO);
+
+                    checkedRoomTalkChildren.Add(childGO);
+
+                    // Optionally, deactivate the child after checking, or perform other actions
+                    //child.gameObject.SetActive(false);
                 }
             }
         }
+
+        private void PrintConditions(GameObject targetGameObject)
+        {
+            if (targetGameObject == null)
+            {
+                Debug.LogError("Target GameObject is null");
+                return;
+            }
+
+            // Print all Conditions
+            var conditionsComponents = targetGameObject.GetComponents<MonoBehaviour>()
+                .Where(c => c != null && c.GetType().Name == "Conditions");
+            foreach (var cond in conditionsComponents)
+            {
+                Debug.Log($"Found Conditions component on {targetGameObject.name}");
+                var branchesField = cond.GetType().GetField("m_Branches", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+                if (branchesField != null)
+                {
+                    var branches = branchesField.GetValue(cond);
+                    Debug.Log($"  m_Branches: {branches.GetType().Name}");
+
+                    if (branches != null)
+                    {
+                        // Check the actual length of the BranchList
+                        PropertyInfo lengthProp = branches.GetType().GetProperty("Length", BindingFlags.Public | BindingFlags.Instance);
+                        if (lengthProp != null)
+                        {
+                            int branchListLength = (int)lengthProp.GetValue(branches);
+                            Debug.Log($"  BranchList Length: {branchListLength}");
+                        }
+
+                        var branchesArrayField = branches.GetType().GetField("m_Branches", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+                        if (branchesArrayField != null)
+                        {
+                            var branchesArray = branchesArrayField.GetValue(branches) as System.Collections.IEnumerable;
+                            if (branchesArray != null)
+                            {
+                                int branchIdx = 0;
+                                foreach (var branch in branchesArray)
+                                {
+                                    if (branch != null)
+                                        {
+                                        Debug.Log($"    Branch {branchIdx}: {branch.GetType().Name}");
+
+                                        // Print details of the condition within the branch
+                                        Debug.Log($"      Attempting to get m_ConditionList field from Branch {branchIdx}.");
+                                        var conditionListField = branch.GetType().GetField("m_ConditionList", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+                                        Debug.Log($"      conditionListField found: {conditionListField != null}");
+                                        if (conditionListField != null)
+                                        {
+                                            var conditionList = conditionListField.GetValue(branch) as ConditionList;
+                                            if (conditionList != null)
+                                            {
+                                                Debug.Log($"      ConditionList: {conditionList.GetType().Name} - {conditionList.ToString()}");
+
+                                                for (int i = 0; i < conditionList.Length; i++)
+                                                {
+                                                    var condition = conditionList.Get(i);
+                                                    if (condition != null)
+                                                    {
+                                                        Debug.Log($"          Condition {i}: {condition.GetType().Name} - {condition.Title}");
+													// Print all fields (especially m_ fields)
+                                                        foreach (var field in condition.GetType().GetFields(BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Public))
+                                                        {
+                                                                var fieldValue = field.GetValue(condition);
+                                                                Debug.Log($"             {field.Name}: {fieldValue}");
+                                                        }
+                                                    }
+                                                    else
+                                                    {
+                                                        Debug.Log($"          Condition {i}: null");
+                                                    }
+                                                }
+                                            }
+                                            else
+                                            {
+                                                Debug.Log($"      ConditionList for Branch {branchIdx} is null");
+                                            }
+                                        }
+                                        else
+                                        {
+                                            Debug.Log($"      Field 'm_ConditionList' not found on Branch for Branch {branchIdx}.");
+                                        }
+                                    }
+                                    else
+                                    {
+                                        Debug.Log($"    Branch {branchIdx}: null");
+                                    }
+                                    branchIdx++;
+                                }
+                            }
+                            else
+                            {
+                                Debug.Log($"  m_Branches array is null or not IEnumerable within BranchList.");
+                            }
+                        }
+                        else
+                        {
+                            Debug.Log($"  Field 'm_Branches' not found on BranchList directly.");
+                        }
+                    }
+                    else
+                    {
+                        Debug.Log($"  m_Branches object is null.");
+                    }
+                }
+                else
+                {
+                    Debug.Log($"  Field 'm_Branches' not found on Conditions component.");
+                }
+            }
+        }
+
+        #region GlobalNameVariable monitoring
+
+        #region GlobalNameVariable monitoring
+
+        #region GlobalNameVariable monitoring
 
         #region GlobalNameVariable monitoring
         public class GlobalVariableChangeTracker
@@ -1253,7 +1416,7 @@ namespace SMSAndroidsCore
                 }
             }
         }
-
+        #endregion
         public static void PrintAllActorExpressionsFromDialogue(GameObject dialogueGO, string actorName)
         {
             if (dialogueGO == null)
@@ -1300,5 +1463,136 @@ namespace SMSAndroidsCore
             }
             Debug.LogWarning($"[PrintAllActorExpressionsFromDialogue] Actor '{actorName}' not found in dialogue '{dialogueGO.name}'.");
         }
+
+        public static void PrintButtonInstructions(GameObject targetGameObject)
+        {
+            if (targetGameObject == null)
+            {
+                Debug.LogError("Target GameObject is null");
+                return;
+            }
+
+            ButtonInstructions buttonInstructions = targetGameObject.GetComponent<ButtonInstructions>();
+            if (buttonInstructions == null)
+            {
+                Debug.LogError($"ButtonInstructions component not found on GameObject: {targetGameObject.name}");
+                return;
+            }
+
+            var instructionsField = buttonInstructions.GetType().GetField("m_Instructions", BindingFlags.NonPublic | BindingFlags.Instance);
+            if (instructionsField != null)
+            {
+                var instructionListObj = instructionsField.GetValue(buttonInstructions);
+
+                if (instructionListObj == null) return;
+                Debug.Log($"Instructions: {instructionListObj.GetType().Name}");
+
+                var instructionsArrayField = instructionListObj.GetType().GetField("m_Instructions", BindingFlags.NonPublic | BindingFlags.Instance);
+                if (instructionsArrayField != null)
+                {
+                    var instructionsArray = instructionsArrayField.GetValue(instructionListObj) as System.Collections.IEnumerable;
+                    if (instructionsArray != null)
+                    {
+                        int instIdx = 0;
+                        foreach (var instruction in instructionsArray)
+                        {
+                            if (instruction != null)
+                            {
+                                var instType = instruction.GetType();
+                                var titleProp = instType.GetProperty("Title", BindingFlags.Public | BindingFlags.Instance);
+                                string title = titleProp?.GetValue(instruction)?.ToString() ?? instType.Name;
+                                Debug.Log($"  Instruction {instIdx}: {title} (Type: {instType.Name})");
+                                // Print all private fields (especially m_ fields)
+                                foreach (var field in instType.GetFields(BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Public))
+                                {
+                                    if (field.Name.StartsWith("m_"))
+                                    {
+                                        var fieldValue = field.GetValue(instruction);
+                                        Debug.Log($"    {field.Name}: {fieldValue}");
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                Debug.Log($"  Instruction {instIdx}: null");
+                            }
+                            instIdx++;
+                        }
+                    }
+                    else
+                    {
+                        Debug.Log($"  m_Instructions array is null or not IEnumerable.");
+                    }
+                }
+                else
+                {
+                    Debug.Log($"  Field 'm_Instructions' not found on InstructionList.");
+                }
+            }
+            else
+            {
+                Debug.LogError("m_Instructions field not found on ButtonInstructions component.");
+            }
+
+            // Inspect OnClick event
+            var onClickEvent = buttonInstructions.onClick;
+            if (onClickEvent != null)
+            {
+                Debug.Log("\n=== OnClick Event Listeners ===");
+                for (int i = 0; i < onClickEvent.GetPersistentEventCount(); i++)
+                {
+                    var target = onClickEvent.GetPersistentTarget(i);
+                    var methodName = onClickEvent.GetPersistentMethodName(i);
+
+                    Debug.Log($"  Listener {i}: Target={target?.GetType().Name}, Method={methodName}");
+
+                    // If the method is RunInstructions, we already printed those
+                    if (methodName == "RunInstructions" && target == buttonInstructions)
+                    {
+                        Debug.Log("    (Skipping RunInstructions - already printed above)");
+                        continue;
+                    }
+
+                    //If the target is a GameObject, we should check its components for instructionLists
+                    if (target is GameObject targetGO)
+                    {
+                        Debug.Log($"    Target is a GameObject: {targetGO.name}");
+                        PrintConditionsAndTriggers(targetGO); // Use PrintConditionsAndTriggers to check this GO
+                    }
+                    else if (target != null)  //If target isnt null check it for instruction lists
+                    {
+                        Debug.Log($"    Target is: {target.GetType().Name}");
+                        PrintConditionsAndTriggers(target as GameObject);
+                    }
+
+                    // Check if the target has an InstructionList and print it (if we can access it)
+                    // (This part is tricky because we need to know the field name and type)
+                    /*
+                    if (target != null)
+                    {
+                        //Attempt to get InstructionList via reflection (if it exists)
+                        var instructionListField = target.GetType().GetField("m_Instructions", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Public);
+                        if (instructionListField != null)
+                        {
+                            var instructionList = instructionListField.GetValue(target);
+                            if (instructionList != null)
+                            {
+                                Debug.Log($"    Found InstructionList on target: {instructionList.GetType().Name}");
+                                //PrintInstructionListDetails(instructionList); // Print instruction list details - using the embedded function
+                                PrintInstructionListDetails(instructionList); // Print instruction list details
+                            }
+                        }
+                    }
+                    */
+                }
+            }
+
+            // Print all Instructions, Conditions, and Triggers
+            PrintConditionsAndTriggers(targetGameObject);
+
+        }
+
     }
 }
+#endregion
+#endregion

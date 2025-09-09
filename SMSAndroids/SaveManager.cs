@@ -65,12 +65,55 @@ namespace SMSAndroidsCore
             // Mountain Lab variables
             { "MountainLab_FirstVisited", false },
             { "MountainLab_FirstVisitor", false },
+            { "MountainLab_GKExplanation", false },
             
-            // Affection variable
+            // Affection variables
             { "Affection_Amber", 0 },
+            { "Affection_Anis", 0 },
+            { "Affection_Centi", 0 },
+            { "Affection_Dorothy", 0 },
+            { "Affection_Elegg", 0 },
+            { "Affection_Frima", 0 },
+            { "Affection_Guilty", 0 },
+            { "Affection_Helm", 0 },
+            { "Affection_Maiden", 0 },
+            { "Affection_Mary", 0 },
+            { "Affection_Mast", 0 },
+            { "Affection_Neon", 0 },
+            { "Affection_Pepper", 0 },
+            { "Affection_Rapi", 0 },
+            { "Affection_Rosanna", 0 },
+            { "Affection_Sakura", 0 },
+            { "Affection_Viper", 0 },
+            { "Affection_Yan", 0 },
+
+            // Event variables
+            { "Event_SeenAmberHospitalHallway01", false },
+            { "Event_SeenAnisMall01", false },
+            { "Event_SeenCentiKensHome01", false },
+            { "Event_SeenDorothyPark01", false },
+            { "Event_SeenEleggDowntown01", false },
+            { "Event_SeenFrimaHotel01", false },
+            { "Event_SeenGuiltyParkingLot01", false },
+            { "Event_SeenHelmBeach01", false },
+            { "Event_SeenMaidenAlley01", false },
+            { "Event_SeenMaryHospitalHallway01", false },
+            { "Event_SeenMastBeach01", false },
+            { "Event_SeenNeonTemple01", false },
+            { "Event_SeenPepperHospital01", false },
+            { "Event_SeenRapiGasStation01", false },
+            { "Event_SeenRosannaGabrielsMansion01", false },
+            { "Event_SeenSakuraForest01", false },
+            { "Event_SeenViperVilla01", false },
+            { "Event_SeenYanMall01", false },
+
+            { "Event_SeenIt01", false },
 
             // Voyeur variables
             { "Voyeur_SeenAnis", false },
+            { "Voyeur_SeenCenti", false },
+            { "Voyeur_SeenDorothy", false },
+            { "Voyeur_SeenElegg", false },
             { "Voyeur_SeenFrima", false },
             { "Voyeur_SeenGuilty", false },
             { "Voyeur_SeenHelm", false },
@@ -92,8 +135,6 @@ namespace SMSAndroidsCore
         public void Awake()
         {
             instance = this;
-            Logger.LogInfo("SaveManager plugin loaded");
-
             SceneManager.sceneLoaded += OnSceneLoaded;
         }
         public void OnSceneLoaded(Scene scene, UnityEngine.SceneManagement.LoadSceneMode mode)
@@ -101,8 +142,20 @@ namespace SMSAndroidsCore
             MainStory.relaxed = false;
             modSaveThisSession = false;
             MainStory.actionTodaySB = false;
-            MainStory.voyeurLotteryNumber = Core.GetRandomNumber(100);
-            Debug.Log("Voyeur Lottery Number: " + MainStory.voyeurLotteryNumber);
+            if (scene.name == "CoreGameScene")
+            {
+                Schedule.day = Core.GetVariableNumber("Day");
+                MainStory.generalLotteryNumber1 = Core.GetRandomNumber(100);
+                MainStory.generalLotteryNumber2 = Core.GetRandomNumber(100);
+                MainStory.generalLotteryNumber3 = Core.GetRandomNumber(100);
+                MainStory.voyeurLotteryNumber = Core.GetRandomNumber(100);
+                Debug.Log("General Lottery Number 1: " + MainStory.generalLotteryNumber1);
+                Debug.Log("General Lottery Number 2: " + MainStory.generalLotteryNumber2);
+                Debug.Log("General Lottery Number 3: " + MainStory.generalLotteryNumber3);
+                Debug.Log("Voyeur Lottery Number: " + MainStory.voyeurLotteryNumber);
+                //Debug.Log("Day: " + Schedule.day);
+                Invoke(nameof(UpdateScheduleInvoke), 1.0f);
+            }
             StartCoroutine(WaitAndLoadSaveFile());
         }
 
@@ -121,92 +174,110 @@ namespace SMSAndroidsCore
         {
             if (Core.currentScene.name == "CoreGameScene")
             {
-
-                if (Core.afterSleepEvents.activeSelf && !afterSleepEventsProc)
+                if (Schedule.loadedSchedule)
                 {
-                    afterSleepEventsProc = true;
-                }
-                if (Core.savedUI.activeSelf && afterSleepEventsProc)
-                {
-                    SaveToFile();
-                    MainStory.voyeurTargetsLeft.Clear();
-                    foreach (string character in MainStory.voyeurTargets)
+                    if (Core.afterSleepEvents.activeSelf && !afterSleepEventsProc)
                     {
-                        if (!SaveManager.GetBool($"Voyeur_Seen{character}"))
-                        {
-                            MainStory.voyeurTargetsLeft.Add(character);
-                        }
+                        afterSleepEventsProc = true;
                     }
-                    MainStory.relaxed = false;
-                    MainStory.actionTodaySB = false;
-                    MainStory.voyeurLotteryNumber = Core.GetRandomNumber(100);
-                    Debug.Log("Voyeur Lottery Number: " + MainStory.voyeurLotteryNumber);
-                    Schedule.day = Core.GetVariableNumber("Day");
-                    afterSleepEventsProc = false;
-                }
+                    if (Core.savedUI.activeSelf && afterSleepEventsProc)
+                    {
+                        SaveToFile();
+                        MainStory.voyeurTargetsLeft.Clear();
+                        string[] currentTargets;
+                        if (SaveManager.GetBool("MountainLab_GKExplanation"))
+                        {
+                            currentTargets = MainStory.fullVoyeurTargets;
+                        }
+                        else
+                        {
+                            currentTargets = MainStory.starterVoyeurTargets;
+                        }
+                        foreach (string character in currentTargets)
+                        {
+                            if (!SaveManager.GetBool($"Voyeur_Seen{character}"))
+                            {
+                                MainStory.voyeurTargetsLeft.Add(character);
+                            }
+                        }
+                        MainStory.relaxed = false;
+                        MainStory.actionTodaySB = false;
+                        MainStory.generalLotteryNumber1 = Core.GetRandomNumber(100);
+                        MainStory.generalLotteryNumber2 = Core.GetRandomNumber(100);
+                        MainStory.generalLotteryNumber3 = Core.GetRandomNumber(100);
+                        MainStory.voyeurLotteryNumber = Core.GetRandomNumber(100);
+                        Debug.Log("General Lottery Number 1: " + MainStory.generalLotteryNumber1);
+                        Debug.Log("General Lottery Number 2: " + MainStory.generalLotteryNumber2);
+                        Debug.Log("General Lottery Number 3: " + MainStory.generalLotteryNumber3);
+                        Debug.Log("Voyeur Lottery Number: " + MainStory.voyeurLotteryNumber);
+                        Invoke(nameof(UpdateScheduleInvoke), 1.0f);
+                        afterSleepEventsProc = false;
+                    }
 
 
-                if (Core.saveLoadSystem.activeSelf && !saveListenersAdded)
-                {
-                    Core.saveButton1.GetComponent<ButtonInstructions>().onClick.AddListener(() => {
-                        OverwriteSaveSlotWithCurrentFile(2);
-                    });
-                    Core.saveButton2.GetComponent<ButtonInstructions>().onClick.AddListener(() => {
-                        OverwriteSaveSlotWithCurrentFile(3);
-                    });
-                    Core.saveButton3.GetComponent<ButtonInstructions>().onClick.AddListener(() => {
-                        OverwriteSaveSlotWithCurrentFile(4);
-                    });
-                    Core.saveButton4.GetComponent<ButtonInstructions>().onClick.AddListener(() => {
-                        OverwriteSaveSlotWithCurrentFile(5);
-                    });
-                    Core.saveButton5.GetComponent<ButtonInstructions>().onClick.AddListener(() => {
-                        OverwriteSaveSlotWithCurrentFile(6);
-                    });
-                    Core.saveButton6.GetComponent<ButtonInstructions>().onClick.AddListener(() => {
-                        OverwriteSaveSlotWithCurrentFile(7);
-                    });
-                    Core.saveButton7.GetComponent<ButtonInstructions>().onClick.AddListener(() => {
-                        OverwriteSaveSlotWithCurrentFile(8);
-                    });
-                    Core.saveButton8.GetComponent<ButtonInstructions>().onClick.AddListener(() => {
-                        OverwriteSaveSlotWithCurrentFile(9);
-                    });
-                    saveListenersAdded = true;
-                }
-                if (!Core.saveLoadSystem.activeSelf && saveListenersAdded)
-                {
-                    Core.saveButton1.GetComponent<ButtonInstructions>().onClick.AddListener(() => {
-                        OverwriteSaveSlotWithCurrentFile(2);
-                    });
-                    Core.saveButton2.GetComponent<ButtonInstructions>().onClick.AddListener(() => {
-                        OverwriteSaveSlotWithCurrentFile(3);
-                    });
-                    Core.saveButton3.GetComponent<ButtonInstructions>().onClick.AddListener(() => {
-                        OverwriteSaveSlotWithCurrentFile(4);
-                    });
-                    Core.saveButton4.GetComponent<ButtonInstructions>().onClick.AddListener(() => {
-                        OverwriteSaveSlotWithCurrentFile(5);
-                    });
-                    Core.saveButton5.GetComponent<ButtonInstructions>().onClick.AddListener(() => {
-                        OverwriteSaveSlotWithCurrentFile(6);
-                    });
-                    Core.saveButton6.GetComponent<ButtonInstructions>().onClick.AddListener(() => {
-                        OverwriteSaveSlotWithCurrentFile(7);
-                    });
-                    Core.saveButton7.GetComponent<ButtonInstructions>().onClick.AddListener(() => {
-                        OverwriteSaveSlotWithCurrentFile(8);
-                    });
-                    Core.saveButton8.GetComponent<ButtonInstructions>().onClick.AddListener(() => {
-                        OverwriteSaveSlotWithCurrentFile(9);
-                    });
-                    saveListenersAdded = false;
-                }
+                    if (Core.saveLoadSystem.activeSelf && !saveListenersAdded)
+                    {
+                        Core.saveButton1.GetComponent<ButtonInstructions>().onClick.AddListener(() => {
+                            OverwriteSaveSlotWithCurrentFile(2);
+                        });
+                        Core.saveButton2.GetComponent<ButtonInstructions>().onClick.AddListener(() => {
+                            OverwriteSaveSlotWithCurrentFile(3);
+                        });
+                        Core.saveButton3.GetComponent<ButtonInstructions>().onClick.AddListener(() => {
+                            OverwriteSaveSlotWithCurrentFile(4);
+                        });
+                        Core.saveButton4.GetComponent<ButtonInstructions>().onClick.AddListener(() => {
+                            OverwriteSaveSlotWithCurrentFile(5);
+                        });
+                        Core.saveButton5.GetComponent<ButtonInstructions>().onClick.AddListener(() => {
+                            OverwriteSaveSlotWithCurrentFile(6);
+                        });
+                        Core.saveButton6.GetComponent<ButtonInstructions>().onClick.AddListener(() => {
+                            OverwriteSaveSlotWithCurrentFile(7);
+                        });
+                        Core.saveButton7.GetComponent<ButtonInstructions>().onClick.AddListener(() => {
+                            OverwriteSaveSlotWithCurrentFile(8);
+                        });
+                        Core.saveButton8.GetComponent<ButtonInstructions>().onClick.AddListener(() => {
+                            OverwriteSaveSlotWithCurrentFile(9);
+                        });
+                        saveListenersAdded = true;
+                    }
+                    if (!Core.saveLoadSystem.activeSelf && saveListenersAdded)
+                    {
+                        Core.saveButton1.GetComponent<ButtonInstructions>().onClick.AddListener(() => {
+                            OverwriteSaveSlotWithCurrentFile(2);
+                        });
+                        Core.saveButton2.GetComponent<ButtonInstructions>().onClick.AddListener(() => {
+                            OverwriteSaveSlotWithCurrentFile(3);
+                        });
+                        Core.saveButton3.GetComponent<ButtonInstructions>().onClick.AddListener(() => {
+                            OverwriteSaveSlotWithCurrentFile(4);
+                        });
+                        Core.saveButton4.GetComponent<ButtonInstructions>().onClick.AddListener(() => {
+                            OverwriteSaveSlotWithCurrentFile(5);
+                        });
+                        Core.saveButton5.GetComponent<ButtonInstructions>().onClick.AddListener(() => {
+                            OverwriteSaveSlotWithCurrentFile(6);
+                        });
+                        Core.saveButton6.GetComponent<ButtonInstructions>().onClick.AddListener(() => {
+                            OverwriteSaveSlotWithCurrentFile(7);
+                        });
+                        Core.saveButton7.GetComponent<ButtonInstructions>().onClick.AddListener(() => {
+                            OverwriteSaveSlotWithCurrentFile(8);
+                        });
+                        Core.saveButton8.GetComponent<ButtonInstructions>().onClick.AddListener(() => {
+                            OverwriteSaveSlotWithCurrentFile(9);
+                        });
+                        saveListenersAdded = false;
+                    }
 
-                if (Core.introMomentNewGame.activeSelf && !newGame)
-                {
-                    ResetToDefaults();
-                    newGame = true;
+                    if (Core.introMomentNewGame.activeSelf && !newGame)
+                    {
+                        ResetToDefaults();
+                        //Debugging.PrintConditionsAndTriggers(GameObject.Find("Part_One").transform.Find("Canvas_MM").Find("MainMenu").Find("DeleteSaveFiles").gameObject);
+                        newGame = true;
+                    }
                 }
             }
 
@@ -237,6 +308,11 @@ namespace SMSAndroidsCore
         public static void SetInt(string variableName, int value)
         {
             if (instance == null) return;
+            // Clamp affection variables to a maximum of 5
+            if (variableName.StartsWith("Affection_"))
+            {
+                value = Mathf.Clamp(value, 0, 5);
+            }
             instance.SetValueInternal(variableName, value);
         }
         /// Gets an integer value for the current save slot
@@ -317,10 +393,52 @@ namespace SMSAndroidsCore
             return false;
         }
 
+        /// <summary>
+        /// Returns the count of bool save variables whose name contains the given substring and are true.
+        /// </summary>
+        public static int CountBoolVariablesWithNameContains(string substring)
+        {
+            if (instance == null || string.IsNullOrEmpty(substring)) return 0;
+            string substringLower = substring.ToLower();
+            int count = 0;
+            foreach (var kvp in instance.currentSlotCache)
+            {
+                if (kvp.Key.ToLower().Contains(substringLower) && kvp.Value is bool b && b)
+                {
+                    count++;
+                }
+            }
+            return count;
+        }
+
         #endregion
 
         #region Internal Methods
-
+        private void DeleteAllSaveFiles()
+        {
+            Debug.Log("[SaveManager] Deleting all mod save files...");
+            for (int slot = 1; slot <= 9; slot++)
+            {
+                string saveFilePath = Path.Combine(Core.savesPath, $"save_{slot}.txt");
+                try
+                {
+                    if (File.Exists(saveFilePath))
+                    {
+                        File.Delete(saveFilePath);
+                        Debug.Log($"[SaveManager] Deleted save file: {saveFilePath}");
+                    }
+                }
+                catch (Exception e)
+                {
+                    Debug.LogError($"[SaveManager] Error deleting save file {saveFilePath}: {e.Message}");
+                }
+            }
+            // Reset current slot cache and variables
+            currentSlotCache.Clear();
+            currentSaveSlot = -1;
+            modSaveThisSession = false;
+            Debug.Log("[SaveManager] All mod save files deleted.");
+        }
         private void SetValueInternal(string variableName, object value)
         {
             if (currentSaveSlot < 0) return;
@@ -462,11 +580,11 @@ namespace SMSAndroidsCore
         public static void OverwriteSaveSlotWithCurrentFile(int targetSlot)
         {
             if (instance == null) return;
-            if (instance.currentSaveSlot < 0)
-            {
-                Debug.LogError("[SaveManager] No current save slot loaded.");
-                return;
-            }
+            //if (instance.currentSaveSlot < 0)
+            //{
+            //    Debug.LogError("[SaveManager] No current save slot loaded.");
+            //    return;
+            //}
 
             string sourceFile;
             if (instance.modSaveThisSession)
@@ -544,6 +662,11 @@ namespace SMSAndroidsCore
                 Debug.LogError($"[SaveManager] Error checking variable change: {e.Message}");
                 return false;
             }
+        }
+
+        private void UpdateScheduleInvoke()
+        {
+            Schedule.UpdateScheduleForDay();
         }
     }
 } 
