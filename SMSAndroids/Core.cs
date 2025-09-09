@@ -36,7 +36,7 @@ namespace SMSAndroidsCore
         #region Plugin Info
         public const string pluginGuid = "treboy.starmakerstory.smsandroidscore.core";
         public const string pluginName = "Androids Core";
-        public const string pluginVersion = "0.5.1";
+        public const string pluginVersion = "0.5.2";
         #endregion
 
         public static AssetBundle dialogueBundle;
