@@ -153,7 +153,7 @@ namespace SMSAndroidsCore
                 if (!loadedBusts && Core.loadedCore)
                 {
                     amber = CreateNewBust("Amber", Core.bustPath, "Amber\\Amber00.PNG", "Amber\\AmberBlink.PNG", "Amber\\Amber00Mask.PNG", "Amber\\Mouth", "Amber\\Expression", true, true);
-                    amberCoatless = CreateNewBust("AmberCoatless", Core.bustPath, "Amber\\AmberCoatless00.PNG", "Amber\\AmberBlink.PNG", "Amber\\AmberCoatless00Mask.PNG", "Amber\\Mouth", "Amber\\Expression", true, true);
+                    amberCoatless = CreateNewBust("AmberCoatless", Core.bustPath, "Amber\\Amber01.PNG", "Amber\\AmberBlink.PNG", "Amber\\Amber01Mask.PNG", "Amber\\Mouth", "Amber\\Expression", true, true);
                     amberSwim = CreateNewBust("AmberSwim", Core.bustPath, "Amber\\AmberSwim00.PNG", "Amber\\AmberBlink.PNG", "Amber\\AmberSwim00Mask.PNG", "Amber\\Mouth", "Amber\\Expression", true, true);
 
                     anis = CreateNewBust("AnisBase", Core.bustNikkePath, "Anis\\Anis00.PNG", "Anis\\AnisBlink.PNG", "Anis\\Anis00Mask.PNG", "Anis\\Mouth", "Anis\\Expression", true, true);
