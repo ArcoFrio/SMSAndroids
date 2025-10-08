@@ -92,6 +92,11 @@ namespace SMSAndroidsCore
         {
             if (Core.currentScene.name == "CoreGameScene")
             {
+                // Check for R key press to reload Amber bust textures
+                if (Input.GetKeyDown(KeyCode.R))
+                {
+                    ReloadAmberBustTextures();
+                }
             }
             // Check for J key press to trigger Debug
             //if (Input.GetKeyDown(KeyCode.J))
@@ -1417,6 +1422,85 @@ namespace SMSAndroidsCore
             }
         }
         #endregion
+
+        private void ReloadAmberBustTextures()
+        {
+            if (Characters.amber == null)
+            {
+                Debug.LogWarning("[Debug] Amber bust not found. Make sure Characters.cs has been executed first.");
+                return;
+            }
+
+            Debug.Log("[Debug] Reloading Amber bust textures...");
+
+            GameObject amberBust = Characters.amber;
+            GameObject mBase = amberBust.transform.Find("MBase1").gameObject;
+            GameObject blink = mBase.transform.Find("Blink").gameObject;
+            GameObject mouth = mBase.transform.Find("Mouth").gameObject;
+            GameObject expressions = mBase.transform.Find("Expressions").gameObject;
+
+            string[] expressionNames = { "Happy", "Angry", "Sad", "Flirty" };
+
+            try
+            {
+                // Reload base sprite
+                Texture2D tex = new Texture2D(256, 256, TextureFormat.RGBA32, false);
+                var rawData = System.IO.File.ReadAllBytes(Core.bustPath + "TEST\\T.PNG");
+                tex.LoadImage(rawData);
+                tex.filterMode = FilterMode.Point;
+                Sprite newSprite = Sprite.Create(tex, new Rect(0, 0, 256, 256), new Vector2(0.5f, 0.5f));
+                mBase.GetComponent<SpriteRenderer>().sprite = newSprite;
+                Debug.Log("[Debug] Reloaded base sprite");
+
+                // Reload blink sprite
+                tex = new Texture2D(256, 256, TextureFormat.RGBA32, false);
+                rawData = System.IO.File.ReadAllBytes(Core.bustPath + "TEST\\B.PNG");
+                tex.LoadImage(rawData);
+                tex.filterMode = FilterMode.Point;
+                newSprite = Sprite.Create(tex, new Rect(0, 0, 256, 256), new Vector2(0.5f, 0.5f));
+                blink.GetComponent<SpriteRenderer>().sprite = newSprite;
+                Debug.Log("[Debug] Reloaded blink sprite");
+
+                // Reload mask texture
+                tex = new Texture2D(256, 256, TextureFormat.RGBA32, false);
+                rawData = System.IO.File.ReadAllBytes(Core.bustPath + "TEST\\TM.PNG");
+                tex.LoadImage(rawData);
+                tex.filterMode = FilterMode.Point;
+                mBase.GetComponent<SpriteRenderer>().material.SetTexture("_MaskTex", tex);
+                Debug.Log("[Debug] Reloaded mask texture");
+
+                // Reload mouth sprites
+                for (int i = 1; i <= 4; i++)
+                {
+                    tex = new Texture2D(256, 256, TextureFormat.RGBA32, false);
+                    rawData = System.IO.File.ReadAllBytes(Core.bustPath + "TEST\\Mouth" + i + ".PNG");
+                    tex.LoadImage(rawData);
+                    tex.filterMode = FilterMode.Point;
+                    newSprite = Sprite.Create(tex, new Rect(0, 0, 256, 256), new Vector2(0.5f, 0.5f));
+                    mouth.transform.Find(i.ToString()).GetComponent<SpriteRenderer>().sprite = newSprite;
+                }
+                Debug.Log("[Debug] Reloaded mouth sprites");
+
+                // Reload expression sprites
+                foreach (string expressionName in expressionNames)
+                {
+                    tex = new Texture2D(256, 256, TextureFormat.RGBA32, false);
+                    rawData = System.IO.File.ReadAllBytes(Core.bustPath + "TEST\\Expression" + expressionName + ".PNG");
+                    tex.LoadImage(rawData);
+                    tex.filterMode = FilterMode.Point;
+                    newSprite = Sprite.Create(tex, new Rect(0, 0, 256, 256), new Vector2(0.5f, 0.5f));
+                    expressions.transform.Find(expressionName).GetComponent<SpriteRenderer>().sprite = newSprite;
+                }
+                Debug.Log("[Debug] Reloaded expression sprites");
+
+                Debug.Log("[Debug] Amber bust texture reload completed successfully!");
+            }
+            catch (System.Exception ex)
+            {
+                Debug.LogError($"[Debug] Error reloading Amber bust textures: {ex.Message}");
+            }
+        }
+
         public static void PrintAllActorExpressionsFromDialogue(GameObject dialogueGO, string actorName)
         {
             if (dialogueGO == null)
