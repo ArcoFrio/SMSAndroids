@@ -36,6 +36,16 @@ namespace SMSAndroidsCore
         {
             image = transform.GetChild(2).gameObject.GetComponent<UnityEngine.UI.Image>();
         }
+        public void OnEnable()
+        {
+            mouseOver = false;
+            if (image != null)
+            {
+                Color c = image.color;
+                c.a = 0f;
+                image.color = c;
+            }
+        }
         public void Update()
         {
             if (image == null) return;

@@ -39,7 +39,7 @@ namespace SMSAndroidsCore
 
         private Dictionary<IdString, GlobalVariableChangeTracker> variableTrackers = new Dictionary<IdString, GlobalVariableChangeTracker>();
         private float monitoringInterval = 0.1f; // Check every 0.1 seconds
-        public  bool isMonitoring = false;
+        public bool isMonitoring = false;
         private Coroutine monitoringCoroutine;
         private bool monitorRoomTalk = false; // Switch for activating/deactivating monitoring
 
@@ -53,7 +53,7 @@ namespace SMSAndroidsCore
             // Subscribe to scene change events
             SceneManager.sceneLoaded += OnSceneLoaded;
             SceneManager.sceneUnloaded += OnSceneUnloaded;
-            
+
             //Logger.LogInfo("Scene change monitoring initialized");
         }
 
@@ -70,13 +70,13 @@ namespace SMSAndroidsCore
 
             string modeText = mode == UnityEngine.SceneManagement.LoadSceneMode.Single ? "Single" : "Additive";
             Debug.Log($"[Scene Change] Scene LOADED: '{scene.name}' (Build Index: {scene.buildIndex}, Mode: {modeText})");
-            
+
             // Check if this is a scene reload (same scene name)
             if (scene.name == lastSceneName)
             {
                 Debug.Log($"[Scene Change] SCENE RELOAD detected: '{scene.name}' was reloaded");
             }
-            
+
             lastSceneName = scene.name;
             lastSceneBuildIndex = scene.buildIndex;
         }
@@ -84,7 +84,7 @@ namespace SMSAndroidsCore
         private void OnSceneUnloaded(Scene scene)
         {
             if (!sceneChangeLoggingEnabled) return;
-            
+
             Debug.Log($"[Scene Change] Scene UNLOADED: '{scene.name}' (Build Index: {scene.buildIndex})");
         }
 
@@ -93,10 +93,49 @@ namespace SMSAndroidsCore
             if (Core.currentScene.name == "CoreGameScene")
             {
                 // Check for R key press to reload Amber bust textures
-                if (Input.GetKeyDown(KeyCode.R))
+                //if (Input.GetKeyDown(KeyCode.R))
+                //{
+                //    ReloadAmberBustTextures();
+                //    Core.mainCanvas.gameObject.SetActive(false);
+                //    Core.level.Find("5_MyRoom").Find("PlayerRoom_ButtonCanvas").gameObject.SetActive(false);
+                //}
+
+                // Check for P key press to print all Proxy Variables
+                if (Input.GetKeyDown(KeyCode.P))
                 {
-                    ReloadAmberBustTextures();
+                    Debug.Log("Disable-Specific-RNGEvents: " + Core.GetVariableBool("Disable-Specific-RNGEvents"));
                 }
+
+                //if (Input.GetKeyDown(KeyCode.V))
+                //{ 
+                //    Schedule.anisLocation = "HarborHomeLivingRoomCouchleft";
+                //    Debug.Log(Schedule.anisLocation);
+                //}
+                //if (Input.GetKeyDown(KeyCode.B))
+                //{
+
+                //    if (Schedule.amberLocation == "HarborHomeBathroom")
+                //    {
+                //        Schedule.amberLocation = "HarborHomeBedroom";
+                //    }
+                //    else
+                //    {
+                //        Schedule.amberLocation = "HarborHomeBathroom";
+                //    }
+                //    SaveManager.SetBool("HarborHome_Visit_Amber", true);
+                //    Debug.Log(Schedule.amberLocation);
+                //}
+
+                //// Check for F key press to find all SetActive instructions in Dialogues
+                //if (Input.GetKeyDown(KeyCode.F))
+                //{
+                //    FindAllSetActiveInstructionsInDialogues();
+                //}
+                //if (Input.GetKeyDown(KeyCode.I))
+                //{
+                //    Core.FindAndModifyProxyVariableBool("DailyProc_Tove-Trail-1", true);
+                //}
+                //StartMonitoringGlobalVariables();
             }
             // Check for J key press to trigger Debug
             //if (Input.GetKeyDown(KeyCode.J))
@@ -126,7 +165,7 @@ namespace SMSAndroidsCore
             //    Debug.Log($"[Scene Change] Current Scene: '{currentScene.name}' (Build Index: {currentScene.buildIndex})");
             //    Debug.Log($"[Scene Change] Last Scene: '{lastSceneName}' (Build Index: {lastSceneBuildIndex})");
             //    Debug.Log($"[Scene Change] Total loaded scenes: {SceneManager.sceneCount}");
-                
+
             //    // List all loaded scenes
             //    for (int i = 0; i < SceneManager.sceneCount; i++)
             //    {
@@ -220,7 +259,7 @@ namespace SMSAndroidsCore
                                 foreach (var branch in branchesArray)
                                 {
                                     if (branch != null)
-                                        {
+                                    {
                                         Debug.Log($"    Branch {branchIdx}: {branch.GetType().Name}");
 
                                         // Print details of the condition within the branch
@@ -240,11 +279,11 @@ namespace SMSAndroidsCore
                                                     if (condition != null)
                                                     {
                                                         Debug.Log($"          Condition {i}: {condition.GetType().Name} - {condition.Title}");
-													// Print all fields (especially m_ fields)
+                                                        // Print all fields (especially m_ fields)
                                                         foreach (var field in condition.GetType().GetFields(BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Public))
                                                         {
-                                                                var fieldValue = field.GetValue(condition);
-                                                                Debug.Log($"             {field.Name}: {fieldValue}");
+                                                            var fieldValue = field.GetValue(condition);
+                                                            Debug.Log($"             {field.Name}: {fieldValue}");
                                                         }
                                                     }
                                                     else
@@ -426,7 +465,7 @@ namespace SMSAndroidsCore
             }
 
             List<object> values = new List<object>();
-            
+
             for (int i = 0; i < localListVariables.Count; i++)
             {
                 object value = localListVariables.Get(i);
@@ -455,7 +494,7 @@ namespace SMSAndroidsCore
             Debug.Log($"=== LocalListVariables values from GameObject: {targetGameObject.name} ===");
             Debug.Log($"Count: {localListVariables.Count}");
             Debug.Log($"TypeID: {localListVariables.TypeID}");
-            
+
             // Try to access the private m_Runtime field to get more info
             FieldInfo runtimeField = typeof(LocalListVariables).GetField("m_Runtime", BindingFlags.NonPublic | BindingFlags.Instance);
             if (runtimeField != null)
@@ -464,7 +503,7 @@ namespace SMSAndroidsCore
                 if (runtime != null)
                 {
                     Debug.Log($"Runtime Count: {runtime.Count}");
-                    
+
                     // Try to call OnStartup if it hasn't been called yet
                     if (runtime.Count == 0)
                     {
@@ -476,21 +515,21 @@ namespace SMSAndroidsCore
                             Debug.Log($"Runtime Count after OnStartup: {runtime.Count}");
                         }
                     }
-                    
+
                     // Try to access the private m_List field
                     FieldInfo listField = typeof(ListVariableRuntime).GetField("m_List", BindingFlags.NonPublic | BindingFlags.Instance);
                     if (listField != null)
                     {
                         var list = listField.GetValue(runtime);
                         Debug.Log($"m_List: {list}");
-                        
+
                         // Try to get the Length property of m_List
                         PropertyInfo lengthProp = list?.GetType().GetProperty("Length");
                         if (lengthProp != null)
                         {
                             int length = (int)lengthProp.GetValue(list);
                             Debug.Log($"m_List.Length: {length}");
-                            
+
                             // Try to access individual items in the IndexList
                             for (int i = 0; i < length; i++)
                             {
@@ -502,7 +541,7 @@ namespace SMSAndroidsCore
                                 }
                             }
                         }
-                        
+
                         // Try to access the TypeID of the IndexList
                         PropertyInfo typeIDProp = list?.GetType().GetProperty("TypeID");
                         if (typeIDProp != null)
@@ -510,7 +549,7 @@ namespace SMSAndroidsCore
                             var typeID = typeIDProp.GetValue(list);
                             Debug.Log($"m_List.TypeID: {typeID}");
                         }
-                        
+
                         // Try to access the serialized data in the IndexList
                         FieldInfo[] listFields = list?.GetType().GetFields(BindingFlags.NonPublic | BindingFlags.Instance);
                         if (listFields != null)
@@ -523,14 +562,14 @@ namespace SMSAndroidsCore
                             }
                         }
                     }
-                    
+
                     // Try to access the Variables list
                     PropertyInfo variablesProp = typeof(ListVariableRuntime).GetProperty("Variables", BindingFlags.NonPublic | BindingFlags.Instance);
                     if (variablesProp != null)
                     {
                         var variables = variablesProp.GetValue(runtime) as List<object>;
                         Debug.Log($"Variables list count: {variables?.Count ?? 0}");
-                        
+
                         if (variables != null && variables.Count > 0)
                         {
                             Debug.Log("Variables list contents:");
@@ -542,13 +581,13 @@ namespace SMSAndroidsCore
                     }
                 }
             }
-            
+
             for (int i = 0; i < localListVariables.Count; i++)
             {
                 object value = localListVariables.Get(i);
                 Debug.Log($"Index {i}: {value}");
             }
-            
+
             Debug.Log($"=== End of LocalListVariables (Total: {localListVariables.Count} values) ===");
         }
 
@@ -731,7 +770,7 @@ namespace SMSAndroidsCore
                                     if (branch != null)
                                     {
                                         Debug.Log($"    Branch {branchIdx}: {branch.GetType().Name}");
-                                        
+
                                         // List ALL fields on the Branch object to see what's actually available
                                         Debug.Log($"      === ALL FIELDS ON BRANCH {branchIdx} ===");
                                         Type currentBranchType = branch.GetType();
@@ -989,87 +1028,126 @@ namespace SMSAndroidsCore
                 Debug.Log($"RootIds: [{string.Join(", ", rootIds)}]");
             }
 
-            // Print all nodes (if accessible)
+            // Print all nodes recursively (if accessible)
             var getNodeMethod = contentType.GetMethod("Get", BindingFlags.Public | BindingFlags.Instance);
             if (getNodeMethod != null && rootIds != null)
             {
+                HashSet<int> visitedNodes = new HashSet<int>();
                 foreach (var nodeId in rootIds)
                 {
-                    var node = getNodeMethod.Invoke(content, new object[] { nodeId });
-                    if (node != null)
-                    {
-                        Debug.Log($"--- Node {nodeId} ---");
-                        var nodeType = node.GetType();
-
-                        // Print node text
-                        var textField = nodeType.GetField("m_Text", BindingFlags.NonPublic | BindingFlags.Instance);
-                        string nodeText = textField?.GetValue(node)?.ToString() ?? "(no text)";
-                        Debug.Log($"  Text: {nodeText}");
-
-                        // Print node type
-                        var nodeTypeField = nodeType.GetField("m_NodeType", BindingFlags.NonPublic | BindingFlags.Instance);
-                        Debug.Log($"  NodeType: {nodeTypeField?.GetValue(node)}");
-
-                        // Print Acting
-                        var actingField = nodeType.GetField("m_Acting", BindingFlags.NonPublic | BindingFlags.Instance);
-                        var acting = actingField?.GetValue(node);
-                        if (acting != null)
-                        {
-                            var actingType = acting.GetType();
-                            var actorField = actingType.GetField("m_Actor", BindingFlags.NonPublic | BindingFlags.Instance);
-                            var exprField = actingType.GetField("m_Expression", BindingFlags.NonPublic | BindingFlags.Instance);
-                            var portraitField = actingType.GetField("m_Portrait", BindingFlags.NonPublic | BindingFlags.Instance);
-
-                            var actor = actorField?.GetValue(acting);
-                            int exprIdx = exprField != null ? (int)exprField.GetValue(acting) : -1;
-                            var portrait = portraitField?.GetValue(acting);
-
-                            string actorName = "(null)";
-                            string actorDesc = "(null)";
-                            string actorAssetName = "(null)";
-                            string exprName = "(unknown)";
-                            if (actor != null)
-                            {
-                                // Try to get name and description via Actant
-                                var actantField = actor.GetType().GetField("m_Actant", BindingFlags.NonPublic | BindingFlags.Instance);
-                                var actant = actantField?.GetValue(actor);
-                                if (actant != null)
-                                {
-                                    var getNameMethod = actant.GetType().GetMethod("GetName", BindingFlags.Public | BindingFlags.Instance);
-                                    var getDescMethod = actant.GetType().GetMethod("GetDescription", BindingFlags.Public | BindingFlags.Instance);
-                                    actorName = getNameMethod?.Invoke(actant, new object[] { null }) as string ?? "(no name)";
-                                    actorDesc = getDescMethod?.Invoke(actant, new object[] { null }) as string ?? "(no desc)";
-                                }
-                                // Try to get Unity asset name
-                                var nameProp = actor.GetType().GetProperty("name", BindingFlags.Public | BindingFlags.Instance);
-                                actorAssetName = nameProp?.GetValue(actor) as string ?? "(no asset name)";
-
-                                // Try to get expression name
-                                var expressionsField = actor.GetType().GetField("m_Expressions", BindingFlags.NonPublic | BindingFlags.Instance);
-                                var expressions = expressionsField?.GetValue(actor);
-                                if (expressions != null)
-                                {
-                                    var fromIndexMethod = expressions.GetType().GetMethod("FromIndex", BindingFlags.Public | BindingFlags.Instance);
-                                    var exprObj = fromIndexMethod?.Invoke(expressions, new object[] { exprIdx });
-                                    if (exprObj != null)
-                                    {
-                                        var exprNameProp = exprObj.GetType().GetProperty("name", BindingFlags.Public | BindingFlags.Instance);
-                                        exprName = exprNameProp?.GetValue(exprObj) as string ?? exprObj.ToString();
-                                    }
-                                }
-                            }
-
-                            Debug.Log($"  Acting: Actor Asset='{actorAssetName}', Name='{actorName}', Desc='{actorDesc}', ExpressionIdx={exprIdx}, ExpressionName={exprName}, Portrait={portrait}");
-                        }
-                    }
-                    else
-                    {
-                        Debug.Log($"Node {nodeId} is null");
-                    }
+                    PrintDialogueNodeRecursive(content, story, contentType, getNodeMethod, nodeId, 0, visitedNodes);
                 }
             }
 
             Debug.Log($"=== End Dialogue Component Info for {targetGameObject.name} ===");
+        }
+
+        /// <summary>
+        /// Recursively prints dialogue node and its children
+        /// </summary>
+        private static void PrintDialogueNodeRecursive(object content, object story, Type contentType, MethodInfo getNodeMethod, int nodeId, int depth, HashSet<int> visitedNodes)
+        {
+            if (visitedNodes.Contains(nodeId))
+            {
+                return; // Already processed this node
+            }
+
+            visitedNodes.Add(nodeId);
+
+            // Get the node
+            var node = getNodeMethod.Invoke(content, new object[] { nodeId });
+            if (node == null)
+            {
+                return;
+            }
+
+            string indent = new string(' ', depth * 2);
+            Debug.Log($"{indent}--- Node {nodeId} ---");
+
+            var nodeType = node.GetType();
+
+            // Print node text
+            var textField = nodeType.GetField("m_Text", BindingFlags.NonPublic | BindingFlags.Instance);
+            string nodeText = textField?.GetValue(node)?.ToString() ?? "(no text)";
+            Debug.Log($"{indent}  Text: {nodeText}");
+
+            // Print node type
+            var nodeTypeField = nodeType.GetField("m_NodeType", BindingFlags.NonPublic | BindingFlags.Instance);
+            Debug.Log($"{indent}  NodeType: {nodeTypeField?.GetValue(node)}");
+
+            // Print Acting
+            var actingField = nodeType.GetField("m_Acting", BindingFlags.NonPublic | BindingFlags.Instance);
+            var acting = actingField?.GetValue(node);
+            if (acting != null)
+            {
+                var actingType = acting.GetType();
+                var actorField = actingType.GetField("m_Actor", BindingFlags.NonPublic | BindingFlags.Instance);
+                var exprField = actingType.GetField("m_Expression", BindingFlags.NonPublic | BindingFlags.Instance);
+                var portraitField = actingType.GetField("m_Portrait", BindingFlags.NonPublic | BindingFlags.Instance);
+
+                var actor = actorField?.GetValue(acting);
+                int exprIdx = exprField != null ? (int)exprField.GetValue(acting) : -1;
+                var portrait = portraitField?.GetValue(acting);
+
+                string actorName = "(null)";
+                string actorDesc = "(null)";
+                string actorAssetName = "(null)";
+                string exprName = "(unknown)";
+                if (actor != null)
+                {
+                    // Try to get name and description via Actant
+                    var actantField = actor.GetType().GetField("m_Actant", BindingFlags.NonPublic | BindingFlags.Instance);
+                    var actant = actantField?.GetValue(actor);
+                    if (actant != null)
+                    {
+                        var getNameMethod = actant.GetType().GetMethod("GetName", BindingFlags.Public | BindingFlags.Instance);
+                        var getDescMethod = actant.GetType().GetMethod("GetDescription", BindingFlags.Public | BindingFlags.Instance);
+                        actorName = getNameMethod?.Invoke(actant, new object[] { null }) as string ?? "(no name)";
+                        actorDesc = getDescMethod?.Invoke(actant, new object[] { null }) as string ?? "(no desc)";
+                    }
+                    // Try to get Unity asset name
+                    var nameProp = actor.GetType().GetProperty("name", BindingFlags.Public | BindingFlags.Instance);
+                    actorAssetName = nameProp?.GetValue(actor) as string ?? "(no asset name)";
+
+                    // Try to get expression name
+                    var expressionsField = actor.GetType().GetField("m_Expressions", BindingFlags.NonPublic | BindingFlags.Instance);
+                    var expressions = expressionsField?.GetValue(actor);
+                    if (expressions != null)
+                    {
+                        var fromIndexMethod = expressions.GetType().GetMethod("FromIndex", BindingFlags.Public | BindingFlags.Instance);
+                        var exprObj = fromIndexMethod?.Invoke(expressions, new object[] { exprIdx });
+                        if (exprObj != null)
+                        {
+                            var exprNameProp = exprObj.GetType().GetProperty("name", BindingFlags.Public | BindingFlags.Instance);
+                            exprName = exprNameProp?.GetValue(exprObj) as string ?? exprObj.ToString();
+                        }
+                    }
+                }
+
+                Debug.Log($"{indent}  Acting: Actor Asset='{actorAssetName}', Name='{actorName}', Desc='{actorDesc}', ExpressionIdx={exprIdx}, ExpressionName={exprName}, Portrait={portrait}");
+            }
+
+            // Get child node IDs from the tree structure
+            var childrenMethod = contentType.GetMethod("Children", BindingFlags.Public | BindingFlags.Instance);
+            if (childrenMethod != null)
+            {
+                try
+                {
+                    var childNodeIds = childrenMethod.Invoke(content, new object[] { nodeId }) as List<int>;
+                    if (childNodeIds != null && childNodeIds.Count > 0)
+                    {
+                        Debug.Log($"{indent}  Child Nodes: [{string.Join(", ", childNodeIds)}]");
+                        foreach (var childNodeId in childNodeIds)
+                        {
+                            PrintDialogueNodeRecursive(content, story, contentType, getNodeMethod, childNodeId, depth + 1, visitedNodes);
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Debug.LogWarning($"{indent}  Could not get child nodes: {ex.Message}");
+                }
+            }
         }
 
         public static void PrintDialogueComponentDeep(GameObject targetGameObject, int maxDepth = 4)
@@ -1089,7 +1167,275 @@ namespace SMSAndroidsCore
 
             Debug.Log($"=== DEEP Dialogue Component Info for {targetGameObject.name} ===");
             PrintObjectRecursive(dialogue, "Dialogue", 0, maxDepth, new HashSet<object>());
+            
+            // Print conditions for each node
+            PrintDialogueNodeConditions(dialogue);
+            
             Debug.Log($"=== END DEEP Dialogue Component Info for {targetGameObject.name} ===");
+        }
+
+        /// <summary>
+        /// Prints conditions for all nodes in a Dialogue component
+        /// </summary>
+        private static void PrintDialogueNodeConditions(object dialogue)
+        {
+            if (dialogue == null) return;
+
+            Debug.Log("\n=== DIALOGUE NODE CONDITIONS ===");
+
+            // Get Story from Dialogue
+            var storyProp = dialogue.GetType().GetProperty("Story", BindingFlags.Public | BindingFlags.Instance);
+            var story = storyProp?.GetValue(dialogue);
+            if (story == null)
+            {
+                Debug.Log("Story is null");
+                return;
+            }
+
+            // Get Content from Story
+            var contentProp = story.GetType().GetProperty("Content", BindingFlags.Public | BindingFlags.Instance);
+            var content = contentProp?.GetValue(story);
+            if (content == null)
+            {
+                Debug.Log("Content is null");
+                return;
+            }
+
+            // Get m_Data dictionary from Content (TSerializableTree<Node>)
+            var dataField = content.GetType().GetField("m_Data", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.FlattenHierarchy);
+            if (dataField == null)
+            {
+                Debug.Log("m_Data field not found on Content");
+                return;
+            }
+
+            var data = dataField.GetValue(content) as System.Collections.IDictionary;
+            if (data == null)
+            {
+                Debug.Log("m_Data is null or not a dictionary");
+                return;
+            }
+
+            Debug.Log($"Total nodes in dialogue: {data.Count}");
+
+            foreach (System.Collections.DictionaryEntry entry in data)
+            {
+                int nodeId = (int)entry.Key;
+                var treeDataItem = entry.Value;
+                
+                // Get the Node from TTreeDataItem<Node>.Value
+                var valueProp = treeDataItem?.GetType().GetProperty("Value", BindingFlags.Public | BindingFlags.Instance);
+                var node = valueProp?.GetValue(treeDataItem);
+                
+                if (node == null)
+                {
+                    Debug.Log($"\n--- Node {nodeId}: null ---");
+                    continue;
+                }
+
+                // Get node text for context
+                var textProp = node.GetType().GetProperty("Text", BindingFlags.Public | BindingFlags.Instance);
+                string nodeText = textProp?.GetValue(node)?.ToString() ?? "(no text)";
+                
+                // Truncate text for display
+                if (nodeText.Length > 50)
+                    nodeText = nodeText.Substring(0, 47) + "...";
+
+                Debug.Log($"\n--- Node {nodeId}: \"{nodeText}\" ---");
+
+                // Get m_Conditions (RunConditionsList)
+                var conditionsField = node.GetType().GetField("m_Conditions", BindingFlags.NonPublic | BindingFlags.Instance);
+                if (conditionsField == null)
+                {
+                    Debug.Log("  m_Conditions field not found");
+                    continue;
+                }
+
+                var runConditionsList = conditionsField.GetValue(node);
+                if (runConditionsList == null)
+                {
+                    Debug.Log("  m_Conditions: null");
+                    continue;
+                }
+
+                // Get m_Conditions (ConditionList) from RunConditionsList
+                var conditionListField = runConditionsList.GetType().GetField("m_Conditions", BindingFlags.NonPublic | BindingFlags.Instance);
+                if (conditionListField == null)
+                {
+                    Debug.Log("  ConditionList field not found in RunConditionsList");
+                    continue;
+                }
+
+                var conditionList = conditionListField.GetValue(runConditionsList);
+                if (conditionList == null)
+                {
+                    Debug.Log("  ConditionList: null");
+                    continue;
+                }
+
+                // Get Length property
+                var lengthProp = conditionList.GetType().GetProperty("Length", BindingFlags.Public | BindingFlags.Instance);
+                int conditionCount = lengthProp != null ? (int)lengthProp.GetValue(conditionList) : 0;
+
+                if (conditionCount == 0)
+                {
+                    Debug.Log("  Conditions: (none)");
+                    continue;
+                }
+
+                Debug.Log($"  Conditions ({conditionCount}):");
+
+                // Get m_Conditions array from ConditionList
+                var conditionsArrayField = conditionList.GetType().GetField("m_Conditions", BindingFlags.NonPublic | BindingFlags.Instance);
+                if (conditionsArrayField == null)
+                {
+                    Debug.Log("    Could not access conditions array");
+                    continue;
+                }
+
+                var conditionsArray = conditionsArrayField.GetValue(conditionList) as Array;
+                if (conditionsArray == null)
+                {
+                    Debug.Log("    Conditions array is null");
+                    continue;
+                }
+
+                int condIdx = 0;
+                foreach (var condition in conditionsArray)
+                {
+                    if (condition == null)
+                    {
+                        Debug.Log($"    [{condIdx}]: null");
+                        condIdx++;
+                        continue;
+                    }
+
+                    var condType = condition.GetType();
+                    
+                    // Get Title property
+                    var titleProp = condType.GetProperty("Title", BindingFlags.Public | BindingFlags.Instance);
+                    string title = titleProp?.GetValue(condition)?.ToString() ?? condType.Name;
+
+                    // Get m_Sign (negation flag)
+                    var signField = condType.GetField("m_Sign", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.FlattenHierarchy);
+                    bool sign = signField != null ? (bool)signField.GetValue(condition) : true;
+                    string signText = sign ? "" : " (NEGATED)";
+
+                    Debug.Log($"    [{condIdx}]: {title}{signText} (Type: {condType.Name})");
+
+                    // Print condition-specific fields (m_ fields)
+                    PrintConditionDetails(condition, "      ");
+
+                    condIdx++;
+                }
+            }
+
+            Debug.Log("\n=== END DIALOGUE NODE CONDITIONS ===");
+        }
+
+        /// <summary>
+        /// Prints details of a condition's private fields
+        /// </summary>
+        private static void PrintConditionDetails(object condition, string indent)
+        {
+            if (condition == null) return;
+
+            var condType = condition.GetType();
+            var fields = condType.GetFields(BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Public);
+
+            foreach (var field in fields)
+            {
+                // Skip base class fields we've already handled
+                if (field.Name == "m_Sign" || field.Name == "m_IsEnabled" || field.Name == "m_Breakpoint")
+                    continue;
+
+                if (field.Name.StartsWith("m_"))
+                {
+                    try
+                    {
+                        var value = field.GetValue(condition);
+                        string valueStr = GetConditionFieldValueString(value);
+                        Debug.Log($"{indent}{field.Name}: {valueStr}");
+                    }
+                    catch (Exception ex)
+                    {
+                        Debug.Log($"{indent}{field.Name}: (error reading: {ex.Message})");
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// Converts a condition field value to a readable string
+        /// </summary>
+        private static string GetConditionFieldValueString(object value)
+        {
+            if (value == null) return "null";
+
+            var type = value.GetType();
+
+            // Handle primitives and strings
+            if (type.IsPrimitive || value is string || value is decimal)
+                return value.ToString();
+
+            // Handle enums
+            if (type.IsEnum)
+                return $"{value} ({type.Name})";
+
+            // Handle Unity Objects
+            if (value is UnityEngine.Object unityObj)
+                return $"{type.Name} (name='{unityObj.name}')";
+
+            // Try to get a String property (common in GameCreator property wrappers)
+            var stringProp = type.GetProperty("String", BindingFlags.Public | BindingFlags.Instance);
+            if (stringProp != null)
+            {
+                try
+                {
+                    var str = stringProp.GetValue(value);
+                    if (str != null) return str.ToString();
+                }
+                catch { }
+            }
+
+            // Try to get a Value property
+            var valueProp = type.GetProperty("Value", BindingFlags.Public | BindingFlags.Instance);
+            if (valueProp != null)
+            {
+                try
+                {
+                    var val = valueProp.GetValue(value);
+                    if (val != null) return $"{val} ({type.Name})";
+                }
+                catch { }
+            }
+
+            // For GlobalNameVariables or similar, try to get the asset name
+            if (type.Name.Contains("GlobalNameVariable") || type.Name.Contains("LocalNameVariable"))
+            {
+                var assetField = type.GetField("m_Variable", BindingFlags.NonPublic | BindingFlags.Instance);
+                if (assetField != null)
+                {
+                    var asset = assetField.GetValue(value);
+                    if (asset is UnityEngine.Object assetObj)
+                        return $"{type.Name} -> {assetObj.name}";
+                }
+
+                var nameField = type.GetField("m_Name", BindingFlags.NonPublic | BindingFlags.Instance);
+                if (nameField != null)
+                {
+                    var nameVal = nameField.GetValue(value);
+                    var nameProp = nameVal?.GetType().GetProperty("String", BindingFlags.Public | BindingFlags.Instance);
+                    if (nameProp != null)
+                    {
+                        var nameStr = nameProp.GetValue(nameVal);
+                        if (nameStr != null) return $"{type.Name} -> Variable: {nameStr}";
+                    }
+                }
+            }
+
+            // Default: just return type name
+            return $"({type.Name})";
         }
 
         private static void PrintObjectRecursive(object obj, string label, int depth, int maxDepth, HashSet<object> visited)
@@ -1433,6 +1779,7 @@ namespace SMSAndroidsCore
 
             Debug.Log("[Debug] Reloading Amber bust textures...");
 
+            Characters.amber.SetActive(true);
             GameObject amberBust = Characters.amber;
             GameObject mBase = amberBust.transform.Find("MBase1").gameObject;
             GameObject blink = mBase.transform.Find("Blink").gameObject;
@@ -1675,6 +2022,875 @@ namespace SMSAndroidsCore
             PrintConditionsAndTriggers(targetGameObject);
 
         }
+
+        public static void PrintToggleOnValueChanged(GameObject targetGameObject)
+        {
+            if (targetGameObject == null)
+            {
+                Debug.LogError("Target GameObject is null");
+                return;
+            }
+
+            UnityEngine.UI.Toggle toggle = targetGameObject.GetComponent<UnityEngine.UI.Toggle>();
+            if (toggle == null)
+            {
+                Debug.LogError($"Toggle component not found on GameObject: {targetGameObject.name}");
+                return;
+            }
+
+            Debug.Log($"=== Toggle OnValueChanged for: {targetGameObject.name} ===");
+            Debug.Log($"Current isOn value: {toggle.isOn}");
+
+            // Check if it's a TogglePropertyBool
+            if (toggle is TogglePropertyBool)
+            {
+                Debug.Log("Toggle Type: TogglePropertyBool");
+                var togglePropertyBool = toggle as TogglePropertyBool;
+
+                // Get the m_SetFromSource field
+                var setFromSourceField = typeof(TogglePropertyBool).GetField("m_SetFromSource", BindingFlags.NonPublic | BindingFlags.Instance);
+                if (setFromSourceField != null)
+                {
+                    var setFromSource = setFromSourceField.GetValue(togglePropertyBool);
+                    Debug.Log($"  m_SetFromSource: {setFromSource}");
+                }
+
+                // Get the m_OnChangeSet field (PropertySetBool)
+                var onChangeSetField = typeof(TogglePropertyBool).GetField("m_OnChangeSet", BindingFlags.NonPublic | BindingFlags.Instance);
+                if (onChangeSetField != null)
+                {
+                    var onChangeSet = onChangeSetField.GetValue(togglePropertyBool);
+                    if (onChangeSet != null)
+                    {
+                        Debug.Log($"  m_OnChangeSet: {onChangeSet.GetType().Name}");
+                        
+                        // Try to get details from PropertySetBool
+                        var propertySetBoolType = onChangeSet.GetType();
+                        foreach (var field in propertySetBoolType.GetFields(BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Public))
+                        {
+                            if (field.Name.StartsWith("m_"))
+                            {
+                                var fieldValue = field.GetValue(onChangeSet);
+                                Debug.Log($"    {field.Name}: {GetConditionFieldValueString(fieldValue)}");
+                            }
+                        }
+                    }
+                    else
+                    {
+                        Debug.Log("  m_OnChangeSet is null");
+                    }
+                }
+            }
+            else
+            {
+                Debug.Log("Toggle Type: Standard Toggle");
+            }
+
+            // Inspect OnValueChanged event listeners
+            var onValueChangedEvent = toggle.onValueChanged;
+            if (onValueChangedEvent != null)
+            {
+                Debug.Log("\n=== OnValueChanged Event Listeners ===");
+                int persistentListenerCount = onValueChangedEvent.GetPersistentEventCount();
+                Debug.Log($"Persistent Listener Count: {persistentListenerCount}");
+
+                for (int i = 0; i < persistentListenerCount; i++)
+                {
+                    var target = onValueChangedEvent.GetPersistentTarget(i);
+                    var methodName = onValueChangedEvent.GetPersistentMethodName(i);
+                    
+                    Debug.Log($"  Listener {i}:");
+                    Debug.Log($"    Target: {(target != null ? target.GetType().Name : "null")}");
+                    if (target is UnityEngine.Object unityTarget)
+                    {
+                        Debug.Log($"    Target Name: {unityTarget.name}");
+                    }
+                    Debug.Log($"    Method: {methodName}");
+
+                    // If the target is a GameObject or has interesting components, analyze it
+                    if (target is GameObject targetGO)
+                    {
+                        Debug.Log($"    Target is GameObject: {targetGO.name}");
+                    }
+                }
+
+                // Try to get runtime listeners using reflection (these are added via AddListener)
+                var onValueChangedField = typeof(UnityEngine.UI.Toggle).GetField("onValueChanged", BindingFlags.NonPublic | BindingFlags.Instance);
+                if (onValueChangedField == null)
+                {
+                    onValueChangedField = typeof(UnityEngine.UI.Toggle).GetField("m_OnValueChanged", BindingFlags.NonPublic | BindingFlags.Instance);
+                }
+
+                if (onValueChangedField != null)
+                {
+                    var unityEvent = onValueChangedField.GetValue(toggle);
+                    if (unityEvent != null)
+                    {
+                        // Try to get runtime calls
+                        var callsField = unityEvent.GetType().GetField("m_Calls", BindingFlags.NonPublic | BindingFlags.Instance);
+                        if (callsField != null)
+                        {
+                            var calls = callsField.GetValue(unityEvent);
+                            if (calls != null)
+                            {
+                                var runtimeCallsField = calls.GetType().GetField("m_RuntimeCalls", BindingFlags.NonPublic | BindingFlags.Instance);
+                                if (runtimeCallsField != null)
+                                {
+                                    var runtimeCalls = runtimeCallsField.GetValue(calls) as System.Collections.IList;
+                                    if (runtimeCalls != null && runtimeCalls.Count > 0)
+                                    {
+                                        Debug.Log($"\n=== Runtime Listeners (AddListener) ===");
+                                        Debug.Log($"Runtime Listener Count: {runtimeCalls.Count}");
+                                        
+                                        for (int i = 0; i < runtimeCalls.Count; i++)
+                                        {
+                                            var call = runtimeCalls[i];
+                                            if (call != null)
+                                            {
+                                                Debug.Log($"  Runtime Listener {i}: {call.GetType().Name}");
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            else
+            {
+                Debug.Log("onValueChanged is null");
+            }
+        }
+
+        public static void PrintAllGlobalNameVariables()
+        {
+            var manager = GlobalNameVariablesManager.Instance;
+            if (manager == null)
+            {
+                Debug.LogError("[PrintAllGlobalNameVariables] GlobalNameVariablesManager not initialized");
+                return;
+            }
+
+            PropertyInfo valuesProp = typeof(GlobalNameVariablesManager).GetProperty(
+                "Values",
+                BindingFlags.NonPublic | BindingFlags.Instance
+            );
+
+            if (valuesProp == null)
+            {
+                Debug.LogError("[PrintAllGlobalNameVariables] Could not access Values property");
+                return;
+            }
+
+            var values = valuesProp.GetValue(manager) as Dictionary<IdString, NameVariableRuntime>;
+            if (values == null || values.Count == 0)
+            {
+                Debug.LogWarning("[PrintAllGlobalNameVariables] No global name variables found");
+                return;
+            }
+
+            var repo = TRepository<VariablesRepository>.Get;
+            if (repo == null)
+            {
+                Debug.LogError("[PrintAllGlobalNameVariables] VariablesRepository not accessible");
+                return;
+            }
+
+            Debug.Log("=== ALL GLOBAL NAME VARIABLES ===");
+            
+            foreach (var pair in values)
+            {
+                var asset = repo.Variables.GetNameVariablesAsset(pair.Key);
+                string assetName = asset != null ? asset.name : $"Unknown Asset ({pair.Key})";
+
+                PropertyInfo runtimeVarsProp = typeof(NameVariableRuntime).GetProperty(
+                    "Variables",
+                    BindingFlags.NonPublic | BindingFlags.Instance
+                );
+
+                if (runtimeVarsProp == null) continue;
+
+                var variables = runtimeVarsProp.GetValue(pair.Value) as Dictionary<string, NameVariable>;
+                if (variables == null || variables.Count == 0)
+                {
+                    Debug.Log($"[{assetName}] (No variables)");
+                    continue;
+                }
+
+                Debug.Log($"[{assetName}] ({variables.Count} variables)");
+                foreach (var varPair in variables)
+                {
+                    object value = varPair.Value?.Value;
+                    string typeName = value != null ? value.GetType().Name : "null";
+                    Debug.Log($"  - {varPair.Key}: {value ?? "null"} (Type: {typeName})");
+                }
+            }
+
+            Debug.Log("=== END GLOBAL NAME VARIABLES ===");
+        }
+
+        public static void PrintProxyVariables()
+        {
+            if (Core.proxyVariables == null)
+            {
+                Debug.LogError("[PrintProxyVariables] Proxy Variables not initialized");
+                return;
+            }
+
+            Debug.Log("=== PROXY VARIABLES ===");
+            Debug.Log($"Asset Name: {Core.proxyVariables.name}");
+            Debug.Log($"UniqueID: {Core.proxyVariables.UniqueID}");
+
+            // Get all variable names from the proxy variables
+            string[] variableNames = Core.proxyVariables.Names;
+
+            if (variableNames == null || variableNames.Length == 0)
+            {
+                Debug.LogWarning("[PrintProxyVariables] No variables found in Proxy Variables asset");
+                Debug.Log("=== END PROXY VARIABLES ===");
+                return;
+            }
+
+            Debug.Log($"Total Variables: {variableNames.Length}");
+
+            foreach (string varName in variableNames)
+            {
+                if (Core.proxyVariables.Exists(varName))
+                {
+                    object value = Core.proxyVariables.Get(varName);
+                    string typeName = value != null ? value.GetType().Name : "null";
+                    string title = Core.proxyVariables.Title(varName);
+                    
+                    Debug.Log($"  - {varName}: {value ?? "null"} (Type: {typeName}, Title: \"{title}\")");
+                }
+                else
+                {
+                    Debug.LogWarning($"  - {varName}: [DOES NOT EXIST]");
+                }
+            }
+
+            Debug.Log("=== END PROXY VARIABLES ===");
+        }
+
+        public static IEnumerator PrintAllGlobalNameVariablesDelayed(float delay)
+        {
+            yield return new WaitForSeconds(delay);
+            PrintAllGlobalNameVariables();
+        }
+
+        public static void PrintAllSignals()
+        {
+            Debug.Log("=== ALL ACTIVE SIGNALS ===");
+
+            try
+            {
+                // Use reflection to access the private SIGNALS dictionary
+                var signalsType = typeof(Signals);
+                var signalsField = signalsType.GetField("SIGNALS", BindingFlags.NonPublic | BindingFlags.Static);
+
+                if (signalsField == null)
+                {
+                    Debug.LogError("[PrintAllSignals] Could not access SIGNALS field via reflection");
+                    return;
+                }
+
+                var signalsDictionary = signalsField.GetValue(null) as Dictionary<PropertyName, List<ISignalReceiver>>;
+                if (signalsDictionary == null)
+                {
+                    Debug.LogWarning("[PrintAllSignals] SIGNALS dictionary is null");
+                    Debug.Log("=== END ALL ACTIVE SIGNALS ===");
+                    return;
+                }
+
+                if (signalsDictionary.Count == 0)
+                {
+                    Debug.LogWarning("[PrintAllSignals] No active signals found");
+                    Debug.Log("=== END ALL ACTIVE SIGNALS ===");
+                    return;
+                }
+
+                Debug.Log($"Total Active Signals: {signalsDictionary.Count}");
+
+                foreach (var signal in signalsDictionary)
+                {
+                    int receiverCount = signal.Value?.Count ?? 0;
+                    
+                    // Try to get the actual signal name from the first receiver (Trigger)
+                    // since PropertyName only stores a hash, not the original string
+                    string signalName = $"Hash:{signal.Key.GetHashCode()}";
+                    
+                    if (signal.Value != null && signal.Value.Count > 0)
+                    {
+                        var firstReceiver = signal.Value[0];
+                        string extractedName = TryGetSignalNameFromReceiver(firstReceiver);
+                        if (!string.IsNullOrEmpty(extractedName))
+                        {
+                            signalName = extractedName;
+                        }
+                    }
+                    
+                    Debug.Log($"  Signal: '{signalName}' - {receiverCount} receiver(s)");
+
+                    if (signal.Value != null && signal.Value.Count > 0)
+                    {
+                        for (int i = 0; i < signal.Value.Count; i++)
+                        {
+                            var receiver = signal.Value[i];
+                            if (receiver is MonoBehaviour monoBehaviour)
+                            {
+                                Debug.Log($"    [{i}] {monoBehaviour.GetType().Name} on GameObject '{monoBehaviour.gameObject.name}'");
+                            }
+                            else
+                            {
+                                Debug.Log($"    [{i}] {receiver?.GetType().Name ?? "null"}");
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.LogError($"[PrintAllSignals] Error retrieving signals: {ex.Message}");
+            }
+
+            Debug.Log("=== END ALL ACTIVE SIGNALS ===");
+        }
+
+        private static string TryGetSignalNameFromReceiver(ISignalReceiver receiver)
+        {
+            if (receiver == null) return null;
+
+            try
+            {
+                var receiverType = receiver.GetType();
+                
+                // Get m_TriggerEvent field (which is EventOnReceiveSignal)
+                var triggerEventField = receiverType.GetField("m_TriggerEvent", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Public);
+                if (triggerEventField != null)
+                {
+                    var triggerEvent = triggerEventField.GetValue(receiver);
+                    if (triggerEvent != null && triggerEvent.GetType().Name == "EventOnReceiveSignal")
+                    {
+                        // Now look for the signal field inside EventOnReceiveSignal
+                        var eventType = triggerEvent.GetType();
+                        
+                        // Try common field names for the signal
+                        string[] signalFieldNames = { "m_Signal", "m_SignalName", "m_Name", "m_PropertyName" };
+                        
+                        foreach (var fieldName in signalFieldNames)
+                        {
+                            var signalField = eventType.GetField(fieldName, BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Public);
+                            if (signalField != null)
+                            {
+                                var signalValue = signalField.GetValue(triggerEvent);
+                                if (signalValue != null)
+                                {
+                                    // If it's a string directly
+                                    if (signalValue is string strVal && !string.IsNullOrEmpty(strVal))
+                                        return strVal;
+                                    
+                                    // Try to get String property (GameCreator wrapper types often have this)
+                                    var stringProp = signalValue.GetType().GetProperty("String", BindingFlags.Public | BindingFlags.Instance);
+                                    if (stringProp != null)
+                                    {
+                                        var str = stringProp.GetValue(signalValue);
+                                        if (str is string s && !string.IsNullOrEmpty(s))
+                                            return s;
+                                    }
+                                    
+                                    // Try m_String field
+                                    var mStringField = signalValue.GetType().GetField("m_String", BindingFlags.NonPublic | BindingFlags.Instance);
+                                    if (mStringField != null)
+                                    {
+                                        var str = mStringField.GetValue(signalValue);
+                                        if (str is string s && !string.IsNullOrEmpty(s))
+                                            return s;
+                                    }
+                                }
+                            }
+                        }
+                        
+                        // If we still haven't found it, dump all fields of EventOnReceiveSignal for debugging
+                        Debug.Log($"    [Debug] EventOnReceiveSignal fields:");
+                        var allEventFields = eventType.GetFields(BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Public);
+                        foreach (var f in allEventFields)
+                        {
+                            var val = f.GetValue(triggerEvent);
+                            Debug.Log($"    [Debug]   {f.Name}: {val} ({val?.GetType().Name ?? "null"})");
+                            
+                            // If this field looks like it could contain the signal, dig deeper
+                            if (val != null && f.Name.ToLower().Contains("signal"))
+                            {
+                                var innerFields = val.GetType().GetFields(BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Public);
+                                foreach (var innerF in innerFields)
+                                {
+                                    var innerVal = innerF.GetValue(val);
+                                    Debug.Log($"    [Debug]     -> {innerF.Name}: {innerVal} ({innerVal?.GetType().Name ?? "null"})");
+                                }
+                                var innerProps = val.GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance);
+                                foreach (var innerP in innerProps)
+                                {
+                                    try
+                                    {
+                                        var innerVal = innerP.GetValue(val);
+                                        Debug.Log($"    [Debug]     -> {innerP.Name} (prop): {innerVal} ({innerVal?.GetType().Name ?? "null"})");
+                                    }
+                                    catch { }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.LogWarning($"[TryGetSignalNameFromReceiver] Error: {ex.Message}");
+            }
+
+            return null;
+        }
+
+        /// <summary>
+        /// Helper method to write to dialogue debug log file
+        /// </summary>
+        private static void LogToDialogueFile(string message)
+        {
+            try
+            {
+                string logDir = Path.Combine(new DirectoryInfo(Application.dataPath).Parent.FullName);
+                string logPath = Path.Combine(logDir, "DialogueSetActiveDebug.log");
+                
+                // Append timestamp to each message
+                string timestampedMessage = $"[{System.DateTime.Now:yyyy-MM-dd HH:mm:ss.fff}] {message}";
+                
+                // Write to file
+                File.AppendAllText(logPath, timestampedMessage + Environment.NewLine);
+            }
+            catch (Exception ex)
+            {
+                Debug.LogError($"Failed to write to dialogue log file: {ex.Message}");
+            }
+        }
+
+        /// <summary>
+        /// Finds all GameObjects with a Dialogue component in the scene (active or inactive),
+        /// searches through their dialogue structure for nodes with "Set Active" instructions,
+        /// and logs the path of nodes needed to reach that instruction along with the target GO name.
+        /// </summary>
+        public static void FindAllSetActiveInstructionsInDialogues()
+        {
+            LogToDialogueFile("=== Searching All Dialogues for SetActive Instructions ===");
+
+            // Get all GameObjects in the scene including inactive ones
+            var allGameObjects = new List<GameObject>();
+            foreach (var rootGO in SceneManager.GetActiveScene().GetRootGameObjects())
+            {
+                CollectAllGameObjects(rootGO.transform, allGameObjects);
+            }
+
+            LogToDialogueFile($"Found {allGameObjects.Count} total GameObjects in scene");
+
+            int dialogueCount = 0;
+            int setActiveFoundCount = 0;
+
+            foreach (var go in allGameObjects)
+            {
+                var dialogue = go.GetComponent(typeof(GameCreator.Runtime.Dialogue.Dialogue));
+                if (dialogue == null) continue;
+
+                dialogueCount++;
+
+                // Get the Story property
+                var dialogueType = dialogue.GetType();
+                var storyProp = dialogueType.GetProperty("Story", BindingFlags.Public | BindingFlags.Instance);
+                var story = storyProp?.GetValue(dialogue);
+                if (story == null)
+                {
+                    LogToDialogueFile($"[{go.name}] Dialogue.Story is null");
+                    continue;
+                }
+
+                // Get Content property
+                var storyType = story.GetType();
+                var contentProp = storyType.GetProperty("Content", BindingFlags.Public | BindingFlags.Instance);
+                var content = contentProp?.GetValue(story);
+                if (content == null)
+                {
+                    LogToDialogueFile($"[{go.name}] Story.Content is null");
+                    continue;
+                }
+
+                var contentType = content.GetType();
+
+                // Get RootIds
+                var rootIdsProp = contentType.GetProperty("RootIds", BindingFlags.Public | BindingFlags.Instance);
+                var rootIds = rootIdsProp?.GetValue(content) as int[];
+                if (rootIds == null || rootIds.Length == 0)
+                {
+                    continue;
+                }
+
+                // Get methods for traversing the tree
+                var getNodeMethod = contentType.GetMethod("Get", BindingFlags.Public | BindingFlags.Instance);
+                var childrenMethod = contentType.GetMethod("Children", BindingFlags.Public | BindingFlags.Instance);
+
+                if (getNodeMethod == null || childrenMethod == null)
+                {
+                    LogToDialogueFile($"[{go.name}] Could not find Get or Children methods on Content");
+                    continue;
+                }
+
+                // Search through all nodes starting from roots
+                HashSet<int> visitedNodes = new HashSet<int>();
+                List<int> currentPath = new List<int>();
+
+                foreach (var rootId in rootIds)
+                {
+                    SearchNodeForSetActiveInstructions(
+                        go.name,
+                        content,
+                        contentType,
+                        getNodeMethod,
+                        childrenMethod,
+                        rootId,
+                        visitedNodes,
+                        currentPath,
+                        ref setActiveFoundCount
+                    );
+                }
+            }
+
+            LogToDialogueFile($"=== Search Complete: Found {dialogueCount} Dialogues, {setActiveFoundCount} SetActive Instructions ===");
+        }
+
+        /// <summary>
+        /// Recursively collects all GameObjects from a transform hierarchy
+        /// </summary>
+        private static void CollectAllGameObjects(Transform parent, List<GameObject> result)
+        {
+            result.Add(parent.gameObject);
+            foreach (Transform child in parent)
+            {
+                CollectAllGameObjects(child, result);
+            }
+        }
+
+        /// <summary>
+        /// Recursively searches a dialogue node and its children for SetActive instructions
+        /// </summary>
+        private static void SearchNodeForSetActiveInstructions(
+            string dialogueGOName,
+            object content,
+            Type contentType,
+            MethodInfo getNodeMethod,
+            MethodInfo childrenMethod,
+            int nodeId,
+            HashSet<int> visitedNodes,
+            List<int> currentPath,
+            ref int setActiveFoundCount)
+        {
+            if (visitedNodes.Contains(nodeId))
+                return;
+
+            visitedNodes.Add(nodeId);
+
+            // Get the node
+            var node = getNodeMethod.Invoke(content, new object[] { nodeId });
+            if (node == null)
+                return;
+
+            // Add current node to path
+            currentPath.Add(nodeId);
+
+            var nodeType = node.GetType();
+
+            // Get node text for identification
+            var textField = nodeType.GetField("m_Text", BindingFlags.NonPublic | BindingFlags.Instance);
+            string nodeText = textField?.GetValue(node)?.ToString() ?? "(no text)";
+            if (nodeText.Length > 50)
+                nodeText = nodeText.Substring(0, 50) + "...";
+
+            // Check m_OnStart instructions
+            var onStartField = nodeType.GetField("m_OnStart", BindingFlags.NonPublic | BindingFlags.Instance);
+            if (onStartField != null)
+            {
+                var onStart = onStartField.GetValue(node);
+                if (onStart != null)
+                {
+                    CheckInstructionListForSetActive(
+                        dialogueGOName,
+                        onStart,
+                        "OnStart",
+                        currentPath,
+                        nodeText,
+                        content,
+                        getNodeMethod,
+                        ref setActiveFoundCount
+                    );
+                }
+            }
+
+            // Check m_OnFinish instructions
+            var onFinishField = nodeType.GetField("m_OnFinish", BindingFlags.NonPublic | BindingFlags.Instance);
+            if (onFinishField != null)
+            {
+                var onFinish = onFinishField.GetValue(node);
+                if (onFinish != null)
+                {
+                    CheckInstructionListForSetActive(
+                        dialogueGOName,
+                        onFinish,
+                        "OnFinish",
+                        currentPath,
+                        nodeText,
+                        content,
+                        getNodeMethod,
+                        ref setActiveFoundCount
+                    );
+                }
+            }
+
+            // Get child nodes and recurse
+            try
+            {
+                var childNodeIds = childrenMethod.Invoke(content, new object[] { nodeId }) as List<int>;
+                if (childNodeIds != null && childNodeIds.Count > 0)
+                {
+                    foreach (var childNodeId in childNodeIds)
+                    {
+                        SearchNodeForSetActiveInstructions(
+                            dialogueGOName,
+                            content,
+                            contentType,
+                            getNodeMethod,
+                            childrenMethod,
+                            childNodeId,
+                            visitedNodes,
+                            currentPath,
+                            ref setActiveFoundCount
+                        );
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                LogToDialogueFile($"[{dialogueGOName}] Error getting children for node {nodeId}: {ex.Message}");
+            }
+
+            // Remove current node from path when backtracking
+            currentPath.RemoveAt(currentPath.Count - 1);
+        }
+
+        /// <summary>
+        /// Checks an instruction list (RunInstructionsList) for SetActive instructions
+        /// </summary>
+        private static void CheckInstructionListForSetActive(
+            string dialogueGOName,
+            object runInstructionsList,
+            string listName,
+            List<int> nodePath,
+            string currentNodeText,
+            object content,
+            MethodInfo getNodeMethod,
+            ref int setActiveFoundCount)
+        {
+            if (runInstructionsList == null)
+                return;
+
+            // Get m_Instructions field from RunInstructionsList
+            var instructionsField = runInstructionsList.GetType().GetField("m_Instructions", BindingFlags.NonPublic | BindingFlags.Instance);
+            if (instructionsField == null)
+                return;
+
+            var instructionList = instructionsField.GetValue(runInstructionsList);
+            if (instructionList == null)
+                return;
+
+            // Get m_Instructions array from InstructionList
+            var instructionsArrayField = instructionList.GetType().GetField("m_Instructions", BindingFlags.NonPublic | BindingFlags.Instance);
+            if (instructionsArrayField == null)
+                return;
+
+            var instructionsArray = instructionsArrayField.GetValue(instructionList) as System.Collections.IEnumerable;
+            if (instructionsArray == null)
+                return;
+
+            int instIdx = 0;
+            foreach (var instruction in instructionsArray)
+            {
+                if (instruction == null)
+                {
+                    instIdx++;
+                    continue;
+                }
+
+                var instType = instruction.GetType();
+                string instTypeName = instType.Name;
+
+                // Check if this is a SetActive instruction
+                if (instTypeName == "InstructionGameObjectSetActive" || 
+                    instTypeName.Contains("SetActive"))
+                {
+                    setActiveFoundCount++;
+
+                    // Try to get the target GameObject name from m_GameObject field
+                    string targetGOName = "(unknown)";
+                    var gameObjectField = instType.GetField("m_GameObject", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Public);
+                    if (gameObjectField == null)
+                    {
+                        // Try inherited field from TInstructionGameObject
+                        gameObjectField = instType.BaseType?.GetField("m_GameObject", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Public);
+                    }
+
+                    if (gameObjectField != null)
+                    {
+                        var goProperty = gameObjectField.GetValue(instruction);
+                        if (goProperty != null)
+                        {
+                            // Try to get the string representation which usually contains the GO reference
+                            targetGOName = goProperty.ToString();
+
+                            // Also try to dig deeper into PropertyGetGameObject to find actual name
+                            var mPropertyField = goProperty.GetType().GetField("m_Property", BindingFlags.NonPublic | BindingFlags.Instance);
+                            if (mPropertyField != null)
+                            {
+                                var mProperty = mPropertyField.GetValue(goProperty);
+                                if (mProperty != null)
+                                {
+                                    // Try m_GameObject field on the property type
+                                    var innerGOField = mProperty.GetType().GetField("m_GameObject", BindingFlags.NonPublic | BindingFlags.Instance);
+                                    if (innerGOField != null)
+                                    {
+                                        var innerGO = innerGOField.GetValue(mProperty);
+                                        if (innerGO != null)
+                                        {
+                                            targetGOName = innerGO.ToString();
+                                            
+                                            // If it's a Unity Object, try to get its name
+                                            if (innerGO is UnityEngine.Object unityObj && unityObj != null)
+                                            {
+                                                targetGOName = unityObj.name;
+                                            }
+                                        }
+                                    }
+
+                                    // Alternative: try String property
+                                    var stringProp = mProperty.GetType().GetProperty("String", BindingFlags.Public | BindingFlags.Instance);
+                                    if (stringProp != null)
+                                    {
+                                        var strVal = stringProp.GetValue(mProperty);
+                                        if (strVal != null && !string.IsNullOrEmpty(strVal.ToString()))
+                                        {
+                                            targetGOName = strVal.ToString();
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    // Try to get the active value from m_Active field
+                    string activeValue = "(unknown)";
+                    var activeField = instType.GetField("m_Active", BindingFlags.NonPublic | BindingFlags.Instance);
+                    if (activeField != null)
+                    {
+                        var active = activeField.GetValue(instruction);
+                        if (active != null)
+                        {
+                            activeValue = active.ToString();
+                        }
+                    }
+
+                    // Build the path description
+                    string pathDescription = BuildNodePathDescription(nodePath, content, getNodeMethod);
+
+                    // Log the finding
+                    LogToDialogueFile($"[SETACTIVE FOUND] Dialogue GO: '{dialogueGOName}'");
+                    LogToDialogueFile($"  Target GO: {targetGOName}");
+                    LogToDialogueFile($"  Active Value: {activeValue}");
+                    LogToDialogueFile($"  Location: {listName}, Instruction #{instIdx}");
+                    LogToDialogueFile($"  Current Node Text: \"{currentNodeText}\"");
+                    LogToDialogueFile($"  Node Path: {pathDescription}");
+                    LogToDialogueFile("  ---");
+                }
+
+                instIdx++;
+            }
+        }
+
+        /// <summary>
+        /// Builds a human-readable description of the node path
+        /// </summary>
+        private static string BuildNodePathDescription(List<int> nodePath, object content, MethodInfo getNodeMethod)
+        {
+            if (nodePath == null || nodePath.Count == 0)
+                return "(empty path)";
+
+            var pathParts = new List<string>();
+
+            for (int i = 0; i < nodePath.Count; i++)
+            {
+                int nodeId = nodePath[i];
+                var node = getNodeMethod.Invoke(content, new object[] { nodeId });
+
+                string nodeDesc = $"[{nodeId}]";
+
+                if (node != null)
+                {
+                    var nodeType = node.GetType();
+
+                    // Get node text
+                    var textField = nodeType.GetField("m_Text", BindingFlags.NonPublic | BindingFlags.Instance);
+                    string text = textField?.GetValue(node)?.ToString() ?? "";
+                    if (text.Length > 30)
+                        text = text.Substring(0, 30) + "...";
+
+                    // Get node type (Text, Choice, Random, etc.)
+                    var nodeTypeField = nodeType.GetField("m_NodeType", BindingFlags.NonPublic | BindingFlags.Instance);
+                    string nodeTypeName = "";
+                    if (nodeTypeField != null)
+                    {
+                        var nodeTypeObj = nodeTypeField.GetValue(node);
+                        if (nodeTypeObj != null)
+                        {
+                            nodeTypeName = nodeTypeObj.GetType().Name.Replace("NodeType", "");
+                        }
+                    }
+
+                    // Get actor name if available
+                    string actorName = "";
+                    var actingField = nodeType.GetField("m_Acting", BindingFlags.NonPublic | BindingFlags.Instance);
+                    if (actingField != null)
+                    {
+                        var acting = actingField.GetValue(node);
+                        if (acting != null)
+                        {
+                            var actorField = acting.GetType().GetField("m_Actor", BindingFlags.NonPublic | BindingFlags.Instance);
+                            var actor = actorField?.GetValue(acting);
+                            if (actor != null)
+                            {
+                                var nameProp = actor.GetType().GetProperty("name", BindingFlags.Public | BindingFlags.Instance);
+                                actorName = nameProp?.GetValue(actor) as string ?? "";
+                            }
+                        }
+                    }
+
+                    // Build description
+                    if (!string.IsNullOrEmpty(actorName))
+                        nodeDesc = $"[{nodeId}:{nodeTypeName}:{actorName}:\"{text}\"]";
+                    else if (!string.IsNullOrEmpty(text))
+                        nodeDesc = $"[{nodeId}:{nodeTypeName}:\"{text}\"]";
+                    else
+                        nodeDesc = $"[{nodeId}:{nodeTypeName}]";
+                }
+
+                pathParts.Add(nodeDesc);
+            }
+
+            return string.Join(" -> ", pathParts);
+        }
+
 
     }
 }

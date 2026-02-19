@@ -41,7 +41,26 @@ namespace SMSAndroidsCore
         public static GameObject amberEventHospitalhallwayScene02;
         public static GameObject amberStorySecretbeachScene01;
 
+        public static GameObject anisAffection01Scene01;
+        public static GameObject anisAffection01Scene02;
+        public static GameObject anisAffection02Scene01;
+        public static GameObject anisAffection02Scene02;
+        public static GameObject anisAffection02Scene03;
+        public static GameObject anisAffection02Scene04;
+        public static GameObject anisAffection02Scene05;
+        public static GameObject anisAffection03Scene01;
+        public static GameObject anisAffection03Scene02;
+        public static GameObject anisAffection03Scene03;
+        public static GameObject anisAffection03Scene04;
+        public static GameObject anisAffection03Scene05;
+        public static GameObject anisChillToplessScene01;
+        public static GameObject anisChillToplessScene02;
+        public static GameObject anisChillToplessScene03;
+        public static GameObject anisChillToplessScene04;
+        public static GameObject anisChillToplessScene05;
+        public static GameObject anisChillToplessScene06;
         public static GameObject anisEventMallScene01;
+
         public static GameObject centiEventKenshomeScene01;
         public static GameObject dorothyEventParkScene01;
         public static GameObject eleggEventDowntownScene01;
@@ -56,6 +75,7 @@ namespace SMSAndroidsCore
         public static GameObject rapiEventGasstationScene01;
         public static GameObject rosannaEventGabrielsmansionScene01;
         public static GameObject sakuraEventForestScene01;
+        public static GameObject toveEventTrailScene01;
         public static GameObject viperEventVillaScene01;
         public static GameObject yanEventMallScene01;
 
@@ -135,6 +155,11 @@ namespace SMSAndroidsCore
         public static GameObject sakuraVoyeurSecretbeachScene03;
         public static GameObject sakuraVoyeurSecretbeachScene04;
 
+        public static GameObject toveVoyeurSecretbeachScene01;
+        public static GameObject toveVoyeurSecretbeachScene02;
+        public static GameObject toveVoyeurSecretbeachScene03;
+        public static GameObject toveVoyeurSecretbeachScene04;
+
         public static GameObject viperVoyeurSecretbeachScene01;
         public static GameObject viperVoyeurSecretbeachScene02;
         public static GameObject viperVoyeurSecretbeachScene03;
@@ -157,7 +182,25 @@ namespace SMSAndroidsCore
                     amberEventHospitalhallwayScene02 = CreateNewPicScene("AmberEventHospitalhallwayScene02", Core.scenePath + "Amber\\AmberEventHospitalhallwayScene02.PNG");
                     amberStorySecretbeachScene01 = CreateNewPicScene("AmberStorySecretbeachScene01", Core.scenePath + "Amber\\AmberStorySecretbeachScene01.PNG");
 
+                    anisAffection01Scene01 = CreateNewPicScene("AnisAffection01Scene01", Core.scenePath + "Anis\\AnisAffection01Scene01.PNG");
+                    anisAffection01Scene02 = CreateNewPicScene("AnisAffection01Scene02", Core.scenePath + "Anis\\AnisAffection01Scene02.PNG");
+                    anisAffection02Scene01 = CreateNewPicScene("AnisAffection02Scene01", Core.scenePath + "Anis\\AnisAffection02Scene01.PNG");
+                    anisAffection02Scene02 = CreateNewPicScene("AnisAffection02Scene02", Core.scenePath + "Anis\\AnisAffection02Scene02.PNG");
+                    anisAffection02Scene03 = CreateNewPicScene("AnisAffection02Scene03", Core.scenePath + "Anis\\AnisAffection02Scene03.PNG");
+                    anisAffection02Scene04 = CreateNewPicScene("AnisAffection02Scene04", Core.scenePath + "Anis\\AnisAffection02Scene04.PNG");
+                    anisAffection02Scene05 = CreateNewPicScene("AnisAffection02Scene05", Core.scenePath + "Anis\\AnisAffection02Scene05.PNG");
+                    anisAffection03Scene01 = CreateNewPicScene("AnisAffection03Scene01", Core.scenePath + "Anis\\AnisAffection03Scene01.PNG");
+                    anisAffection03Scene02 = CreateNewPicScene("AnisAffection03Scene02", Core.scenePath + "Anis\\AnisAffection03Scene02.PNG");
+                    anisAffection03Scene03 = CreateNewPicScene("AnisAffection03Scene03", Core.scenePath + "Anis\\AnisAffection03Scene03.PNG");
+                    anisAffection03Scene04 = CreateNewPicScene("AnisAffection03Scene04", Core.scenePath + "Anis\\AnisAffection03Scene04.PNG");
+                    anisAffection03Scene05 = CreateNewPicScene("AnisAffection03Scene05", Core.scenePath + "Anis\\AnisAffection03Scene05.PNG");
                     anisEventMallScene01 = CreateNewPicScene("AnisEventMallScene01", Core.scenePath + "Anis\\AnisEventMallScene01.PNG");
+                    anisChillToplessScene01 = CreateNewPicScene("AnisChillToplessScene01", Core.scenePath + "Anis\\AnisChillToplessScene01.PNG");
+                    anisChillToplessScene02 = CreateNewPicScene("AnisChillToplessScene02", Core.scenePath + "Anis\\AnisChillToplessScene02.PNG");
+                    anisChillToplessScene03 = CreateNewPicScene("AnisChillToplessScene03", Core.scenePath + "Anis\\AnisChillToplessScene03.PNG");
+                    anisChillToplessScene04 = CreateNewPicScene("AnisChillToplessScene04", Core.scenePath + "Anis\\AnisChillToplessScene04.PNG");
+                    anisChillToplessScene05 = CreateNewPicScene("AnisChillToplessScene05", Core.scenePath + "Anis\\AnisChillToplessScene05.PNG");
+                    anisChillToplessScene06 = CreateNewPicScene("AnisChillToplessScene06", Core.scenePath + "Anis\\AnisChillToplessScene06.PNG");
                     anisVoyeurSecretbeachScene01 = CreateNewPicScene("AnisVoyeurSecretbeachScene01", Core.scenePath + "Anis\\AnisVoyeurSecretbeachScene01.PNG");
                     anisVoyeurSecretbeachScene02 = CreateNewPicScene("AnisVoyeurSecretbeachScene02", Core.scenePath + "Anis\\AnisVoyeurSecretbeachScene02.PNG");
                     anisVoyeurSecretbeachScene03 = CreateNewPicScene("AnisVoyeurSecretbeachScene03", Core.scenePath + "Anis\\AnisVoyeurSecretbeachScene03.PNG");
@@ -247,6 +290,12 @@ namespace SMSAndroidsCore
                     sakuraVoyeurSecretbeachScene03 = CreateNewPicScene("SakuraVoyeurSecretbeachScene03", Core.scenePath + "Sakura\\SakuraVoyeurSecretbeachScene03.PNG");
                     sakuraVoyeurSecretbeachScene04 = CreateNewPicScene("SakuraVoyeurSecretbeachScene04", Core.scenePath + "Sakura\\SakuraVoyeurSecretbeachScene04.PNG");
 
+                    toveEventTrailScene01 = CreateNewPicScene("ToveEventTrailScene01", Core.scenePath + "Tove\\ToveEventTrailScene01.PNG");
+                    toveVoyeurSecretbeachScene01 = CreateNewPicScene("ToveVoyeurSecretbeachScene01", Core.scenePath + "Tove\\ToveVoyeurSecretbeachScene01.PNG");
+                    toveVoyeurSecretbeachScene02 = CreateNewPicScene("ToveVoyeurSecretbeachScene02", Core.scenePath + "Tove\\ToveVoyeurSecretbeachScene02.PNG");
+                    toveVoyeurSecretbeachScene03 = CreateNewPicScene("ToveVoyeurSecretbeachScene03", Core.scenePath + "Tove\\ToveVoyeurSecretbeachScene03.PNG");
+                    toveVoyeurSecretbeachScene04 = CreateNewPicScene("ToveVoyeurSecretbeachScene04", Core.scenePath + "Tove\\ToveVoyeurSecretbeachScene04.PNG");
+
                     viperEventVillaScene01 = CreateNewPicScene("ViperEventVillaScene01", Core.scenePath + "Viper\\ViperEventVillaScene01.PNG");
                     viperVoyeurSecretbeachScene01 = CreateNewPicScene("ViperVoyeurSecretbeachScene01", Core.scenePath + "Viper\\ViperVoyeurSecretbeachScene01.PNG");
                     viperVoyeurSecretbeachScene02 = CreateNewPicScene("ViperVoyeurSecretbeachScene02", Core.scenePath + "Viper\\ViperVoyeurSecretbeachScene02.PNG");
@@ -259,7 +308,7 @@ namespace SMSAndroidsCore
                     yanVoyeurSecretbeachScene03 = CreateNewPicScene("YanVoyeurSecretbeachScene03", Core.scenePath + "Yan\\YanVoyeurSecretbeachScene03.PNG");
                     yanVoyeurSecretbeachScene04 = CreateNewPicScene("YanVoyeurSecretbeachScene04", Core.scenePath + "Yan\\YanVoyeurSecretbeachScene04.PNG");
 
-                    Core.cGManagerSexy.GetComponent<SpriteRendererLayoutManager>().RefreshCache();
+                    Core.cGManagerSexy.GetComponent<SpriteManager>().RefreshCache();
                     Logger.LogInfo("----- SCENES LOADED -----");
                     loadedScenes = true;
                 }
@@ -288,7 +337,7 @@ namespace SMSAndroidsCore
             Sprite newSprite = Sprite.Create(tex, new Rect(0, 0, 256, 256), new Vector2(0.5f, 0.5f));
             art.GetComponent<SpriteRenderer>().sprite = newSprite;
 
-            Core.cGManagerSexy.GetComponent<SpriteRendererLayoutManager>().targetObjects.Add(newPicScene);
+            Core.cGManagerSexy.GetComponent<SpriteManager>().targetObjects.Add(newPicScene);
 
             newPicScene.SetActive(false);
             return newPicScene;

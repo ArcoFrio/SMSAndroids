@@ -16,6 +16,7 @@ using System.ComponentModel.Design;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Text.RegularExpressions;
 using System.Xml.XPath;
 using TMPro;
 using TransitionsPlusDemos;
@@ -39,7 +40,19 @@ namespace SMSAndroidsCore
         #endregion
 
         public static bool loadedStory = false;
+        public static SignalArgs blinkSignal = new SignalArgs(new PropertyName("Blink"), null);
+        public static SignalArgs dialogueEndSignal = new SignalArgs(new PropertyName("DialogueEnd"), null);
+        public static SignalArgs dialogueStartSignal = new SignalArgs(new PropertyName("DialogueStart"), null);
+        public static SignalArgs drinkSignal = new SignalArgs(new PropertyName("drink"), null);
         public static SignalArgs fadeUISignal = new SignalArgs(new PropertyName("FadeUI"), null);
+        public static SignalArgs fadeInSignal = new SignalArgs(new PropertyName("FadeIn2025"), null);
+        public static SignalArgs fadeInBlackSignal = new SignalArgs(new PropertyName("FadeInBlack"), null);
+        public static SignalArgs fadeOutBlackSignal = new SignalArgs(new PropertyName("FadeOutBlack"), null);
+        public static SignalArgs fadeOutSignal = new SignalArgs(new PropertyName("FadeOut2025"), null);
+        public static SignalArgs flashSignal = new SignalArgs(new PropertyName("flash"), null);
+        public static SignalArgs forceEnableUISignal = new SignalArgs(new PropertyName("ForceEnableUI"), null);
+        public static SignalArgs kissSignal = new SignalArgs(new PropertyName("kiss"), null);
+        public static SignalArgs whiteFlashNoSoundBlackSignal = new SignalArgs(new PropertyName("whiteflashnosound"), null);
         public static bool actionTodaySB = false;
         public static bool voyeurDialoguePlaying = false;
         public static bool relaxed = false;
@@ -57,9 +70,12 @@ namespace SMSAndroidsCore
         public static bool snekIsSolid = false;
 
         public static string[] starterVoyeurTargets = { "Anis", "Neon", "Rapi" };
-        public static string[] fullVoyeurTargets = { "Anis", "Centi", "Dorothy", "Elegg", "Frima", "Guilty", "Helm", "Maiden", "Mary", "Mast", "Neon", "Pepper", "Rapi", "Rosanna", "Sakura", "Viper", "Yan" };
+        public static string[] gSVoyeurTargets = { "Yan", "Centi" };
+        public static string[] fullVoyeurTargets = { "Anis", "Centi", "Dorothy", "Elegg", "Frima", "Guilty", "Helm", "Maiden", "Mary", "Mast", "Neon", "Pepper", "Rapi", "Rosanna", "Sakura", "Tove", "Viper", "Yan" };
         public static List<GameObject> diagBusts = new List<GameObject>();
         public static List<string> voyeurTargetsLeft = new List<string>();
+
+        public static bool amberDefaultDiagQueued = false;
 
         // Helper to check if all starter targets have been found
         public static bool AllStarterVoyeurTargetsFound()
@@ -71,10 +87,24 @@ namespace SMSAndroidsCore
             }
             return true;
         }
+        public static bool AllGSVoyeurTargetsFound()
+        {
+            foreach (string character in gSVoyeurTargets)
+            {
+                if (!SaveManager.GetBool($"Voyeur_Seen{character}"))
+                    return false;
+            }
+            return true;
+        }
 
         private GameObject dialogueToActivate;
         private GameObject tempNewCurrentRT;
         private Vector2 refVelocity = Vector2.zero;
+
+        // SFX System tracking
+        private static int lastProcessedNodeID = -1;
+        private static Dictionary<string, List<int>> lastPlayedIndicesPerNode = new Dictionary<string, List<int>>();
+        private static Coroutine sfxDelayCoroutine = null;
 
         public void Update()
         {
@@ -85,12 +115,20 @@ namespace SMSAndroidsCore
                     voyeurTargetsLeft.Clear();
                     string[] currentTargets;
 
-                    if (AllStarterVoyeurTargetsFound() && SaveManager.GetBool("MountainLab_GKExplanation"))
+                    // Progression gating: unlock new tiers only after specific conditions
+                    if (SaveManager.GetInt("GiftShop_BuildCounter") >= 2)
                     {
+                        // Player has built the gift shop, unlock full voyeur targets
                         currentTargets = fullVoyeurTargets;
+                    }
+                    else if (SaveManager.GetBool("MountainLab_GKExplanation"))
+                    {
+                        // Player has found all starter targets AND received GK explanation, unlock gift shop targets
+                        currentTargets = gSVoyeurTargets;
                     }
                     else
                     {
+                        // Default to starter targets
                         currentTargets = starterVoyeurTargets;
                     }
 
@@ -157,7 +195,7 @@ namespace SMSAndroidsCore
                                     this.dialogueToActivate = Dialogues.amberHospitalhallwayEvent01Dialogue;
                                     diagBusts.Add(Characters.amberCoatless);
                                     diagBusts.Add(Characters.doctorFrost);
-                                    Invoke(nameof(CheckAndStartVanillaDialogue), 0.6f);
+                                    Invoke(nameof(CheckAndStartVanillaDialogue), 0.65f);
                                 }
                                 if (this.dialogueToActivate != null && this.dialogueToActivate.name == "AmberDialogueHospitalhallway01")
                                 {
@@ -187,27 +225,213 @@ namespace SMSAndroidsCore
                             break;
 
                         default:
-                            if (!Dialogues.dialoguePlaying && Places.mountainLabRoomtalk.activeSelf && SaveManager.GetBool("MountainLab_FirstVisited") 
+                            if (!Dialogues.dialoguePlaying && Places.mountainLabRoomtalk.activeSelf && !amberDefaultDiagQueued && SaveManager.GetBool("MountainLab_FirstVisited") 
                                 && !(!SaveManager.GetBool("MountainLab_FirstVisitor") && SaveManager.AnyBoolVariableWithNameContains("Voyeur_Seen"))
                                 && !(SaveManager.GetBool("MountainLab_FirstVisitor") && !SaveManager.GetBool("MountainLab_GKExplanation") && AllStarterVoyeurTargetsFound()))
                             {
-                                StartDialogueSequence(Dialogues.amberDefaultDialogue);
                                 Characters.amber.SetActive(true);
+                                amberDefaultDiagQueued = true;
+                                if (currentActiveDialogue != Dialogues.amberDefaultDialogue)
+                                {
+                                    StartCoroutine(StartDialogueSequenceDelayed(Dialogues.amberDefaultDialogue, 1.05f));
+                                }
+                                else
+                                {
+                                    StartDialogueSequenceQueue(Dialogues.amberDefaultDialogue);
+                                }
+                            }
+                            if (Dialogues.amberDefaultDialogueScene5.activeSelf)
+                            {
+                                Signals.Emit(fadeUISignal);
+                                Dialogues.amberDefaultDialogueScene5.SetActive(false);
                             }
                             if (Dialogues.amberDefaultDialogueDialogueFinisher.activeSelf)
                             {
                                 Invoke(nameof(EndDialogueSequence), 1.0f);
+                                amberDefaultDiagQueued = false;
                                 Dialogues.amberDefaultDialogueDialogueFinisher.SetActive(false);
+                            }
+
+
+                            if (!Places.mountainLabLevel.activeSelf)
+                            {
+                                if (currentActiveDialogue == Dialogues.amberDefaultDialogue)
+                                {
+                                    foreach (Transform child in Dialogues.amberDefaultDialogue.transform)
+                                    {
+                                        child.gameObject.SetActive(false);
+                                    }
+                                    currentActiveDialogue = null;
+                                    amberDefaultDiagQueued = false;
+                                    Dialogues.dialoguePlaying = false;
+                                }
+                            }
+                            break;
+                    }
+                    switch (Schedule.claireLocation)
+                    {
+                        default:
+                            if (!Dialogues.dialoguePlaying && Places.giftShopInteriorRoomtalk.activeSelf && SaveManager.GetInt("GiftShop_BuildCounter") >= 2)
+                            {
+                                StartDialogueSequence(Dialogues.claireDefaultDialogue);
+                                Characters.claire.SetActive(true);
+                            }
+                            if (Dialogues.claireDefaultDialogueScene5.activeSelf)
+                            {
+                                Dialogues.claireDefaultDialogueScene5.SetActive(false);
+                                Places.ActivateShop(Places.giftStore);
+                            }
+                            if (Dialogues.claireDefaultDialogueDialogueFinisher.activeSelf)
+                            {
+                                Invoke(nameof(EndDialogueSequence), 1.0f);
+                                Dialogues.claireDefaultDialogueDialogueFinisher.SetActive(false);
                             }
                             break;
                     }
 
                     switch (Schedule.anisLocation)
                     {
+                        case "Downtown":
+                            if (SaveManager.GetInt("Affection_Anis") >=2 && !SaveManager.GetBool("Affection_Anis_Seen1"))
+                            {
+                                if (!Dialogues.dialoguePlaying && !evaluatingLevelDialogue && Places.levelDowntown.activeSelf)
+                                {
+                                    evaluatingLevelDialogue = true;
+                                    lastEvaluatedLevel = Places.levelDowntown;
+                                    this.dialogueToActivate = Dialogues.anisAffection01Dialogue;
+                                    diagBusts.Add(Characters.anis);
+                                    Invoke(nameof(CheckAndStartVanillaDialogue), 0.65f);
+                                }
+                                if (this.dialogueToActivate != null && this.dialogueToActivate.name == "AnisDialogueAffection01")
+                                {
+                                    if (this.dialogueToActivate.transform.Find("Scene5").gameObject.activeSelf)
+                                    {
+                                        this.dialogueToActivate.transform.Find("Scene5").gameObject.SetActive(false);
+                                        Signals.Emit(fadeInSignal);
+                                        Core.EmitSignalDelayed("FadeOut2025", 1.5f);
+                                    }
+                                    if (this.dialogueToActivate.transform.Find("Scene1").gameObject.activeSelf)
+                                    {
+                                        Scenes.anisAffection01Scene01.SetActive(true);
+                                        this.dialogueToActivate.transform.Find("Scene1").gameObject.SetActive(false);
+                                    }
+                                    if (this.dialogueToActivate.transform.Find("Scene2").gameObject.activeSelf)
+                                    {
+                                        Scenes.anisAffection01Scene02.SetActive(true);
+                                        this.dialogueToActivate.transform.Find("Scene2").gameObject.SetActive(false);
+                                    }
+                                    if (this.dialogueToActivate.transform.Find("DialogueFinisher").gameObject.activeSelf)
+                                    {
+                                        Invoke(nameof(EndDialogueSequenceVanilla), 1.0f);
+                                        this.dialogueToActivate.transform.Find("DialogueFinisher").gameObject.SetActive(false);
+                                        Characters.anis.transform.Find("MBase1").Find("Leave").gameObject.SetActive(true);
+                                        if (Scenes.anisAffection01Scene01.activeSelf) { SaveManager.SetBool("Affection_Anis_Seen1", true); }
+                                        Scenes.anisAffection01Scene01.SetActive(false);
+                                        Scenes.anisAffection01Scene02.SetActive(false);
+                                        Schedule.anisLocation = "MountainLabRoomNikkeAnis";
+                                    }
+                                }
+                            }
+                            break;
                         case "Mall":
                             if (SaveManager.GetBool("Event_SeenAnisMall01"))
                             {
-                                Schedule.anisLocation = "MountainLabRoomNikkeAnis";
+                                if (SaveManager.GetInt("Affection_Anis") >= 4 && SaveManager.GetBool("Affection_Anis_Seen1") && !SaveManager.GetBool("Affection_Anis_Seen2"))
+                                {
+                                    if (!Dialogues.dialoguePlaying && !evaluatingLevelDialogue && Places.levelMall.activeSelf)
+                                    {
+                                        evaluatingLevelDialogue = true;
+                                        lastEvaluatedLevel = Places.levelMall;
+                                        this.dialogueToActivate = Dialogues.anisAffection02Dialogue;
+                                        diagBusts.Add(Characters.anis);
+                                        diagBusts.Add(Characters.kate);
+                                        Invoke(nameof(CheckAndStartVanillaDialogue), 0.65f);
+                                    }
+                                    if (this.dialogueToActivate != null && this.dialogueToActivate.name == "AnisDialogueAffection02")
+                                    {
+                                        if (this.dialogueToActivate.transform.Find("Scene6").gameObject.activeSelf)
+                                        {
+                                            this.dialogueToActivate.transform.Find("Scene6").gameObject.SetActive(false);
+                                            Characters.kate.transform.Find("D1Base").Find("Leave").gameObject.SetActive(true);
+                                        }
+                                        if (this.dialogueToActivate.transform.Find("Scene7").gameObject.activeSelf)
+                                        {
+                                            this.dialogueToActivate.transform.Find("Scene7").gameObject.SetActive(false);
+                                            Characters.anis.SetActive(false);
+                                            Signals.Emit(fadeInSignal);
+                                            Places.levelCinema.transform.Find("Dark_Cinema").gameObject.SetActive(true);
+                                            Core.EmitSignalGameObjectDelayed("FadeOut2025", Places.levelMall, Places.levelCinema, 1.5f);
+                                        }
+                                        if (this.dialogueToActivate.transform.Find("Scene1").gameObject.activeSelf)
+                                        {
+                                            this.dialogueToActivate.transform.Find("Scene1").gameObject.SetActive(false);
+                                            Characters.anis.SetActive(true);
+                                            Scenes.anisAffection02Scene01.SetActive(true);
+                                        }
+                                        if (this.dialogueToActivate.transform.Find("Scene2").gameObject.activeSelf)
+                                        {
+                                            this.dialogueToActivate.transform.Find("Scene2").gameObject.SetActive(false);
+                                            Scenes.anisAffection02Scene02.SetActive(true);
+                                        }
+                                        if (this.dialogueToActivate.transform.Find("Scene3").gameObject.activeSelf)
+                                        {
+                                            this.dialogueToActivate.transform.Find("Scene3").gameObject.SetActive(false);
+                                            Scenes.anisAffection02Scene03.SetActive(true);
+                                        }
+                                        if (this.dialogueToActivate.transform.Find("Scene4").gameObject.activeSelf)
+                                        {
+                                            this.dialogueToActivate.transform.Find("Scene4").gameObject.SetActive(false);
+                                            Scenes.anisAffection02Scene01.SetActive(false);
+                                            Scenes.anisAffection02Scene04.SetActive(true);
+                                        }
+                                        if (this.dialogueToActivate.transform.Find("Scene5").gameObject.activeSelf)
+                                        {
+                                            this.dialogueToActivate.transform.Find("Scene5").gameObject.SetActive(false);
+                                            Scenes.anisAffection02Scene02.SetActive(false);
+                                            Scenes.anisAffection02Scene05.SetActive(true);
+                                        }
+                                        if (this.dialogueToActivate.transform.Find("Scene8").gameObject.activeSelf)
+                                        {
+                                            this.dialogueToActivate.transform.Find("Scene8").gameObject.SetActive(false);
+                                            Signals.Emit(fadeInSignal);
+                                            Core.EmitSignalGameObjectDelayed("FadeOut2025", Places.levelCinema, Places.levelMall, 1.5f);
+                                            Scenes.anisAffection02Scene01.SetActive(false);
+                                            Scenes.anisAffection02Scene02.SetActive(false);
+                                            Scenes.anisAffection02Scene03.SetActive(false);
+                                            Scenes.anisAffection02Scene04.SetActive(false);
+                                            Scenes.anisAffection02Scene05.SetActive(false);
+                                        }
+                                        if (this.dialogueToActivate.transform.Find("DialogueFinisher").gameObject.activeSelf)
+                                        {
+                                            if (this.dialogueToActivate.transform.Find("MouthActivator").gameObject.activeSelf) { SaveManager.SetBool("Affection_Anis_Seen2", true); this.dialogueToActivate.transform.Find("MouthActivator").gameObject.SetActive(false); }
+                                            Invoke(nameof(EndDialogueSequenceVanilla), 1.0f);
+                                            this.dialogueToActivate.transform.Find("DialogueFinisher").gameObject.SetActive(false);
+                                            Characters.anis.transform.Find("MBase1").Find("Leave").gameObject.SetActive(true);
+                                            Schedule.anisLocation = "MountainLabRoomNikkeAnis";
+                                        }
+                                    }
+                                }
+                                if (!Dialogues.dialoguePlaying && !evaluatingLevelDialogue && Places.levelMall.activeSelf && Places.randomNumMall <= 30 && 
+                                    SaveManager.GetBool("Event_SeenAnisMall01"))
+                                {
+                                    evaluatingLevelDialogue = true;
+                                    lastEvaluatedLevel = Places.levelMall;
+                                    this.dialogueToActivate = Dialogues.anisRandomDialogue67;
+                                    diagBusts.Add(Characters.anis);
+                                    diagBusts.Add(Characters.kate);
+                                    Invoke(nameof(CheckAndStartVanillaDialogue), 0.65f);
+                                }
+                                if (this.dialogueToActivate != null && this.dialogueToActivate.name == "AnisRandom67")
+                                {
+                                    if (this.dialogueToActivate.transform.Find("DialogueFinisher").gameObject.activeSelf)
+                                    {
+                                        Invoke(nameof(EndDialogueSequenceVanilla), 1.0f);
+                                        this.dialogueToActivate.transform.Find("DialogueFinisher").gameObject.SetActive(false);
+                                        Characters.anis.transform.Find("MBase1").Find("Leave").gameObject.SetActive(true);
+                                        Characters.kate.transform.Find("D1Base").Find("Leave").gameObject.SetActive(true);
+                                        Schedule.anisLocation = "MountainLabRoomNikkeAnis";
+                                    }
+                                }
                             }
                             else
                             {
@@ -217,7 +441,7 @@ namespace SMSAndroidsCore
                                     lastEvaluatedLevel = Places.levelMall;
                                     this.dialogueToActivate = Dialogues.anisMallEvent01Dialogue;
                                     diagBusts.Add(Characters.anis);
-                                    Invoke(nameof(CheckAndStartVanillaDialogue), 0.6f);
+                                    Invoke(nameof(CheckAndStartVanillaDialogue), 0.65f);
                                 }
                                 if (this.dialogueToActivate != null && this.dialogueToActivate.name == "AnisDialogueMall01")
                                 {
@@ -245,16 +469,230 @@ namespace SMSAndroidsCore
                             }
                             break;
 
-                        default:
-                            if (!Dialogues.dialoguePlaying && Places.mountainLabRoomNikkeAnisRoomtalk.activeSelf && SaveManager.GetBool("Voyeur_SeenAnis"))
+
+                            // SECRET BEACH DIALOGUE
+                        case "SecretBeach":
+                            if (SaveManager.GetInt("Affection_Anis") >= 5 && SaveManager.GetBool("Affection_Anis_Seen1") && SaveManager.GetBool("Affection_Anis_Seen2") && !SaveManager.GetBool("Affection_Anis_Seen3"))
                             {
-                                StartDialogueSequence(Dialogues.anisDefaultDialogue);
-                                Characters.anis.SetActive(true);
+                                if (!Dialogues.dialoguePlaying && Places.secretBeachLevel.activeSelf && Places.secretBeachRoomtalk.activeSelf)
+                                {
+                                    StartDialogueSequence(Dialogues.anisAffection03Dialogue);
+                                    Characters.anisSwim.SetActive(true);
+                                }
+                                if (Dialogues.anisAffection03DialogueScene1.activeSelf)
+                                {
+                                    Dialogues.anisAffection03DialogueScene1.SetActive(false);
+                                    Scenes.anisAffection03Scene01.SetActive(true);
+                                }
+                                if (Dialogues.anisAffection03DialogueScene2.activeSelf)
+                                {
+                                    Dialogues.anisAffection03DialogueScene2.SetActive(false);
+                                    Scenes.anisAffection03Scene02.SetActive(true);
+                                }
+                                if (Dialogues.anisAffection03DialogueScene3.activeSelf)
+                                {
+                                    Dialogues.anisAffection03DialogueScene3.SetActive(false);
+                                    Scenes.anisAffection03Scene03.SetActive(true);
+                                    ChangeActiveBust(Characters.anisSwim, Characters.anisSwimSlip);
+                                }
+                                if (Dialogues.anisAffection03DialogueScene4.activeSelf)
+                                {
+                                    Dialogues.anisAffection03DialogueScene4.SetActive(false);
+                                    Scenes.anisAffection03Scene01.SetActive(false);
+                                    Scenes.anisAffection03Scene04.SetActive(true);
+                                }
+                                if (Dialogues.anisAffection03DialogueScene5.activeSelf)
+                                {
+                                    Dialogues.anisAffection03DialogueScene5.SetActive(false);
+                                    Scenes.anisAffection03Scene02.SetActive(false);
+                                    Scenes.anisAffection03Scene05.SetActive(true);
+                                }
+
+                                if (Dialogues.anisAffection03DialogueDialogueFinisher.activeSelf)
+                                {
+                                    Invoke(nameof(EndDialogueSequence), 1.0f);
+                                    Dialogues.anisAffection03DialogueDialogueFinisher.SetActive(false);
+                                    Characters.anisSwimSlip.transform.Find("MBase1").Find("Leave").gameObject.SetActive(true);
+                                    if (Scenes.anisAffection03Scene05.activeSelf) { SaveManager.SetBool("Affection_Anis_Seen3", true); }
+                                    Scenes.anisAffection03Scene01.SetActive(false);
+                                    Scenes.anisAffection03Scene02.SetActive(false);
+                                    Scenes.anisAffection03Scene03.SetActive(false);
+                                    Scenes.anisAffection03Scene04.SetActive(false);
+                                    Scenes.anisAffection03Scene05.SetActive(false);
+                                    Schedule.anisLocation = "MountainLabRoomNikkeAnis";
+                                }
+                                
+
                             }
-                            if (Dialogues.anisDefaultDialogueDialogueFinisher.activeSelf)
+                            break;
+
+
+                            // HARBOR HOME DIALOGUE
+                        case string s when s.StartsWith("HarborHome"):
+                            if (s.StartsWith("HarborHomeBathroom")) { Schedule.anisHHOutfit = Characters.anisNaked; }
+                            else if (s.StartsWith("HarborHomeCloset") || s.StartsWith("HarborHomeBedroomBedright")) { Schedule.anisHHOutfit = Characters.anisTopless; }
+                            else if (s.StartsWith("HarborHomePool")) { Schedule.anisHHOutfit = Characters.anisSwim; }
+                            else {
+                                if (SaveManager.GetString("HarborHome_Outfit_Anis") == "Default") { Schedule.anisHHOutfit = Characters.anisCoatless; }
+                                if (SaveManager.GetString("HarborHome_Outfit_Anis") == "Swim") { Schedule.anisHHOutfit = Characters.anisSwim; }
+                            }
+                            if (!Dialogues.dialoguePlaying && SaveManager.GetBool("Voyeur_SeenAnis") && !Core.GetProxyVariableBool("Gifting_Gifted") &&
+                            SaveManager.GetBool("HarborHome_Visit_Anis") && SaveManager.GetString("HarborHome_TalkSelected") == "Anis")
+                            {
+                                Places.harborHomeLivingroomRoomtalk.SetActive(true);
+                                StartDialogueSequence(Dialogues.anisDefaultHHDialogue);
+                                Schedule.anisHHOutfit.SetActive(true);
+                                Places.harborHomeBedroomButtonCanvas.SetActive(false);
+                            }
+                            if (Dialogues.anisDefaultHHDialogueScene4.activeSelf)
+                            {
+                                SaveManager.SetBool("HarborHome_Visit_Anis", false);
+                                Schedule.anisDefaultLocation = "MountainLabRoomNikkeAnis";
+                                Schedule.anisLocation = "MountainLabRoomNikkeAnis";
+                                Dialogues.UpdateHHTalkPanel(true);
+                                Dialogues.anisDefaultHHDialogueScene4.SetActive(false);
+                                Schedule.anisHHOutfit.transform.Find("MBase1").Find("Leave").gameObject.SetActive(true);
+                            }
+                            if (Dialogues.anisDefaultHHDialogueScene5.activeSelf)
+                            {
+                                Signals.Emit(fadeUISignal);
+                                Dialogues.giftUI.SetActive(true);
+                                Core.FindAndModifyProxyVariableString("Gifting_Target", "Anis");
+                                Dialogues.anisDefaultHHDialogueScene5.SetActive(false);
+                            }
+                            if (Dialogues.anisDefaultHHDialogueDialogueFinisher.activeSelf)
                             {
                                 Invoke(nameof(EndDialogueSequence), 1.0f);
-                                Dialogues.anisDefaultDialogueDialogueFinisher.SetActive(false);
+                                SaveManager.SetString("HarborHome_TalkSelected", "");
+                                Dialogues.anisDefaultHHDialogueDialogueFinisher.SetActive(false);
+                                Places.harborHomeBedroomButtonCanvas.SetActive(true);
+                            }
+
+                            if (!Dialogues.dialoguePlaying && SaveManager.GetBool("Voyeur_SeenAnis") &&
+                                Core.GetProxyVariableString("Gifting_Target") == "Anis" && Core.GetProxyVariableBool("Gifting_Gifted") && SaveManager.GetBool("HarborHome_Visit_Anis"))
+                            {
+                                Core.FindAndModifyProxyVariableBool("Gifting_Gifted", false);
+                                Core.FindAndModifyProxyVariableString("Gifting_Target", null);
+                                Signals.Emit(fadeUISignal);
+                                Places.mountainLabRoomNikkeAnisRoomtalk.SetActive(true);
+                                StartDialogueSequence(Dialogues.anisGiftDialogue);
+                                Schedule.anisHHOutfit.SetActive(true);
+                                Places.harborHomeBedroomButtonCanvas.SetActive(false);
+                            }
+                            if (Dialogues.anisGiftDialogueScene5.activeSelf)
+                            {
+                                Core.affectionIncrease.SetActive(true);
+                                Dialogues.anisGiftDialogueScene5.SetActive(false);
+                            }
+                            if (Dialogues.anisGiftDialogueDialogueFinisher.activeSelf)
+                            {
+                                Invoke(nameof(EndDialogueSequence), 1.0f);
+                                SaveManager.SetString("HarborHome_TalkSelected", "");
+                                Dialogues.anisGiftDialogueDialogueFinisher.SetActive(false);
+                                Schedule.anisHHOutfit.SetActive(false);
+                                Places.harborHomeBedroomButtonCanvas.SetActive(true);
+                            }
+                                break;
+
+                        default:
+
+                            if (!SaveManager.GetBool("HarborHome_Visit_Anis"))
+                            {
+                                if (!Dialogues.dialoguePlaying && Places.mountainLabRoomNikkeAnisRoomtalk.activeSelf && SaveManager.GetBool("Voyeur_SeenAnis") && !Core.GetProxyVariableBool("DailyProc_Anis-Chill-1") &&
+                                    Places.randomNumMLRoomAnis <= 10)
+                                {
+                                    StartDialogueSequence(Dialogues.anisRandomDialogueLabRoomChill01Dialogue);
+                                    Characters.anisTopless.SetActive(true);
+                                }
+                                if (Dialogues.anisRandomDialogueLabRoomChill01DialogueScene1.activeSelf)
+                                {
+                                    Scenes.anisChillToplessScene01.SetActive(true);
+                                    Dialogues.anisRandomDialogueLabRoomChill01DialogueScene1.SetActive(false);
+                                }
+                                if (Dialogues.anisRandomDialogueLabRoomChill01DialogueScene2.activeSelf)
+                                {
+                                    Scenes.anisChillToplessScene02.SetActive(true);
+                                    Dialogues.anisRandomDialogueLabRoomChill01DialogueScene2.SetActive(false);
+                                }
+                                if (Dialogues.anisRandomDialogueLabRoomChill01DialogueScene3.activeSelf)
+                                {
+                                    Scenes.anisChillToplessScene03.SetActive(true);
+                                    Dialogues.anisRandomDialogueLabRoomChill01DialogueScene3.SetActive(false);
+                                }
+                                if (Dialogues.anisRandomDialogueLabRoomChill01DialogueScene4.activeSelf)
+                                {
+                                    Scenes.anisChillToplessScene01.SetActive(false);
+                                    Scenes.anisChillToplessScene04.SetActive(true);
+                                    Dialogues.anisRandomDialogueLabRoomChill01DialogueScene4.SetActive(false);
+                                }
+                                if (Dialogues.anisRandomDialogueLabRoomChill01DialogueScene5.activeSelf)
+                                {
+                                    Scenes.anisChillToplessScene02.SetActive(false);
+                                    Scenes.anisChillToplessScene05.SetActive(true);
+                                    Dialogues.anisRandomDialogueLabRoomChill01DialogueScene5.SetActive(false);
+                                }
+                                if (Dialogues.anisRandomDialogueLabRoomChill01DialogueScene6.activeSelf)
+                                {
+                                    Scenes.anisChillToplessScene03.SetActive(false);
+                                    Scenes.anisChillToplessScene06.SetActive(true);
+                                    Dialogues.anisRandomDialogueLabRoomChill01DialogueScene6.SetActive(false);
+                                }
+                                if (Dialogues.anisRandomDialogueLabRoomChill01DialogueDialogueFinisher.activeSelf)
+                                {
+                                    Invoke(nameof(EndDialogueSequence), 1.0f);
+                                    Core.FindAndModifyProxyVariableBool("DailyProc_Anis-Chill-1", true);
+                                    Scenes.anisChillToplessScene01.SetActive(false);
+                                    Scenes.anisChillToplessScene02.SetActive(false);
+                                    Scenes.anisChillToplessScene03.SetActive(false);
+                                    Scenes.anisChillToplessScene04.SetActive(false);
+                                    Scenes.anisChillToplessScene05.SetActive(false);
+                                    Scenes.anisChillToplessScene06.SetActive(false);
+                                    if (!SaveManager.GetBool("Affection_Anis_Seen2")) { Characters.anisTopless.transform.Find("MBase1").Find("Leave").gameObject.SetActive(true); }
+                                    Dialogues.anisRandomDialogueLabRoomChill01DialogueDialogueFinisher.SetActive(false);
+                                }
+
+                                if (!Dialogues.dialoguePlaying && Places.mountainLabRoomNikkeAnisRoomtalk.activeSelf && SaveManager.GetBool("Voyeur_SeenAnis") && !Core.GetProxyVariableBool("Gifting_Gifted"))
+                                {
+                                    StartDialogueSequence(Dialogues.anisDefaultDialogue);
+                                    if (!Characters.anisTopless.activeSelf) { Characters.anis.SetActive(true); }
+                                }
+                                if (Dialogues.anisDefaultDialogueScene4.activeSelf)
+                                {
+                                    SaveManager.SetBool("HarborHome_Visit_Anis", true);
+                                    Dialogues.anisDefaultDialogueScene4.SetActive(false);
+                                }
+                                if (Dialogues.anisDefaultDialogueScene5.activeSelf)
+                                {
+                                    Signals.Emit(fadeUISignal);
+                                    Dialogues.giftUI.SetActive(true);
+                                    Core.FindAndModifyProxyVariableString("Gifting_Target", "Anis");
+                                    Dialogues.anisDefaultDialogueScene5.SetActive(false);
+                                }
+                                if (Dialogues.anisDefaultDialogueDialogueFinisher.activeSelf)
+                                {
+                                    Invoke(nameof(EndDialogueSequence), 1.0f);
+                                    Dialogues.anisDefaultDialogueDialogueFinisher.SetActive(false);
+                                }
+
+                                if (!Dialogues.dialoguePlaying && SaveManager.GetBool("Voyeur_SeenAnis") &&
+                                    Core.GetProxyVariableString("Gifting_Target") == "Anis" && Core.GetProxyVariableBool("Gifting_Gifted"))
+                                {
+                                    Core.FindAndModifyProxyVariableBool("Gifting_Gifted", false);
+                                    Core.FindAndModifyProxyVariableString("Gifting_Target", null);
+                                    Signals.Emit(fadeUISignal);
+                                    Places.mountainLabRoomNikkeAnisRoomtalk.SetActive(true);
+                                    StartDialogueSequence(Dialogues.anisGiftDialogue);
+                                }
+                                if (Dialogues.anisGiftDialogueScene5.activeSelf)
+                                {
+                                    Core.affectionIncrease.SetActive(true);
+                                    Dialogues.anisGiftDialogueScene5.SetActive(false);
+                                }
+                                if (Dialogues.anisGiftDialogueDialogueFinisher.activeSelf)
+                                {
+                                    Invoke(nameof(EndDialogueSequence), 1.0f);
+                                    Dialogues.anisGiftDialogueDialogueFinisher.SetActive(false);
+                                }
                             }
                             break;
                     }
@@ -274,7 +712,7 @@ namespace SMSAndroidsCore
                                     lastEvaluatedLevel = Places.levelKensHome;
                                     this.dialogueToActivate = Dialogues.centiKenshomeEvent01Dialogue;
                                     diagBusts.Add(Characters.samSwim);
-                                    Invoke(nameof(CheckAndStartVanillaDialogue), 0.6f);
+                                    Invoke(nameof(CheckAndStartVanillaDialogue), 0.65f);
                                 }
                                 if (this.dialogueToActivate != null && this.dialogueToActivate.name == "CentiDialogueKenshome01")
                                 {
@@ -338,7 +776,7 @@ namespace SMSAndroidsCore
                                         lastEvaluatedLevel = Places.levelPark;
                                         this.dialogueToActivate = Dialogues.dorothyParkEvent01Dialogue;
                                         diagBusts.Add(Characters.dorothy);
-                                        Invoke(nameof(CheckAndStartVanillaDialogue), 0.6f);
+                                        Invoke(nameof(CheckAndStartVanillaDialogue), 0.65f);
                                     }
                                     if (this.dialogueToActivate != null && this.dialogueToActivate.name == "DorothyDialoguePark01")
                                     {
@@ -398,7 +836,7 @@ namespace SMSAndroidsCore
                                     evaluatingLevelDialogue = true;
                                     lastEvaluatedLevel = Places.levelDowntown;
                                     this.dialogueToActivate = Dialogues.eleggDowntownEvent01Dialogue;
-                                    Invoke(nameof(CheckAndStartVanillaDialogue), 0.6f);
+                                    Invoke(nameof(CheckAndStartVanillaDialogue), 0.65f);
                                 }
                                 if (this.dialogueToActivate != null && this.dialogueToActivate.name == "EleggDialogueDowntown01")
                                 {
@@ -464,7 +902,7 @@ namespace SMSAndroidsCore
                                     this.dialogueToActivate = Dialogues.frimaHotelEvent01Dialogue;
                                     diagBusts.Add(Characters.frima);
                                     diagBusts.Add(Characters.isabella);
-                                    Invoke(nameof(CheckAndStartVanillaDialogue), 0.6f);
+                                    Invoke(nameof(CheckAndStartVanillaDialogue), 0.65f);
                                 }
                                 if (this.dialogueToActivate != null && this.dialogueToActivate.name == "FrimaDialogueHotel01")
                                 {
@@ -523,7 +961,7 @@ namespace SMSAndroidsCore
                                         lastEvaluatedLevel = Places.levelParkingLot;
                                         this.dialogueToActivate = Dialogues.guiltyParkinglotEvent01Dialogue;
                                         diagBusts.Add(Characters.guilty);
-                                        Invoke(nameof(CheckAndStartVanillaDialogue), 0.6f);
+                                        Invoke(nameof(CheckAndStartVanillaDialogue), 0.65f);
                                     }
                                     if (this.dialogueToActivate != null && this.dialogueToActivate.name == "GuiltyDialogueParkinglot01")
                                     {
@@ -584,7 +1022,7 @@ namespace SMSAndroidsCore
                                         lastEvaluatedLevel = Places.levelBeach;
                                         this.dialogueToActivate = Dialogues.helmBeachEvent01Dialogue;
                                         diagBusts.Add(Characters.helm);
-                                        Invoke(nameof(CheckAndStartVanillaDialogue), 0.6f);
+                                        Invoke(nameof(CheckAndStartVanillaDialogue), 0.65f);
                                     }
                                     if (this.dialogueToActivate != null && this.dialogueToActivate.name == "HelmDialogueBeach01")
                                     {
@@ -641,7 +1079,7 @@ namespace SMSAndroidsCore
                                     lastEvaluatedLevel = Places.levelAlley;
                                     this.dialogueToActivate = Dialogues.maidenAlleyEvent01Dialogue;
                                     diagBusts.Add(Characters.maiden);
-                                    Invoke(nameof(CheckAndStartVanillaDialogue), 0.6f);
+                                    Invoke(nameof(CheckAndStartVanillaDialogue), 0.65f);
                                 }
                                 if (this.dialogueToActivate != null && this.dialogueToActivate.name == "MaidenDialogueAlley01")
                                 {
@@ -698,7 +1136,7 @@ namespace SMSAndroidsCore
                                     this.dialogueToActivate = Dialogues.maryHospitalhallwayEvent01Dialogue;
                                     diagBusts.Add(Characters.anna);
                                     diagBusts.Add(Characters.mary);
-                                    Invoke(nameof(CheckAndStartVanillaDialogue), 0.6f);
+                                    Invoke(nameof(CheckAndStartVanillaDialogue), 0.65f);
                                 }
                                 if (this.dialogueToActivate != null && this.dialogueToActivate.name == "MaryDialogueHospitalhallway01")
                                 {
@@ -753,7 +1191,7 @@ namespace SMSAndroidsCore
                                         lastEvaluatedLevel = Places.levelBeach;
                                         this.dialogueToActivate = Dialogues.mastBeachEvent01Dialogue;
                                         diagBusts.Add(Characters.mast);
-                                        Invoke(nameof(CheckAndStartVanillaDialogue), 0.6f);
+                                        Invoke(nameof(CheckAndStartVanillaDialogue), 0.65f);
                                     }
                                     if (this.dialogueToActivate != null && this.dialogueToActivate.name == "MastDialogueBeach01")
                                     {
@@ -815,7 +1253,7 @@ namespace SMSAndroidsCore
                                     lastEvaluatedLevel = Places.levelTemple;
                                     this.dialogueToActivate = Dialogues.neonTempleEvent01Dialogue;
                                     diagBusts.Add(Characters.neon);
-                                    Invoke(nameof(CheckAndStartVanillaDialogue), 0.6f);
+                                    Invoke(nameof(CheckAndStartVanillaDialogue), 0.65f);
                                 }
                                 if (this.dialogueToActivate != null && this.dialogueToActivate.name == "NeonDialogueTemple01")
                                 {
@@ -871,7 +1309,7 @@ namespace SMSAndroidsCore
                                     lastEvaluatedLevel = Places.levelHospital;
                                     this.dialogueToActivate = Dialogues.pepperHospitalEvent01Dialogue;
                                     diagBusts.Add(Characters.pepper);
-                                    Invoke(nameof(CheckAndStartVanillaDialogue), 0.6f);
+                                    Invoke(nameof(CheckAndStartVanillaDialogue), 0.65f);
                                 }
                                 if (this.dialogueToActivate != null && this.dialogueToActivate.name == "PepperDialogueHospital01")
                                 {
@@ -922,7 +1360,7 @@ namespace SMSAndroidsCore
                                     this.dialogueToActivate = Dialogues.rapiGasstationEvent01Dialogue;
                                     diagBusts.Add(Characters.rapi);
                                     diagBusts.Add(Characters.sofia);
-                                    Invoke(nameof(CheckAndStartVanillaDialogue), 0.6f);
+                                    Invoke(nameof(CheckAndStartVanillaDialogue), 0.65f);
                                 }
                                 if (this.dialogueToActivate != null && this.dialogueToActivate.name == "RapiDialogueGasstation01")
                                 {
@@ -973,7 +1411,7 @@ namespace SMSAndroidsCore
                                     lastEvaluatedLevel = Places.levelGabrielsMansion;
                                     this.dialogueToActivate = Dialogues.rosannaGabrielsmansionEvent01Dialogue;
                                     diagBusts.Add(Characters.rosanna);
-                                    Invoke(nameof(CheckAndStartVanillaDialogue), 0.6f);
+                                    Invoke(nameof(CheckAndStartVanillaDialogue), 0.65f);
                                 }
                                 if (this.dialogueToActivate != null && this.dialogueToActivate.name == "RosannaDialogueGabrielsmansion01")
                                 {
@@ -1029,21 +1467,21 @@ namespace SMSAndroidsCore
                                     lastEvaluatedLevel = Places.levelForest;
                                     this.dialogueToActivate = Dialogues.sakuraForestEvent01Dialogue;
                                     diagBusts.Add(Characters.sakura);
-                                    Invoke(nameof(CheckAndStartVanillaDialogue), 0.6f);
+                                    Invoke(nameof(CheckAndStartVanillaDialogue), 0.65f);
                                 }
                                 if (this.dialogueToActivate != null && this.dialogueToActivate.name == "SakuraDialogueForest01")
                                 {
                                     if (this.dialogueToActivate.transform.Find("Scene1").gameObject.activeSelf)
                                     {
                                         Scenes.sakuraEventForestScene01.SetActive(true);
-                                        ChangeActiveBust(Characters.sakura, Characters.sakuraShirtless);
+                                        ChangeActiveBust(Characters.sakura, Characters.sakuraUnderwear);
                                         this.dialogueToActivate.transform.Find("Scene1").gameObject.SetActive(false);
                                     }
                                     if (this.dialogueToActivate.transform.Find("DialogueFinisher").gameObject.activeSelf)
                                     {
                                         Invoke(nameof(EndDialogueSequenceVanilla), 1.0f);
                                         this.dialogueToActivate.transform.Find("DialogueFinisher").gameObject.SetActive(false);
-                                        Characters.sakuraShirtless.transform.Find("MBase1").Find("Leave").gameObject.SetActive(true);
+                                        Characters.sakuraUnderwear.transform.Find("MBase1").Find("Leave").gameObject.SetActive(true);
                                         Scenes.sakuraEventForestScene01.SetActive(false);
                                         Schedule.sakuraLocation = "MountainLabRoomNikkeSakura";
                                         SaveManager.SetBool("Event_SeenSakuraForest01", true);
@@ -1065,6 +1503,68 @@ namespace SMSAndroidsCore
                             break;
                     }
 
+                    switch (Schedule.toveLocation)
+                    {
+                        case "Trail":
+                            if (Core.GetProxyVariableBool("DailyProc_Tove-Trail-1"))
+                            {
+                                Schedule.toveLocation = "MountainLabRoomNikkeTove";
+                            }
+                            else
+                            {
+                                if (!Dialogues.dialoguePlaying && !evaluatingLevelDialogue && Places.levelTrail.activeSelf && SaveManager.GetBool("Voyeur_SeenTove"))
+                                {
+                                    evaluatingLevelDialogue = true;
+                                    lastEvaluatedLevel = Places.levelTrail;
+                                    this.dialogueToActivate = Dialogues.toveTrailEvent01Dialogue;
+                                    diagBusts.Add(Characters.tove);
+                                    Invoke(nameof(CheckAndStartVanillaDialogue), 0.65f);
+                                }
+                                if (this.dialogueToActivate != null && this.dialogueToActivate.name == "ToveDialogueTrail01")
+                                {
+                                    if (this.dialogueToActivate.transform.Find("Scene1").gameObject.activeSelf)
+                                    {
+                                        Scenes.toveEventTrailScene01.SetActive(true);
+                                        this.dialogueToActivate.transform.Find("Scene1").gameObject.SetActive(false);
+                                    }
+                                    if (this.dialogueToActivate.transform.Find("Scene4").gameObject.activeSelf)
+                                    {
+                                        Signals.Emit(fadeInSignal);
+                                        Core.EmitSignalDelayed("FadeOut2025", 1.5f);
+                                        this.dialogueToActivate.transform.Find("Scene4").gameObject.SetActive(false);
+                                    }
+                                    if (this.dialogueToActivate.transform.Find("Scene5").gameObject.activeSelf)
+                                    {
+                                        Signals.Emit(blinkSignal);
+                                        this.dialogueToActivate.transform.Find("Scene5").gameObject.SetActive(false);
+                                    }
+                                    if (this.dialogueToActivate.transform.Find("DialogueFinisher").gameObject.activeSelf)
+                                    {
+                                        Invoke(nameof(EndDialogueSequenceVanilla), 1.0f);
+                                        this.dialogueToActivate.transform.Find("DialogueFinisher").gameObject.SetActive(false);
+                                        Characters.tove.transform.Find("MBase1").Find("Leave").gameObject.SetActive(true);
+                                        Scenes.toveEventTrailScene01.SetActive(false);
+                                        Schedule.toveLocation = "MountainLabRoomNikkeTove";
+                                        SaveManager.SetBool("Event_SeenToveTrail01", true);
+                                        Core.FindAndModifyProxyVariableBool("DailyProc_Tove-Trail-1", true);
+                                    }
+                                }
+                            }
+                            break;
+                        default:
+                            if (!Dialogues.dialoguePlaying && Places.mountainLabRoomNikkeToveRoomtalk.activeSelf && SaveManager.GetBool("Voyeur_SeenTove"))
+                            {
+                                StartDialogueSequence(Dialogues.toveDefaultDialogue);
+                                Characters.tove.SetActive(true);
+                            }
+                            if (Dialogues.toveDefaultDialogueDialogueFinisher.activeSelf)
+                            {
+                                Invoke(nameof(EndDialogueSequence), 1.0f);
+                                Dialogues.toveDefaultDialogueDialogueFinisher.SetActive(false);
+                            }
+                            break;
+                    }
+
                     switch (Schedule.viperLocation)
                     {
                         case "Villa":
@@ -1080,7 +1580,7 @@ namespace SMSAndroidsCore
                                     lastEvaluatedLevel = Places.levelVilla;
                                     this.dialogueToActivate = Dialogues.viperVillaEvent01Dialogue;
                                     diagBusts.Add(Characters.viper);
-                                    Invoke(nameof(CheckAndStartVanillaDialogue), 0.6f);
+                                    Invoke(nameof(CheckAndStartVanillaDialogue), 0.65f);
                                 }
                                 if (this.dialogueToActivate != null && this.dialogueToActivate.name == "ViperDialogueVilla01")
                                 {
@@ -1140,7 +1640,7 @@ namespace SMSAndroidsCore
                                     lastEvaluatedLevel = Places.levelMall;
                                     this.dialogueToActivate = Dialogues.yanMallEvent01Dialogue;
                                     diagBusts.Add(Characters.yan);
-                                    Invoke(nameof(CheckAndStartVanillaDialogue), 0.6f);
+                                    Invoke(nameof(CheckAndStartVanillaDialogue), 0.65f);
                                 }
                                 if (this.dialogueToActivate != null && this.dialogueToActivate.name == "YanDialogueMall01")
                                 {
@@ -1221,6 +1721,57 @@ namespace SMSAndroidsCore
                         Places.solid.GetComponent<SpriteRenderer>().color = c;
                     }
                     #endregion
+                    #region Gift Shop
+//------------------------------------------------------------------------------------------------ GS Story 5
+                    if (!Dialogues.dialoguePlaying && Places.giftShopRoomtalk.activeSelf && AllGSVoyeurTargetsFound() && !SaveManager.GetBool("GiftShop_FirstVisited"))
+                    {
+                        StartDialogueSequence(Dialogues.gSDialogueMainFirst);
+                        Characters.centi.SetActive(true);
+                        Characters.yan.SetActive(true);
+                    }
+                    if (Dialogues.gSDialogueMainFirstScene4.activeSelf)
+                    {
+                        Dialogues.gSDialogueMainFirstScene4.SetActive(false);
+                        Characters.centi.transform.Find("MBase1").Find("Leave").gameObject.SetActive(true);
+                    }
+                    if (Dialogues.gSDialogueMainFirstScene5.activeSelf)
+                    {
+                        Dialogues.gSDialogueMainFirstScene5.SetActive(false);
+                        Core.affectionIncrease.SetActive(true);
+                        SaveManager.SetInt("Affection_Yan", SaveManager.GetInt("Affection_Yan") + 1);
+                    }
+                    if (Dialogues.gSDialogueMainFirstDialogueFinisher.activeSelf)
+                    {
+                        Invoke(nameof(EndDialogueSequence), 1.0f);
+                        Dialogues.gSDialogueMainFirstDialogueFinisher.SetActive(false);
+                        SaveManager.SetBool("GiftShop_FirstVisited", true);
+                        Characters.yan.transform.Find("MBase1").Find("Leave").gameObject.SetActive(true);
+                    }
+                    #endregion
+                    #region Harbor Home
+                    if (!Dialogues.dialoguePlaying && Places.harborHouseEntranceRoomtalk.activeSelf && !SaveManager.GetBool("HarborHome_Bought"))
+                    {
+                        StartDialogueSequence(Dialogues.sarahDialogueBuyHH);
+                    }
+                    if (Dialogues.sarahDialogueBuyHHScene5.activeSelf)
+                    {
+                        Dialogues.sarahDialogueBuyHHScene5.SetActive(false);
+                        Characters.sarah.SetActive(true);
+                    }
+                    if (Dialogues.sarahDialogueBuyHHScene4.activeSelf)
+                    {
+                        Dialogues.sarahDialogueBuyHHScene4.SetActive(false);
+                        Core.FindAndModifyVariableDouble("Cash", Core.GetVariableNumber("Cash") - 5000000);
+                        SaveManager.SetBool("HarborHome_Bought", true);
+                    }
+                    if (Dialogues.sarahDialogueBuyHHDialogueFinisher.activeSelf)
+                    {
+                        Invoke(nameof(EndDialogueSequence), 1.0f);
+                        Dialogues.sarahDialogueBuyHHDialogueFinisher.SetActive(false);
+                        if (!SaveManager.GetBool("HarborHome_FirstVisited")) { SaveManager.SetBool("HarborHome_FirstVisited", true); }
+                        Characters.sarah.transform.Find("MBase1").Find("Leave").gameObject.SetActive(true);
+                    }
+                    #endregion
                     #region Mountain Lab
                     //------------------------------------------------------------------------------------------------ ML Story 2
                     if (!Dialogues.dialoguePlaying && Places.mountainLabRoomtalk.activeSelf && !SaveManager.GetBool("MountainLab_FirstVisited"))
@@ -1295,14 +1846,6 @@ namespace SMSAndroidsCore
                     }
                     #endregion
                     #region Bad Weather
-                    if (Places.secretBeachRoomtalk.activeSelf && Core.GetVariableBool("rainy-day"))
-                    {
-                        Places.weatherOutsideRain.SetActive(true);
-                    }
-                    if (Places.secretBeachRoomtalk.activeSelf && Core.GetVariableBool("snowy-day"))
-                    {
-                        Places.weatherOutsideSnow.SetActive(true);
-                    }
                     if (!Dialogues.dialoguePlaying && Places.GetBadWeather() && Places.secretBeachRoomtalk.activeSelf)
                     {
                         StartDialogueSequence(Dialogues.badWeatherDialogue);
@@ -1330,7 +1873,7 @@ namespace SMSAndroidsCore
                         }
 //------------------------------------------------------------------------------------------------ SB Main
                         if (!Dialogues.dialoguePlaying && Places.secretBeachRoomtalk.activeSelf && SaveManager.GetBool("SecretBeach_FirstVisited") && SaveManager.GetInt("SecretBeach_RelaxedAmount") != 2 && 
-                            !(SaveManager.GetBool("MountainLab_FirstVisited") != true && SaveManager.GetInt("SecretBeach_RelaxedAmount") > 2))
+                            !(SaveManager.GetBool("MountainLab_FirstVisited") != true && SaveManager.GetInt("SecretBeach_RelaxedAmount") > 2) && Places.secretBeachLevel.activeSelf && voyeurTargetsLeft.Count != 0)
                         {
                             StartDialogueSequence(Dialogues.sBDialogueMain);
                         }
@@ -1455,7 +1998,10 @@ namespace SMSAndroidsCore
                         if (Dialogues.dorothySecretbeachVoyeur01DialogueFinisher.activeSelf) { Characters.dorothySwimSlip.transform.Find("MBase1").Find("Leave").gameObject.SetActive(true); }
 
                         if (Dialogues.eleggSecretbeachVoyeur01DialogueScene3.activeSelf && !Characters.eleggSwimSlip.activeSelf) { ChangeActiveBust(Characters.eleggSwim, Characters.eleggSwimSlip); }
-                        if (Dialogues.eleggSecretbeachVoyeur01DialogueFinisher.activeSelf) { Characters.eleggSwimSlip.transform.Find("MBase1").Find("Leave").gameObject.SetActive(true); }
+                        if (Dialogues.eleggSecretbeachVoyeur01DialogueScene5.activeSelf) { Characters.eleggSwim.transform.Find("MBase1").Find("Leave").gameObject.SetActive(true); Dialogues.eleggSecretbeachVoyeur01DialogueScene5.SetActive(false); }
+                        if (Dialogues.eleggSecretbeachVoyeur01DialogueScene6.activeSelf) { Signals.Emit(fadeInSignal); Core.EmitSignalDelayed("FadeOut2025", 1.5f); Dialogues.eleggSecretbeachVoyeur01DialogueScene6.SetActive(false); }
+                        if (Dialogues.eleggSecretbeachVoyeur01DialogueScene7.activeSelf) { Characters.eleggSwim.SetActive(true); Dialogues.eleggSecretbeachVoyeur01DialogueScene7.SetActive(false); }
+                        if (Dialogues.eleggSecretbeachVoyeur01DialogueScene8.activeSelf) { Characters.eleggSwimSlip.transform.Find("MBase1").Find("Leave").gameObject.SetActive(true); Dialogues.eleggSecretbeachVoyeur01DialogueScene8.SetActive(false); }
 
                         if (Dialogues.frimaSecretbeachVoyeur01DialogueScene2.activeSelf && !Dialogues.frimaSecretbeachVoyeur01DialogueScene4.activeSelf && !Characters.frimaSwimShirtless.activeSelf) { ChangeActiveBust(Characters.frimaSwim, Characters.frimaSwimShirtless); }
                         if (Dialogues.frimaSecretbeachVoyeur01DialogueScene4.activeSelf && !Characters.frimaSwimSlip.activeSelf) { ChangeActiveBust(Characters.frimaSwimShirtless, Characters.frimaSwimSlip); }
@@ -1470,6 +2016,7 @@ namespace SMSAndroidsCore
                         if (Dialogues.helmSecretbeachVoyeur01DialogueFinisher.activeSelf) { Characters.helmSwimSlip.transform.Find("MBase1").Find("Leave").gameObject.SetActive(true); }
 
                         if (Dialogues.maidenSecretbeachVoyeur01DialogueScene4.activeSelf && !Characters.maidenSwimSlip.activeSelf) { ChangeActiveBust(Characters.maidenSwim, Characters.maidenSwimSlip); }
+                        if (Dialogues.maidenSecretbeachVoyeur01DialogueScene5.activeSelf) { Signals.Emit(fadeInSignal); Core.EmitSignalDelayed("FadeOut2025", 1.5f); Dialogues.maidenSecretbeachVoyeur01DialogueScene5.SetActive(false); }
                         if (Dialogues.maidenSecretbeachVoyeur01DialogueFinisher.activeSelf) { Characters.maidenSwimSlip.transform.Find("MBase1").Find("Leave").gameObject.SetActive(true); }
 
                         if (Dialogues.marySecretbeachVoyeur01DialogueScene3.activeSelf && !Characters.marySwimSlip.activeSelf) { ChangeActiveBust(Characters.marySwim, Characters.marySwimSlip); }
@@ -1489,10 +2036,14 @@ namespace SMSAndroidsCore
                         if (Dialogues.rapiSecretbeachVoyeur01DialogueFinisher.activeSelf) { Characters.rapiSwimSlip.transform.Find("MBase1").Find("Leave").gameObject.SetActive(true); }
 
                         if (Dialogues.rosannaSecretbeachVoyeur01DialogueScene4.activeSelf && !Characters.rosannaSwimSlip.activeSelf) { ChangeActiveBust(Characters.rosannaSwim, Characters.rosannaSwimSlip); }
+                        if (Dialogues.rosannaSecretbeachVoyeur01DialogueScene5.activeSelf) { Signals.Emit(blinkSignal); Dialogues.rosannaSecretbeachVoyeur01DialogueScene5.SetActive(false); }
                         if (Dialogues.rosannaSecretbeachVoyeur01DialogueFinisher.activeSelf) { Characters.rosannaSwimSlip.transform.Find("MBase1").Find("Leave").gameObject.SetActive(true); }
 
                         if (Dialogues.sakuraSecretbeachVoyeur01DialogueScene4.activeSelf && !Characters.sakuraSwimSlip.activeSelf) { ChangeActiveBust(Characters.sakuraSwim, Characters.sakuraSwimSlip); }
                         if (Dialogues.sakuraSecretbeachVoyeur01DialogueFinisher.activeSelf) { Characters.sakuraSwimSlip.transform.Find("MBase1").Find("Leave").gameObject.SetActive(true); }
+
+                        if (Dialogues.toveSecretbeachVoyeur01DialogueScene4.activeSelf && !Characters.toveSwimSlip.activeSelf) { ChangeActiveBust(Characters.toveSwim, Characters.toveSwimSlip); }
+                        if (Dialogues.toveSecretbeachVoyeur01DialogueFinisher.activeSelf) { Characters.toveSwimSlip.transform.Find("MBase1").Find("Leave").gameObject.SetActive(true); }
 
                         if (Dialogues.viperSecretbeachVoyeur01DialogueScene1.activeSelf && !Dialogues.viperSecretbeachVoyeur01DialogueScene2.activeSelf && !Characters.viperSwimShirtless.activeSelf) { ChangeActiveBust(Characters.viperSwim, Characters.viperSwimShirtless); }
                         if (Dialogues.viperSecretbeachVoyeur01DialogueScene2.activeSelf && !Dialogues.viperSecretbeachVoyeur01DialogueScene4.activeSelf && !Characters.viperSwimWet.activeSelf) { ChangeActiveBust(Characters.viperSwimShirtless, Characters.viperSwimWet); }
@@ -1534,6 +2085,12 @@ namespace SMSAndroidsCore
             }
         }
 
+        private IEnumerator StartDialogueSequenceDelayed(GameObject diag, float delay)
+        {
+            yield return new WaitForSeconds(delay);
+            StartDialogueSequenceQueue(diag);
+        }
+
         public void StartDialogueSequence(GameObject diag)
         {
             Logger.LogInfo(diag.name + " started.");
@@ -1542,6 +2099,16 @@ namespace SMSAndroidsCore
             currentActiveDialogue = diag;
             currentActiveDialogueSpriteFocus = diag.transform.Find("SpriteFocus").gameObject;
             Signals.Emit(fadeUISignal);
+            Invoke(nameof(PlayDialogueStep), 1.0f);
+        }
+        public void StartDialogueSequenceQueue(GameObject diag)
+        {
+            Logger.LogInfo(diag.name + " queued.");
+            Dialogues.dialoguePlaying = true;
+            this.dialogueToActivate = diag;
+            currentActiveDialogue = diag;
+            currentActiveDialogueSpriteFocus = diag.transform.Find("SpriteFocus").gameObject;
+            //Signals.Emit(fadeUISignal);
             Invoke(nameof(PlayDialogueStep), 1.0f);
         }
         private void PlayDialogueStep()
@@ -1553,7 +2120,10 @@ namespace SMSAndroidsCore
         public void EndDialogueSequence()
         {
             Signals.Emit(fadeUISignal);
-            this.dialogueToActivate.GetComponent<Dialogue>().EventStartNext -= OnDialogueLineStart;
+            if (this.dialogueToActivate != null)
+            {
+                this.dialogueToActivate.GetComponent<Dialogue>().EventStartNext -= OnDialogueLineStart;
+            }
             Invoke(nameof(FinishStep), 0.5f);
         }
         private void FinishStep()
@@ -1692,7 +2262,6 @@ namespace SMSAndroidsCore
                 ChangeBustSortingOrder(currentActiveBustMBase.transform.Find("Mouth").Find("4").gameObject, 6);
             }
         }
-
         private void CheckAndStartVanillaDialogue()
         {
             if (!Dialogues.dialoguePlayingVanilla)
@@ -1705,7 +2274,6 @@ namespace SMSAndroidsCore
                 Debug.Log("Starting Dialogue Sequence: " + this.dialogueToActivate);
             }
         }
-
         public static void OnDialogueLineStart(int nodeID)
         {
             string actor = GetCurrentSpeakingActor();
@@ -1713,7 +2281,7 @@ namespace SMSAndroidsCore
 
             if (!string.IsNullOrEmpty(actor) && !string.IsNullOrEmpty(expression))
             {
-                Debug.Log($"[OnDialogueLineStart] Actor: {actor}, Expression: {expression}");
+                //Debug.Log($"[OnDialogueLineStart] Actor: {actor}, Expression: {expression}");
             }
 
             // Process variable replacement for the current dialogue line
@@ -1727,7 +2295,7 @@ namespace SMSAndroidsCore
                 {
                     currentActiveBust = bustForActor;
                     currentActiveBustMBase = bustForActor.transform.GetChild(0).gameObject;
-                    Debug.Log($"[OnDialogueLineStart] Set currentActiveBust to: {bustForActor.name}");
+                    //Debug.Log($"[OnDialogueLineStart] Set currentActiveBust to: {bustForActor.name}");
 
                     currentActiveBustMBase.transform.Find("Mouth").gameObject.SetActive(true);
                     if (string.IsNullOrEmpty(expression) || expression == "my-expression" || expression == "neutral")
@@ -1824,7 +2392,7 @@ namespace SMSAndroidsCore
                     return;
                 }
 
-                Debug.Log($"[ProcessCurrentDialogueLine] Original text: {originalText}");
+                //Debug.Log($"[ProcessCurrentDialogueLine] Original text: {originalText}");
 
                 // Process the text for variable replacement
                 string processedText = Dialogues.ProcessTextWithVariables(originalText);
@@ -1832,7 +2400,7 @@ namespace SMSAndroidsCore
                 // Only update if the text actually changed
                 if (processedText != originalText)
                 {
-                    Debug.Log($"[ProcessCurrentDialogueLine] CHANGED: '{originalText}' -> '{processedText}'");
+                    //Debug.Log($"[ProcessCurrentDialogueLine] CHANGED: '{originalText}' -> '{processedText}'");
 
                     // Drill down to set the value in GetStringTextArea -> TextAreaField -> m_Text
                     var mPropertyField = propertyGetString.GetType().GetField("m_Property", BindingFlags.NonPublic | BindingFlags.Instance);
@@ -1868,12 +2436,171 @@ namespace SMSAndroidsCore
                 {
                     //Debug.Log($"[ProcessCurrentDialogueLine] UNCHANGED: '{originalText}'");
                 }
+
+                // Process SFX triggers
+                ProcessSFXTriggersForText(originalText, nodeID);
             }
             catch (Exception e)
             {
                 Debug.LogError($"[ProcessCurrentDialogueLine] Error processing dialogue line: {e.Message}");
             }
         }
+
+        /// <summary>
+        /// Calculates the volume multiplier based on the <size=X%> tag active at a given position in the text.
+        /// Returns 1.0f if no size tag is found (equivalent to 100%).
+        /// </summary>
+        private static float GetSizeMultiplierAtPosition(string text, int position)
+        {
+            // Regex to find all <size=X%> tags and their positions
+            Regex sizeTagRegex = new Regex(@"<size=(\d+)%>", RegexOptions.IgnoreCase);
+            MatchCollection sizeTags = sizeTagRegex.Matches(text);
+
+            float currentMultiplier = 1.0f; // Default is 100%
+
+            foreach (Match sizeTag in sizeTags)
+            {
+                // Only consider size tags that appear before our target position
+                if (sizeTag.Index < position)
+                {
+                    // Parse the percentage value
+                    if (int.TryParse(sizeTag.Groups[1].Value, out int percentage))
+                    {
+                        currentMultiplier = percentage / 100f;
+                    }
+                }
+                else
+                {
+                    // We've passed the position, no need to continue
+                    break;
+                }
+            }
+
+            return currentMultiplier;
+        }
+
+        private static void ProcessSFXTriggersForText(string text, int nodeID)
+        {
+            try
+            {
+                if (string.IsNullOrEmpty(text) || Dialogues.textToSFX.Count == 0)
+                    return;
+
+                // Check each registered SFX pattern
+                foreach (var mapping in Dialogues.textToSFX.Values)
+                {
+                    string pattern = mapping.TextPattern;
+
+                    // Use Regex to handle special characters properly
+                    // Escape the pattern for regex, then use it to find all matches (case-insensitive)
+                    string escapedPattern = Regex.Escape(pattern);
+                    Regex regex = new Regex(escapedPattern, RegexOptions.IgnoreCase);
+                    MatchCollection matches = regex.Matches(text);
+
+                    if (matches.Count > 0)
+                    {
+                        // Create a key for this node+pattern combination
+                        string nodePatternKey = $"{nodeID}_{pattern}";
+
+                        // Initialize the list if this is the first time seeing this pattern in this node
+                        if (!lastPlayedIndicesPerNode.ContainsKey(nodePatternKey))
+                        {
+                            lastPlayedIndicesPerNode[nodePatternKey] = new List<int>();
+                        }
+
+                        List<int> playedIndices = lastPlayedIndicesPerNode[nodePatternKey];
+
+                        // Play SFX for each match that hasn't been played yet in this node
+                        for (int i = 0; i < matches.Count; i++)
+                        {
+                            if (!playedIndices.Contains(i))
+                            {
+                                playedIndices.Add(i);
+                                
+                                // Get a random audio clip from the variants
+                                AudioClip selectedClip = Dialogues.GetRandomAudioClipForSFX(mapping);
+                                if (selectedClip != null)
+                                {
+                                    // Calculate delay: 0 for first, 0.22s for subsequent
+                                    float delay = (playedIndices.Count == 1) ? 0f : 0.22f;
+                                    
+                                    // Get the size multiplier based on the <size=X%> tag at this match's position
+                                    float sizeMultiplier = GetSizeMultiplierAtPosition(text, matches[i].Index);
+                                    
+                                    // Calculate final volume: base volume from CreateSFX * size multiplier
+                                    float finalVolume = mapping.Volume * sizeMultiplier;
+                                    
+                                    Debug.Log($"[ProcessSFXTriggersForText] Playing SFX for pattern '{pattern}' (match {i + 1}/{matches.Count}) at delay {delay}s, volume {finalVolume:F2} (base: {mapping.Volume:F2}, size multiplier: {sizeMultiplier:F2})");
+                                    PlaySFXWithDelay(selectedClip, finalVolume, delay);
+                                }
+                                else
+                                {
+                                    Debug.LogWarning($"[ProcessSFXTriggersForText] No audio clip available for pattern '{pattern}'");
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                Debug.LogError($"[ProcessSFXTriggersForText] Error processing SFX triggers: {e.Message}");
+            }
+        }
+
+        private static MainStory sfxPlaybackInstance = null;
+
+        private static void PlaySFXWithDelay(AudioClip clip, float volume, float delay)
+        {
+            try
+            {
+                if (clip == null)
+                {
+                    Debug.LogWarning("[PlaySFXWithDelay] AudioClip is null");
+                    return;
+                }
+
+                if (sfxPlaybackInstance == null)
+                {
+                    Debug.LogWarning("[PlaySFXWithDelay] MainStory instance not available for SFX playback");
+                    return;
+                }
+
+                // Create audio config with custom volume (pitch uses default range 1f to 1f)
+                AudioConfigSoundUI audioConfig = AudioConfigSoundUI.Create(volume, new Vector2(1f, 1f));
+
+                if (delay <= 0)
+                {
+                    // Play immediately with custom volume
+                    Singleton<AudioManager>.Instance.UserInterface.Play(clip, audioConfig, Args.EMPTY);
+                    Debug.Log($"[PlaySFXWithDelay] Played SFX immediately: {clip.name} at volume {volume:F2}");
+                }
+                else
+                {
+                    // Start a coroutine for delayed playback
+                    sfxPlaybackInstance.StartCoroutine(sfxPlaybackInstance.DelayedSFXPlaybackCoroutine(clip, volume, delay));
+                }
+            }
+            catch (Exception e)
+            {
+                Debug.LogError($"[PlaySFXWithDelay] Error playing SFX: {e.Message}");
+            }
+        }
+
+        private IEnumerator DelayedSFXPlaybackCoroutine(AudioClip clip, float volume, float delay)
+        {
+            yield return new WaitForSeconds(delay);
+            // Create audio config with custom volume (pitch uses default range 1f to 1f)
+            AudioConfigSoundUI audioConfig = AudioConfigSoundUI.Create(volume, new Vector2(1f, 1f));
+            Singleton<AudioManager>.Instance.UserInterface.Play(clip, audioConfig, Args.EMPTY);
+            Debug.Log($"[DelayedSFXPlayback] Played SFX after {delay}s delay: {clip.name} at volume {volume:F2}");
+        }
+
+        private void OnEnable()
+        {
+            sfxPlaybackInstance = this;
+        }
+
         public static string GetCurrentSpeakingActor()
         {
             try
@@ -2032,7 +2759,7 @@ namespace SMSAndroidsCore
                 
                 if (activeBust != null)
                 {
-                    Debug.Log($"[GetBustForActor] Found active bust for {characterName}: {activeBust.name}");
+                    //Debug.Log($"[GetBustForActor] Found active bust for {characterName}: {activeBust.name}");
                     return activeBust;
                 }
 
