@@ -217,6 +217,8 @@ namespace SMSAndroidsCore
         public static GameObject anisDefaultHHDialogueDialogueActivator;
         public static GameObject anisDefaultHHDialogueDialogueFinisher;
         public static GameObject anisDefaultHHDialogueMouthActivator;
+        public static GameObject anisDefaultHHDialogueOutfitDefault;
+        public static GameObject anisDefaultHHDialogueOutfitSwim;
         public static GameObject anisDefaultHHDialogueSpriteFocus;
 
         public static GameObject anisGiftDialogue;
@@ -1136,6 +1138,8 @@ namespace SMSAndroidsCore
                     anisDefaultHHDialogueDialogueActivator = anisDefaultHHDialogue.transform.Find("DialogueActivator").gameObject;
                     anisDefaultHHDialogueDialogueFinisher = anisDefaultHHDialogue.transform.Find("DialogueFinisher").gameObject;
                     anisDefaultHHDialogueMouthActivator = anisDefaultHHDialogue.transform.Find("MouthActivator").gameObject;
+                    anisDefaultHHDialogueOutfitDefault = anisDefaultHHDialogue.transform.Find("OutfitDefault").gameObject;
+                    anisDefaultHHDialogueOutfitSwim = anisDefaultHHDialogue.transform.Find("OutfitSwim").gameObject;
                     anisDefaultHHDialogueSpriteFocus = anisDefaultHHDialogue.transform.Find("SpriteFocus").gameObject;
 
                     anisGiftDialogue = CreateNewDialogue("AnisDialogueGift", Places.mountainLabRoomNikkeAnisRoomtalk.transform);

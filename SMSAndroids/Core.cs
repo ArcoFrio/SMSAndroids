@@ -36,7 +36,7 @@ namespace SMSAndroidsCore
         #region Plugin Info
         public const string pluginGuid = "treboy.starmakerstory.smsandroidscore.core";
         public const string pluginName = "Androids Core";
-        public const string pluginVersion = "0.6.1";
+        public const string pluginVersion = "0.7.0";
         #endregion
 
         public static AssetBundle characterBundle;
@@ -1090,6 +1090,30 @@ namespace SMSAndroidsCore
             Signals.Emit(signalArgs);
             Debug.Log($"[EmitSignalDelayed] Signal '{signalName}' emitted!");
         }
+        public static GameObject ChangeOutfitDelayed(GameObject currentOutfitGO, GameObject newOutfitGO, string variableName, string newValue, float delay)
+        {
+            var debugging = FindObjectOfType<Debugging>();
+            if (debugging != null)
+            {
+                debugging.StartCoroutine(ChangeOutfitDelayedCoroutine(currentOutfitGO, newOutfitGO, variableName, newValue, delay));
+            }
+            else
+            {
+                Debug.LogError("[ChangeOutfitDelayed] Debugging instance not found");
+            }
+            return newOutfitGO;
+        }
+        public static IEnumerator ChangeOutfitDelayedCoroutine(GameObject currentOutfitGO,GameObject newOutfitGO, string variableName, string newValue, float delay)
+        {
+            Debug.Log($"[ChangeOutfitDelayed] Changing '{variableName}' to {newValue} in {delay} seconds...");
+            yield return new WaitForSeconds(delay);
+
+            currentOutfitGO.SetActive(false);
+            SaveManager.SetString(variableName, newValue);
+            newOutfitGO.SetActive(true);
+
+            Debug.Log($"[ChangeOutfitDelayed] Variable '{variableName}' changed to {newValue}");
+        }
 
         public static void EmitSignalGameObjectDelayed(string signalName, GameObject go1, GameObject go2, float delay = 3f)
         {
@@ -1170,6 +1194,27 @@ namespace SMSAndroidsCore
             var signalArgs = new SignalArgs(new PropertyName(signalName), null);
             Signals.Emit(signalArgs);
             Debug.Log($"[EmitSignalGameObjectDelayed] Signal '{signalName}' emitted!");
+        }
+
+        public static void DisableAllActiveBustChildren()
+        {
+            if (bustManager == null)
+            {
+                Debug.LogError("[DisableAllActiveBustChildren] bustManager is null");
+                return;
+            }
+
+            int disabledCount = 0;
+            foreach (Transform child in bustManager)
+            {
+                if (child.gameObject.activeSelf)
+                {
+                    child.gameObject.SetActive(false);
+                    disabledCount++;
+                }
+            }
+            
+            Debug.Log($"[DisableAllActiveBustChildren] Disabled {disabledCount} active bust children");
         }
     }
 }

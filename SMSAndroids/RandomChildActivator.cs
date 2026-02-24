@@ -14,7 +14,7 @@ namespace SMSAndroidsCore
         
         [SerializeField]
         [Tooltip("If true, picks a new random child every time OnEnable is called. If false, remembers the last selected child.")]
-        public bool pickNewOnEnable = true;
+        public bool pickNewOnEnable = false;
         
         private int selectedChildIndex = -1;
 
@@ -71,6 +71,7 @@ namespace SMSAndroidsCore
             Transform randomChild = transform.GetChild(selectedChildIndex);
             Logger.LogInfo($"Picked new random child {selectedChildIndex}: {randomChild.name}");
             randomChild.gameObject.SetActive(true);
+            pickNewOnEnable = false;
         }
 
         /// <summary>

@@ -246,49 +246,52 @@ namespace SMSAndroidsCore
                             UpdateHHRoaming();
                         }
 
-                        if (anisLocation == "HarborHomeBathroomShower" && anisLocation != anisLocationPrevious)
-                        { Characters.anisNPCHHShowerNaked.GetComponent<RandomChildActivator>().pickNewOnEnable = true; anisLocationPrevious = anisLocation; Debug.Log("Set anisLocationPrevious to " + anisLocationPrevious);}
-                        Characters.anisNPCHHShowerNaked.gameObject.SetActive(anisLocation == "HarborHomeBathroomShower");
+                        if (anisLocation != anisLocationPrevious)
+                        {
+                            anisLocationPrevious = anisLocation;
+                            Characters.anisNPCHHBedleftDefault.GetComponent<RandomChildActivator>().pickNewOnEnable = true;
+                            Characters.anisNPCHHBedrightDefault.GetComponent<RandomChildActivator>().pickNewOnEnable = true;
+                            Characters.anisNPCHHChangingleftDefault.GetComponent<RandomChildActivator>().pickNewOnEnable = true;
+                            Characters.anisNPCHHChangingrightDefault.GetComponent<RandomChildActivator>().pickNewOnEnable = true;
+                            Characters.anisNPCHHCouchleftDefault.GetComponent<RandomChildActivator>().pickNewOnEnable = true;
+                            Characters.anisNPCHHCouchrightDefault.GetComponent<RandomChildActivator>().pickNewOnEnable = true;
+                            Characters.anisNPCHHFridgeDefault.GetComponent<RandomChildActivator>().pickNewOnEnable = true;
+                            Characters.anisNPCHHSinkDefault.GetComponent<RandomChildActivator>().pickNewOnEnable = true;
 
-                        if (anisLocation == "HarborHomeBedroomBedleft" && anisLocation != anisLocationPrevious && SaveManager.GetString("HarborHome_Outfit_Anis") == "Default")
-                        { Characters.anisNPCHHBedleftDefault.GetComponent<RandomChildActivator>().pickNewOnEnable = true; anisLocationPrevious = anisLocation; Debug.Log("Set anisLocationPrevious to " + anisLocationPrevious);}
+                            Characters.anisNPCHHBedleftSwim.GetComponent<RandomChildActivator>().pickNewOnEnable = true;
+                            Characters.anisNPCHHBedrightSwim.GetComponent<RandomChildActivator>().pickNewOnEnable = true;
+                            Characters.anisNPCHHChangingleftSwim.GetComponent<RandomChildActivator>().pickNewOnEnable = true;
+                            Characters.anisNPCHHChangingrightSwim.GetComponent<RandomChildActivator>().pickNewOnEnable = true;
+                            Characters.anisNPCHHCouchleftSwim.GetComponent<RandomChildActivator>().pickNewOnEnable = true;
+                            Characters.anisNPCHHCouchrightSwim.GetComponent<RandomChildActivator>().pickNewOnEnable = true;
+                            Characters.anisNPCHHFridgeSwim.GetComponent<RandomChildActivator>().pickNewOnEnable = true;
+                            Characters.anisNPCHHSinkSwim.GetComponent<RandomChildActivator>().pickNewOnEnable = true;
+                            Characters.anisNPCHHTanningleftSwim.GetComponent<RandomChildActivator>().pickNewOnEnable = true;
+                            Characters.anisNPCHHTanningrightSwim.GetComponent<RandomChildActivator>().pickNewOnEnable = true;
+
+                            Characters.anisNPCHHShowerNaked.GetComponent<RandomChildActivator>().pickNewOnEnable = true;
+                        }
                         Characters.anisNPCHHBedleftDefault.gameObject.SetActive(anisLocation == "HarborHomeBedroomBedleft" && SaveManager.GetString("HarborHome_Outfit_Anis") == "Default");
-
-                        if (anisLocation == "HarborHomeBedroomBedright" && anisLocation != anisLocationPrevious && SaveManager.GetString("HarborHome_Outfit_Anis") == "Default")
-                        { Characters.anisNPCHHBedrightDefault.GetComponent<RandomChildActivator>().pickNewOnEnable = true; anisLocationPrevious = anisLocation; Debug.Log("Set anisLocationPrevious to " + anisLocationPrevious);}
                         Characters.anisNPCHHBedrightDefault.gameObject.SetActive(anisLocation == "HarborHomeBedroomBedright" && SaveManager.GetString("HarborHome_Outfit_Anis") == "Default");
-
-                        if (anisLocation == "HarborHomeClosetChangingleft" && anisLocation != anisLocationPrevious && SaveManager.GetString("HarborHome_Outfit_Anis") == "Default")
-                        { Characters.anisNPCHHChangingleftDefault.GetComponent<RandomChildActivator>().pickNewOnEnable = true; anisLocationPrevious = anisLocation; Debug.Log("Set anisLocationPrevious to " + anisLocationPrevious);}
                         Characters.anisNPCHHChangingleftDefault.gameObject.SetActive(anisLocation == "HarborHomeClosetChangingleft" && SaveManager.GetString("HarborHome_Outfit_Anis") == "Default");
-
-                        if (anisLocation == "HarborHomeClosetChangingright" && anisLocation != anisLocationPrevious && SaveManager.GetString("HarborHome_Outfit_Anis") == "Default")
-                        { Characters.anisNPCHHChangingrightDefault.GetComponent<RandomChildActivator>().pickNewOnEnable = true; anisLocationPrevious = anisLocation; Debug.Log("Set anisLocationPrevious to " + anisLocationPrevious);}
                         Characters.anisNPCHHChangingrightDefault.gameObject.SetActive(anisLocation == "HarborHomeClosetChangingright" && SaveManager.GetString("HarborHome_Outfit_Anis") == "Default");
-
-                        if (anisLocation == "HarborHomeKitchenFridge" && anisLocation != anisLocationPrevious && SaveManager.GetString("HarborHome_Outfit_Anis") == "Default")
-                        { Characters.anisNPCHHFridgeDefault.GetComponent<RandomChildActivator>().pickNewOnEnable = true; anisLocationPrevious = anisLocation; Debug.Log("Set anisLocationPrevious to " + anisLocationPrevious);}
+                        Characters.anisNPCHHCouchleftDefault.gameObject.SetActive(anisLocation == "HarborHomeLivingRoomCouchleft" && SaveManager.GetString("HarborHome_Outfit_Anis") == "Default");
+                        Characters.anisNPCHHCouchrightDefault.gameObject.SetActive(anisLocation == "HarborHomeLivingRoomCouchright" && SaveManager.GetString("HarborHome_Outfit_Anis") == "Default");
                         Characters.anisNPCHHFridgeDefault.gameObject.SetActive(anisLocation == "HarborHomeKitchenFridge" && SaveManager.GetString("HarborHome_Outfit_Anis") == "Default");
-
-                        if (anisLocation == "HarborHomeKitchenSink" && anisLocation != anisLocationPrevious && SaveManager.GetString("HarborHome_Outfit_Anis") == "Default")
-                        { Characters.anisNPCHHSinkDefault.GetComponent<RandomChildActivator>().pickNewOnEnable = true; anisLocationPrevious = anisLocation; Debug.Log("Set anisLocationPrevious to " + anisLocationPrevious);}
                         Characters.anisNPCHHSinkDefault.gameObject.SetActive(anisLocation == "HarborHomeKitchenSink" && SaveManager.GetString("HarborHome_Outfit_Anis") == "Default");
 
-                        if (anisLocation == "HarborHomeLivingRoomCouchleft" && anisLocation != anisLocationPrevious && SaveManager.GetString("HarborHome_Outfit_Anis") == "Default")
-                        { Characters.anisNPCHHCouchleftDefault.GetComponent<RandomChildActivator>().pickNewOnEnable = true; anisLocationPrevious = anisLocation; Debug.Log("Set anisLocationPrevious to " + anisLocationPrevious);}
-                        Characters.anisNPCHHCouchleftDefault.gameObject.SetActive(anisLocation == "HarborHomeLivingRoomCouchleft" && SaveManager.GetString("HarborHome_Outfit_Anis") == "Default");
-
-                        if (anisLocation == "HarborHomeLivingRoomCouchright" && anisLocation != anisLocationPrevious && SaveManager.GetString("HarborHome_Outfit_Anis") == "Default")
-                        { Characters.anisNPCHHCouchrightDefault.GetComponent<RandomChildActivator>().pickNewOnEnable = true; anisLocationPrevious = anisLocation; Debug.Log("Set anisLocationPrevious to " + anisLocationPrevious);}
-                        Characters.anisNPCHHCouchrightDefault.gameObject.SetActive(anisLocation == "HarborHomeLivingRoomCouchright" && SaveManager.GetString("HarborHome_Outfit_Anis") == "Default");
-
-                        if (anisLocation == "HarborHomePoolTanningleft" && anisLocation != anisLocationPrevious)
-                        { Characters.anisNPCHHTanningleftSwim.GetComponent<RandomChildActivator>().pickNewOnEnable = true; anisLocationPrevious = anisLocation; Debug.Log("Set anisLocationPrevious to " + anisLocationPrevious);}
+                        Characters.anisNPCHHBedleftSwim.gameObject.SetActive(anisLocation == "HarborHomeBedroomBedleft" && SaveManager.GetString("HarborHome_Outfit_Anis") == "Swim");
+                        Characters.anisNPCHHBedrightSwim.gameObject.SetActive(anisLocation == "HarborHomeBedroomBedright" && SaveManager.GetString("HarborHome_Outfit_Anis") == "Swim");
+                        Characters.anisNPCHHChangingleftSwim.gameObject.SetActive(anisLocation == "HarborHomeClosetChangingleft" && SaveManager.GetString("HarborHome_Outfit_Anis") == "Swim");
+                        Characters.anisNPCHHChangingrightSwim.gameObject.SetActive(anisLocation == "HarborHomeClosetChangingright" && SaveManager.GetString("HarborHome_Outfit_Anis") == "Swim");
+                        Characters.anisNPCHHCouchleftSwim.gameObject.SetActive(anisLocation == "HarborHomeLivingRoomCouchleft" && SaveManager.GetString("HarborHome_Outfit_Anis") == "Swim");
+                        Characters.anisNPCHHCouchrightSwim.gameObject.SetActive(anisLocation == "HarborHomeLivingRoomCouchright" && SaveManager.GetString("HarborHome_Outfit_Anis") == "Swim");
+                        Characters.anisNPCHHFridgeSwim.gameObject.SetActive(anisLocation == "HarborHomeKitchenFridge" && SaveManager.GetString("HarborHome_Outfit_Anis") == "Swim");
+                        Characters.anisNPCHHSinkSwim.gameObject.SetActive(anisLocation == "HarborHomeKitchenSink" && SaveManager.GetString("HarborHome_Outfit_Anis") == "Swim");
                         Characters.anisNPCHHTanningleftSwim.gameObject.SetActive(anisLocation == "HarborHomePoolTanningleft");
-
-                        if (anisLocation == "HarborHomePoolTanningright" && anisLocation != anisLocationPrevious)
-                        { Characters.anisNPCHHTanningrightSwim.GetComponent<RandomChildActivator>().pickNewOnEnable = true; anisLocationPrevious = anisLocation; Debug.Log("Set anisLocationPrevious to " + anisLocationPrevious);}
                         Characters.anisNPCHHTanningrightSwim.gameObject.SetActive(anisLocation == "HarborHomePoolTanningright");
+
+                        Characters.anisNPCHHShowerNaked.gameObject.SetActive(anisLocation == "HarborHomeBathroomShower");
 
 
 
@@ -314,6 +317,29 @@ namespace SMSAndroidsCore
                             Dialogues.audioShower.SetActive(false);
                             Dialogues.audioShowerQuiet.SetActive(false);
                         }
+
+                        if(amberLocation != Core.GetProxyVariableString("Location_Amber")) { Core.FindAndModifyProxyVariableString("Location_Amber", amberLocation); }
+                        if(claireLocation != Core.GetProxyVariableString("Location_Claire")) { Core.FindAndModifyProxyVariableString("Location_Claire", claireLocation); }
+                        if(sarahLocation != Core.GetProxyVariableString("Location_Sarah")) { Core.FindAndModifyProxyVariableString("Location_Sarah", sarahLocation); }
+
+                        if(anisLocation != Core.GetProxyVariableString("Location_Anis")) { Core.FindAndModifyProxyVariableString("Location_Anis", anisLocation); }
+                        if(centiLocation != Core.GetProxyVariableString("Location_Centi")) { Core.FindAndModifyProxyVariableString("Location_Centi", centiLocation); }
+                        if(dorothyLocation != Core.GetProxyVariableString("Location_Dorothy")) { Core.FindAndModifyProxyVariableString("Location_Dorothy", dorothyLocation); }
+                        if(eleggLocation != Core.GetProxyVariableString("Location_Elegg")) { Core.FindAndModifyProxyVariableString("Location_Elegg", eleggLocation); }
+                        if(frimaLocation != Core.GetProxyVariableString("Location_Frima")) { Core.FindAndModifyProxyVariableString("Location_Frima", frimaLocation); }
+                        if(guiltyLocation != Core.GetProxyVariableString("Location_Guilty")) { Core.FindAndModifyProxyVariableString("Location_Guilty", guiltyLocation); }
+                        if(helmLocation != Core.GetProxyVariableString("Location_Helm")) { Core.FindAndModifyProxyVariableString("Location_Helm", helmLocation); }
+                        if(maidenLocation != Core.GetProxyVariableString("Location_Maiden")) { Core.FindAndModifyProxyVariableString("Location_Maiden", maidenLocation); }
+                        if(maryLocation != Core.GetProxyVariableString("Location_Mary")) { Core.FindAndModifyProxyVariableString("Location_Mary", maryLocation); }
+                        if(mastLocation != Core.GetProxyVariableString("Location_Mast")) { Core.FindAndModifyProxyVariableString("Location_Mast", mastLocation); }
+                        if(neonLocation != Core.GetProxyVariableString("Location_Neon")) { Core.FindAndModifyProxyVariableString("Location_Neon", neonLocation); }
+                        if(pepperLocation != Core.GetProxyVariableString("Location_Pepper")) { Core.FindAndModifyProxyVariableString("Location_Pepper", pepperLocation); }
+                        if(rapiLocation != Core.GetProxyVariableString("Location_Rapi")) { Core.FindAndModifyProxyVariableString("Location_Rapi", rapiLocation); }
+                        if(rosannaLocation != Core.GetProxyVariableString("Location_Rosanna")) { Core.FindAndModifyProxyVariableString("Location_Rosanna", rosannaLocation); }
+                        if(sakuraLocation != Core.GetProxyVariableString("Location_Sakura")) { Core.FindAndModifyProxyVariableString("Location_Sakura", sakuraLocation); }
+                        if(toveLocation != Core.GetProxyVariableString("Location_Tove")) { Core.FindAndModifyProxyVariableString("Location_Tove", toveLocation); }
+                        if(viperLocation != Core.GetProxyVariableString("Location_Viper")) { Core.FindAndModifyProxyVariableString("Location_Viper", viperLocation); }
+                        if(yanLocation != Core.GetProxyVariableString("Location_Yan")) { Core.FindAndModifyProxyVariableString("Location_Yan", yanLocation); }
                     }
                 }
             }

@@ -536,6 +536,8 @@ namespace SMSAndroidsCore
                                 if (SaveManager.GetString("HarborHome_Outfit_Anis") == "Default") { Schedule.anisHHOutfit = Characters.anisCoatless; }
                                 if (SaveManager.GetString("HarborHome_Outfit_Anis") == "Swim") { Schedule.anisHHOutfit = Characters.anisSwim; }
                             }
+
+                            #region Default Dialogue
                             if (!Dialogues.dialoguePlaying && SaveManager.GetBool("Voyeur_SeenAnis") && !Core.GetProxyVariableBool("Gifting_Gifted") &&
                             SaveManager.GetBool("HarborHome_Visit_Anis") && SaveManager.GetString("HarborHome_TalkSelected") == "Anis")
                             {
@@ -560,10 +562,25 @@ namespace SMSAndroidsCore
                                 Core.FindAndModifyProxyVariableString("Gifting_Target", "Anis");
                                 Dialogues.anisDefaultHHDialogueScene5.SetActive(false);
                             }
+                            if (Dialogues.anisDefaultHHDialogueOutfitDefault.activeSelf)
+                            {
+                                Signals.Emit(fadeInSignal);
+                                Schedule.anisHHOutfit = Core.ChangeOutfitDelayed(Schedule.anisHHOutfit, Characters.anisCoatless, "HarborHome_Outfit_Anis", "Default", 0.5f);
+                                Core.EmitSignalDelayed("FadeOut2025", 1.0f);
+                                Dialogues.anisDefaultHHDialogueOutfitDefault.SetActive(false);
+                            }
+                            if (Dialogues.anisDefaultHHDialogueOutfitSwim.activeSelf)
+                            {
+                                Signals.Emit(fadeInSignal);
+                                Schedule.anisHHOutfit = Core.ChangeOutfitDelayed(Schedule.anisHHOutfit, Characters.anisSwim, "HarborHome_Outfit_Anis", "Swim", 0.5f);
+                                Core.EmitSignalDelayed("FadeOut2025", 1.0f);
+                                Dialogues.anisDefaultHHDialogueOutfitSwim.SetActive(false);
+                            }
                             if (Dialogues.anisDefaultHHDialogueDialogueFinisher.activeSelf)
                             {
                                 Invoke(nameof(EndDialogueSequence), 1.0f);
                                 SaveManager.SetString("HarborHome_TalkSelected", "");
+                                if (!Dialogues.giftUI.activeSelf) { Core.DisableAllActiveBustChildren(); }
                                 Dialogues.anisDefaultHHDialogueDialogueFinisher.SetActive(false);
                                 Places.harborHomeBedroomButtonCanvas.SetActive(true);
                             }
@@ -592,7 +609,9 @@ namespace SMSAndroidsCore
                                 Schedule.anisHHOutfit.SetActive(false);
                                 Places.harborHomeBedroomButtonCanvas.SetActive(true);
                             }
-                                break;
+                            #endregion
+
+                            break;
 
                         default:
 

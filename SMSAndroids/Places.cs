@@ -313,13 +313,13 @@ namespace SMSAndroidsCore
                     CreateNewPlace(921, "MountainLabRoomNikkeYan", "MountainLabRoom", "Yan's Room", 0.65f);
                     CreateNewPlace(922, "GiftShop", "GiftShop", "West Side", 0.75f);
                     CreateNewPlace(923, "GiftShopInterior", "GiftShopInterior", "Gift Shop", 0.65f);
-                    CreateNewPlace(924, "HarborHouseEntrance", "HHomeEntrance", "Entrance", 0.75f);
-                    CreateNewPlace(925, "HarborHomeBathroom", "HHomeBathroom", "Bathroom", 0.15f);
-                    CreateNewPlace(926, "HarborHomeBedroom", "HHomeBedroom", "Bedroom", 0.05f);
+                    CreateNewPlace(924, "HarborHomeLivingRoom", "HHomeLivingRoom", "Living Room", 0.05f);
+                    CreateNewPlace(925, "HarborHomeBedroom", "HHomeBedroom", "Bedroom", 0.05f);
+                    CreateNewPlace(926, "HarborHomeBathroom", "HHomeBathroom", "Bathroom", 0.15f);
                     CreateNewPlace(927, "HarborHomeCloset", "HHomeCloset", "Closet", 0.05f);
                     CreateNewPlace(928, "HarborHomeKitchen", "HHomeKitchen", "Kitchen", 0.05f);
-                    CreateNewPlace(929, "HarborHomeLivingRoom", "HHomeLivingRoom", "Living Room", 0.05f);
-                    CreateNewPlace(930, "HarborHomePool", "HHomePool", "Pool", 0.05f);
+                    CreateNewPlace(929, "HarborHomePool", "HHomePool", "Pool", 0.05f);
+                    CreateNewPlace(930, "HarborHouseEntrance", "HHomeEntrance", "Entrance", 0.75f);
 
                     buttonBeach = Core.mainCanvas.Find("Navigator").Find("MapButtons").Find("14_beach").gameObject;
                     buttonCar = Core.mainCanvas.Find("Navigator").Find("MapButtons").Find("22_car").gameObject;
@@ -348,13 +348,13 @@ namespace SMSAndroidsCore
                     buttonMountainLabRoomNikkeYan = Core.mainCanvas.Find("Navigator").Find("MapButtons").Find("921_MountainLabRoomNikkeYan").gameObject;
                     buttonGiftShop = Core.mainCanvas.Find("Navigator").Find("MapButtons").Find("922_GiftShop").gameObject;
                     buttonGiftShopInterior = Core.mainCanvas.Find("Navigator").Find("MapButtons").Find("923_GiftShopInterior").gameObject;
-                    buttonHarborHouseEntrance = Core.mainCanvas.Find("Navigator").Find("MapButtons").Find("924_HarborHouseEntrance").gameObject;
-                    buttonHarborHomeBathroom = Core.mainCanvas.Find("Navigator").Find("MapButtons").Find("925_HarborHomeBathroom").gameObject;
-                    buttonHarborHomeBedroom = Core.mainCanvas.Find("Navigator").Find("MapButtons").Find("926_HarborHomeBedroom").gameObject;
+                    buttonHarborHomeLivingroom = Core.mainCanvas.Find("Navigator").Find("MapButtons").Find("924_HarborHomeLivingRoom").gameObject;
+                    buttonHarborHomeBedroom = Core.mainCanvas.Find("Navigator").Find("MapButtons").Find("925_HarborHomeBedroom").gameObject;
+                    buttonHarborHomeBathroom = Core.mainCanvas.Find("Navigator").Find("MapButtons").Find("926_HarborHomeBathroom").gameObject;
                     buttonHarborHomeCloset = Core.mainCanvas.Find("Navigator").Find("MapButtons").Find("927_HarborHomeCloset").gameObject;
                     buttonHarborHomeKitchen = Core.mainCanvas.Find("Navigator").Find("MapButtons").Find("928_HarborHomeKitchen").gameObject;
-                    buttonHarborHomeLivingroom = Core.mainCanvas.Find("Navigator").Find("MapButtons").Find("929_HarborHomeLivingRoom").gameObject;
-                    buttonHarborHomePool = Core.mainCanvas.Find("Navigator").Find("MapButtons").Find("930_HarborHomePool").gameObject;
+                    buttonHarborHomePool = Core.mainCanvas.Find("Navigator").Find("MapButtons").Find("929_HarborHomePool").gameObject;
+                    buttonHarborHouseEntrance = Core.mainCanvas.Find("Navigator").Find("MapButtons").Find("930_HarborHouseEntrance").gameObject;
 
                     secretBeachLevel = Core.level.Find("900_SecretBeach").gameObject;
                     secretBeachLevelBG = secretBeachLevel.transform.GetChild(1).gameObject;
@@ -410,25 +410,25 @@ namespace SMSAndroidsCore
                     giftShopInteriorLevel = Core.level.Find("923_GiftShopInterior").gameObject;
                     giftShopInteriorRoomtalk = Core.roomTalk.Find("GiftShopInterior").gameObject;
 
-                    harborHouseEntranceLevel = Core.level.Find("924_HarborHouseEntrance").gameObject;
-                    harborHouseEntranceRoomtalk = Core.roomTalk.Find("HarborHouseEntrance").gameObject;
-                    harborHomeBathroomLevel = Core.level.Find("925_HarborHomeBathroom").gameObject;
-                    harborHomeBathroomRoomtalk = Core.roomTalk.Find("HarborHomeBathroom").gameObject;
-                    harborHomeBedroomLevel = Core.level.Find("926_HarborHomeBedroom").gameObject;
+                    harborHomeLivingroomLevel = Core.level.Find("924_HarborHomeLivingRoom").gameObject;
+                    harborHomeLivingroomRoomtalk = Core.roomTalk.Find("HarborHomeLivingRoom").gameObject;
+                    harborHomeBedroomLevel = Core.level.Find("925_HarborHomeBedroom").gameObject;
                     harborHomeBedroomRoomtalk = Core.roomTalk.Find("HarborHomeBedroom").gameObject;
                     harborHomeBedroomButtonCanvas = GameObject.Instantiate(Core.level.Find("5_MyRoom").Find("PlayerRoom_ButtonCanvas").gameObject, harborHomeBedroomLevel.transform);
                     harborHomeBedroomButtonCanvas.transform.Find("Player_Room_Buttons").gameObject.GetComponent<ParallaxMouseEffect>().parallaxStrength = 0.05f;
                     harborHomeBedroomButtonCanvas.transform.Find("Player_Room_Buttons").Find("SleepButton").localPosition = new Vector2(0, -140);
                     harborHomeBedroomButtonCanvas.transform.Find("Player_Room_Buttons").Find("CalendarButton").localPosition = new Vector2(-20, 250);
                     harborHomeBedroomButtonCanvas.transform.Find("Player_Room_Buttons").Find("PCButton").localPosition = new Vector2(-720, -100);
+                    harborHomeBathroomLevel = Core.level.Find("926_HarborHomeBathroom").gameObject;
+                    harborHomeBathroomRoomtalk = Core.roomTalk.Find("HarborHomeBathroom").gameObject;
                     harborHomeClosetLevel = Core.level.Find("927_HarborHomeCloset").gameObject;
                     harborHomeClosetRoomtalk = Core.roomTalk.Find("HarborHomeCloset").gameObject;
                     harborHomeKitchenLevel = Core.level.Find("928_HarborHomeKitchen").gameObject;
                     harborHomeKitchenRoomtalk = Core.roomTalk.Find("HarborHomeKitchen").gameObject;
-                    harborHomeLivingroomLevel = Core.level.Find("929_HarborHomeLivingRoom").gameObject;
-                    harborHomeLivingroomRoomtalk = Core.roomTalk.Find("HarborHomeLivingRoom").gameObject;
-                    harborHomePoolLevel = Core.level.Find("930_HarborHomePool").gameObject;
+                    harborHomePoolLevel = Core.level.Find("929_HarborHomePool").gameObject;
                     harborHomePoolRoomtalk = Core.roomTalk.Find("HarborHomePool").gameObject;
+                    harborHouseEntranceLevel = Core.level.Find("930_HarborHouseEntrance").gameObject;
+                    harborHouseEntranceRoomtalk = Core.roomTalk.Find("HarborHouseEntrance").gameObject;
 
                     // Create Harbor Home Entrance radial button in Foundry
                     CreateHarborHouseEntranceRadialButton();
@@ -496,7 +496,7 @@ namespace SMSAndroidsCore
 
                     solid.SetActive(true);
 
-                    harborHomeBathroomLevelB1 = GameObject.Instantiate(harborHomeBathroomLevel.transform.Find("925_HarborHomeBathroom").gameObject, harborHomeBathroomLevel.transform);
+                    harborHomeBathroomLevelB1 = GameObject.Instantiate(harborHomeBathroomLevel.transform.Find("926_HarborHomeBathroom").gameObject, harborHomeBathroomLevel.transform);
                     harborHomeBathroomLevelB1.name = "ShowerGlassOverlay";
                     harborHomeBathroomLevelB1.GetComponent<SpriteRenderer>().sortingOrder = 0;
                     Destroy(harborHomeBathroomLevelB1.GetComponent<ParallaxMouseEffect>());
@@ -562,7 +562,7 @@ namespace SMSAndroidsCore
                 if (secretBeachLevel.activeSelf || giftShopLevel.activeSelf) { buttonBeach.SetActive(true); }
                 if (secretBeachLevel.activeSelf || harborHouseEntranceLevel.activeSelf) { buttonCar.SetActive(true); }
 
-                harborHomeKitchenLevelB1.SetActive(Characters.anisNPCHHFridgeDefault.activeSelf);
+                harborHomeKitchenLevelB1.SetActive(Schedule.anisLocation == "HarborHomeKitchenFridge");
 
                 buttonSecretBeach.SetActive(Core.levelBeach.activeSelf || mountainLabLevel.activeSelf);
                 buttonMountainLab.SetActive(SaveManager.GetBool("SecretBeach_UnlockedLab") && (secretBeachLevel.activeSelf || mountainLabCorridorNikke1Level.activeSelf || mountainLabCorridorNikke2Level.activeSelf));
@@ -594,11 +594,12 @@ namespace SMSAndroidsCore
                 buttonHarborHouseEntrance.SetActive(harborHomeLivingroomLevel.activeSelf);
                 buttonHarborHomeLivingroom.SetActive(SaveManager.GetBool("HarborHome_Bought") && (harborHouseEntranceLevel.activeSelf || harborHomeBedroomLevel.activeSelf || harborHomeKitchenLevel.activeSelf ||
                     harborHomePoolLevel.activeSelf));
-                buttonHarborHomeBathroom.SetActive(harborHomeBedroomLevel.activeSelf || harborHomeClosetLevel.activeSelf);
                 buttonHarborHomeBedroom.SetActive(harborHomeLivingroomLevel.activeSelf || harborHomeClosetLevel.activeSelf || harborHomeBathroomLevel.activeSelf);
+                buttonHarborHomeBathroom.SetActive(harborHomeBedroomLevel.activeSelf || harborHomeClosetLevel.activeSelf);
                 buttonHarborHomeCloset.SetActive(harborHomeBedroomLevel.activeSelf || harborHomeBathroomLevel.activeSelf);
                 buttonHarborHomeKitchen.SetActive(harborHomeLivingroomLevel.activeSelf);
                 buttonHarborHomePool.SetActive(harborHomeLivingroomLevel.activeSelf);
+                buttonHarborHouseEntrance.SetActive(harborHomeLivingroomLevel.activeSelf);
 
                 if (Core.GetVariableBool("rainy-day"))
                 {
@@ -635,13 +636,13 @@ namespace SMSAndroidsCore
                 if (buttonMountainLabRoomNikkeYan.transform.GetChild(0).gameObject.activeSelf) { ClickMapButton(mountainLabRoomNikkeYanRoomtalk, 21); buttonMountainLabRoomNikkeYan.transform.GetChild(0).gameObject.SetActive(false); }
                 if (buttonGiftShop.transform.GetChild(0).gameObject.activeSelf) { ClickMapButton(giftShopRoomtalk, 22); buttonGiftShop.transform.GetChild(0).gameObject.SetActive(false); }
                 if (buttonGiftShopInterior.transform.GetChild(0).gameObject.activeSelf) { ClickMapButton(giftShopInteriorRoomtalk, 23); buttonGiftShopInterior.transform.GetChild(0).gameObject.SetActive(false); }
-                if (buttonHarborHouseEntrance.transform.GetChild(0).gameObject.activeSelf) { ClickMapButton(harborHouseEntranceRoomtalk, 24); buttonHarborHouseEntrance.transform.GetChild(0).gameObject.SetActive(false); }
-                if (buttonHarborHomeBathroom.transform.GetChild(0).gameObject.activeSelf) { ClickMapButton(harborHomeBathroomRoomtalk, 25); buttonHarborHomeBathroom.transform.GetChild(0).gameObject.SetActive(false);}
-                if (buttonHarborHomeBedroom.transform.GetChild(0).gameObject.activeSelf) { ClickMapButton(harborHomeBedroomRoomtalk, 26); buttonHarborHomeBedroom.transform.GetChild(0).gameObject.SetActive(false); harborHomeBedroomButtonCanvas.SetActive(true); }
+                if (buttonHarborHomeLivingroom.transform.GetChild(0).gameObject.activeSelf) { ClickMapButton(harborHomeLivingroomRoomtalk, 24); buttonHarborHomeLivingroom.transform.GetChild(0).gameObject.SetActive(false); }
+                if (buttonHarborHomeBedroom.transform.GetChild(0).gameObject.activeSelf) { ClickMapButton(harborHomeBedroomRoomtalk, 25); buttonHarborHomeBedroom.transform.GetChild(0).gameObject.SetActive(false); harborHomeBedroomButtonCanvas.SetActive(true); }
+                if (buttonHarborHomeBathroom.transform.GetChild(0).gameObject.activeSelf) { ClickMapButton(harborHomeBathroomRoomtalk, 26); buttonHarborHomeBathroom.transform.GetChild(0).gameObject.SetActive(false); }
                 if (buttonHarborHomeCloset.transform.GetChild(0).gameObject.activeSelf) { ClickMapButton(harborHomeClosetRoomtalk, 27); buttonHarborHomeCloset.transform.GetChild(0).gameObject.SetActive(false); }
                 if (buttonHarborHomeKitchen.transform.GetChild(0).gameObject.activeSelf) { ClickMapButton(harborHomeKitchenRoomtalk, 28); buttonHarborHomeKitchen.transform.GetChild(0).gameObject.SetActive(false); }
-                if (buttonHarborHomeLivingroom.transform.GetChild(0).gameObject.activeSelf) { ClickMapButton(harborHomeLivingroomRoomtalk, 29); buttonHarborHomeLivingroom.transform.GetChild(0).gameObject.SetActive(false); }
-                if (buttonHarborHomePool.transform.GetChild(0).gameObject.activeSelf) { ClickMapButton(harborHomePoolRoomtalk, 30); buttonHarborHomePool.transform.GetChild(0).gameObject.SetActive(false); }
+                if (buttonHarborHomePool.transform.GetChild(0).gameObject.activeSelf) { ClickMapButton(harborHomePoolRoomtalk, 29); buttonHarborHomePool.transform.GetChild(0).gameObject.SetActive(false); }
+                if (buttonHarborHouseEntrance.transform.GetChild(0).gameObject.activeSelf) { ClickMapButton(harborHouseEntranceRoomtalk, 30); buttonHarborHouseEntrance.transform.GetChild(0).gameObject.SetActive(false); }
 
                 if (SaveManager.GetBool("HarborHome_Bought") && harborHouseEntranceRadialButtonText.GetComponent<TextMeshProUGUI>().text == "House for Sale") { harborHouseEntranceRadialButtonText.GetComponent<TextMeshProUGUI>().text = "Home"; }
 
@@ -905,7 +906,7 @@ namespace SMSAndroidsCore
                 if (clickEffect != null)
                 {
                     clickEffect.gameObject.SetActive(true);
-                    ClickMapButton(harborHouseEntranceRoomtalk, 24, "HarborHomeMusic");
+                    ClickMapButton(harborHouseEntranceRoomtalk, 30, "HarborHomeMusic");
                 }
             }
 
@@ -915,8 +916,8 @@ namespace SMSAndroidsCore
                 return; // Game is locked, don't proceed
             }
 
-            // Instruction 3: Set Core[Upcoming-Level] = vanillaLevelCount + 24
-            Core.FindAndModifyVariableDouble("Upcoming-Level", vanillaLevelCount + 24);
+            // Instruction 3: Set Core[Upcoming-Level] = vanillaLevelCount + 30
+            Core.FindAndModifyVariableDouble("Upcoming-Level", vanillaLevelCount + 30);
 
             // Instruction 4: District_Buttons CanvasGroup Interactable = True
             if (worldMap != null)
