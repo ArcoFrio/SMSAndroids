@@ -1,5 +1,6 @@
 ﻿using BepInEx;
 using GameCreator;
+using GameCreator.Runtime.Cameras;
 using GameCreator.Runtime.Common;
 using GameCreator.Runtime.Common.Audio;
 using GameCreator.Runtime.Common.UnityUI;
@@ -41,6 +42,7 @@ namespace SMSAndroidsCore
 
         public static AssetBundle characterBundle;
         public static AssetBundle dialogueBundle;
+        public static AssetBundle minigameBundle;
         public static AssetBundle otherBundle;
         public static bool loadedCore = false;
         public static bool loadedBases = false;
@@ -51,6 +53,7 @@ namespace SMSAndroidsCore
         public static GameObject disableAllBusts;
         public static GameObject introMomentNewGame;
         public static GameObject levelBeach;
+        public static GameObject mainCamera;
         public static GameObject menuModHeader;
         public static GameObject savedUI;
         public static GameObject saveLoadSystem;
@@ -60,6 +63,7 @@ namespace SMSAndroidsCore
         public static Scene currentScene;
         public static string assetPath = "BepInEx\\plugins\\SMSAndroidsCore\\Assets\\";
         public static string audioPath = "BepInEx\\plugins\\SMSAndroidsCore\\Audio\\";
+        public static string minigamePath = "BepInEx\\plugins\\SMSAndroidsCore\\Minigame\\";
         public static string bustPath = "BepInEx\\plugins\\SMSAndroidsCore\\Busts\\";
         public static string bustNikkePath = "BepInEx\\plugins\\SMSAndroidsCore\\Busts\\Nikke\\";
         public static string itemsPath = "BepInEx\\plugins\\SMSAndroidsCore\\Items\\";
@@ -79,6 +83,7 @@ namespace SMSAndroidsCore
         public static Transform level;
         public static Transform mainCanvas;
         public static Transform roomTalk;
+        public static Transform xMovies;
 
         public static GlobalNameVariables proxyVariables;
         private static bool proxyVariablesInitialized = false;
@@ -100,6 +105,11 @@ namespace SMSAndroidsCore
             dialogueBundle = AssetBundle.LoadFromFile(exePath + assetPath + "dialoguebundle");
             otherBundle = AssetBundle.LoadFromFile(exePath + assetPath + "otherbundle");
 
+            // Minigame bundle is optional — visual assets fall back to procedural if absent
+            string minigameBundlePath = exePath + assetPath + "minigamebundle";
+            if (System.IO.File.Exists(minigameBundlePath))
+                minigameBundle = AssetBundle.LoadFromFile(minigameBundlePath);
+
             SceneManager.sceneLoaded += OnSceneLoaded;
         }
         public void OnSceneLoaded(Scene scene, UnityEngine.SceneManagement.LoadSceneMode mode)
@@ -110,6 +120,7 @@ namespace SMSAndroidsCore
             Characters.loadedBusts = false;
             Dialogues.loadedDialogues = false;
             MainStory.loadedStory = false;
+            Minigames.loadedMinigame = false;
             Places.loadedPlaces = false;
             Scenes.loadedScenes = false;
             Schedule.loadedSchedule = false;
@@ -146,6 +157,7 @@ namespace SMSAndroidsCore
                     loadedSaveFile = saveLoadManager.SlotLoaded;
 
                     attractorCanvas = GameObject.Find("Attractor_Canvas").transform;
+                    xMovies = FindInActiveObjectByName("X_Movies").transform;
                     bustManager = GameObject.Find("2_Bust_Manager").transform;
                     cGManagerSexy = GameObject.Find("4_CG_Manager-Sexy").transform;
                     level = GameObject.Find("5_Levels").transform;
@@ -156,11 +168,12 @@ namespace SMSAndroidsCore
                     gameplay = GameObject.Find("10_Gameplay").transform;
                     audioPlayer = GameObject.Find("12_AudioPlayer").transform;
 
-                    baseBust = bustManager.Find("Anna_YellowSexy").gameObject;
-                    disableAllBusts = GameObject.Find("Disable_All_chars");
-                    levelBeach = level.Find("14_Beach").gameObject;
                     afterSleepEvents = mainCanvas.Find("AfterSleepEvents").gameObject;
+                    baseBust = bustManager.Find("Anna_YellowSexy").gameObject; 
+                    disableAllBusts = GameObject.Find("Disable_All_chars");
                     introMomentNewGame = mainCanvas.transform.Find("Starmaker").Find("Intro_Moment").gameObject;
+                    levelBeach = level.Find("14_Beach").gameObject;
+                    mainCamera = GameObject.Find("Main Camera");
                     savedUI = effects.Find("Effect_Canvas").Find("Game_Saved").Find("Saved").gameObject;
                     saveLoadSystem = mainCanvas.transform.Find("SaveLoadSystem").gameObject;
                     toggleRepeatableBedEvents = mainCanvas.transform.Find("Starmaker").Find("Starmaker_Profile").Find("Extra_settings").Find("Toggle").gameObject;
@@ -177,10 +190,11 @@ namespace SMSAndroidsCore
                     loadedMenu = false;
                     loadedCore = true;
 
-                    //Debugging.PrintConditionsAndTriggers(roomTalk.GetChild(4).gameObject);
-                    //Debugging.PrintButtonInstructions(mainCanvas.Find("TalkButton").FindInActiveObjectByName("Button").gameObject);
-                    //Debugging.PrintDialogueComponentDeep(coreEvents.Find("Trips").Find("AmeliaMeetingDefault").Find("DefaultDialogue").gameObject, 10);
-                    //Debugging.PrintDialogueComponentInfo(coreEvents.Find("Himari_Dinner").Find("Himari_Dinner_Three").Find("himaribathroom").gameObject);
+                    //Debugging.PrintActionsComponentInfo(gameplay.Find("Sleeping").Find("sleepactions").gameObject);
+                    //Debugging.PrintConditionsAndTriggers(GameObject.Find("4_CG_Manager-Photos").transform.Find("01_MSmile").gameObject);
+                    //Debugging.PrintButtonInstructions(Core.level.Find("5_MyRoom").Find("PlayerRoom_ButtonCanvas").Find("Player_Room_Buttons").Find("SleepButton").gameObject);
+                    //Debugging.PrintDialogueComponentDeep(roomTalk.Find("Livingroom").Find("DefaultDialoge").gameObject, 10);
+                    //Debugging.PrintDialogueComponentInfo(roomTalk.Find("Livingroom").Find("DefaultDialoge").gameObject);
                     //Debugging.PrintToggleOnValueChanged(mainCanvas.Find("Starmaker").Find("Starmaker_Profile").Find("Extra_settings").Find("Toggle").gameObject);
                     //Core.EmitSignalDelayed("FadeIn2025", 5f);
                     //Core.EmitSignalDelayed("FadeOut2025", 6f);
@@ -502,6 +516,42 @@ namespace SMSAndroidsCore
 
             Debug.LogError($"Variable '{variableNameToFind}' not found in any global variable set");
             return 0.0;
+        }
+        public static GameObject GetVariableGameObject(string variableNameToFind)
+        {
+            var manager = GlobalNameVariablesManager.Instance;
+            if (manager == null)
+            {
+                Debug.LogError("GlobalNameVariablesManager not initialized");
+                return null;
+            }
+
+            PropertyInfo valuesProp = typeof(GlobalNameVariablesManager).GetProperty(
+                "Values",
+                BindingFlags.NonPublic | BindingFlags.Instance
+            );
+
+            var values = valuesProp.GetValue(manager) as Dictionary<IdString, NameVariableRuntime>;
+            if (values == null) return null;
+
+            foreach (var pair in values)
+            {
+                PropertyInfo varsProp = typeof(NameVariableRuntime).GetProperty(
+                    "Variables",
+                    BindingFlags.NonPublic | BindingFlags.Instance
+                );
+
+                var variables = varsProp.GetValue(pair.Value) as Dictionary<string, NameVariable>;
+                if (variables == null) continue;
+
+                if (variables.TryGetValue(variableNameToFind, out var nameVar))
+                {
+                    return nameVar.Value as GameObject;
+                }
+            }
+
+            Debug.LogError($"Variable '{variableNameToFind}' not found in any global variable set");
+            return null;
         }
         public static void AddGameObjectToLocalListVariables(GameObject targetGameObject, GameObject valueToAdd)
         {
@@ -919,6 +969,7 @@ namespace SMSAndroidsCore
         private static Dictionary<string, double> lastVanillaNumericValues = new Dictionary<string, double>();
         private static Dictionary<string, int> lastSaveManagerIntValues = new Dictionary<string, int>();
         private static Dictionary<string, bool> lastSaveManagerBoolValues = new Dictionary<string, bool>();
+        private static Dictionary<string, string> lastSaveManagerStringValues = new Dictionary<string, string>();
         private static HashSet<string> excludedProxyGiftNames = new HashSet<string>(booleanVariableMappings.Values);
 
         // SaveManager to Proxy variable mappings
@@ -944,13 +995,18 @@ namespace SMSAndroidsCore
             "Affection_Sakura",
             "Affection_Tove",
             "Affection_Viper",
-            "Affection_Yan"
+            "Affection_Yan",
+            // Massage minigame per-character progression. Add entries for each character
+            // whose unified-prefab Characters/<Char> root has variants.
+            "Minigame_Massage_Anis_Level",
+            "Minigame_Massage_Anis_Highscore"
         };
 
         private static readonly List<string> saveManagerBoolMappings = new List<string>
         {
             "Affection_Anis_Seen2",
             "Affection_Anis_Seen3",
+            "DailyProc_Anis_Massage",
             "Gift_Action-Figure",
             "Gift_Bikini",
             "Gift_Bonsai-Tree",
@@ -962,6 +1018,11 @@ namespace SMSAndroidsCore
             "Gift_Tropical-Flower-Bouquet",
             "HarborHome_Bought",
             "HarborHome_FirstVisited"
+        };
+
+        private static readonly List<string> saveManagerStringMappings = new List<string>
+        {
+            "HarborHome_Outfit_Anis"
         };
 
         private static void SetupVariableSync()
@@ -1064,6 +1125,27 @@ namespace SMSAndroidsCore
                     proxyVariables.Set(variableName, currentValue);
                     lastSaveManagerBoolValues[variableName] = currentValue;
                     Debug.Log($"[ProxyVariables] Synced: {variableName} = {currentValue} (SaveManager bool changed)");
+                }
+            }
+
+            // Sync SaveManager string variables to Proxy
+            foreach (var variableName in saveManagerStringMappings)
+            {
+                string currentValue = SaveManager.GetString(variableName, "");
+
+                // Check if proxy variable exists
+                if (!proxyVariables.Exists(variableName))
+                {
+                    Debug.LogWarning($"[ProxyVariables] SaveManager variable '{variableName}' not found in Proxy Variables asset");
+                    continue;
+                }
+
+                // Only update if value changed
+                if (!lastSaveManagerStringValues.ContainsKey(variableName) || lastSaveManagerStringValues[variableName] != currentValue)
+                {
+                    proxyVariables.Set(variableName, currentValue);
+                    lastSaveManagerStringValues[variableName] = currentValue;
+                    Debug.Log($"[ProxyVariables] Synced: {variableName} = {currentValue} (SaveManager string changed)");
                 }
             }
         }

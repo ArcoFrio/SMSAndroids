@@ -134,6 +134,7 @@ namespace SMSAndroidsCore
         public static GameObject harborHomeKitchenLevelB1;
         public static GameObject harborHomeKitchenRoomtalk;
         public static GameObject harborHomeLivingroomLevel;
+        public static GameObject harborHomeLivingroomLevelMovies;
         public static GameObject harborHomeLivingroomRoomtalk;
         public static GameObject harborHomePoolLevel;
         public static GameObject harborHomePoolRoomtalk;
@@ -228,7 +229,7 @@ namespace SMSAndroidsCore
         public int vanillaLevelCount;
 
         public static bool loadedPlaces = false;
-        private static bool harborHomeBedroomSwapApplied = false;
+        public static bool harborHomeBedroomSwapApplied = false;
         public static bool insideHarborHome = false;
         public static GameObject currentRoomTalk;
         public static GameObject solid;
@@ -517,6 +518,7 @@ namespace SMSAndroidsCore
                     harborHomeKitchenNPCSink = GameObject.Instantiate(new GameObject(), harborHomeKitchenLevel.transform.Find("NPCs")).transform; harborHomeKitchenNPCSink.name = "Sink";
                     harborHomeLivingroomNPCCouchleft = GameObject.Instantiate(new GameObject(), harborHomeLivingroomLevel.transform.Find("NPCs")).transform; harborHomeLivingroomNPCCouchleft.name = "Couchleft";
                     harborHomeLivingroomNPCCouchright = GameObject.Instantiate(new GameObject(), harborHomeLivingroomLevel.transform.Find("NPCs")).transform; harborHomeLivingroomNPCCouchright.name = "Couchright";
+                    harborHomeLivingroomLevelMovies = GameObject.Instantiate(Core.level.Find("3_LivingRoom").Find("Movies").gameObject, harborHomeLivingroomLevel.transform);
                     harborHomePoolNPCTanningleft = GameObject.Instantiate(new GameObject(), harborHomePoolLevel.transform.Find("NPCs")).transform; harborHomePoolNPCTanningleft.name = "Tanningleft";
                     harborHomePoolNPCTanningright = GameObject.Instantiate(new GameObject(), harborHomePoolLevel.transform.Find("NPCs")).transform; harborHomePoolNPCTanningright.name = "Tanningright";
 

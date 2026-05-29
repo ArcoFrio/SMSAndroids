@@ -1,0 +1,186 @@
+- MinigameMassage [self:False, hierarchy:False]
+  * Transform
+  - CanvasMassage [self:True, hierarchy:False]
+    * RectTransform
+    * Canvas
+    * CanvasScaler
+    * GraphicRaycaster
+    - Countdown [self:True, hierarchy:False]
+      * RectTransform
+      * CanvasRenderer
+      * TextMeshProUGUI
+    - HUD [self:True, hierarchy:False]
+      * RectTransform
+      - Combo [self:True, hierarchy:False]
+        * RectTransform
+        * CanvasRenderer
+        * TextMeshProUGUI
+      - PatternName [self:True, hierarchy:False]
+        * RectTransform
+        * CanvasRenderer
+        * TextMeshProUGUI
+      - PatternProgress [self:True, hierarchy:False]
+        * RectTransform
+        * CanvasRenderer
+        * TextMeshProUGUI
+      - Score [self:True, hierarchy:False]
+        * RectTransform
+        * CanvasRenderer
+        * TextMeshProUGUI
+      - SpeedHint [self:True, hierarchy:False]
+        * RectTransform
+        * CanvasRenderer
+        * TextMeshProUGUI
+      - StrokeProgress [self:True, hierarchy:False]
+        * RectTransform
+        * CanvasRenderer
+        * TextMeshProUGUI
+    - PlayArea [self:True, hierarchy:False]
+      * RectTransform
+      - Cursor [self:True, hierarchy:False]
+        * RectTransform
+        * CanvasRenderer
+        * Image
+      - Zone_0 [self:True, hierarchy:False]
+        * RectTransform
+        * CanvasRenderer
+        * Image
+      - Zone_1 [self:True, hierarchy:False]
+        * RectTransform
+        * CanvasRenderer
+        * Image
+      - Zone_2 [self:True, hierarchy:False]
+        * RectTransform
+        * CanvasRenderer
+        * Image
+      - Zone_3 [self:True, hierarchy:False]
+        * RectTransform
+        * CanvasRenderer
+        * Image
+      - Zone_4 [self:True, hierarchy:False]
+        * RectTransform
+        * CanvasRenderer
+        * Image
+      - Zone_5 [self:True, hierarchy:False]
+        * RectTransform
+        * CanvasRenderer
+        * Image
+      - Zone_6 [self:True, hierarchy:False]
+        * RectTransform
+        * CanvasRenderer
+        * Image
+    - SpeedBarBg [self:True, hierarchy:False]
+      * RectTransform
+      * CanvasRenderer
+      * Image
+      - SpeedBarFill [self:True, hierarchy:False]
+        * RectTransform
+        * CanvasRenderer
+        * Image
+    - StrokeRating [self:True, hierarchy:False]
+      * RectTransform
+      * CanvasRenderer
+      * TextMeshProUGUI
+    - Results [self:True, hierarchy:False]
+      * RectTransform
+      * CanvasRenderer
+      * Image
+      - Breakdown [self:True, hierarchy:False]
+        * RectTransform
+        * CanvasRenderer
+        * TextMeshProUGUI
+      - FinalScore [self:True, hierarchy:False]
+        * RectTransform
+        * CanvasRenderer
+        * TextMeshProUGUI
+      - Rank [self:True, hierarchy:False]
+        * RectTransform
+        * CanvasRenderer
+        * TextMeshProUGUI
+      - CloseButton [self:True, hierarchy:False]
+        * RectTransform
+        * CanvasRenderer
+        * Image
+        - CloseBtnTxt [self:True, hierarchy:False]
+          * RectTransform
+          * CanvasRenderer
+          * TextMeshProUGUI
+    - StartMenu [self:True, hierarchy:False]
+      * RectTransform
+      * CanvasRenderer
+      * Image
+      - StartButton [self:True, hierarchy:False]
+        * RectTransform
+        * CanvasRenderer
+        * Image
+        - StartBtnTxt [self:True, hierarchy:False]
+          * RectTransform
+          * CanvasRenderer
+          * TextMeshProUGUI
+      - StartInstructions [self:True, hierarchy:False]
+        * RectTransform
+        * CanvasRenderer
+        * TextMeshProUGUI
+      - StartTitle [self:True, hierarchy:False]
+        * RectTransform
+        * CanvasRenderer
+        * TextMeshProUGUI
+  - Characters [self:True, hierarchy:False]
+    * Transform
+    - Anis [self:True, hierarchy:False]
+      * Transform
+      - MassageAnis [self:False, hierarchy:False]
+        * Transform
+        * SpriteRenderer
+        * SqueezeSpriteController
+      - MassageAnisNaked [self:False, hierarchy:False]
+        * Transform
+        * SpriteRenderer
+        * SqueezeSpriteController
+      - MassageAnisNakedFront [self:False, hierarchy:False]
+        * Transform
+        * SpriteRenderer
+        * SqueezeSpriteController
+        - Blink [self:True, hierarchy:False]
+          * Transform
+          * SpriteRenderer
+          * BlinkingSprite
+        - BreastL [self:True, hierarchy:False]
+          * Transform
+          * SpriteRenderer
+          * PolygonCollider2D
+          * BreastPhysics
+        - BreastR [self:True, hierarchy:False]
+          * Transform
+          * SpriteRenderer
+          * PolygonCollider2D
+          * BreastPhysics
+  - Hands [self:True, hierarchy:False]
+    * Transform
+    - HandLeft [self:True, hierarchy:False]
+      * Transform
+      * SqueezeContourFollower
+      * LotionTrail
+      * PolygonCollider2D
+      * Rigidbody2D
+      - HandSprite [self:True, hierarchy:False]
+        * Transform
+        * SpriteRenderer
+        - HandSprite (1) [self:False, hierarchy:False]
+          * Transform
+          * SpriteRenderer
+    - HandRight [self:True, hierarchy:False]
+      * Transform
+      * SqueezeContourFollower
+      * LotionTrail
+      * PolygonCollider2D
+      * Rigidbody2D
+      - HandSprite [self:True, hierarchy:False]
+        * Transform
+        * SpriteRenderer
+        - HandSprite (1) [self:False, hierarchy:False]
+          * Transform
+          * SpriteRenderer
+  - MassageBackground [self:True, hierarchy:False]
+    * Transform
+    * SpriteRenderer

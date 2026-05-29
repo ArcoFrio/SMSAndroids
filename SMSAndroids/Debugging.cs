@@ -103,7 +103,9 @@ namespace SMSAndroidsCore
                 // Check for P key press to print all Proxy Variables
                 if (Input.GetKeyDown(KeyCode.P))
                 {
-                    Debug.Log("Disable-Specific-RNGEvents: " + Core.GetVariableBool("Disable-Specific-RNGEvents"));
+                    Minigames.minigameMassage.GetComponent<MassageMinigame>().LoadPatterns();
+                    Minigames.minigameMassage.GetComponent<MassageMinigame>().LoadVisualAssets();
+                    Minigames.minigameMassage.GetComponent<MassageMinigame>().StartMinigame();
                 }
 
                 //if (Input.GetKeyDown(KeyCode.V))
@@ -1150,6 +1152,11 @@ namespace SMSAndroidsCore
             }
         }
 
+        /// <summary>
+        /// Prints a structured, human-readable dump of a GC2 Dialogue component.
+        /// For each node in tree order: text, actor, expression, node type,
+        /// conditions (with variable names/values), OnStart instructions, OnFinish instructions.
+        /// </summary>
         public static void PrintDialogueComponentDeep(GameObject targetGameObject, int maxDepth = 4)
         {
             if (targetGameObject == null)
@@ -1165,172 +1172,435 @@ namespace SMSAndroidsCore
                 return;
             }
 
-            Debug.Log($"=== DEEP Dialogue Component Info for {targetGameObject.name} ===");
-            PrintObjectRecursive(dialogue, "Dialogue", 0, maxDepth, new HashSet<object>());
-            
-            // Print conditions for each node
-            PrintDialogueNodeConditions(dialogue);
-            
-            Debug.Log($"=== END DEEP Dialogue Component Info for {targetGameObject.name} ===");
+            Debug.Log($"╔══════════════════════════════════════════════════════");
+            Debug.Log($"║ DIALOGUE: {targetGameObject.name}");
+            Debug.Log($"╚═════════���═════════════════════════���══════════════════");
+
+            var storyProp = dialogue.GetType().GetProperty("Story", BindingFlags.Public | BindingFlags.Instance);
+            var story = storyProp?.GetValue(dialogue);
+            if (story == null) { Debug.Log("Story is null"); return; }
+
+            var contentProp = story.GetType().GetProperty("Content", BindingFlags.Public | BindingFlags.Instance);
+            var content = contentProp?.GetValue(story);
+            if (content == null) { Debug.Log("Content is null"); return; }
+
+            var contentType = content.GetType();
+
+            // Print roles
+            var rolesField = contentType.GetField("m_Roles", BindingFlags.NonPublic | BindingFlags.Instance);
+            var roles = rolesField?.GetValue(content) as Array;
+            if (roles != null && roles.Length > 0)
+            {
+                Debug.Log($"\n── Roles ({roles.Length}) ──");
+                int idx = 0;
+                foreach (var role in roles)
+                {
+                    string actorName = DialogueDeep_GetActorName(role);
+                    Debug.Log($"  [{idx}] {actorName}");
+                    idx++;
+                }
+            }
+
+            // Print dialogue skin name
+            var skinField = contentType.GetField("m_DialogueSkin", BindingFlags.NonPublic | BindingFlags.Instance);
+            if (skinField != null)
+            {
+                var skin = skinField.GetValue(content);
+                if (skin != null)
+                {
+                    var skinNameProp = skin.GetType().GetProperty("name", BindingFlags.Public | BindingFlags.Instance);
+                    string skinName = skinNameProp?.GetValue(skin)?.ToString() ?? "(unknown)";
+                    Debug.Log($"\n── Dialogue Skin: {skinName} ──");
+                }
+            }
+
+            // Walk the tree
+            var rootIdsProp = contentType.GetProperty("RootIds", BindingFlags.Public | BindingFlags.Instance);
+            var rootIds = rootIdsProp?.GetValue(content) as int[];
+            var getNodeMethod = contentType.GetMethod("Get", BindingFlags.Public | BindingFlags.Instance);
+            var childrenMethod = contentType.GetMethod("Children", BindingFlags.Public | BindingFlags.Instance);
+
+            if (rootIds == null || getNodeMethod == null)
+            {
+                Debug.Log("Could not access RootIds or Get method");
+                return;
+            }
+
+            Debug.Log($"\n── Nodes (roots: {rootIds.Length}) ──");
+            var visited = new HashSet<int>();
+            foreach (var rootId in rootIds)
+            {
+                DialogueDeep_PrintNodeRecursive(content, contentType, getNodeMethod, childrenMethod, rootId, 0, visited);
+            }
+
+            Debug.Log($"\n══════════════════════════════════════════════════════");
+            Debug.Log($" END DIALOGUE: {targetGameObject.name}");
+            Debug.Log($"═════���═══════════��════════════════════════════════════");
         }
 
         /// <summary>
-        /// Prints conditions for all nodes in a Dialogue component
+        /// Recursively prints a dialogue node and all children in tree order.
         /// </summary>
-        private static void PrintDialogueNodeConditions(object dialogue)
+        private static void DialogueDeep_PrintNodeRecursive(object content, Type contentType, MethodInfo getNodeMethod, MethodInfo childrenMethod, int nodeId, int depth, HashSet<int> visited)
         {
-            if (dialogue == null) return;
+            if (visited.Contains(nodeId)) return;
+            visited.Add(nodeId);
 
-            Debug.Log("\n=== DIALOGUE NODE CONDITIONS ===");
+            var node = getNodeMethod.Invoke(content, new object[] { nodeId });
+            if (node == null) return;
 
-            // Get Story from Dialogue
-            var storyProp = dialogue.GetType().GetProperty("Story", BindingFlags.Public | BindingFlags.Instance);
-            var story = storyProp?.GetValue(dialogue);
-            if (story == null)
+            var nodeType = node.GetType();
+            string indent = new string(' ', depth * 2);
+            string bar = depth > 0 ? "├─ " : "";
+
+            // --- Node header: type + text ---
+            string nodeTypeName = DialogueDeep_GetNodeTypeName(node);
+            string nodeText = DialogueDeep_GetNodeText(node);
+
+            Debug.Log($"\n{indent}{bar}[{nodeTypeName}] Node {nodeId}");
+            if (!string.IsNullOrEmpty(nodeText))
+                Debug.Log($"{indent}  Text: \"{nodeText}\"");
+
+            // --- Actor / Expression ---
+            var actingField = nodeType.GetField("m_Acting", BindingFlags.NonPublic | BindingFlags.Instance);
+            var acting = actingField?.GetValue(node);
+            if (acting != null)
             {
-                Debug.Log("Story is null");
-                return;
+                var actorField = acting.GetType().GetField("m_Actor", BindingFlags.NonPublic | BindingFlags.Instance);
+                var exprField = acting.GetType().GetField("m_Expression", BindingFlags.NonPublic | BindingFlags.Instance);
+                var actor = actorField?.GetValue(acting);
+                int exprIdx = exprField != null ? (int)exprField.GetValue(acting) : -1;
+
+                if (actor != null)
+                {
+                    string actorName = actor.GetType().GetProperty("name", BindingFlags.Public | BindingFlags.Instance)?.GetValue(actor)?.ToString() ?? "(unknown)";
+                    string exprName = DialogueDeep_GetExpressionName(actor, exprIdx);
+                    Debug.Log($"{indent}  Actor: {actorName}, Expression: {exprName} (idx {exprIdx})");
+                }
             }
 
-            // Get Content from Story
-            var contentProp = story.GetType().GetProperty("Content", BindingFlags.Public | BindingFlags.Instance);
-            var content = contentProp?.GetValue(story);
-            if (content == null)
+            // --- Duration ---
+            var durationField = nodeType.GetField("m_Duration", BindingFlags.NonPublic | BindingFlags.Instance);
+            if (durationField != null)
             {
-                Debug.Log("Content is null");
-                return;
+                var duration = durationField.GetValue(node);
+                Debug.Log($"{indent}  Duration: {duration}");
             }
 
-            // Get m_Data dictionary from Content (TSerializableTree<Node>)
-            var dataField = content.GetType().GetField("m_Data", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.FlattenHierarchy);
-            if (dataField == null)
+            // --- Jump ---
+            var jumpField = nodeType.GetField("m_Jump", BindingFlags.NonPublic | BindingFlags.Instance);
+            if (jumpField != null)
             {
-                Debug.Log("m_Data field not found on Content");
-                return;
-            }
-
-            var data = dataField.GetValue(content) as System.Collections.IDictionary;
-            if (data == null)
-            {
-                Debug.Log("m_Data is null or not a dictionary");
-                return;
-            }
-
-            Debug.Log($"Total nodes in dialogue: {data.Count}");
-
-            foreach (System.Collections.DictionaryEntry entry in data)
-            {
-                int nodeId = (int)entry.Key;
-                var treeDataItem = entry.Value;
-                
-                // Get the Node from TTreeDataItem<Node>.Value
-                var valueProp = treeDataItem?.GetType().GetProperty("Value", BindingFlags.Public | BindingFlags.Instance);
-                var node = valueProp?.GetValue(treeDataItem);
-                
-                if (node == null)
+                var jump = jumpField.GetValue(node);
+                if (jump != null)
                 {
-                    Debug.Log($"\n--- Node {nodeId}: null ---");
-                    continue;
-                }
-
-                // Get node text for context
-                var textProp = node.GetType().GetProperty("Text", BindingFlags.Public | BindingFlags.Instance);
-                string nodeText = textProp?.GetValue(node)?.ToString() ?? "(no text)";
-                
-                // Truncate text for display
-                if (nodeText.Length > 50)
-                    nodeText = nodeText.Substring(0, 47) + "...";
-
-                Debug.Log($"\n--- Node {nodeId}: \"{nodeText}\" ---");
-
-                // Get m_Conditions (RunConditionsList)
-                var conditionsField = node.GetType().GetField("m_Conditions", BindingFlags.NonPublic | BindingFlags.Instance);
-                if (conditionsField == null)
-                {
-                    Debug.Log("  m_Conditions field not found");
-                    continue;
-                }
-
-                var runConditionsList = conditionsField.GetValue(node);
-                if (runConditionsList == null)
-                {
-                    Debug.Log("  m_Conditions: null");
-                    continue;
-                }
-
-                // Get m_Conditions (ConditionList) from RunConditionsList
-                var conditionListField = runConditionsList.GetType().GetField("m_Conditions", BindingFlags.NonPublic | BindingFlags.Instance);
-                if (conditionListField == null)
-                {
-                    Debug.Log("  ConditionList field not found in RunConditionsList");
-                    continue;
-                }
-
-                var conditionList = conditionListField.GetValue(runConditionsList);
-                if (conditionList == null)
-                {
-                    Debug.Log("  ConditionList: null");
-                    continue;
-                }
-
-                // Get Length property
-                var lengthProp = conditionList.GetType().GetProperty("Length", BindingFlags.Public | BindingFlags.Instance);
-                int conditionCount = lengthProp != null ? (int)lengthProp.GetValue(conditionList) : 0;
-
-                if (conditionCount == 0)
-                {
-                    Debug.Log("  Conditions: (none)");
-                    continue;
-                }
-
-                Debug.Log($"  Conditions ({conditionCount}):");
-
-                // Get m_Conditions array from ConditionList
-                var conditionsArrayField = conditionList.GetType().GetField("m_Conditions", BindingFlags.NonPublic | BindingFlags.Instance);
-                if (conditionsArrayField == null)
-                {
-                    Debug.Log("    Could not access conditions array");
-                    continue;
-                }
-
-                var conditionsArray = conditionsArrayField.GetValue(conditionList) as Array;
-                if (conditionsArray == null)
-                {
-                    Debug.Log("    Conditions array is null");
-                    continue;
-                }
-
-                int condIdx = 0;
-                foreach (var condition in conditionsArray)
-                {
-                    if (condition == null)
+                    var jumpTypeField = jump.GetType().GetField("m_Jump", BindingFlags.NonPublic | BindingFlags.Instance);
+                    var jumpType = jumpTypeField?.GetValue(jump);
+                    if (jumpType != null && jumpType.ToString() != "Continue")
                     {
-                        Debug.Log($"    [{condIdx}]: null");
-                        condIdx++;
-                        continue;
+                        var jumpToField = jump.GetType().GetField("m_JumpTo", BindingFlags.NonPublic | BindingFlags.Instance);
+                        var jumpTo = jumpToField?.GetValue(jump);
+                        string jumpToStr = jumpTo != null ? DialogueDeep_ResolveGC2Value(jumpTo) : "";
+                        Debug.Log($"{indent}  Jump: {jumpType}{(string.IsNullOrEmpty(jumpToStr) ? "" : " -> " + jumpToStr)}");
                     }
-
-                    var condType = condition.GetType();
-                    
-                    // Get Title property
-                    var titleProp = condType.GetProperty("Title", BindingFlags.Public | BindingFlags.Instance);
-                    string title = titleProp?.GetValue(condition)?.ToString() ?? condType.Name;
-
-                    // Get m_Sign (negation flag)
-                    var signField = condType.GetField("m_Sign", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.FlattenHierarchy);
-                    bool sign = signField != null ? (bool)signField.GetValue(condition) : true;
-                    string signText = sign ? "" : " (NEGATED)";
-
-                    Debug.Log($"    [{condIdx}]: {title}{signText} (Type: {condType.Name})");
-
-                    // Print condition-specific fields (m_ fields)
-                    PrintConditionDetails(condition, "      ");
-
-                    condIdx++;
                 }
             }
 
-            Debug.Log("\n=== END DIALOGUE NODE CONDITIONS ===");
+            // --- Conditions ---
+            DialogueDeep_PrintConditions(node, indent);
+
+            // --- OnStart instructions ---
+            DialogueDeep_PrintInstructionsList(node, "m_OnStart", "OnStart", indent);
+
+            // --- OnFinish instructions ---
+            DialogueDeep_PrintInstructionsList(node, "m_OnFinish", "OnFinish", indent);
+
+            // --- Recurse into children ---
+            if (childrenMethod != null)
+            {
+                try
+                {
+                    var childIds = childrenMethod.Invoke(content, new object[] { nodeId }) as List<int>;
+                    if (childIds != null && childIds.Count > 0)
+                    {
+                        foreach (var childId in childIds)
+                        {
+                            DialogueDeep_PrintNodeRecursive(content, contentType, getNodeMethod, childrenMethod, childId, depth + 1, visited);
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Debug.LogWarning($"{indent}  (error getting children: {ex.Message})");
+                }
+            }
+        }
+
+        /// <summary>
+        /// Gets the concrete node type name (Text, Choice, Random, etc.)
+        /// </summary>
+        private static string DialogueDeep_GetNodeTypeName(object node)
+        {
+            var nodeTypeField = node.GetType().GetField("m_NodeType", BindingFlags.NonPublic | BindingFlags.Instance);
+            var nodeTypeObj = nodeTypeField?.GetValue(node);
+            if (nodeTypeObj == null) return "Unknown";
+
+            string fullName = nodeTypeObj.GetType().Name;
+            // Strip "NodeType" prefix for readability: "NodeTypeChoice" -> "Choice"
+            if (fullName.StartsWith("NodeType"))
+                return fullName.Substring(8);
+            return fullName;
+        }
+
+        /// <summary>
+        /// Extracts the dialogue text from a Node's m_Text field.
+        /// </summary>
+        private static string DialogueDeep_GetNodeText(object node)
+        {
+            var textField = node.GetType().GetField("m_Text", BindingFlags.NonPublic | BindingFlags.Instance);
+            var nodeText = textField?.GetValue(node);
+            if (nodeText == null) return null;
+
+            // NodeText has m_Text (PropertyGetString) -> m_Property -> String
+            var innerTextField = nodeText.GetType().GetField("m_Text", BindingFlags.NonPublic | BindingFlags.Instance);
+            var propertyGetString = innerTextField?.GetValue(nodeText);
+            if (propertyGetString == null) return null;
+
+            // Try the EditorValue property first (doesn't need Args), then String
+            var editorValueProp = propertyGetString.GetType().GetProperty("EditorValue", BindingFlags.Public | BindingFlags.Instance);
+            if (editorValueProp != null)
+            {
+                try
+                {
+                    var val = editorValueProp.GetValue(propertyGetString);
+                    if (val != null) return val.ToString();
+                }
+                catch { }
+            }
+
+            // Fall back to m_Property -> String
+            var mPropertyField = propertyGetString.GetType().GetField("m_Property", BindingFlags.NonPublic | BindingFlags.Instance);
+            var innerProp = mPropertyField?.GetValue(propertyGetString);
+            if (innerProp != null)
+            {
+                var stringProp = innerProp.GetType().GetProperty("String", BindingFlags.Public | BindingFlags.Instance);
+                try { return stringProp?.GetValue(innerProp)?.ToString(); } catch { }
+
+                var edVal = innerProp.GetType().GetProperty("EditorValue", BindingFlags.Public | BindingFlags.Instance);
+                try { return edVal?.GetValue(innerProp)?.ToString(); } catch { }
+            }
+
+            return nodeText.ToString();
+        }
+
+        /// <summary>
+        /// Resolves an actor expression name by index.
+        /// </summary>
+        private static string DialogueDeep_GetExpressionName(object actor, int exprIdx)
+        {
+            if (actor == null || exprIdx < 0) return "(none)";
+            var expressionsField = actor.GetType().GetField("m_Expressions", BindingFlags.NonPublic | BindingFlags.Instance);
+            var expressions = expressionsField?.GetValue(actor);
+            if (expressions == null) return $"(idx {exprIdx})";
+
+            var fromIndexMethod = expressions.GetType().GetMethod("FromIndex", BindingFlags.Public | BindingFlags.Instance);
+            if (fromIndexMethod != null)
+            {
+                try
+                {
+                    var exprObj = fromIndexMethod.Invoke(expressions, new object[] { exprIdx });
+                    if (exprObj != null)
+                    {
+                        var idField = exprObj.GetType().GetField("m_Id", BindingFlags.NonPublic | BindingFlags.Instance);
+                        var idObj = idField?.GetValue(exprObj);
+                        if (idObj != null)
+                        {
+                            var strProp = idObj.GetType().GetProperty("String", BindingFlags.Public | BindingFlags.Instance);
+                            return strProp?.GetValue(idObj)?.ToString() ?? $"(idx {exprIdx})";
+                        }
+                    }
+                }
+                catch { }
+            }
+
+            return $"(idx {exprIdx})";
+        }
+
+        /// <summary>
+        /// Gets a role's actor display name.
+        /// </summary>
+        private static string DialogueDeep_GetActorName(object role)
+        {
+            if (role == null) return "(null)";
+            var actorField = role.GetType().GetField("m_Actor", BindingFlags.NonPublic | BindingFlags.Instance);
+            var actor = actorField?.GetValue(role);
+            if (actor == null) return "(no actor)";
+            var nameProp = actor.GetType().GetProperty("name", BindingFlags.Public | BindingFlags.Instance);
+            return nameProp?.GetValue(actor)?.ToString() ?? "(unknown)";
+        }
+
+        /// <summary>
+        /// Prints the conditions on a dialogue node.
+        /// Path: Node.m_Conditions (RunConditionsList) -> m_Conditions (ConditionList) -> m_Conditions (Condition[])
+        /// </summary>
+        private static void DialogueDeep_PrintConditions(object node, string indent)
+        {
+            var condField = node.GetType().GetField("m_Conditions", BindingFlags.NonPublic | BindingFlags.Instance);
+            var runConditionsList = condField?.GetValue(node);
+            if (runConditionsList == null) return;
+
+            var condListField = runConditionsList.GetType().GetField("m_Conditions", BindingFlags.NonPublic | BindingFlags.Instance);
+            var conditionList = condListField?.GetValue(runConditionsList);
+            if (conditionList == null) return;
+
+            var condArrayField = conditionList.GetType().GetField("m_Conditions", BindingFlags.NonPublic | BindingFlags.Instance);
+            var conditionsArray = condArrayField?.GetValue(conditionList) as Array;
+            if (conditionsArray == null || conditionsArray.Length == 0) return;
+
+            Debug.Log($"{indent}  Conditions ({conditionsArray.Length}):");
+            int idx = 0;
+            foreach (var condition in conditionsArray)
+            {
+                if (condition == null) { Debug.Log($"{indent}    [{idx}] (null)"); idx++; continue; }
+
+                var condType = condition.GetType();
+                var titleProp = condType.GetProperty("Title", BindingFlags.Public | BindingFlags.Instance);
+                string title = titleProp?.GetValue(condition)?.ToString() ?? condType.Name;
+
+                var signField = condType.GetField("m_Sign", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.FlattenHierarchy);
+                bool sign = signField != null ? (bool)signField.GetValue(condition) : true;
+                string negated = sign ? "" : " [NEGATED]";
+
+                Debug.Log($"{indent}    [{idx}] {condType.Name}: \"{title}\"{negated}");
+
+                // Print all m_ fields on the condition, walking the full type hierarchy
+                DialogueDeep_PrintFieldsRecursive(condition, indent + "      ");
+
+                idx++;
+            }
+        }
+
+        /// <summary>
+        /// Prints an instructions list (OnStart or OnFinish) from a dialogue node.
+        /// Path: Node.m_OnStart/m_OnFinish (RunInstructionsList) -> m_Instructions (InstructionList) -> m_Instructions (Instruction[])
+        /// </summary>
+        private static void DialogueDeep_PrintInstructionsList(object node, string fieldName, string label, string indent)
+        {
+            var runListField = node.GetType().GetField(fieldName, BindingFlags.NonPublic | BindingFlags.Instance);
+            var runInstructionsList = runListField?.GetValue(node);
+            if (runInstructionsList == null) return;
+
+            var instrListField = runInstructionsList.GetType().GetField("m_Instructions", BindingFlags.NonPublic | BindingFlags.Instance);
+            var instructionList = instrListField?.GetValue(runInstructionsList);
+            if (instructionList == null) return;
+
+            var instrArrayField = instructionList.GetType().GetField("m_Instructions", BindingFlags.NonPublic | BindingFlags.Instance);
+            var instrArray = instrArrayField?.GetValue(instructionList) as Array;
+            if (instrArray == null || instrArray.Length == 0) return;
+
+            Debug.Log($"{indent}  {label} ({instrArray.Length}):");
+            int idx = 0;
+            foreach (var instruction in instrArray)
+            {
+                if (instruction == null) { Debug.Log($"{indent}    [{idx}] (null)"); idx++; continue; }
+
+                var instrType = instruction.GetType();
+                var titleProp = instrType.GetProperty("Title", BindingFlags.Public | BindingFlags.Instance);
+                string title = titleProp?.GetValue(instruction)?.ToString() ?? "(no title)";
+
+                var isEnabledProp = instrType.GetProperty("IsEnabled", BindingFlags.Public | BindingFlags.Instance);
+                bool enabled = isEnabledProp != null ? (bool)isEnabledProp.GetValue(instruction) : true;
+                string disabledStr = enabled ? "" : " [DISABLED]";
+
+                Debug.Log($"{indent}    [{idx}] {instrType.Name}: \"{title}\"{disabledStr}");
+
+                // Print all m_ fields on the instruction, walking the full type hierarchy
+                DialogueDeep_PrintFieldsRecursive(instruction, indent + "      ");
+
+                idx++;
+            }
+        }
+
+        /// <summary>
+        /// Prints all m_ fields on an object, walking up the type hierarchy until TPolymorphicItem.
+        /// Uses GetFieldValueDisplayString to resolve GC2 property wrappers, Unity objects, etc.
+        /// For fields that look like variable detectors (have m_Variable + m_Name), prints the
+        /// resolved variable asset name and variable key name.
+        /// </summary>
+        private static void DialogueDeep_PrintFieldsRecursive(object obj, string indent)
+        {
+            if (obj == null) return;
+
+            Type currentType = obj.GetType();
+            while (currentType != null && currentType != typeof(object) && !currentType.Name.StartsWith("TPolymorphicItem"))
+            {
+                var fields = currentType.GetFields(BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly);
+                foreach (var field in fields)
+                {
+                    // Skip base class plumbing fields
+                    if (field.Name == "m_Sign" || field.Name == "m_IsEnabled" || field.Name == "m_Breakpoint")
+                        continue;
+                    if (!field.Name.StartsWith("m_")) continue;
+
+                    try
+                    {
+                        var fieldValue = field.GetValue(obj);
+                        string valueStr = GetFieldValueDisplayString(fieldValue);
+
+                        // Special handling: if this is a variable reference (m_Variable), also print the asset name
+                        if (field.Name == "m_Variable" && fieldValue != null && fieldValue is UnityEngine.Object unityObj)
+                        {
+                            Debug.Log($"{indent}{field.Name}: {unityObj.name} ({field.FieldType.Name})");
+                        }
+                        // Special handling: if this is a variable name (m_Name with a .String property)
+                        else if (field.Name == "m_Name" && fieldValue != null)
+                        {
+                            var stringProp = fieldValue.GetType().GetProperty("String", BindingFlags.Public | BindingFlags.Instance);
+                            if (stringProp != null)
+                            {
+                                try
+                                {
+                                    var nameStr = stringProp.GetValue(fieldValue);
+                                    Debug.Log($"{indent}{field.Name}: \"{nameStr}\" ({field.FieldType.Name})");
+                                    continue;
+                                }
+                                catch { }
+                            }
+                            Debug.Log($"{indent}{field.Name}: {valueStr}");
+                        }
+                        else
+                        {
+                            Debug.Log($"{indent}{field.Name}: {valueStr}");
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        Debug.Log($"{indent}{field.Name}: <error: {e.Message}>");
+                    }
+                }
+                currentType = currentType.BaseType;
+            }
+        }
+
+        /// <summary>
+        /// Attempts to resolve a GC2 property wrapper or value to a readable string.
+        /// Handles primitives, enums, Unity Objects, PropertyGetString, IdString, etc.
+        /// </summary>
+        private static string DialogueDeep_ResolveGC2Value(object value)
+        {
+            if (value == null) return "null";
+            var type = value.GetType();
+            if (type.IsPrimitive || value is string) return value.ToString();
+            if (type.IsEnum) return value.ToString();
+            if (value is UnityEngine.Object uo) return uo != null ? uo.name : "null (destroyed)";
+
+            var stringProp = type.GetProperty("String", BindingFlags.Public | BindingFlags.Instance);
+            if (stringProp != null) { try { return stringProp.GetValue(value)?.ToString(); } catch { } }
+
+            var valueProp = type.GetProperty("Value", BindingFlags.Public | BindingFlags.Instance);
+            if (valueProp != null) { try { return valueProp.GetValue(value)?.ToString(); } catch { } }
+
+            return $"({type.Name})";
         }
 
         /// <summary>
@@ -1766,6 +2036,237 @@ namespace SMSAndroidsCore
                     Debug.Log($"  Expression {i}: (null)");
                 }
             }
+        }
+
+        public static void PrintActionsComponentInfo(GameObject targetGameObject, bool includeChildren = false)
+        {
+            if (targetGameObject == null)
+            {
+                Debug.LogError("Target GameObject is null");
+                return;
+            }
+
+            var actionsList = includeChildren
+                ? targetGameObject.GetComponentsInChildren<MonoBehaviour>(true)
+                    .Where(c => c != null && (c.GetType().Name == "Actions" || c.GetType().IsSubclassOf(typeof(MonoBehaviour)) && c.GetType().BaseType?.Name == "BaseActions"))
+                    .ToList()
+                : targetGameObject.GetComponents<MonoBehaviour>()
+                    .Where(c => c != null && (c.GetType().Name == "Actions" || c.GetType().IsSubclassOf(typeof(MonoBehaviour)) && c.GetType().BaseType?.Name == "BaseActions"))
+                    .ToList();
+
+            if (actionsList.Count == 0)
+            {
+                Debug.Log($"[PrintActions] No Actions components found on {targetGameObject.name}{(includeChildren ? " (including children)" : "")}");
+                return;
+            }
+
+            Debug.Log($"[PrintActions] Found {actionsList.Count} Actions component(s) on {targetGameObject.name}{(includeChildren ? " (including children)" : "")}");
+
+            for (int actionsIdx = 0; actionsIdx < actionsList.Count; actionsIdx++)
+            {
+                var actions = actionsList[actionsIdx];
+                string gameObjectPath = GetGameObjectPath(actions.gameObject);
+                Debug.Log($"  === Actions [{actionsIdx}] on: {gameObjectPath} ===");
+                Debug.Log($"    Component Type: {actions.GetType().FullName}");
+                Debug.Log($"    Enabled: {actions.enabled}, GameObject Active: {actions.gameObject.activeInHierarchy}");
+
+                // Get IsRunning and RunningIndex via reflection (properties on BaseActions)
+                var isRunningProp = actions.GetType().GetProperty("IsRunning", BindingFlags.Public | BindingFlags.Instance);
+                var runningIndexProp = actions.GetType().GetProperty("RunningIndex", BindingFlags.Public | BindingFlags.Instance);
+                if (isRunningProp != null)
+                {
+                    var isRunning = isRunningProp.GetValue(actions);
+                    Debug.Log($"    IsRunning: {isRunning}");
+                }
+                if (runningIndexProp != null)
+                {
+                    var runningIndex = runningIndexProp.GetValue(actions);
+                    Debug.Log($"    RunningIndex: {runningIndex}");
+                }
+
+                // Get m_Instructions field (defined on BaseActions)
+                var instructionsField = actions.GetType().GetField("m_Instructions", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.FlattenHierarchy);
+                if (instructionsField == null)
+                {
+                    // Try walking the hierarchy manually
+                    Type currentType = actions.GetType();
+                    while (currentType != null && currentType != typeof(object))
+                    {
+                        instructionsField = currentType.GetField("m_Instructions", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly);
+                        if (instructionsField != null) break;
+                        currentType = currentType.BaseType;
+                    }
+                }
+
+                if (instructionsField == null)
+                {
+                    Debug.LogWarning($"    Could not find m_Instructions field on {actions.GetType().Name}");
+                    continue;
+                }
+
+                var instructionList = instructionsField.GetValue(actions);
+                if (instructionList == null)
+                {
+                    Debug.Log($"    m_Instructions is null");
+                    continue;
+                }
+
+                Debug.Log($"    InstructionList Type: {instructionList.GetType().Name}");
+
+                // Check IsRunning / IsCancelled on the InstructionList itself
+                var listRunningProp = instructionList.GetType().GetProperty("IsRunning", BindingFlags.Public | BindingFlags.Instance);
+                var listCancelledProp = instructionList.GetType().GetProperty("IsCancelled", BindingFlags.Public | BindingFlags.Instance);
+                if (listRunningProp != null)
+                    Debug.Log($"    InstructionList.IsRunning: {listRunningProp.GetValue(instructionList)}");
+                if (listCancelledProp != null)
+                    Debug.Log($"    InstructionList.IsCancelled: {listCancelledProp.GetValue(instructionList)}");
+
+                // Get the m_Instructions array inside InstructionList
+                var instrArrayField = instructionList.GetType().GetField("m_Instructions", BindingFlags.NonPublic | BindingFlags.Instance);
+                if (instrArrayField == null)
+                {
+                    Debug.LogWarning($"    Could not find m_Instructions array field on InstructionList");
+                    continue;
+                }
+
+                var instrArray = instrArrayField.GetValue(instructionList) as Instruction[];
+                if (instrArray == null)
+                {
+                    // Try as IEnumerable fallback
+                    var instrEnumerable = instrArrayField.GetValue(instructionList) as System.Collections.IEnumerable;
+                    if (instrEnumerable == null)
+                    {
+                        Debug.Log($"    Instructions array is null");
+                        continue;
+                    }
+
+                    int idx = 0;
+                    foreach (var instr in instrEnumerable)
+                    {
+                        PrintSingleInstruction(instr, idx, "    ");
+                        idx++;
+                    }
+                    if (idx == 0) Debug.Log($"    (No instructions)");
+                }
+                else
+                {
+                    Debug.Log($"    Instruction Count: {instrArray.Length}");
+                    for (int i = 0; i < instrArray.Length; i++)
+                    {
+                        PrintSingleInstruction(instrArray[i], i, "    ");
+                    }
+                }
+            }
+        }
+
+        private static void PrintSingleInstruction(object instruction, int index, string baseIndent)
+        {
+            string indent = baseIndent + "  ";
+            if (instruction == null)
+            {
+                Debug.Log($"{indent}[{index}] (null)");
+                return;
+            }
+
+            var instrType = instruction.GetType();
+
+            // Get Title property
+            var titleProp = instrType.GetProperty("Title", BindingFlags.Public | BindingFlags.Instance);
+            string title = titleProp?.GetValue(instruction)?.ToString() ?? "(no title)";
+
+            // Get IsEnabled from base TPolymorphicItem
+            var isEnabledProp = instrType.GetProperty("IsEnabled", BindingFlags.Public | BindingFlags.Instance);
+            string enabledStr = isEnabledProp != null ? $", Enabled: {isEnabledProp.GetValue(instruction)}" : "";
+
+            Debug.Log($"{indent}[{index}] {instrType.Name}: \"{title}\"{enabledStr}");
+
+            // Print all m_ fields declared on this instruction type and its hierarchy up to Instruction
+            Type currentType = instrType;
+            while (currentType != null && currentType != typeof(object) && currentType.Name != "TPolymorphicItem`1")
+            {
+                var fields = currentType.GetFields(BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly);
+                foreach (var field in fields)
+                {
+                    if (!field.Name.StartsWith("m_")) continue;
+                    try
+                    {
+                        var fieldValue = field.GetValue(instruction);
+                        string valueStr = GetFieldValueDisplayString(fieldValue);
+                        Debug.Log($"{indent}  {field.Name} ({field.FieldType.Name}): {valueStr}");
+                    }
+                    catch (Exception e)
+                    {
+                        Debug.Log($"{indent}  {field.Name}: <error: {e.Message}>");
+                    }
+                }
+                currentType = currentType.BaseType;
+            }
+        }
+
+        private static string GetFieldValueDisplayString(object value)
+        {
+            if (value == null) return "null";
+
+            var type = value.GetType();
+
+            if (type.IsPrimitive || value is string || value is decimal)
+                return value.ToString();
+
+            if (type.IsEnum)
+                return $"{type.Name}.{value}";
+
+            if (value is UnityEngine.Object unityObj)
+                return unityObj != null ? $"{unityObj.name} ({type.Name})" : "null (destroyed)";
+
+            // Try .String property (common in GC2 wrappers like IdString, PropertyGetString, etc.)
+            var stringProp = type.GetProperty("String", BindingFlags.Public | BindingFlags.Instance);
+            if (stringProp != null)
+            {
+                try
+                {
+                    var strVal = stringProp.GetValue(value);
+                    if (strVal != null) return $"\"{strVal}\" ({type.Name})";
+                }
+                catch { }
+            }
+
+            // Try .Value property
+            var valueProp = type.GetProperty("Value", BindingFlags.Public | BindingFlags.Instance);
+            if (valueProp != null)
+            {
+                try
+                {
+                    var val = valueProp.GetValue(value);
+                    if (val != null) return $"{val} ({type.Name})";
+                }
+                catch { }
+            }
+
+            // Try .Get property or .name
+            var nameProp = type.GetProperty("name", BindingFlags.Public | BindingFlags.Instance);
+            if (nameProp != null)
+            {
+                try
+                {
+                    var nameVal = nameProp.GetValue(value);
+                    if (nameVal != null) return $"\"{nameVal}\" ({type.Name})";
+                }
+                catch { }
+            }
+
+            return $"({type.Name})";
+        }
+
+        private static string GetGameObjectPath(GameObject obj)
+        {
+            string path = obj.name;
+            Transform parent = obj.transform.parent;
+            while (parent != null)
+            {
+                path = parent.name + "/" + path;
+                parent = parent.parent;
+            }
+            return path;
         }
         #endregion
 

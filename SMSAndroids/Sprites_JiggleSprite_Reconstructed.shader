@@ -80,28 +80,6 @@ Shader "Sprites/JiggleSprite"
             float _NoiseSpeed;
             float _NoiseStrength;
 
-            // Simple hash-based noise function
-            float hash(float2 p)
-            {
-                float3 p3 = frac(float3(p.xyx) * 0.1031);
-                p3 += dot(p3, p3.yzx + 33.33);
-                return frac((p3.x + p3.y) * p3.z);
-            }
-
-            float noise(float2 p)
-            {
-                float2 i = floor(p);
-                float2 f = frac(p);
-                f = f * f * (3.0 - 2.0 * f);
-
-                float a = hash(i);
-                float b = hash(i + float2(1.0, 0.0));
-                float c = hash(i + float2(0.0, 1.0));
-                float d = hash(i + float2(1.0, 1.0));
-
-                return lerp(lerp(a, b, f.x), lerp(c, d, f.x), f.y);
-            }
-
             v2f vert(appdata v)
             {
                 v2f o;
@@ -134,10 +112,10 @@ Shader "Sprites/JiggleSprite"
                 // Wave jiggle (Green channel) - left-right movement
                 float wave = sin(uv.y * _JiggleFrequency + _Time.y * _JiggleSpeed) * _JiggleStrength * mask.g * intensity;
 
-                // Noise jiggle (Blue channel) - noise-based distortion
-                float2 noiseUV = uv * _NoiseScale + _Time.y * _NoiseSpeed;
-                float noiseX = (noise(noiseUV) - 0.5) * 2.0 * _NoiseStrength * mask.b * intensity;
-                float noiseY = (noise(noiseUV + float2(43.0, 17.0)) - 0.5) * 2.0 * _NoiseStrength * mask.b * intensity;
+                // Noise jiggle (Blue channel) - sin-based crossed-axis cloth ripple
+                float noiseTime = _Time.y * _NoiseSpeed;
+                float noiseX = sin(uv.y * _NoiseScale + noiseTime) * _NoiseStrength * mask.b * intensity;
+                float noiseY = sin(uv.x * _NoiseScale + noiseTime) * _NoiseStrength * mask.b * intensity;
 
                 // Apply distortion to UVs
                 uv.x += wave + noiseX;

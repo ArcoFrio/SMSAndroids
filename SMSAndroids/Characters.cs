@@ -276,66 +276,27 @@ namespace SMSAndroidsCore
                     anisSwimSlip.transform.Find("MBase1").Find("Wet").gameObject.SetActive(true);
                     anisNaked = CreateNewBust("AnisNaked", Core.bustNikkePath, "Anis\\AnisNaked00.PNG", "Anis\\AnisBlink.PNG", "Anis\\AnisNaked00Mask.PNG", "Anis\\Mouth", "Anis\\Expression", true, true);
 
-                    anisNPCHHBedleftDefault = GameObject.Instantiate(Core.characterBundle.LoadAsset<GameObject>("AnisNPCBedleftDefault"), anisNPCHHBedleft); anisNPCHHBedleftDefault.name = "Default";
-                    anisNPCHHBedleftDefault.gameObject.AddComponent<RandomChildActivator>();
-                    AddBlinkingSpriteToBlinkObjects(anisNPCHHBedleftDefault);
-                    anisNPCHHBedrightDefault = GameObject.Instantiate(Core.characterBundle.LoadAsset<GameObject>("AnisNPCBedrightDefault"), anisNPCHHBedright); anisNPCHHBedrightDefault.name = "Default";
-                    anisNPCHHBedrightDefault.gameObject.AddComponent<RandomChildActivator>();
-                    AddBlinkingSpriteToBlinkObjects(anisNPCHHBedrightDefault);
-                    anisNPCHHChangingleftDefault = GameObject.Instantiate(Core.characterBundle.LoadAsset<GameObject>("AnisNPCChangingleftDefault"), anisNPCHHChangingleft); anisNPCHHChangingleftDefault.name = "Default";
-                    anisNPCHHChangingleftDefault.gameObject.AddComponent<RandomChildActivator>();
-                    AddBlinkingSpriteToBlinkObjects(anisNPCHHChangingleftDefault);
-                    anisNPCHHChangingrightDefault = GameObject.Instantiate(Core.characterBundle.LoadAsset<GameObject>("AnisNPCChangingrightDefault"), anisNPCHHChangingright); anisNPCHHChangingrightDefault.name = "Default";
-                    anisNPCHHChangingrightDefault.gameObject.AddComponent<RandomChildActivator>();
-                    AddBlinkingSpriteToBlinkObjects(anisNPCHHChangingrightDefault);
-                    anisNPCHHCouchleftDefault = GameObject.Instantiate(Core.characterBundle.LoadAsset<GameObject>("AnisNPCCouchleftDefault"), anisNPCHHCouchleft); anisNPCHHCouchleftDefault.name = "Default";
-                    anisNPCHHCouchleftDefault.gameObject.AddComponent<RandomChildActivator>();
-                    AddBlinkingSpriteToBlinkObjects(anisNPCHHCouchleftDefault);
-                    anisNPCHHCouchrightDefault = GameObject.Instantiate(Core.characterBundle.LoadAsset<GameObject>("AnisNPCCouchrightDefault"), anisNPCHHCouchright); anisNPCHHCouchrightDefault.name = "Default";
-                    anisNPCHHCouchrightDefault.gameObject.AddComponent<RandomChildActivator>();
-                    AddBlinkingSpriteToBlinkObjects(anisNPCHHCouchrightDefault);
-                    anisNPCHHFridgeDefault = GameObject.Instantiate(Core.characterBundle.LoadAsset<GameObject>("AnisNPCFridgeDefault"), anisNPCHHFridge); anisNPCHHFridgeDefault.name = "Default";
-                    anisNPCHHFridgeDefault.gameObject.AddComponent<RandomChildActivator>();
-                    AddBlinkingSpriteToBlinkObjects(anisNPCHHFridgeDefault);
-                    anisNPCHHSinkDefault = GameObject.Instantiate(Core.characterBundle.LoadAsset<GameObject>("AnisNPCSinkDefault"), anisNPCHHSink); anisNPCHHSinkDefault.name = "Default";
-                    anisNPCHHSinkDefault.gameObject.AddComponent<RandomChildActivator>();
-                    AddBlinkingSpriteToBlinkObjects(anisNPCHHSinkDefault);
+                    anisNPCHHBedleftDefault = CreateNPC("AnisNPCBedleftDefault", anisNPCHHBedleft, "Default");
+                    anisNPCHHBedrightDefault = CreateNPC("AnisNPCBedrightDefault", anisNPCHHBedright, "Default");
+                    anisNPCHHChangingleftDefault = CreateNPC("AnisNPCChangingleftDefault", anisNPCHHChangingleft, "Default");
+                    anisNPCHHChangingrightDefault = CreateNPC("AnisNPCChangingrightDefault", anisNPCHHChangingright, "Default");
+                    anisNPCHHCouchleftDefault = CreateNPC("AnisNPCCouchleftDefault", anisNPCHHCouchleft, "Default");
+                    anisNPCHHCouchrightDefault = CreateNPC("AnisNPCCouchrightDefault", anisNPCHHCouchright, "Default");
+                    anisNPCHHFridgeDefault = CreateNPC("AnisNPCFridgeDefault", anisNPCHHFridge, "Default");
+                    anisNPCHHSinkDefault = CreateNPC("AnisNPCSinkDefault", anisNPCHHSink, "Default");
 
-                    anisNPCHHBedleftSwim = GameObject.Instantiate(Core.characterBundle.LoadAsset<GameObject>("AnisNPCBedleftSwim"), anisNPCHHBedleft); anisNPCHHBedleftSwim.name = "Swim";
-                    anisNPCHHBedleftSwim.gameObject.AddComponent<RandomChildActivator>();
-                    AddBlinkingSpriteToBlinkObjects(anisNPCHHBedleftSwim);
-                    anisNPCHHBedrightSwim = GameObject.Instantiate(Core.characterBundle.LoadAsset<GameObject>("AnisNPCBedrightSwim"), anisNPCHHBedright); anisNPCHHBedrightSwim.name = "Swim";
-                    anisNPCHHBedrightSwim.gameObject.AddComponent<RandomChildActivator>();
-                    AddBlinkingSpriteToBlinkObjects(anisNPCHHBedrightSwim);
-                    anisNPCHHChangingleftSwim = GameObject.Instantiate(Core.characterBundle.LoadAsset<GameObject>("AnisNPCChangingleftSwim"), anisNPCHHChangingleft); anisNPCHHChangingleftSwim.name = "Swim";
-                    anisNPCHHChangingleftSwim.gameObject.AddComponent<RandomChildActivator>();
-                    AddBlinkingSpriteToBlinkObjects(anisNPCHHChangingleftSwim);
-                    anisNPCHHChangingrightSwim = GameObject.Instantiate(Core.characterBundle.LoadAsset<GameObject>("AnisNPCChangingrightSwim"), anisNPCHHChangingright); anisNPCHHChangingrightSwim.name = "Swim";
-                    anisNPCHHChangingrightSwim.gameObject.AddComponent<RandomChildActivator>();
-                    AddBlinkingSpriteToBlinkObjects(anisNPCHHChangingrightSwim);
-                    anisNPCHHCouchleftSwim = GameObject.Instantiate(Core.characterBundle.LoadAsset<GameObject>("AnisNPCCouchleftSwim"), anisNPCHHCouchleft); anisNPCHHCouchleftSwim.name = "Swim";
-                    anisNPCHHCouchleftSwim.gameObject.AddComponent<RandomChildActivator>();
-                    AddBlinkingSpriteToBlinkObjects(anisNPCHHCouchleftSwim);
-                    anisNPCHHCouchrightSwim = GameObject.Instantiate(Core.characterBundle.LoadAsset<GameObject>("AnisNPCCouchrightSwim"), anisNPCHHCouchright); anisNPCHHCouchrightSwim.name = "Swim";
-                    anisNPCHHCouchrightSwim.gameObject.AddComponent<RandomChildActivator>();
-                    AddBlinkingSpriteToBlinkObjects(anisNPCHHCouchrightSwim);
-                    anisNPCHHFridgeSwim = GameObject.Instantiate(Core.characterBundle.LoadAsset<GameObject>("AnisNPCFridgeSwim"), anisNPCHHFridge); anisNPCHHFridgeSwim.name = "Swim";
-                    anisNPCHHFridgeSwim.gameObject.AddComponent<RandomChildActivator>();
-                    AddBlinkingSpriteToBlinkObjects(anisNPCHHFridgeSwim);
-                    anisNPCHHSinkSwim = GameObject.Instantiate(Core.characterBundle.LoadAsset<GameObject>("AnisNPCSinkSwim"), anisNPCHHSink); anisNPCHHSinkSwim.name = "Swim";
-                    anisNPCHHSinkSwim.gameObject.AddComponent<RandomChildActivator>();
-                    AddBlinkingSpriteToBlinkObjects(anisNPCHHSinkSwim);
-                    anisNPCHHTanningleftSwim = GameObject.Instantiate(Core.characterBundle.LoadAsset<GameObject>("AnisNPCTanningleftSwim"), anisNPCHHTanningleft); anisNPCHHTanningleftSwim.name = "Swim";
-                    anisNPCHHTanningleftSwim.gameObject.AddComponent<RandomChildActivator>();
-                    AddBlinkingSpriteToBlinkObjects(anisNPCHHTanningleftSwim);
-                    anisNPCHHTanningrightSwim = GameObject.Instantiate(Core.characterBundle.LoadAsset<GameObject>("AnisNPCTanningrightSwim"), anisNPCHHTanningright); anisNPCHHTanningrightSwim.name = "Swim";
-                    anisNPCHHTanningrightSwim.gameObject.AddComponent<RandomChildActivator>();
-                    AddBlinkingSpriteToBlinkObjects(anisNPCHHTanningrightSwim);
+                    anisNPCHHBedleftSwim = CreateNPC("AnisNPCBedleftSwim", anisNPCHHBedleft, "Swim");
+                    anisNPCHHBedrightSwim = CreateNPC("AnisNPCBedrightSwim", anisNPCHHBedright, "Swim");
+                    anisNPCHHChangingleftSwim = CreateNPC("AnisNPCChangingleftSwim", anisNPCHHChangingleft, "Swim");
+                    anisNPCHHChangingrightSwim = CreateNPC("AnisNPCChangingrightSwim", anisNPCHHChangingright, "Swim");
+                    anisNPCHHCouchleftSwim = CreateNPC("AnisNPCCouchleftSwim", anisNPCHHCouchleft, "Swim");
+                    anisNPCHHCouchrightSwim = CreateNPC("AnisNPCCouchrightSwim", anisNPCHHCouchright, "Swim");
+                    anisNPCHHFridgeSwim = CreateNPC("AnisNPCFridgeSwim", anisNPCHHFridge, "Swim");
+                    anisNPCHHSinkSwim = CreateNPC("AnisNPCSinkSwim", anisNPCHHSink, "Swim");
+                    anisNPCHHTanningleftSwim = CreateNPC("AnisNPCTanningleftSwim", anisNPCHHTanningleft, "Swim");
+                    anisNPCHHTanningrightSwim = CreateNPC("AnisNPCTanningrightSwim", anisNPCHHTanningright, "Swim");
 
-                    anisNPCHHShowerNaked = GameObject.Instantiate(Core.characterBundle.LoadAsset<GameObject>("AnisNPCShowerNaked"), anisNPCHHShower); anisNPCHHShowerNaked.name = "Naked";
-                    anisNPCHHShowerNaked.gameObject.AddComponent<RandomChildActivator>();
-                    AddBlinkingSpriteToBlinkObjects(anisNPCHHShowerNaked);
-                    CopyParticleSystemToParticleObjects(anisNPCHHShowerNaked);
+                    anisNPCHHShowerNaked = CreateNPC("AnisNPCShowerNaked", anisNPCHHShower, "Naked", copyParticles: true);
 
 
 
@@ -511,10 +472,43 @@ namespace SMSAndroidsCore
         }
 
 
+        /// <summary>
+        /// Legacy 9-arg overload. Kept as a thin wrapper so every hardcoded
+        /// call site in <see cref="Update"/> stays unchanged — it forwards to
+        /// the descriptor overload with <c>Jiggle = null</c> (use inherited
+        /// material) and a single <c>"Wet"</c> particle preset, exactly
+        /// matching the previous behaviour.
+        /// </summary>
         public GameObject CreateNewBust(string name, string pathToCG, string baseSprite, string blinkSprite, string maskSprite, string mouthSprite, string expressionSprite, bool hasMouth, bool hasExpression)
         {
+            return CreateNewBust(new BustOutfitDescriptor
+            {
+                Name = name,
+                BaseSpriteAbs       = pathToCG + baseSprite,
+                MaskSpriteAbs       = pathToCG + maskSprite,
+                BlinkSpriteAbs      = pathToCG + blinkSprite,
+                MouthEnabled        = hasMouth,
+                MouthPrefixAbs      = pathToCG + mouthSprite,
+                ExpressionEnabled   = hasExpression,
+                ExpressionPrefixAbs = pathToCG + expressionSprite,
+                Jiggle              = null,
+                Particles           = new System.Collections.Generic.List<ParticleSpec>
+                                       { new ParticleSpec { Preset = "Wet" } },
+            });
+        }
+
+        /// <summary>
+        /// Descriptor-driven bust builder. Single source of truth for the bust
+        /// hierarchy mutation that the legacy 9-arg overload wraps and that
+        /// <see cref="BustPacks"/> calls directly. Behaviour matches the
+        /// legacy path exactly when <see cref="BustOutfitDescriptor.Jiggle"/>
+        /// is null and <see cref="BustOutfitDescriptor.Particles"/> is a
+        /// single <c>"Wet"</c> entry.
+        /// </summary>
+        public GameObject CreateNewBust(BustOutfitDescriptor desc)
+        {
             GameObject newBust = GameObject.Instantiate(Core.baseBust, Core.bustManager);
-            newBust.name = name;
+            newBust.name = desc.Name;
             GameObject mBase = newBust.transform.Find("MBase1").gameObject;
             GameObject blink = mBase.transform.Find("Blink").gameObject;
             GameObject mouth = mBase.transform.Find("Mouth").gameObject;
@@ -522,34 +516,42 @@ namespace SMSAndroidsCore
             Material mat = new Material(mBase.GetComponent<SpriteRenderer>().material);
             string[] expressionNames = { "Happy", "Angry", "Sad", "Flirty" };
 
+            // ── Base sprite
             Texture2D tex = new Texture2D(256, 256, TextureFormat.RGBA32, false);
-            var rawData = System.IO.File.ReadAllBytes(pathToCG + baseSprite);
+            var rawData = System.IO.File.ReadAllBytes(desc.BaseSpriteAbs);
             tex.LoadImage(rawData);
             tex.filterMode = FilterMode.Point;
             Sprite newSprite = Sprite.Create(tex, new Rect(0, 0, 256, 256), new Vector2(0.5f, 0.5f));
             mBase.GetComponent<SpriteRenderer>().sprite = newSprite;
 
+            // ── Blink sprite
             tex = new Texture2D(256, 256, TextureFormat.RGBA32, false);
-            rawData = System.IO.File.ReadAllBytes(pathToCG + blinkSprite);
+            rawData = System.IO.File.ReadAllBytes(desc.BlinkSpriteAbs);
             tex.LoadImage(rawData);
             tex.filterMode = FilterMode.Point;
             newSprite = Sprite.Create(tex, new Rect(0, 0, 256, 256), new Vector2(0.5f, 0.5f));
             blink.GetComponent<SpriteRenderer>().sprite = newSprite;
 
+            // ── Mask + per-outfit material clone
             tex = new Texture2D(256, 256, TextureFormat.RGBA32, false);
-            rawData = System.IO.File.ReadAllBytes(pathToCG + maskSprite);
+            rawData = System.IO.File.ReadAllBytes(desc.MaskSpriteAbs);
             tex.LoadImage(rawData);
             tex.filterMode = FilterMode.Point;
             mat.SetTexture("_MaskTex", tex);
             mBase.GetComponent<SpriteRenderer>().material = mat;
             mBase.GetComponent<SpriteRenderer>().material.SetTexture("_MaskTex", tex);
 
-            if (hasMouth)
+            // Optionally override the shader uniforms (only when authored).
+            if (desc.Jiggle != null)
+                ApplyJiggle(mBase.GetComponent<SpriteRenderer>().material, desc.Jiggle);
+
+            // ── Mouth frames
+            if (desc.MouthEnabled)
             {
                 for (int i = 1; i <= 4; i++)
                 {
                     tex = new Texture2D(256, 256, TextureFormat.RGBA32, false);
-                    rawData = System.IO.File.ReadAllBytes(pathToCG + mouthSprite + i + ".PNG");
+                    rawData = System.IO.File.ReadAllBytes(desc.MouthPrefixAbs + i + ".PNG");
                     tex.LoadImage(rawData);
                     tex.filterMode = FilterMode.Point;
                     newSprite = Sprite.Create(tex, new Rect(0, 0, 256, 256), new Vector2(0.5f, 0.5f));
@@ -559,45 +561,137 @@ namespace SMSAndroidsCore
             else
             {
                 for (int i = 1; i <= 4; i++)
-                {
                     Destroy(mouth.transform.Find(i.ToString()).GetComponent<SpriteRenderer>());
-                }
             }
-            if (hasExpression)
+
+            // ── Expression overlays
+            if (desc.ExpressionEnabled)
             {
                 foreach (string expressionName in expressionNames)
                 {
                     tex = new Texture2D(256, 256, TextureFormat.RGBA32, false);
-                    rawData = System.IO.File.ReadAllBytes(pathToCG + expressionSprite + expressionName + ".PNG");
+                    rawData = System.IO.File.ReadAllBytes(desc.ExpressionPrefixAbs + expressionName + ".PNG");
                     tex.LoadImage(rawData);
                     tex.filterMode = FilterMode.Point;
                     newSprite = Sprite.Create(tex, new Rect(0, 0, 256, 256), new Vector2(0.5f, 0.5f));
                     expressions.transform.Find(expressionName).GetComponent<SpriteRenderer>().sprite = newSprite;
                 }
             }
-            else 
+            else
             {
                 foreach (string expressionName in expressionNames)
-                {
                     Destroy(expressions.transform.Find(expressionName).GetComponent<SpriteRenderer>());
-                }
             }
 
             Destroy(expressions.GetComponent<Conditions>());
             Destroy(expressions.GetComponent<Trigger>());
 
-            GameObject wetParticles = GameObject.Instantiate(Core.bustManager.Find("Anna_Towel").Find("MBase1").Find("Particle System").gameObject, mBase.transform);
-            wetParticles.name = "Wet";
-            wetParticles.SetActive(false);
-
-            if (hasMouth)
+            // ── Particles. Default behaviour matches the legacy path:
+            // attach a single inactive "Wet" particle cloned from Anna_Towel.
+            if (desc.Particles != null)
             {
+                foreach (var p in desc.Particles)
+                    AttachParticle(mBase, p);
             }
 
             Core.bustManager.GetComponent<SpriteManager>().targetObjects.Add(newBust);
 
             newBust.SetActive(false);
             return newBust;
+        }
+
+        /// <summary>
+        /// Applies the <see cref="JiggleParamsValues"/> uniforms onto a freshly
+        /// cloned per-outfit material. Safe to call multiple times — these are
+        /// just shader property writes.
+        /// </summary>
+        private static void ApplyJiggle(Material mat, JiggleParamsValues j)
+        {
+            mat.SetFloat("_JiggleSpeed",     j.Speed);
+            mat.SetFloat("_JiggleStrength",  j.Strength);
+            mat.SetFloat("_JiggleFrequency", j.Frequency);
+            mat.SetFloat("_NoiseScale",      j.NoiseScale);
+            mat.SetFloat("_NoiseSpeed",      j.NoiseSpeed);
+            mat.SetFloat("_NoiseStrength",   j.NoiseStrength);
+            mat.SetFloat("_PixelSnap",       j.PixelSnap ? 1f : 0f);
+            if (TryParseHexColor(j.Tint, out Color c)) mat.SetColor("_Color", c);
+        }
+
+        /// <summary>
+        /// Spawns one particle effect under <paramref name="mBase"/>. Currently
+        /// only the <c>"Wet"</c> preset (Anna_Towel clone) is implemented —
+        /// custom preset deserialisation is reserved for v1.1, with the same
+        /// JSON-on-disk shape the editor will write.
+        /// </summary>
+        private static void AttachParticle(GameObject mBase, ParticleSpec spec)
+        {
+            if (spec == null) return;
+            string preset = string.IsNullOrEmpty(spec.Preset) ? "Wet" : spec.Preset;
+            if (string.Equals(preset, "Wet", System.StringComparison.OrdinalIgnoreCase))
+            {
+                GameObject wetParticles = GameObject.Instantiate(
+                    Core.bustManager.Find("Anna_Towel").Find("MBase1").Find("Particle System").gameObject,
+                    mBase.transform);
+                wetParticles.name = string.IsNullOrEmpty(spec.Name) ? "Wet" : spec.Name;
+                wetParticles.SetActive(false);
+                return;
+            }
+            // "custom" path stub — log only for now so a pack referencing it doesn't crash.
+            UnityEngine.Debug.LogWarning(
+                "[Characters] Particle preset '" + preset + "' not yet implemented; skipping.");
+        }
+
+        private static bool TryParseHexColor(string hex, out Color c)
+        {
+            c = Color.white;
+            if (string.IsNullOrEmpty(hex)) return false;
+            string s = hex.TrimStart('#');
+            if (s.Length == 6) s += "FF";
+            if (s.Length != 8) return false;
+            try
+            {
+                byte r = System.Convert.ToByte(s.Substring(0, 2), 16);
+                byte g = System.Convert.ToByte(s.Substring(2, 2), 16);
+                byte b = System.Convert.ToByte(s.Substring(4, 2), 16);
+                byte a = System.Convert.ToByte(s.Substring(6, 2), 16);
+                c = new Color(r / 255f, g / 255f, b / 255f, a / 255f);
+                return true;
+            }
+            catch { return false; }
+        }
+
+        /// <summary>
+        /// Instantiates an NPC HH variant from a character bundle asset, sets up blinking, 
+        /// RandomChildActivator, and FadeInAlpha on the direct parents of Blink GameObjects.
+        /// </summary>
+        public static GameObject CreateNPC(string assetName, Transform parent, string displayName, bool copyParticles = false)
+        {
+            GameObject npc = GameObject.Instantiate(Core.characterBundle.LoadAsset<GameObject>(assetName), parent);
+            npc.name = displayName;
+            npc.gameObject.AddComponent<RandomChildActivator>();
+            AddBlinkingSpriteToBlinkObjects(npc);
+            AddFadeInSpriteToBlinkParents(npc);
+            if (copyParticles)
+                CopyParticleSystemToParticleObjects(npc);
+            return npc;
+        }
+
+        /// <summary>
+        /// Recursively searches for GameObjects named "Blink" and adds FadeInAlpha 
+        /// to their direct parent if it doesn't already have one.
+        /// </summary>
+        public static void AddFadeInSpriteToBlinkParents(GameObject root)
+        {
+            if (root == null) return;
+            foreach (Transform child in root.transform)
+            {
+                if (child.name == "Blink" && child.parent != null)
+                {
+                    if (child.parent.gameObject.GetComponent<FadeInSprite>() == null)
+                        child.parent.gameObject.AddComponent<FadeInSprite>();
+                }
+                AddFadeInSpriteToBlinkParents(child.gameObject);
+            }
         }
 
         /// <summary>

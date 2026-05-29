@@ -1,0 +1,84 @@
+{
+  "patterns": [
+    {
+      "patternName": "Gentle Waves Up",
+      "segments": [
+        { "zone": 4, "minStrokes": 3, "maxStrokes": 5, "direction": "up",   "targetSpeed": 0.35, "speedTolerance": 0.35 },
+        { "zone": 3, "minStrokes": 3, "maxStrokes": 5, "direction": "up",   "targetSpeed": 0.35, "speedTolerance": 0.35 },
+        { "zone": 2, "minStrokes": 3, "maxStrokes": 5, "direction": "up",   "targetSpeed": 0.35, "speedTolerance": 0.35 },
+        { "zone": 0, "minStrokes": 2, "maxStrokes": 4, "direction": "down", "targetSpeed": 0.35, "speedTolerance": 0.30 }
+      ]
+    },
+    {
+      "patternName": "Gentle Waves Down",
+      "segments": [
+		{ "zone": 0, "minStrokes": 2, "maxStrokes": 4, "direction": "up", "targetSpeed": 0.35, "speedTolerance": 0.30 },
+        { "zone": 4, "minStrokes": 3, "maxStrokes": 5, "direction": "down",   "targetSpeed": 0.35, "speedTolerance": 0.35 },
+        { "zone": 3, "minStrokes": 3, "maxStrokes": 5, "direction": "down",   "targetSpeed": 0.35, "speedTolerance": 0.35 },
+        { "zone": 2, "minStrokes": 3, "maxStrokes": 5, "direction": "down",   "targetSpeed": 0.35, "speedTolerance": 0.35 }
+      ]
+    },
+    {
+      "patternName": "Full Body",
+      "segments": [
+		{ "zone": 0, "minStrokes": 2, "maxStrokes": 4, "direction": "down", "targetSpeed": 0.35, "speedTolerance": 0.30 },
+        { "zone": 6, "minStrokes": 4, "maxStrokes": 6, "direction": "up",   "targetSpeed": 0.35, "speedTolerance": 0.35 },
+        { "zone": 5, "minStrokes": 3, "maxStrokes": 5, "direction": "up",   "targetSpeed": 0.30, "speedTolerance": 0.35 }
+      ]
+    },
+    {
+      "patternName": "Upper Body",
+      "segments": [
+		{ "zone": 6, "minStrokes": 2, "maxStrokes": 4, "direction": "down", "targetSpeed": 0.35, "speedTolerance": 0.35 },
+        { "zone": 6, "minStrokes": 2, "maxStrokes": 4, "direction": "up",   "targetSpeed": 0.35, "speedTolerance": 0.35 },
+        { "zone": 5, "minStrokes": 3, "maxStrokes": 5, "direction": "up",   "targetSpeed": 0.25, "speedTolerance": 0.30 }
+        { "zone": 5, "minStrokes": 3, "maxStrokes": 5, "direction": "down",   "targetSpeed": 0.25, "speedTolerance": 0.30 }
+      ]
+    },
+    {
+      "patternName": "Lower Body",
+      "segments": [
+		{ "zone": 2, "minStrokes": 2, "maxStrokes": 4, "direction": "up", "targetSpeed": 0.35, "speedTolerance": 0.35 },
+        { "zone": 2, "minStrokes": 2, "maxStrokes": 4, "direction": "down",   "targetSpeed": 0.35, "speedTolerance": 0.35 },
+        { "zone": 3, "minStrokes": 3, "maxStrokes": 5, "direction": "up",   "targetSpeed": 0.30, "speedTolerance": 0.35 }
+        { "zone": 3, "minStrokes": 3, "maxStrokes": 5, "direction": "down",   "targetSpeed": 0.30, "speedTolerance": 0.35 }
+      ]
+    },
+    {
+      "patternName": "Quick Pulse",
+      "segments": [
+        { "zone": 2, "minStrokes": 4, "maxStrokes": 6, "direction": "up",   "targetSpeed": 0.90, "speedTolerance": 0.25 },
+        { "zone": 0, "minStrokes": 4, "maxStrokes": 6, "direction": "up",   "targetSpeed": 1.00, "speedTolerance": 0.25 },
+        { "zone": 3, "minStrokes": 4, "maxStrokes": 6, "direction": "down", "targetSpeed": 0.85, "speedTolerance": 0.25 },
+        { "zone": 1, "minStrokes": 4, "maxStrokes": 6, "direction": "down", "targetSpeed": 0.95, "speedTolerance": 0.25 }
+      ]
+    },
+    {
+      "patternName": "Deep Stroke",
+      "segments": [
+        { "zone": 0, "minStrokes": 2, "maxStrokes": 4, "direction": "up",   "targetSpeed": 0.25, "speedTolerance": 0.30 },
+        { "zone": 2, "minStrokes": 2, "maxStrokes": 4, "direction": "down", "targetSpeed": 0.25, "speedTolerance": 0.30 },
+        { "zone": 3, "minStrokes": 2, "maxStrokes": 3, "direction": "up",   "targetSpeed": 0.20, "speedTolerance": 0.35 }
+      ]
+    },
+    {
+      "patternName": "Zigzag",
+      "segments": [
+        { "zone": 0, "minStrokes": 3, "maxStrokes": 5, "direction": "up",   "targetSpeed": 0.70, "speedTolerance": 0.30 },
+        { "zone": 3, "minStrokes": 3, "maxStrokes": 5, "direction": "down", "targetSpeed": 0.70, "speedTolerance": 0.30 },
+        { "zone": 1, "minStrokes": 3, "maxStrokes": 5, "direction": "up",   "targetSpeed": 0.60, "speedTolerance": 0.30 },
+        { "zone": 2, "minStrokes": 3, "maxStrokes": 5, "direction": "down", "targetSpeed": 0.60, "speedTolerance": 0.30 },
+        { "zone": 0, "minStrokes": 3, "maxStrokes": 5, "direction": "up",   "targetSpeed": 0.80, "speedTolerance": 0.25 },
+        { "zone": 3, "minStrokes": 3, "maxStrokes": 5, "direction": "down", "targetSpeed": 0.80, "speedTolerance": 0.25 }
+      ]
+    },
+    {
+      "patternName": "Hold & Release",
+      "segments": [
+        { "zone": 2, "minStrokes": 2, "maxStrokes": 3, "direction": "up",   "targetSpeed": 0.15, "speedTolerance": 0.40 },
+        { "zone": 1, "minStrokes": 4, "maxStrokes": 7, "direction": "down", "targetSpeed": 1.20, "speedTolerance": 0.20 },
+        { "zone": 3, "minStrokes": 2, "maxStrokes": 3, "direction": "up",   "targetSpeed": 0.15, "speedTolerance": 0.40 }
+      ]
+    }
+  ]
+}

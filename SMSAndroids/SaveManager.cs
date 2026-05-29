@@ -58,6 +58,11 @@ namespace SMSAndroidsCore
         // Default values for all mod variables
         private static readonly Dictionary<string, object> defaultValues = new Dictionary<string, object>
         {
+            // Daily variables
+            { "DailyProc_Anis_Massage", false },
+            { "DailyProc_Anis_Shower", false },
+            { "DailyProc_Anis_TV", false },
+
             // Gift Shop variables
             { "GiftShop_BuildCounter", 0 },
             { "GiftShop_FirstVisited", false },
@@ -66,6 +71,7 @@ namespace SMSAndroidsCore
             { "HarborHome_Bought", false },
             { "HarborHome_FirstVisited", false },
             { "HarborHome_Outfit_Anis", "Default" },
+            { "HarborHome_SleepCD", false },
             { "HarborHome_Slept", false },
             { "HarborHome_TalkSelected", "" },
             { "HarborHome_Visit_Amber", false },
@@ -182,6 +188,17 @@ namespace SMSAndroidsCore
             { "Gift_Sunscreen", false },
             { "Gift_Tropical-Flower-Bouquet", false },
 
+            // Minigame variables
+            // Legacy aggregate keys (kept for compatibility with older saves / dialogue conditions).
+            { "Minigame_Massage_Played", false},
+            { "Minigame_Massage_Highscore", 0 },
+            // Per-character progression. Schema is `Minigame_Massage_<Char>_Level` (int, 0-based
+            // index of the next variant to play; once it reaches the variant count the character
+            // enters sandbox mode) and `Minigame_Massage_<Char>_Highscore` (int).
+            // Add new entries here when a character gets variants in the unified prefab.
+            { "Minigame_Massage_Anis_Level", 0 },
+            { "Minigame_Massage_Anis_Highscore", 0 },
+
             // General mod variables
             { "Wallpaper_Current", -1},
             { "Mod_Version", Core.pluginVersion }
@@ -242,10 +259,11 @@ namespace SMSAndroidsCore
                     }
                     if (Core.savedUI.activeSelf && afterSleepEventsProc)
                     {
-                        //RefreshDailyVariables();
+                        RefreshDailyVariables();
                         Core.RefreshDailyProxyVariables();
                         if (GetBool("GiftShop_FirstVisited") && GetInt("GiftShop_BuildCounter") < 2) { SetInt("GiftShop_BuildCounter", GetInt("GiftShop_BuildCounter") + 1); }
-                        SetBool("HarborHome_Slept", Places.harborHomeBedroomLevel.activeSelf);
+                        SetBool("HarborHome_Slept", Places.harborHomeBedroomSwapApplied);
+                        SetBool("HarborHome_SleepCD", false);
                         SaveToFile(1);  // Autosave to slot 1
                         Schedule.day = Core.GetVariableNumber("Day");
                         Debug.Log("Day: " + Schedule.day);
@@ -426,16 +444,16 @@ namespace SMSAndroidsCore
 
         /// <summary>
         /// Refreshes all daily bool variables by setting them to false.
-        /// This resets any SaveManager variables that end with "_Daily".
+        /// This resets any SaveManager variables that start with "DailyProc_".
         /// </summary>
         public static void RefreshDailyVariables()
         {
             if (instance == null) return;
-            
+
             var keysToReset = new List<string>();
             foreach (var kvp in instance.currentSlotCache)
             {
-                if (kvp.Key.EndsWith("_Daily") && kvp.Value is bool)
+                if (kvp.Key.StartsWith("DailyProc_") && kvp.Value is bool)
                 {
                     keysToReset.Add(kvp.Key);
                 }

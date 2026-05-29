@@ -940,6 +940,65 @@ namespace SMSAndroidsCore
                    snekLocation != null && snekLocation.StartsWith(prefix);
         }
 
+        // Returns all character locations dynamically via reflection — picks up new characters automatically
+        private static Dictionary<string, string> GetAllCharacterLocations()
+        {
+            var result = new Dictionary<string, string>();
+            var fields = typeof(Schedule).GetFields(System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Static);
+            foreach (var field in fields)
+            {
+                if (field.FieldType != typeof(string)) continue;
+                string name = field.Name;
+                if (!name.EndsWith("Location")) continue;
+                if (name.EndsWith("DefaultLocation") || name.EndsWith("HHLocation")) continue;
+
+                string charName = name.Substring(0, name.Length - "Location".Length);
+                string location = field.GetValue(null) as string;
+                if (!string.IsNullOrEmpty(charName))
+                    result[charName] = location;
+            }
+            return result;
+        }
+
+        // Checks if any character is currently at the given location (exact match)
+        public static bool IsAnyoneAtLocation(string location)
+        {
+            if (string.IsNullOrEmpty(location)) return false;
+            foreach (var kvp in GetAllCharacterLocations())
+            {
+                if (kvp.Value != null && kvp.Value == location)
+                    return true;
+            }
+            return false;
+        }
+
+        // Checks if any character besides the specified ones is at the given location (exact match)
+        public static bool IsAnyoneAtLocationBesides(string location, string exclude1 = null, string exclude2 = null, string exclude3 = null, string exclude4 = null, string exclude5 = null)
+        {
+            if (string.IsNullOrEmpty(location)) return false;
+            foreach (var kvp in GetAllCharacterLocations())
+            {
+                if (kvp.Value == null || kvp.Value != location) continue;
+                string capitalized = char.ToUpper(kvp.Key[0]) + kvp.Key.Substring(1);
+                if (capitalized == exclude1 || capitalized == exclude2 || capitalized == exclude3 || capitalized == exclude4 || capitalized == exclude5) continue;
+                return true;
+            }
+            return false;
+        }
+
+        // Returns a list of character names currently at the given location (exact match)
+        public static List<string> GetCharactersAtLocation(string location)
+        {
+            var result = new List<string>();
+            if (string.IsNullOrEmpty(location)) return result;
+            foreach (var kvp in GetAllCharacterLocations())
+            {
+                if (kvp.Value != null && kvp.Value == location)
+                    result.Add(char.ToUpper(kvp.Key[0]) + kvp.Key.Substring(1));
+            }
+            return result;
+        }
+
         // Public method to manually set a character's location
         public static void SetCharacterLocation(string characterName, string location)
         {

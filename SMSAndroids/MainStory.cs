@@ -67,6 +67,7 @@ namespace SMSAndroidsCore
         private string currentVoyeurTarget;
         public static GameObject lastEvaluatedLevel;
         public static bool evaluatingLevelDialogue = false;
+        public static bool movieEnded = false;
         public static bool snekIsSolid = false;
 
         public static string[] starterVoyeurTargets = { "Anis", "Neon", "Rapi" };
@@ -530,19 +531,97 @@ namespace SMSAndroidsCore
                             // HARBOR HOME DIALOGUE
                         case string s when s.StartsWith("HarborHome"):
                             if (s.StartsWith("HarborHomeBathroom")) { Schedule.anisHHOutfit = Characters.anisNaked; }
-                            else if (s.StartsWith("HarborHomeCloset") || s.StartsWith("HarborHomeBedroomBedright")) { Schedule.anisHHOutfit = Characters.anisTopless; }
+                            else if (s.StartsWith("HarborHomeCloset") || s.StartsWith("HarborHomeBedroomBedright"))
+                            {   if (SaveManager.GetString("HarborHome_Outfit_Anis") == "Default") { Schedule.anisHHOutfit = Characters.anisTopless; } else { Schedule.anisHHOutfit = Characters.anisSwim; }}
                             else if (s.StartsWith("HarborHomePool")) { Schedule.anisHHOutfit = Characters.anisSwim; }
-                            else {
+                            else
+                            {
                                 if (SaveManager.GetString("HarborHome_Outfit_Anis") == "Default") { Schedule.anisHHOutfit = Characters.anisCoatless; }
                                 if (SaveManager.GetString("HarborHome_Outfit_Anis") == "Swim") { Schedule.anisHHOutfit = Characters.anisSwim; }
+                            }
+
+                            if (s.StartsWith("HarborHomeBedroom") && Places.harborHomeBedroomLevel.activeSelf)
+                            {
+                                if (!Dialogues.dialoguePlaying && SaveManager.GetBool("Voyeur_SeenAnis") && SaveManager.GetBool("HarborHome_Visit_Anis") && Core.afterSleepEvents.activeSelf && !SaveManager.GetBool("HarborHome_SleepCD"))
+                                {
+                                    SaveManager.SetBool("HarborHome_SleepCD", true);
+                                    Core.afterSleepEvents.GetComponent<CanvasGroup>().alpha = 0;
+                                    Core.afterSleepEvents.GetComponent<CanvasGroup>().interactable = false;
+                                    Places.harborHomeBedroomRoomtalk.SetActive(true);
+                                    StartDialogueSequence(Dialogues.anisRandomDialogueHHBedroomSleep01Dialogue);
+                                    //Characters.anisCoatless.SetActive(true);
+                                    Places.harborHomeBedroomButtonCanvas.SetActive(false);
+                                }
+                                if (Dialogues.anisRandomDialogueHHBedroomSleep01DialogueScene1.activeSelf)
+                                {
+                                    Scenes.anisHHBedroom01Scene01.SetActive(true);
+                                    Dialogues.anisRandomDialogueHHBedroomSleep01DialogueScene1.SetActive(false);
+                                }
+                                if (Dialogues.anisRandomDialogueHHBedroomSleep01DialogueScene2.activeSelf)
+                                {
+                                    Scenes.anisHHBedroom01Scene02.SetActive(true);
+                                    Dialogues.anisRandomDialogueHHBedroomSleep01DialogueScene2.SetActive(false);
+                                }
+                                if (Dialogues.anisRandomDialogueHHBedroomSleep01DialogueScene3.activeSelf)
+                                {
+                                    Scenes.anisHHBedroom01Scene03.SetActive(true);
+                                    Dialogues.anisRandomDialogueHHBedroomSleep01DialogueScene3.SetActive(false);
+                                }
+                                if (Dialogues.anisRandomDialogueHHBedroomSleep01DialogueScene4.activeSelf)
+                                {
+                                    Scenes.anisHHBedroom01Scene01.SetActive(false);
+                                    Scenes.anisHHBedroom01Scene04.SetActive(true);
+                                    Dialogues.anisRandomDialogueHHBedroomSleep01DialogueScene4.SetActive(false);
+                                }
+                                if (Dialogues.anisRandomDialogueHHBedroomSleep01DialogueScene5.activeSelf)
+                                {
+                                    Scenes.anisHHBedroom01Scene02.SetActive(false);
+                                    Scenes.anisHHBedroom01Scene05.SetActive(true);
+                                    Dialogues.anisRandomDialogueHHBedroomSleep01DialogueScene5.SetActive(false);
+                                }
+                                if (Dialogues.anisRandomDialogueHHBedroomSleep01DialogueScene6.activeSelf)
+                                {
+                                    Signals.Emit(kissSignal);
+                                    Dialogues.anisRandomDialogueHHBedroomSleep01DialogueScene6.SetActive(false);
+                                }
+                                if (Dialogues.anisRandomDialogueHHBedroomSleep01DialogueDialogueFinisher.activeSelf)
+                                {
+                                    Invoke(nameof(EndDialogueSequence), 1.0f);
+                                    Core.afterSleepEvents.GetComponent<CanvasGroup>().alpha = 1;
+                                    Core.afterSleepEvents.GetComponent<CanvasGroup>().interactable = true;
+                                    //Characters.anisCoatless.transform.Find("MBase1").Find("Leave").gameObject.SetActive(true);
+                                    Scenes.anisHHBedroom01Scene01.SetActive(false);
+                                    Scenes.anisHHBedroom01Scene02.SetActive(false);
+                                    Scenes.anisHHBedroom01Scene03.SetActive(false);
+                                    Scenes.anisHHBedroom01Scene04.SetActive(false);
+                                    Scenes.anisHHBedroom01Scene05.SetActive(false);
+                                    Dialogues.anisRandomDialogueHHBedroomSleep01DialogueDialogueFinisher.SetActive(false);
+                                    Places.harborHomeBedroomButtonCanvas.SetActive(true);
+                                }
                             }
 
                             #region Default Dialogue
                             if (!Dialogues.dialoguePlaying && SaveManager.GetBool("Voyeur_SeenAnis") && !Core.GetProxyVariableBool("Gifting_Gifted") &&
                             SaveManager.GetBool("HarborHome_Visit_Anis") && SaveManager.GetString("HarborHome_TalkSelected") == "Anis")
                             {
-                                Places.harborHomeLivingroomRoomtalk.SetActive(true);
-                                StartDialogueSequence(Dialogues.anisDefaultHHDialogue);
+                                if (s.StartsWith("HarborHomeBathroom") && Places.harborHomeBathroomLevel.activeSelf && Core.GetVariableNumber("newtrait-Athletic") >= 5 && !SaveManager.GetBool("DailyProc_Anis_Shower"))
+                                {
+                                    Places.harborHomeBathroomRoomtalk.SetActive(true);
+                                    StartDialogueSequence(Dialogues.anisRandomDialogueHHBathroomShower01Dialogue);
+                                    SaveManager.SetBool("DailyProc_Anis_Shower", true);
+                                } else if (s.StartsWith("HarborHomeLivingRoom") && Places.harborHomeLivingroomLevel.activeSelf)
+                                {
+                                    Places.harborHomeLivingroomRoomtalk.SetActive(true);
+                                    StartDialogueSequence(Dialogues.anisDefaultHHMovieDialogue);
+                                } else if (s.StartsWith("HarborHomePool") && Places.harborHomePoolLevel.activeSelf)
+                                {
+                                    Places.harborHomePoolRoomtalk.SetActive(true);
+                                    StartDialogueSequence(Dialogues.anisDefaultHHPoolDialogue);
+                                } else
+                                {
+                                    Places.harborHomeLivingroomRoomtalk.SetActive(true);
+                                    StartDialogueSequence(Dialogues.anisDefaultHHDialogue);
+                                }
                                 Schedule.anisHHOutfit.SetActive(true);
                                 Places.harborHomeBedroomButtonCanvas.SetActive(false);
                             }
@@ -607,6 +686,243 @@ namespace SMSAndroidsCore
                                 SaveManager.SetString("HarborHome_TalkSelected", "");
                                 Dialogues.anisGiftDialogueDialogueFinisher.SetActive(false);
                                 Schedule.anisHHOutfit.SetActive(false);
+                                Places.harborHomeBedroomButtonCanvas.SetActive(true);
+                            }
+                            #endregion
+
+                            #region Bathroom Dialogue
+                            if (Dialogues.anisRandomDialogueHHBathroomShower01DialogueScene1.activeSelf)
+                            {
+                                Dialogues.anisRandomDialogueHHBathroomShower01DialogueScene1.SetActive(false);
+                                Scenes.anisHHBathroom01Scene01.SetActive(true);
+                            }
+                            if (Dialogues.anisRandomDialogueHHBathroomShower01DialogueScene2.activeSelf)
+                            {
+                                Dialogues.anisRandomDialogueHHBathroomShower01DialogueScene2.SetActive(false);
+                                Scenes.anisHHBathroom01Scene02.SetActive(true);
+                            }
+                            if (Dialogues.anisRandomDialogueHHBathroomShower01DialogueScene3.activeSelf)
+                            {
+                                Dialogues.anisRandomDialogueHHBathroomShower01DialogueScene3.SetActive(false);
+                                Scenes.anisHHBathroom01Scene03.SetActive(true);
+                            }
+                            if (Dialogues.anisRandomDialogueHHBathroomShower01DialogueScene4.activeSelf)
+                            {
+                                Dialogues.anisRandomDialogueHHBathroomShower01DialogueScene4.SetActive(false);
+                                Scenes.anisHHBathroom01Scene04.SetActive(true);
+                            }
+                            if (Dialogues.anisRandomDialogueHHBathroomShower01DialogueScene5.activeSelf)
+                            {
+                                Dialogues.anisRandomDialogueHHBathroomShower01DialogueScene5.SetActive(false);
+                                Scenes.anisHHBathroom01Scene05.SetActive(true);
+                            }
+                            if (Dialogues.anisRandomDialogueHHBathroomShower01DialogueScene6.activeSelf)
+                            {
+                                Dialogues.anisRandomDialogueHHBathroomShower01DialogueScene6.SetActive(false);
+                                Scenes.anisHHBathroom01Scene01.SetActive(false);
+                                Scenes.anisHHBathroom01Scene02.SetActive(false);
+                                Scenes.anisHHBathroom01Scene03.SetActive(false);
+                                Scenes.anisHHBathroom01Scene06.SetActive(true);
+                            }
+                            if (Dialogues.anisRandomDialogueHHBathroomShower01DialogueScene7.activeSelf)
+                            {
+                                Dialogues.anisRandomDialogueHHBathroomShower01DialogueScene7.SetActive(false);
+                                Scenes.anisHHBathroom01Scene04.SetActive(false);
+                                Scenes.anisHHBathroom01Scene07.SetActive(true);
+                            }
+                            if (Dialogues.anisRandomDialogueHHBathroomShower01DialogueScene8.activeSelf)
+                            {
+                                Dialogues.anisRandomDialogueHHBathroomShower01DialogueScene8.SetActive(false);
+                                Scenes.anisHHBathroom01Scene05.SetActive(false);
+                                Scenes.anisHHBathroom01Scene08.SetActive(true);
+                            }
+                            if (Dialogues.anisRandomDialogueHHBathroomShower01DialogueScene9.activeSelf)
+                            {
+                                Dialogues.anisRandomDialogueHHBathroomShower01DialogueScene9.SetActive(false);
+                                Scenes.anisHHBathroom01Scene06.SetActive(false);
+                                Scenes.anisHHBathroom01Scene09.SetActive(true);
+                            }
+                            if (Dialogues.anisRandomDialogueHHBathroomShower01DialogueScene10.activeSelf)
+                            {
+                                Dialogues.anisRandomDialogueHHBathroomShower01DialogueScene10.SetActive(false);
+                                Scenes.anisHHBathroom01Scene07.SetActive(false);
+                                Scenes.anisHHBathroom01Scene10.SetActive(true);
+                            }
+                            if (Dialogues.anisRandomDialogueHHBathroomShower01DialogueDialogueFinisher.activeSelf)
+                            {
+                                Invoke(nameof(EndDialogueSequence), 1.0f);
+                                SaveManager.SetString("HarborHome_TalkSelected", "");
+                                Schedule.anisHHOutfit.transform.Find("MBase1").Find("Leave").gameObject.SetActive(true);
+                                Scenes.anisHHBathroom01Scene01.SetActive(false);
+                                Scenes.anisHHBathroom01Scene02.SetActive(false);
+                                Scenes.anisHHBathroom01Scene03.SetActive(false);
+                                Scenes.anisHHBathroom01Scene04.SetActive(false);
+                                Scenes.anisHHBathroom01Scene05.SetActive(false);
+                                Scenes.anisHHBathroom01Scene06.SetActive(false);
+                                Scenes.anisHHBathroom01Scene07.SetActive(false);
+                                Scenes.anisHHBathroom01Scene08.SetActive(false);
+                                Scenes.anisHHBathroom01Scene09.SetActive(false);
+                                Scenes.anisHHBathroom01Scene10.SetActive(false);
+                                Dialogues.anisRandomDialogueHHBathroomShower01DialogueDialogueFinisher.SetActive(false);
+                                Places.harborHomeBedroomButtonCanvas.SetActive(true);
+                            }
+                            #endregion
+                            #region Living Room Dialogue
+                            if (movieEnded)
+                            {
+                                movieEnded = false;
+                                if (!SaveManager.GetBool("DailyProc_Anis_TV") && s.StartsWith("HarborHomeLiving") && !Schedule.IsAnyoneAtLocationBesides("HarborHomeLivingRoom", "Anis"))
+                                {
+                                    Places.harborHomeLivingroomRoomtalk.SetActive(true);
+                                    Debug.Log("Anis's outfit: " + Core.GetProxyVariableString("HarborHome_Outfit_Anis"));
+                                    StartDialogueSequence(Dialogues.anisRandomDialogueHHLivingroomMovie01Dialogue);
+                                    SaveManager.SetBool("DailyProc_Anis_TV", true);
+                                    Schedule.anisHHOutfit.SetActive(true);
+                                }
+                            }
+                            if (Dialogues.anisRandomDialogueHHLivingroomMovie01DialogueScene1.activeSelf)
+                            {
+                                Dialogues.anisRandomDialogueHHLivingroomMovie01DialogueScene1.SetActive(false);
+                                Scenes.anisHHLivingroom01Scene01.SetActive(true);
+                            }
+                            if (Dialogues.anisRandomDialogueHHLivingroomMovie01DialogueScene2.activeSelf)
+                            {
+                                Dialogues.anisRandomDialogueHHLivingroomMovie01DialogueScene2.SetActive(false);
+                                Scenes.anisHHLivingroom02Scene01.SetActive(true);
+                            }
+                            if (Dialogues.anisRandomDialogueHHLivingroomMovie01DialogueScene3.activeSelf)
+                            {
+                                Dialogues.anisRandomDialogueHHLivingroomMovie01DialogueScene3.SetActive(false);
+                                Scenes.anisHHLivingroom03Scene01.SetActive(true);
+                            }
+                            if (Dialogues.anisRandomDialogueHHLivingroomMovie01DialogueScene4.activeSelf)
+                            {
+                                Dialogues.anisRandomDialogueHHLivingroomMovie01DialogueScene4.SetActive(false);
+                                Scenes.anisHHLivingroom04Scene01.SetActive(true);
+                            }
+                            if (Dialogues.anisRandomDialogueHHLivingroomMovie01DialogueScene5.activeSelf)
+                            {
+                                Dialogues.anisRandomDialogueHHLivingroomMovie01DialogueScene5.SetActive(false);
+                                Scenes.anisHHLivingroom05Scene01.SetActive(true);
+                            }
+                            if (Dialogues.anisRandomDialogueHHLivingroomMovie01DialogueScene6.activeSelf)
+                            {
+                                Dialogues.anisRandomDialogueHHLivingroomMovie01DialogueScene6.SetActive(false);
+                                Scenes.anisHHLivingroom06Scene01.SetActive(true);
+                            }
+                            if (Dialogues.anisRandomDialogueHHLivingroomMovie01DialogueDialogueFinisher.activeSelf)
+                            {
+                                Invoke(nameof(EndDialogueSequence), 1.0f);
+                                Scenes.anisHHLivingroom01Scene01.SetActive(false);
+                                Scenes.anisHHLivingroom02Scene01.SetActive(false);
+                                Scenes.anisHHLivingroom03Scene01.SetActive(false);
+                                Scenes.anisHHLivingroom04Scene01.SetActive(false);
+                                Scenes.anisHHLivingroom05Scene01.SetActive(false);
+                                Scenes.anisHHLivingroom06Scene01.SetActive(false);
+                                Schedule.anisHHOutfit.transform.Find("MBase1").Find("Leave").gameObject.SetActive(true);
+                                Dialogues.anisRandomDialogueHHLivingroomMovie01DialogueDialogueFinisher.SetActive(false);
+                            }
+
+
+                            if (Dialogues.anisDefaultHHMovieDialogueScene4.activeSelf)
+                            {
+                                SaveManager.SetBool("HarborHome_Visit_Anis", false);
+                                Schedule.anisDefaultLocation = "MountainLabRoomNikkeAnis";
+                                Schedule.anisLocation = "MountainLabRoomNikkeAnis";
+                                Dialogues.UpdateHHTalkPanel(true);
+                                Dialogues.anisDefaultHHMovieDialogueScene4.SetActive(false);
+                                Schedule.anisHHOutfit.transform.Find("MBase1").Find("Leave").gameObject.SetActive(true);
+                            }
+                            if (Dialogues.anisDefaultHHMovieDialogueScene5.activeSelf)
+                            {
+                                Signals.Emit(fadeUISignal);
+                                Dialogues.giftUI.SetActive(true);
+                                Core.FindAndModifyProxyVariableString("Gifting_Target", "Anis");
+                                Dialogues.anisDefaultHHMovieDialogueScene5.SetActive(false);
+                            }
+                            if (Dialogues.anisDefaultHHMovieDialogueOutfitDefault.activeSelf)
+                            {
+                                Signals.Emit(fadeInSignal);
+                                Schedule.anisHHOutfit = Core.ChangeOutfitDelayed(Schedule.anisHHOutfit, Characters.anisCoatless, "HarborHome_Outfit_Anis", "Default", 0.5f);
+                                Core.EmitSignalDelayed("FadeOut2025", 1.0f);
+                                Dialogues.anisDefaultHHMovieDialogueOutfitDefault.SetActive(false);
+                            }
+                            if (Dialogues.anisDefaultHHMovieDialogueOutfitSwim.activeSelf)
+                            {
+                                Signals.Emit(fadeInSignal);
+                                Schedule.anisHHOutfit = Core.ChangeOutfitDelayed(Schedule.anisHHOutfit, Characters.anisSwim, "HarborHome_Outfit_Anis", "Swim", 0.5f);
+                                Core.EmitSignalDelayed("FadeOut2025", 1.0f);
+                                Dialogues.anisDefaultHHMovieDialogueOutfitSwim.SetActive(false);
+                            }
+                            if (Dialogues.anisDefaultHHMovieDialogueScene20.activeSelf)
+                            {
+                                Dialogues.anisDefaultHHMovieDialogueScene20.SetActive(false);
+                                Core.FindAndModifyVariableBool("watching-porn",false);
+                                //Core.FindAndModifyVariableDouble("random-1-of-10", 0);
+                                Core.FindAndModifyVariableDouble("incoming-movie", 0);
+                            }
+                            if (Dialogues.anisDefaultHHMovieDialogueScene19.activeSelf)
+                            {
+                                Dialogues.anisDefaultHHMovieDialogueScene19.SetActive(false);
+                                Core.FindAndModifyVariableDouble("incoming-movie", 1);
+                            }
+                            if (Dialogues.anisDefaultHHMovieDialogueScene18.activeSelf)
+                            {
+                                Dialogues.anisDefaultHHMovieDialogueScene18.SetActive(false);
+                                Core.FindAndModifyVariableDouble("incoming-movie", 3);
+                            }
+                            if (Dialogues.anisDefaultHHMovieDialogueScene17.activeSelf)
+                            {
+                                Dialogues.anisDefaultHHMovieDialogueScene17.SetActive(false);
+                                Core.FindAndModifyVariableDouble("incoming-movie", 2);
+                            }
+                            if (Dialogues.anisDefaultHHMovieDialogueScene16.activeSelf)
+                            {
+                                Dialogues.anisDefaultHHMovieDialogueScene16.SetActive(false);
+                                StartMovieSequence();
+                            }
+                            if (Dialogues.anisDefaultHHMovieDialogueDialogueFinisher.activeSelf)
+                            {
+                                Invoke(nameof(EndDialogueSequence), 1.0f);
+                                SaveManager.SetString("HarborHome_TalkSelected", "");
+                                if (!Dialogues.giftUI.activeSelf) { Core.DisableAllActiveBustChildren(); }
+                                Dialogues.anisDefaultHHMovieDialogueDialogueFinisher.SetActive(false);
+                                Places.harborHomeBedroomButtonCanvas.SetActive(true);
+                            }
+
+                            #endregion
+                            #region Pool Dialogue
+                            if (Dialogues.anisDefaultHHPoolDialogueScene1.activeSelf)
+                            {
+                                Dialogues.anisDefaultHHPoolDialogueScene1.SetActive(false);
+                                Scenes.anisHHPool01Scene01.SetActive(true);
+                            }
+                            if (Dialogues.anisDefaultHHPoolDialogueScene2.activeSelf)
+                            {
+                                Dialogues.anisDefaultHHPoolDialogueScene2.SetActive(false);
+                                Scenes.anisHHPool02Scene01.SetActive(true);
+                            }
+                            if (Dialogues.anisDefaultHHPoolDialogueScene3.activeSelf)
+                            {
+                                Dialogues.anisDefaultHHPoolDialogueScene3.SetActive(false);
+                                Scenes.anisHHPool03Scene01.SetActive(true);
+                            }
+                            if (Dialogues.anisDefaultHHPoolDialogueScene5.activeSelf)
+                            {
+                                Dialogues.anisDefaultHHPoolDialogueScene5.SetActive(false);
+                                SaveManager.SetBool("DailyProc_Anis_Massage", true);
+                                Core.FindAndModifyProxyVariableString("Minigame_Massage_Character", "Anis");
+                                Minigames.Instance.StartMinigame(Minigames.minigameMassage);
+                            }
+                            if (Dialogues.anisDefaultHHPoolDialogueDialogueFinisher.activeSelf)
+                            {
+                                Invoke(nameof(EndDialogueSequence), 1.0f);
+                                Scenes.anisHHPool01Scene01.SetActive(false);
+                                Scenes.anisHHPool02Scene01.SetActive(false);
+                                Scenes.anisHHPool03Scene01.SetActive(false);
+                                SaveManager.SetString("HarborHome_TalkSelected", "");
+                                Schedule.anisHHOutfit.transform.Find("MBase1").Find("Leave").gameObject.SetActive(true);
+                                Dialogues.anisDefaultHHPoolDialogueDialogueFinisher.SetActive(false);
                                 Places.harborHomeBedroomButtonCanvas.SetActive(true);
                             }
                             #endregion
@@ -2104,6 +2420,83 @@ namespace SMSAndroidsCore
             }
         }
 
+        /// <summary>
+        /// Plays a GC2 Dialogue component on the given GameObject.
+        /// Equivalent to the vanilla Actions "Play Dialogue" instruction.
+        /// Pass an optional onFinish callback to run code when the dialogue ends.
+        /// </summary>
+        public static void PlayDialogue(GameObject dialogueGameObject, Action onFinish = null)
+        {
+            if (dialogueGameObject == null)
+            {
+                Debug.LogError("[PlayDialogue] GameObject is null");
+                return;
+            }
+
+            var dialogue = dialogueGameObject.GetComponent<Dialogue>();
+            if (dialogue == null)
+            {
+                Debug.LogError($"[PlayDialogue] No Dialogue component found on {dialogueGameObject.name}");
+                return;
+            }
+
+            if (onFinish != null)
+            {
+                Action handler = null;
+                handler = () =>
+                {
+                    dialogue.EventFinish -= handler;
+                    onFinish();
+                };
+                dialogue.EventFinish += handler;
+            }
+
+            var args = new Args(dialogueGameObject);
+            _ = dialogue.Play(args);
+        }
+
+        /// <summary>
+        /// Replicates the vanilla GC2 "start movie" instruction sequence:
+        /// Blink → wait 1s → hide busts → show Core[temp-stored-very-short-term] → show Movies → wait 2s.
+        /// </summary>
+        public void StartMovieSequence()
+        {
+            StartCoroutine(StartMovieSequenceCoroutine());
+        }
+
+        private IEnumerator StartMovieSequenceCoroutine()
+        {
+            Signals.Emit(blinkSignal);
+            yield return new WaitForSeconds(1f);
+            Core.bustManager.gameObject.SetActive(false);
+            Core.xMovies.gameObject.SetActive(true);
+            Signals.Emit(fadeUISignal);
+            GameObject diagGO;
+            switch (Core.GetVariableNumber("incoming-movie"))
+            {
+                case 1:
+                    diagGO = Core.xMovies.Find("Scifi_Dialogue").gameObject;
+                    break;
+                case 2:
+                    diagGO = Core.xMovies.Find("News_Dialogue").gameObject;
+                    break;
+                case 3:
+                    diagGO = Core.xMovies.Find("Fantasy_Dialogue ").gameObject;
+                    break;
+                default:
+                    diagGO = Core.xMovies.Find("Scifi_Dialogue").gameObject;
+                    break;
+            }
+            PlayDialogue(diagGO, () =>
+            {
+                Core.bustManager.gameObject.SetActive(true);
+                Signals.Emit(fadeUISignal);
+                movieEnded = true;
+            });
+            Places.harborHomeLivingroomLevelMovies.SetActive(true);
+            yield return new WaitForSeconds(2f);
+        }
+
         private IEnumerator StartDialogueSequenceDelayed(GameObject diag, float delay)
         {
             yield return new WaitForSeconds(delay);
@@ -2540,8 +2933,19 @@ namespace SMSAndroidsCore
                                 AudioClip selectedClip = Dialogues.GetRandomAudioClipForSFX(mapping);
                                 if (selectedClip != null)
                                 {
-                                    // Calculate delay: 0 for first, 0.22s for subsequent
-                                    float delay = (playedIndices.Count == 1) ? 0f : 0.22f;
+                                    // Calculate cumulative delay by summing spaces from all previous matches
+                                    float delay = 0f;
+                                    for (int j = 0; j < i; j++)
+                                    {
+                                        int prevMatchEnd = matches[j].Index + matches[j].Length;
+                                        int nextMatchStart = matches[j + 1].Index;
+                                        int spacesBetween = nextMatchStart - prevMatchEnd;
+                                        delay += spacesBetween * 0.22f;
+                                        
+                                        Debug.Log($"[ProcessSFXTriggersForText] Spaces between match {j + 1} and match {j + 2}: {spacesBetween}, cumulative delay so far: {delay}s");
+                                    }
+                                    
+                                    Debug.Log($"[ProcessSFXTriggersForText] Match {i + 1} final cumulative delay: {delay}s");
                                     
                                     // Get the size multiplier based on the <size=X%> tag at this match's position
                                     float sizeMultiplier = GetSizeMultiplierAtPosition(text, matches[i].Index);

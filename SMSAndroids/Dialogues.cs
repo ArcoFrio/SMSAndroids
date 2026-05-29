@@ -208,19 +208,6 @@ namespace SMSAndroidsCore
         public static GameObject anisDefaultDialogueMouthActivator;
         public static GameObject anisDefaultDialogueSpriteFocus;
 
-        public static GameObject anisDefaultHHDialogue;
-        public static GameObject anisDefaultHHDialogueScene1;
-        public static GameObject anisDefaultHHDialogueScene2;
-        public static GameObject anisDefaultHHDialogueScene3;
-        public static GameObject anisDefaultHHDialogueScene4;
-        public static GameObject anisDefaultHHDialogueScene5;
-        public static GameObject anisDefaultHHDialogueDialogueActivator;
-        public static GameObject anisDefaultHHDialogueDialogueFinisher;
-        public static GameObject anisDefaultHHDialogueMouthActivator;
-        public static GameObject anisDefaultHHDialogueOutfitDefault;
-        public static GameObject anisDefaultHHDialogueOutfitSwim;
-        public static GameObject anisDefaultHHDialogueSpriteFocus;
-
         public static GameObject anisGiftDialogue;
         public static GameObject anisGiftDialogueScene1;
         public static GameObject anisGiftDialogueScene2;
@@ -231,17 +218,6 @@ namespace SMSAndroidsCore
         public static GameObject anisGiftDialogueDialogueFinisher;
         public static GameObject anisGiftDialogueMouthActivator;
         public static GameObject anisGiftDialogueSpriteFocus;
-
-        public static GameObject anisRandomDialogue67;
-        public static GameObject anisRandomDialogue67Scene1;
-        public static GameObject anisRandomDialogue67Scene2;
-        public static GameObject anisRandomDialogue67Scene3;
-        public static GameObject anisRandomDialogue67Scene4;
-        public static GameObject anisRandomDialogue67Scene5;
-        public static GameObject anisRandomDialogue67DialogueActivator;
-        public static GameObject anisRandomDialogue67DialogueFinisher;
-        public static GameObject anisRandomDialogue67MouthActivator;
-        public static GameObject anisRandomDialogue67SpriteFocus;
 
         public static GameObject anisAffection01Dialogue;
         public static GameObject anisAffection01DialogueScene1;
@@ -290,6 +266,115 @@ namespace SMSAndroidsCore
         public static GameObject anisRandomDialogueLabRoomChill01DialogueDialogueFinisher;
         public static GameObject anisRandomDialogueLabRoomChill01DialogueMouthActivator;
         public static GameObject anisRandomDialogueLabRoomChill01DialogueSpriteFocus;
+
+        public static GameObject anisDefaultHHDialogue;
+        public static GameObject anisDefaultHHDialogueScene1;
+        public static GameObject anisDefaultHHDialogueScene2;
+        public static GameObject anisDefaultHHDialogueScene3;
+        public static GameObject anisDefaultHHDialogueScene4;
+        public static GameObject anisDefaultHHDialogueScene5;
+        public static GameObject anisDefaultHHDialogueDialogueActivator;
+        public static GameObject anisDefaultHHDialogueDialogueFinisher;
+        public static GameObject anisDefaultHHDialogueMouthActivator;
+        public static GameObject anisDefaultHHDialogueOutfitDefault;
+        public static GameObject anisDefaultHHDialogueOutfitSwim;
+        public static GameObject anisDefaultHHDialogueSpriteFocus;
+
+        public static GameObject anisDefaultHHMovieDialogue;
+        public static GameObject anisDefaultHHMovieDialogueScene1;
+        public static GameObject anisDefaultHHMovieDialogueScene2;
+        public static GameObject anisDefaultHHMovieDialogueScene3;
+        public static GameObject anisDefaultHHMovieDialogueScene4;
+        public static GameObject anisDefaultHHMovieDialogueScene5;
+        public static GameObject anisDefaultHHMovieDialogueScene6;
+        public static GameObject anisDefaultHHMovieDialogueScene7;
+        public static GameObject anisDefaultHHMovieDialogueScene8;
+        public static GameObject anisDefaultHHMovieDialogueScene9;
+        public static GameObject anisDefaultHHMovieDialogueScene10;
+        public static GameObject anisDefaultHHMovieDialogueScene11;
+        public static GameObject anisDefaultHHMovieDialogueScene12;
+        public static GameObject anisDefaultHHMovieDialogueScene13;
+        public static GameObject anisDefaultHHMovieDialogueScene14;
+        public static GameObject anisDefaultHHMovieDialogueScene15;
+        public static GameObject anisDefaultHHMovieDialogueScene16;
+        public static GameObject anisDefaultHHMovieDialogueScene17;
+        public static GameObject anisDefaultHHMovieDialogueScene18;
+        public static GameObject anisDefaultHHMovieDialogueScene19;
+        public static GameObject anisDefaultHHMovieDialogueScene20;
+        public static GameObject anisDefaultHHMovieDialogueDialogueActivator;
+        public static GameObject anisDefaultHHMovieDialogueDialogueFinisher;
+        public static GameObject anisDefaultHHMovieDialogueMouthActivator;
+        public static GameObject anisDefaultHHMovieDialogueOutfitDefault;
+        public static GameObject anisDefaultHHMovieDialogueOutfitSwim;
+        public static GameObject anisDefaultHHMovieDialogueSpriteFocus;
+
+        public static GameObject anisDefaultHHPoolDialogue;
+        public static GameObject anisDefaultHHPoolDialogueScene1;
+        public static GameObject anisDefaultHHPoolDialogueScene2;
+        public static GameObject anisDefaultHHPoolDialogueScene3;
+        public static GameObject anisDefaultHHPoolDialogueScene4;
+        public static GameObject anisDefaultHHPoolDialogueScene5;
+        public static GameObject anisDefaultHHPoolDialogueDialogueActivator;
+        public static GameObject anisDefaultHHPoolDialogueDialogueFinisher;
+        public static GameObject anisDefaultHHPoolDialogueMouthActivator;
+        public static GameObject anisDefaultHHPoolDialogueOutfitDefault;
+        public static GameObject anisDefaultHHPoolDialogueOutfitSwim;
+        public static GameObject anisDefaultHHPoolDialogueSpriteFocus;
+
+        public static GameObject anisRandomDialogueHHBedroomSleep01Dialogue;
+        public static GameObject anisRandomDialogueHHBedroomSleep01DialogueScene1;
+        public static GameObject anisRandomDialogueHHBedroomSleep01DialogueScene2;
+        public static GameObject anisRandomDialogueHHBedroomSleep01DialogueScene3;
+        public static GameObject anisRandomDialogueHHBedroomSleep01DialogueScene4;
+        public static GameObject anisRandomDialogueHHBedroomSleep01DialogueScene5;
+        public static GameObject anisRandomDialogueHHBedroomSleep01DialogueScene6;
+        public static GameObject anisRandomDialogueHHBedroomSleep01DialogueDialogueActivator;
+        public static GameObject anisRandomDialogueHHBedroomSleep01DialogueDialogueFinisher;
+        public static GameObject anisRandomDialogueHHBedroomSleep01DialogueMouthActivator;
+        public static GameObject anisRandomDialogueHHBedroomSleep01DialogueSpriteFocus;
+
+        public static GameObject anisRandomDialogueHHBathroomShower01Dialogue;
+        public static GameObject anisRandomDialogueHHBathroomShower01DialogueScene1;
+        public static GameObject anisRandomDialogueHHBathroomShower01DialogueScene2;
+        public static GameObject anisRandomDialogueHHBathroomShower01DialogueScene3;
+        public static GameObject anisRandomDialogueHHBathroomShower01DialogueScene4;
+        public static GameObject anisRandomDialogueHHBathroomShower01DialogueScene5;
+        public static GameObject anisRandomDialogueHHBathroomShower01DialogueScene6;
+        public static GameObject anisRandomDialogueHHBathroomShower01DialogueScene7;
+        public static GameObject anisRandomDialogueHHBathroomShower01DialogueScene8;
+        public static GameObject anisRandomDialogueHHBathroomShower01DialogueScene9;
+        public static GameObject anisRandomDialogueHHBathroomShower01DialogueScene10;
+        public static GameObject anisRandomDialogueHHBathroomShower01DialogueDialogueActivator;
+        public static GameObject anisRandomDialogueHHBathroomShower01DialogueDialogueFinisher;
+        public static GameObject anisRandomDialogueHHBathroomShower01DialogueMouthActivator;
+        public static GameObject anisRandomDialogueHHBathroomShower01DialogueSpriteFocus;
+
+        public static GameObject anisRandomDialogueHHLivingroomMovie01Dialogue;
+        public static GameObject anisRandomDialogueHHLivingroomMovie01DialogueScene1;
+        public static GameObject anisRandomDialogueHHLivingroomMovie01DialogueScene2;
+        public static GameObject anisRandomDialogueHHLivingroomMovie01DialogueScene3;
+        public static GameObject anisRandomDialogueHHLivingroomMovie01DialogueScene4;
+        public static GameObject anisRandomDialogueHHLivingroomMovie01DialogueScene5;
+        public static GameObject anisRandomDialogueHHLivingroomMovie01DialogueScene6;
+        public static GameObject anisRandomDialogueHHLivingroomMovie01DialogueScene7;
+        public static GameObject anisRandomDialogueHHLivingroomMovie01DialogueScene8;
+        public static GameObject anisRandomDialogueHHLivingroomMovie01DialogueScene9;
+        public static GameObject anisRandomDialogueHHLivingroomMovie01DialogueScene10;
+        public static GameObject anisRandomDialogueHHLivingroomMovie01DialogueDialogueActivator;
+        public static GameObject anisRandomDialogueHHLivingroomMovie01DialogueDialogueFinisher;
+        public static GameObject anisRandomDialogueHHLivingroomMovie01DialogueMouthActivator;
+        public static GameObject anisRandomDialogueHHLivingroomMovie01DialogueSpriteFocus;
+
+        public static GameObject anisRandomDialogue67;
+        public static GameObject anisRandomDialogue67Scene1;
+        public static GameObject anisRandomDialogue67Scene2;
+        public static GameObject anisRandomDialogue67Scene3;
+        public static GameObject anisRandomDialogue67Scene4;
+        public static GameObject anisRandomDialogue67Scene5;
+        public static GameObject anisRandomDialogue67DialogueActivator;
+        public static GameObject anisRandomDialogue67DialogueFinisher;
+        public static GameObject anisRandomDialogue67MouthActivator;
+        public static GameObject anisRandomDialogue67SpriteFocus;
 
 
         public static GameObject centiDefaultDialogue;
@@ -1142,6 +1227,47 @@ namespace SMSAndroidsCore
                     anisDefaultHHDialogueOutfitSwim = anisDefaultHHDialogue.transform.Find("OutfitSwim").gameObject;
                     anisDefaultHHDialogueSpriteFocus = anisDefaultHHDialogue.transform.Find("SpriteFocus").gameObject;
 
+                    anisDefaultHHMovieDialogue = CreateNewDialogue("AnisDialogueHHDefaultMovie", Places.harborHomeLivingroomRoomtalk.transform);
+                    anisDefaultHHMovieDialogueScene1 = anisDefaultHHMovieDialogue.transform.Find("Scene1").gameObject;
+                    anisDefaultHHMovieDialogueScene2 = anisDefaultHHMovieDialogue.transform.Find("Scene2").gameObject;
+                    anisDefaultHHMovieDialogueScene3 = anisDefaultHHMovieDialogue.transform.Find("Scene3").gameObject;
+                    anisDefaultHHMovieDialogueScene4 = anisDefaultHHMovieDialogue.transform.Find("Scene4").gameObject;
+                    anisDefaultHHMovieDialogueScene5 = anisDefaultHHMovieDialogue.transform.Find("Scene5").gameObject;
+                    anisDefaultHHMovieDialogueScene6 = anisDefaultHHMovieDialogue.transform.Find("Scene6").gameObject;
+                    anisDefaultHHMovieDialogueScene7 = anisDefaultHHMovieDialogue.transform.Find("Scene7").gameObject;
+                    anisDefaultHHMovieDialogueScene8 = anisDefaultHHMovieDialogue.transform.Find("Scene8").gameObject;
+                    anisDefaultHHMovieDialogueScene9 = anisDefaultHHMovieDialogue.transform.Find("Scene9").gameObject;
+                    anisDefaultHHMovieDialogueScene10 = anisDefaultHHMovieDialogue.transform.Find("Scene10").gameObject;
+                    anisDefaultHHMovieDialogueScene11 = anisDefaultHHMovieDialogue.transform.Find("Scene11").gameObject;
+                    anisDefaultHHMovieDialogueScene12 = anisDefaultHHMovieDialogue.transform.Find("Scene12").gameObject;
+                    anisDefaultHHMovieDialogueScene13 = anisDefaultHHMovieDialogue.transform.Find("Scene13").gameObject;
+                    anisDefaultHHMovieDialogueScene14 = anisDefaultHHMovieDialogue.transform.Find("Scene14").gameObject;
+                    anisDefaultHHMovieDialogueScene15 = anisDefaultHHMovieDialogue.transform.Find("Scene15").gameObject;
+                    anisDefaultHHMovieDialogueScene16 = anisDefaultHHMovieDialogue.transform.Find("Scene16").gameObject;
+                    anisDefaultHHMovieDialogueScene17 = anisDefaultHHMovieDialogue.transform.Find("Scene17").gameObject;
+                    anisDefaultHHMovieDialogueScene18 = anisDefaultHHMovieDialogue.transform.Find("Scene18").gameObject;
+                    anisDefaultHHMovieDialogueScene19 = anisDefaultHHMovieDialogue.transform.Find("Scene19").gameObject;
+                    anisDefaultHHMovieDialogueScene20 = anisDefaultHHMovieDialogue.transform.Find("Scene20").gameObject;
+                    anisDefaultHHMovieDialogueDialogueActivator = anisDefaultHHMovieDialogue.transform.Find("DialogueActivator").gameObject;
+                    anisDefaultHHMovieDialogueDialogueFinisher = anisDefaultHHMovieDialogue.transform.Find("DialogueFinisher").gameObject;
+                    anisDefaultHHMovieDialogueMouthActivator = anisDefaultHHMovieDialogue.transform.Find("MouthActivator").gameObject;
+                    anisDefaultHHMovieDialogueOutfitDefault = anisDefaultHHMovieDialogue.transform.Find("OutfitDefault").gameObject;
+                    anisDefaultHHMovieDialogueOutfitSwim = anisDefaultHHMovieDialogue.transform.Find("OutfitSwim").gameObject;
+                    anisDefaultHHMovieDialogueSpriteFocus = anisDefaultHHMovieDialogue.transform.Find("SpriteFocus").gameObject;
+
+                    anisDefaultHHPoolDialogue = CreateNewDialogue("AnisDialogueHHDefaultPool", Places.harborHomePoolRoomtalk.transform);
+                    anisDefaultHHPoolDialogueScene1 = anisDefaultHHPoolDialogue.transform.Find("Scene1").gameObject;
+                    anisDefaultHHPoolDialogueScene2 = anisDefaultHHPoolDialogue.transform.Find("Scene2").gameObject;
+                    anisDefaultHHPoolDialogueScene3 = anisDefaultHHPoolDialogue.transform.Find("Scene3").gameObject;
+                    anisDefaultHHPoolDialogueScene4 = anisDefaultHHPoolDialogue.transform.Find("Scene4").gameObject;
+                    anisDefaultHHPoolDialogueScene5 = anisDefaultHHPoolDialogue.transform.Find("Scene5").gameObject;
+                    anisDefaultHHPoolDialogueDialogueActivator = anisDefaultHHPoolDialogue.transform.Find("DialogueActivator").gameObject;
+                    anisDefaultHHPoolDialogueDialogueFinisher = anisDefaultHHPoolDialogue.transform.Find("DialogueFinisher").gameObject;
+                    anisDefaultHHPoolDialogueMouthActivator = anisDefaultHHPoolDialogue.transform.Find("MouthActivator").gameObject;
+                    anisDefaultHHPoolDialogueOutfitDefault = anisDefaultHHPoolDialogue.transform.Find("OutfitDefault").gameObject;
+                    anisDefaultHHPoolDialogueOutfitSwim = anisDefaultHHPoolDialogue.transform.Find("OutfitSwim").gameObject;
+                    anisDefaultHHPoolDialogueSpriteFocus = anisDefaultHHPoolDialogue.transform.Find("SpriteFocus").gameObject;
+
                     anisGiftDialogue = CreateNewDialogue("AnisDialogueGift", Places.mountainLabRoomNikkeAnisRoomtalk.transform);
                     anisGiftDialogueScene1 = anisGiftDialogue.transform.Find("Scene1").gameObject;
                     anisGiftDialogueScene2 = anisGiftDialogue.transform.Find("Scene2").gameObject;
@@ -1163,6 +1289,50 @@ namespace SMSAndroidsCore
                     anisRandomDialogue67DialogueFinisher = anisRandomDialogue67.transform.Find("DialogueFinisher").gameObject;
                     anisRandomDialogue67MouthActivator = anisRandomDialogue67.transform.Find("MouthActivator").gameObject;
                     anisRandomDialogue67SpriteFocus = anisRandomDialogue67.transform.Find("SpriteFocus").gameObject;
+
+                    anisRandomDialogueHHBedroomSleep01Dialogue = CreateNewDialogue("AnisRandomSleep01", Places.harborHomeBedroomRoomtalk.transform);
+                    anisRandomDialogueHHBedroomSleep01DialogueScene1 = anisRandomDialogueHHBedroomSleep01Dialogue.transform.Find("Scene1").gameObject;
+                    anisRandomDialogueHHBedroomSleep01DialogueScene2 = anisRandomDialogueHHBedroomSleep01Dialogue.transform.Find("Scene2").gameObject;
+                    anisRandomDialogueHHBedroomSleep01DialogueScene3 = anisRandomDialogueHHBedroomSleep01Dialogue.transform.Find("Scene3").gameObject;
+                    anisRandomDialogueHHBedroomSleep01DialogueScene4 = anisRandomDialogueHHBedroomSleep01Dialogue.transform.Find("Scene4").gameObject;
+                    anisRandomDialogueHHBedroomSleep01DialogueScene5 = anisRandomDialogueHHBedroomSleep01Dialogue.transform.Find("Scene5").gameObject;
+                    anisRandomDialogueHHBedroomSleep01DialogueScene6 = anisRandomDialogueHHBedroomSleep01Dialogue.transform.Find("Scene6").gameObject;
+                    anisRandomDialogueHHBedroomSleep01DialogueDialogueActivator = anisRandomDialogueHHBedroomSleep01Dialogue.transform.Find("DialogueActivator").gameObject;
+                    anisRandomDialogueHHBedroomSleep01DialogueDialogueFinisher = anisRandomDialogueHHBedroomSleep01Dialogue.transform.Find("DialogueFinisher").gameObject;
+                    anisRandomDialogueHHBedroomSleep01DialogueMouthActivator = anisRandomDialogueHHBedroomSleep01Dialogue.transform.Find("MouthActivator").gameObject;
+                    anisRandomDialogueHHBedroomSleep01DialogueSpriteFocus = anisRandomDialogueHHBedroomSleep01Dialogue.transform.Find("SpriteFocus").gameObject;
+
+                    anisRandomDialogueHHBathroomShower01Dialogue = CreateNewDialogue("AnisRandomShower01", Places.harborHomeBathroomRoomtalk.transform);
+                    anisRandomDialogueHHBathroomShower01DialogueScene1 = anisRandomDialogueHHBathroomShower01Dialogue.transform.Find("Scene1").gameObject;
+                    anisRandomDialogueHHBathroomShower01DialogueScene2 = anisRandomDialogueHHBathroomShower01Dialogue.transform.Find("Scene2").gameObject;
+                    anisRandomDialogueHHBathroomShower01DialogueScene3 = anisRandomDialogueHHBathroomShower01Dialogue.transform.Find("Scene3").gameObject;
+                    anisRandomDialogueHHBathroomShower01DialogueScene4 = anisRandomDialogueHHBathroomShower01Dialogue.transform.Find("Scene4").gameObject;
+                    anisRandomDialogueHHBathroomShower01DialogueScene5 = anisRandomDialogueHHBathroomShower01Dialogue.transform.Find("Scene5").gameObject;
+                    anisRandomDialogueHHBathroomShower01DialogueScene6 = anisRandomDialogueHHBathroomShower01Dialogue.transform.Find("Scene6").gameObject;
+                    anisRandomDialogueHHBathroomShower01DialogueScene7 = anisRandomDialogueHHBathroomShower01Dialogue.transform.Find("Scene7").gameObject;
+                    anisRandomDialogueHHBathroomShower01DialogueScene8 = anisRandomDialogueHHBathroomShower01Dialogue.transform.Find("Scene8").gameObject;
+                    anisRandomDialogueHHBathroomShower01DialogueScene9 = anisRandomDialogueHHBathroomShower01Dialogue.transform.Find("Scene9").gameObject;
+                    anisRandomDialogueHHBathroomShower01DialogueScene10 = anisRandomDialogueHHBathroomShower01Dialogue.transform.Find("Scene10").gameObject;
+                    anisRandomDialogueHHBathroomShower01DialogueDialogueActivator = anisRandomDialogueHHBathroomShower01Dialogue.transform.Find("DialogueActivator").gameObject;
+                    anisRandomDialogueHHBathroomShower01DialogueDialogueFinisher = anisRandomDialogueHHBathroomShower01Dialogue.transform.Find("DialogueFinisher").gameObject;
+                    anisRandomDialogueHHBathroomShower01DialogueMouthActivator = anisRandomDialogueHHBathroomShower01Dialogue.transform.Find("MouthActivator").gameObject;
+                    anisRandomDialogueHHBathroomShower01DialogueSpriteFocus = anisRandomDialogueHHBathroomShower01Dialogue.transform.Find("SpriteFocus").gameObject;
+
+                    anisRandomDialogueHHLivingroomMovie01Dialogue = CreateNewDialogue("AnisRandomMovie01", Places.harborHomeLivingroomRoomtalk.transform);
+                    anisRandomDialogueHHLivingroomMovie01DialogueScene1 = anisRandomDialogueHHLivingroomMovie01Dialogue.transform.Find("Scene1").gameObject;
+                    anisRandomDialogueHHLivingroomMovie01DialogueScene2 = anisRandomDialogueHHLivingroomMovie01Dialogue.transform.Find("Scene2").gameObject;
+                    anisRandomDialogueHHLivingroomMovie01DialogueScene3 = anisRandomDialogueHHLivingroomMovie01Dialogue.transform.Find("Scene3").gameObject;
+                    anisRandomDialogueHHLivingroomMovie01DialogueScene4 = anisRandomDialogueHHLivingroomMovie01Dialogue.transform.Find("Scene4").gameObject;
+                    anisRandomDialogueHHLivingroomMovie01DialogueScene5 = anisRandomDialogueHHLivingroomMovie01Dialogue.transform.Find("Scene5").gameObject;
+                    anisRandomDialogueHHLivingroomMovie01DialogueScene6 = anisRandomDialogueHHLivingroomMovie01Dialogue.transform.Find("Scene6").gameObject;
+                    anisRandomDialogueHHLivingroomMovie01DialogueScene7 = anisRandomDialogueHHLivingroomMovie01Dialogue.transform.Find("Scene7").gameObject;
+                    anisRandomDialogueHHLivingroomMovie01DialogueScene8 = anisRandomDialogueHHLivingroomMovie01Dialogue.transform.Find("Scene8").gameObject;
+                    anisRandomDialogueHHLivingroomMovie01DialogueScene9 = anisRandomDialogueHHLivingroomMovie01Dialogue.transform.Find("Scene9").gameObject;
+                    anisRandomDialogueHHLivingroomMovie01DialogueScene10 = anisRandomDialogueHHLivingroomMovie01Dialogue.transform.Find("Scene10").gameObject;
+                    anisRandomDialogueHHLivingroomMovie01DialogueDialogueActivator = anisRandomDialogueHHLivingroomMovie01Dialogue.transform.Find("DialogueActivator").gameObject;
+                    anisRandomDialogueHHLivingroomMovie01DialogueDialogueFinisher = anisRandomDialogueHHLivingroomMovie01Dialogue.transform.Find("DialogueFinisher").gameObject;
+                    anisRandomDialogueHHLivingroomMovie01DialogueMouthActivator = anisRandomDialogueHHLivingroomMovie01Dialogue.transform.Find("MouthActivator").gameObject;
+                    anisRandomDialogueHHLivingroomMovie01DialogueSpriteFocus = anisRandomDialogueHHLivingroomMovie01Dialogue.transform.Find("SpriteFocus").gameObject;
 
                     anisRandomDialogueLabRoomChill01Dialogue = CreateNewDialogue("AnisRandomChill01", Places.mountainLabRoomNikkeAnisRoomtalk.transform);
                     anisRandomDialogueLabRoomChill01DialogueScene1 = anisRandomDialogueLabRoomChill01Dialogue.transform.Find("Scene1").gameObject;
@@ -1857,6 +2027,7 @@ namespace SMSAndroidsCore
                     CreateSFX("*smooch*", "Smooch", 0.85f);
                     CreateSFX("*plap*", "Plap", 0.75f);
                     CreateSFX("*plop*", "Plop");
+                    CreateSFX("*rustle*", "Rustle", 1.0f);
                     CreateSFX("*snap*", "Snap");
                     CreateSFX("*snip*", "Snip");
                     CreateSFX("*splash*", "Splash");
