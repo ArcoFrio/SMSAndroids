@@ -46,7 +46,6 @@ namespace SMSAndroidsCore
         public static AssetBundle otherBundle;
         public static bool loadedCore = false;
         public static bool loadedBases = false;
-        public static bool loadedMenu = false;
         public static GameObject afterSleepEvents;
         public static GameObject affectionIncrease;
         public static GameObject baseBust;
@@ -54,7 +53,6 @@ namespace SMSAndroidsCore
         public static GameObject introMomentNewGame;
         public static GameObject levelBeach;
         public static GameObject mainCamera;
-        public static GameObject menuModHeader;
         public static GameObject savedUI;
         public static GameObject saveLoadSystem;
         public static GameObject toggleRepeatableBedEvents;
@@ -122,14 +120,14 @@ namespace SMSAndroidsCore
             MainStory.loadedStory = false;
             Minigames.loadedMinigame = false;
             Places.loadedPlaces = false;
-            Scenes.loadedScenes = false;
+            // Scenes + Wallpaper subsystems removed — ModForge owns both now.
             Schedule.loadedSchedule = false;
-            Wallpaper.loadedWallpaper = false;
             ScheduleVisualizer.loadedVisualizer = false;
         }
         public void Update()
         {
-            if (loadedCore && Characters.loadedBusts && Dialogues.loadedDialogues && MainStory.loadedStory && Places.loadedPlaces && Scenes.loadedScenes)
+            // Scenes gate dropped — ModForge SceneFactory handles 4_CG_Manager-Sexy spawning.
+            if (loadedCore && Characters.loadedBusts && Dialogues.loadedDialogues && MainStory.loadedStory && Places.loadedPlaces)
             {
                 loadedBases = true;
             }
@@ -187,7 +185,6 @@ namespace SMSAndroidsCore
                     InitializeProxyVariables();
 
                     Logger.LogInfo("----- CORE LOADED -----");
-                    loadedMenu = false;
                     loadedCore = true;
 
                     //Debugging.PrintActionsComponentInfo(gameplay.Find("Sleeping").Find("sleepactions").gameObject);
@@ -204,12 +201,8 @@ namespace SMSAndroidsCore
             }
             if (currentScene.name == "GameStart")
             {
-                if (!loadedMenu)
-                {
-                    CreateModHeader();
-                    //Logger.LogInfo("----- MENU LOADED -----");
-                    loadedMenu = true;
-                }
+                // No SMSAndroids menu header anymore — the mod is presented by
+                // its pack entry in ModForge's "Mods" banner (same mod, one line).
                 if (loadedCore)
                 {
                     Logger.LogInfo("----- CORE UNLOADED -----");
@@ -219,34 +212,8 @@ namespace SMSAndroidsCore
         }
 
         
-        public void CreateModHeader()
-        {
-            GameObject originalText = GameObject.Find("Part_One").transform.Find("Canvas_MM").Find("MainMenu").Find("Text (TMP)").gameObject;
-            menuModHeader = GameObject.Instantiate(originalText, GameObject.Find("Part_One").transform.Find("Canvas_MM").Find("MainMenu"));
-            
-            string originalTextContent = originalText.GetComponent<TextMeshProUGUI>().text;
-            string modHeaderText = "Androids Mod " + pluginVersion + " for 1.8E";
-            menuModHeader.GetComponent<TextMeshProUGUI>().text = modHeaderText;
-            menuModHeader.GetComponent<TextMeshProUGUI>().fontSize = 40;
-            menuModHeader.GetComponent<TextMeshProUGUI>().fontSizeMin = 26;
-            menuModHeader.GetComponent<TextMeshProUGUI>().fontSizeMax = 84;
-            
-            // Check if mod header text ending matches original header text ending
-            // Extract the last part after the last space
-            string originalEnding = originalTextContent.Substring(originalTextContent.LastIndexOf(' ') + 1);
-            string modHeaderEnding = modHeaderText.Substring(modHeaderText.LastIndexOf(' ') + 1);
-            if (originalEnding != modHeaderEnding)
-            {
-                menuModHeader.GetComponent<TextMeshProUGUI>().color = Color.red;
-            }
-            
-            //menuModHeader.GetComponent<TextMeshProUGUI>().outlineColor = new Color32(235, 192, 52, 255);
-            RectTransform originalRectTransform = originalText.GetComponent<RectTransform>();
-            RectTransform newRectTransform = menuModHeader.GetComponent<RectTransform>();
-            newRectTransform.anchoredPosition = originalRectTransform.anchoredPosition - new Vector2(-100, 35);
-            newRectTransform.sizeDelta = new Vector2(400, 50);
-            Debug.Log(menuModHeader.GetComponent<TextMeshProUGUI>().text);
-        }
+        // CreateModHeader removed — the ModForge "Mods" menu banner lists the
+        // pack (SMSAndroidsPack), which is this mod's user-facing identity.
         public static void FindAndModifyVariableDouble(string variableNameToFind, Double newValue)
         {
             var manager = GlobalNameVariablesManager.Instance;

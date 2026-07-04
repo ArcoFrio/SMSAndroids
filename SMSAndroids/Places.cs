@@ -78,41 +78,6 @@ namespace SMSAndroidsCore
         public static int randomNumMall = -1;
         public static int randomNumMLRoomAnis = -1;
 
-        public static GameObject buttonBeach;
-        public static GameObject buttonCar;
-
-        public static GameObject buttonGiftShop;
-        public static GameObject buttonGiftShopInterior;
-        public static GameObject buttonHarborHomeBathroom;
-        public static GameObject buttonHarborHomeBedroom;
-        public static GameObject buttonHarborHomeCloset;
-        public static GameObject buttonHarborHouseEntrance;
-        public static GameObject buttonHarborHomeKitchen;
-        public static GameObject buttonHarborHomeLivingroom;
-        public static GameObject buttonHarborHomePool;
-        public static GameObject buttonMountainLab;
-        public static GameObject buttonMountainLabCorridorNikke1;
-        public static GameObject buttonMountainLabCorridorNikke2;
-        public static GameObject buttonMountainLabRoomNikkeAnis;
-        public static GameObject buttonMountainLabRoomNikkeCenti;
-        public static GameObject buttonMountainLabRoomNikkeDorothy;
-        public static GameObject buttonMountainLabRoomNikkeElegg;
-        public static GameObject buttonMountainLabRoomNikkeFrima;
-        public static GameObject buttonMountainLabRoomNikkeGuilty;
-        public static GameObject buttonMountainLabRoomNikkeHelm;
-        public static GameObject buttonMountainLabRoomNikkeMaiden;
-        public static GameObject buttonMountainLabRoomNikkeMary;
-        public static GameObject buttonMountainLabRoomNikkeMast;
-        public static GameObject buttonMountainLabRoomNikkeNeon;
-        public static GameObject buttonMountainLabRoomNikkePepper;
-        public static GameObject buttonMountainLabRoomNikkeRapi;
-        public static GameObject buttonMountainLabRoomNikkeRosanna;
-        public static GameObject buttonMountainLabRoomNikkeSakura;
-        public static GameObject buttonMountainLabRoomNikkeTove;
-        public static GameObject buttonMountainLabRoomNikkeViper;
-        public static GameObject buttonMountainLabRoomNikkeYan;
-        public static GameObject buttonSecretBeach;
-
         public static GameObject giftShopLevel;
         public static GameObject giftShopRoomtalk;
         public static GameObject giftShopInteriorLevel;
@@ -127,8 +92,6 @@ namespace SMSAndroidsCore
         public static GameObject harborHomeClosetLevel;
         public static GameObject harborHomeClosetRoomtalk;
         public static GameObject harborHouseEntranceLevel;
-        public static GameObject harborHouseEntranceRadialButton;
-        public static GameObject harborHouseEntranceRadialButtonText;
         public static GameObject harborHouseEntranceRoomtalk;
         public static GameObject harborHomeKitchenLevel;
         public static GameObject harborHomeKitchenLevelB1;
@@ -198,10 +161,8 @@ namespace SMSAndroidsCore
         public static GameObject secretBeachLevel;
         public static GameObject secretBeachLevelBG;
         public static GameObject secretBeachRoomtalk;
-        public static GameObject secretBeachGatekeeper;
-        public static GameObject secretBeachGatekeeperB;
-        public static GameObject secretBeachFlash;
-        public static GameObject secretBeachSky;
+        // Secret Beach Sky / Flash / Gatekeeper / Portal overlays migrated to the
+        // pack (SMSAndroidsPack place "overlays" + Move/Spin dialogue actions).
 
         public static GameObject weatherInsideRain;
         public static GameObject weatherInsideSnow;
@@ -224,14 +185,9 @@ namespace SMSAndroidsCore
         public static GameObject giftShopItemSunglasses;
         public static GameObject giftShopItemSunscreen;
 
-        public static GameObject extraNavRow;
-        public Vector2 originLevelPos = Vector2.zero;
-        public int vanillaLevelCount;
-
         public static bool loadedPlaces = false;
         public static bool harborHomeBedroomSwapApplied = false;
         public static bool insideHarborHome = false;
-        public static GameObject currentRoomTalk;
         public static GameObject solid;
         public void Update()
         {
@@ -239,15 +195,15 @@ namespace SMSAndroidsCore
             {
                 if (!loadedPlaces && Core.loadedCore)
                 {
-                    vanillaLevelCount = Core.level.childCount;
-                    extraNavRow = GameObject.Instantiate(Core.mainCanvas.Find("Navigator").Find("Image").gameObject, Core.mainCanvas.Find("Navigator"));
-                    Vector2 extraNavRowSize = extraNavRow.GetComponent<RectTransform>().sizeDelta;
-                    Vector2 extraNavRowPosition = extraNavRow.GetComponent<RectTransform>().anchoredPosition;
-                    extraNavRowSize.y *= 2;
-                    extraNavRowPosition.y *= 1.5f;
-                    extraNavRow.GetComponent<RectTransform>().sizeDelta = extraNavRowSize;
-                    extraNavRow.GetComponent<RectTransform>().anchoredPosition = extraNavRowPosition;
-                    extraNavRow.transform.SetSiblingIndex(Core.mainCanvas.Find("Navigator").Find("Image").GetSiblingIndex() + 1);
+                    // GATE FIRST, side effects after. This block re-runs
+                    // every frame until it completes, so anything that
+                    // Instantiates/clones before this check leaks one copy
+                    // per retry frame.
+                    if (!TryResolvePackBuiltPlaces())
+                    {
+                        return;
+                    }
+
 
                     weatherInsideRain = GameObject.Find("Weather_System_Inside").transform.Find("Prefab_Rainy_Day").Find("Rain_Core").gameObject;
                     weatherInsideSnow = GameObject.Find("Weather_System_Inside").transform.Find("Prefab_Snowy_Day").Find("Snow_Core").gameObject;
@@ -290,149 +246,35 @@ namespace SMSAndroidsCore
                     levelCinema = Core.level.Find("122_Cinema").gameObject;
                     levelTrail = Core.level.Find("138_HikingPath_Start").gameObject;
 
-                    CreateNewPlace(900, "SecretBeach", "SecretBeach", "Remote Area", 0.75f);
-                    CreateNewPlace(901, "MountainLab", "MountainLab", "Facility", 0.75f);
-                    CreateNewPlace(902, "MountainLabCorridorNikke1", "MountainLabCorridor", "Sector N", 0.75f);
-                    CreateNewPlace(903, "MountainLabRoomNikkeAnis", "MountainLabRoom", "Anis' Room", 0.65f);
-                    CreateNewPlace(904, "MountainLabRoomNikkeCenti", "MountainLabRoom", "Centi's Room", 0.65f);
-                    CreateNewPlace(905, "MountainLabRoomNikkeDorothy", "MountainLabRoom", "Dorothy's Room", 0.65f);
-                    CreateNewPlace(906, "MountainLabRoomNikkeElegg", "MountainLabRoom", "Elegg's Room", 0.65f);
-                    CreateNewPlace(907, "MountainLabRoomNikkeFrima", "MountainLabRoom", "Frima's Room", 0.65f);
-                    CreateNewPlace(908, "MountainLabRoomNikkeGuilty", "MountainLabRoom", "Guilty's Room", 0.65f);
-                    CreateNewPlace(909, "MountainLabRoomNikkeHelm", "MountainLabRoom", "Helm's Room", 0.65f);
-                    CreateNewPlace(910, "MountainLabRoomNikkeMaiden", "MountainLabRoom", "Maiden's Room", 0.65f);
-                    CreateNewPlace(911, "MountainLabRoomNikkeMary", "MountainLabRoom", "Mary's Room", 0.65f);
-                    CreateNewPlace(912, "MountainLabRoomNikkeMast", "MountainLabRoom", "Mast's Room", 0.65f);
-                    CreateNewPlace(913, "MountainLabCorridorNikke2", "MountainLabCorridor", "Next Section", 0.75f);
-                    CreateNewPlace(914, "MountainLabRoomNikkeNeon", "MountainLabRoom", "Neon's Room", 0.65f);
-                    CreateNewPlace(915, "MountainLabRoomNikkePepper", "MountainLabRoom", "Pepper's Room", 0.65f);
-                    CreateNewPlace(916, "MountainLabRoomNikkeRapi", "MountainLabRoom", "Rapi's Room", 0.65f);
-                    CreateNewPlace(917, "MountainLabRoomNikkeRosanna", "MountainLabRoom", "Rosanna's Room", 0.65f);
-                    CreateNewPlace(918, "MountainLabRoomNikkeSakura", "MountainLabRoom", "Sakura's Room", 0.65f);
-                    CreateNewPlace(919, "MountainLabRoomNikkeTove", "MountainLabRoom", "Tove's Room", 0.65f);
-                    CreateNewPlace(920, "MountainLabRoomNikkeViper", "MountainLabRoom", "Viper's Room", 0.65f);
-                    CreateNewPlace(921, "MountainLabRoomNikkeYan", "MountainLabRoom", "Yan's Room", 0.65f);
-                    CreateNewPlace(922, "GiftShop", "GiftShop", "West Side", 0.75f);
-                    CreateNewPlace(923, "GiftShopInterior", "GiftShopInterior", "Gift Shop", 0.65f);
-                    CreateNewPlace(924, "HarborHomeLivingRoom", "HHomeLivingRoom", "Living Room", 0.05f);
-                    CreateNewPlace(925, "HarborHomeBedroom", "HHomeBedroom", "Bedroom", 0.05f);
-                    CreateNewPlace(926, "HarborHomeBathroom", "HHomeBathroom", "Bathroom", 0.15f);
-                    CreateNewPlace(927, "HarborHomeCloset", "HHomeCloset", "Closet", 0.05f);
-                    CreateNewPlace(928, "HarborHomeKitchen", "HHomeKitchen", "Kitchen", 0.05f);
-                    CreateNewPlace(929, "HarborHomePool", "HHomePool", "Pool", 0.05f);
-                    CreateNewPlace(930, "HarborHouseEntrance", "HHomeEntrance", "Entrance", 0.75f);
+                    // The 31 CreateNewPlace calls that used to live here are
+                    // gone. The matching levels / map buttons / roomtalks
+                    // are owned by SMSModForge.PackPlugin — same key set,
+                    // same parallax / audio / sprite layout. References to
+                    // the pack-built GameObjects were already resolved by
+                    // TryResolvePackBuiltPlaces at the top of this block.
 
-                    buttonBeach = Core.mainCanvas.Find("Navigator").Find("MapButtons").Find("14_beach").gameObject;
-                    buttonCar = Core.mainCanvas.Find("Navigator").Find("MapButtons").Find("22_car").gameObject;
-
-                    buttonSecretBeach = Core.mainCanvas.Find("Navigator").Find("MapButtons").Find("900_SecretBeach").gameObject;
-                    buttonMountainLab = Core.mainCanvas.Find("Navigator").Find("MapButtons").Find("901_MountainLab").gameObject;
-                    buttonMountainLabCorridorNikke1 = Core.mainCanvas.Find("Navigator").Find("MapButtons").Find("902_MountainLabCorridorNikke1").gameObject;
-                    buttonMountainLabRoomNikkeAnis = Core.mainCanvas.Find("Navigator").Find("MapButtons").Find("903_MountainLabRoomNikkeAnis").gameObject;
-                    buttonMountainLabRoomNikkeCenti = Core.mainCanvas.Find("Navigator").Find("MapButtons").Find("904_MountainLabRoomNikkeCenti").gameObject;
-                    buttonMountainLabRoomNikkeDorothy = Core.mainCanvas.Find("Navigator").Find("MapButtons").Find("905_MountainLabRoomNikkeDorothy").gameObject;
-                    buttonMountainLabRoomNikkeElegg = Core.mainCanvas.Find("Navigator").Find("MapButtons").Find("906_MountainLabRoomNikkeElegg").gameObject;
-                    buttonMountainLabRoomNikkeFrima = Core.mainCanvas.Find("Navigator").Find("MapButtons").Find("907_MountainLabRoomNikkeFrima").gameObject;
-                    buttonMountainLabRoomNikkeGuilty = Core.mainCanvas.Find("Navigator").Find("MapButtons").Find("908_MountainLabRoomNikkeGuilty").gameObject;
-                    buttonMountainLabRoomNikkeHelm = Core.mainCanvas.Find("Navigator").Find("MapButtons").Find("909_MountainLabRoomNikkeHelm").gameObject;
-                    buttonMountainLabRoomNikkeMaiden = Core.mainCanvas.Find("Navigator").Find("MapButtons").Find("910_MountainLabRoomNikkeMaiden").gameObject;
-                    buttonMountainLabRoomNikkeMary = Core.mainCanvas.Find("Navigator").Find("MapButtons").Find("911_MountainLabRoomNikkeMary").gameObject;
-                    buttonMountainLabRoomNikkeMast = Core.mainCanvas.Find("Navigator").Find("MapButtons").Find("912_MountainLabRoomNikkeMast").gameObject;
-                    buttonMountainLabCorridorNikke2 = Core.mainCanvas.Find("Navigator").Find("MapButtons").Find("913_MountainLabCorridorNikke2").gameObject;
-                    buttonMountainLabRoomNikkeNeon = Core.mainCanvas.Find("Navigator").Find("MapButtons").Find("914_MountainLabRoomNikkeNeon").gameObject;
-                    buttonMountainLabRoomNikkePepper = Core.mainCanvas.Find("Navigator").Find("MapButtons").Find("915_MountainLabRoomNikkePepper").gameObject;
-                    buttonMountainLabRoomNikkeRapi = Core.mainCanvas.Find("Navigator").Find("MapButtons").Find("916_MountainLabRoomNikkeRapi").gameObject;
-                    buttonMountainLabRoomNikkeRosanna = Core.mainCanvas.Find("Navigator").Find("MapButtons").Find("917_MountainLabRoomNikkeRosanna").gameObject;
-                    buttonMountainLabRoomNikkeSakura = Core.mainCanvas.Find("Navigator").Find("MapButtons").Find("918_MountainLabRoomNikkeSakura").gameObject;
-                    buttonMountainLabRoomNikkeTove = Core.mainCanvas.Find("Navigator").Find("MapButtons").Find("919_MountainLabRoomNikkeTove").gameObject;
-                    buttonMountainLabRoomNikkeViper = Core.mainCanvas.Find("Navigator").Find("MapButtons").Find("920_MountainLabRoomNikkeViper").gameObject;
-                    buttonMountainLabRoomNikkeYan = Core.mainCanvas.Find("Navigator").Find("MapButtons").Find("921_MountainLabRoomNikkeYan").gameObject;
-                    buttonGiftShop = Core.mainCanvas.Find("Navigator").Find("MapButtons").Find("922_GiftShop").gameObject;
-                    buttonGiftShopInterior = Core.mainCanvas.Find("Navigator").Find("MapButtons").Find("923_GiftShopInterior").gameObject;
-                    buttonHarborHomeLivingroom = Core.mainCanvas.Find("Navigator").Find("MapButtons").Find("924_HarborHomeLivingRoom").gameObject;
-                    buttonHarborHomeBedroom = Core.mainCanvas.Find("Navigator").Find("MapButtons").Find("925_HarborHomeBedroom").gameObject;
-                    buttonHarborHomeBathroom = Core.mainCanvas.Find("Navigator").Find("MapButtons").Find("926_HarborHomeBathroom").gameObject;
-                    buttonHarborHomeCloset = Core.mainCanvas.Find("Navigator").Find("MapButtons").Find("927_HarborHomeCloset").gameObject;
-                    buttonHarborHomeKitchen = Core.mainCanvas.Find("Navigator").Find("MapButtons").Find("928_HarborHomeKitchen").gameObject;
-                    buttonHarborHomePool = Core.mainCanvas.Find("Navigator").Find("MapButtons").Find("929_HarborHomePool").gameObject;
-                    buttonHarborHouseEntrance = Core.mainCanvas.Find("Navigator").Find("MapButtons").Find("930_HarborHouseEntrance").gameObject;
-
-                    secretBeachLevel = Core.level.Find("900_SecretBeach").gameObject;
-                    secretBeachLevelBG = secretBeachLevel.transform.GetChild(1).gameObject;
-                    secretBeachRoomtalk = Core.roomTalk.Find("SecretBeach").gameObject;
-
-                    mountainLabLevel = Core.level.Find("901_MountainLab").gameObject;
-                    mountainLabRoomtalk = Core.roomTalk.Find("MountainLab").gameObject;
-
-                    mountainLabCorridorNikke1Level = Core.level.Find("902_MountainLabCorridorNikke1").gameObject;
-                    mountainLabCorridorNikke1Roomtalk = Core.roomTalk.Find("MountainLabCorridorNikke1").gameObject;
-                    mountainLabCorridorNikke2Level = Core.level.Find("913_MountainLabCorridorNikke2").gameObject;
-                    mountainLabCorridorNikke2Roomtalk = Core.roomTalk.Find("MountainLabCorridorNikke2").gameObject;
-
-                    mountainLabRoomNikkeAnisLevel = Core.level.Find("903_MountainLabRoomNikkeAnis").gameObject;
-                    mountainLabRoomNikkeAnisRoomtalk = Core.roomTalk.Find("MountainLabRoomNikkeAnis").gameObject;
-                    mountainLabRoomNikkeCentiLevel = Core.level.Find("904_MountainLabRoomNikkeCenti").gameObject;
-                    mountainLabRoomNikkeCentiRoomtalk = Core.roomTalk.Find("MountainLabRoomNikkeCenti").gameObject;
-                    mountainLabRoomNikkeDorothyLevel = Core.level.Find("905_MountainLabRoomNikkeDorothy").gameObject;
-                    mountainLabRoomNikkeDorothyRoomtalk = Core.roomTalk.Find("MountainLabRoomNikkeDorothy").gameObject;
-                    mountainLabRoomNikkeEleggLevel = Core.level.Find("906_MountainLabRoomNikkeElegg").gameObject;
-                    mountainLabRoomNikkeEleggRoomtalk = Core.roomTalk.Find("MountainLabRoomNikkeElegg").gameObject;
-                    mountainLabRoomNikkeFrimaLevel = Core.level.Find("907_MountainLabRoomNikkeFrima").gameObject;
-                    mountainLabRoomNikkeFrimaRoomtalk = Core.roomTalk.Find("MountainLabRoomNikkeFrima").gameObject;
-                    mountainLabRoomNikkeGuiltyLevel = Core.level.Find("908_MountainLabRoomNikkeGuilty").gameObject;
-                    mountainLabRoomNikkeGuiltyRoomtalk = Core.roomTalk.Find("MountainLabRoomNikkeGuilty").gameObject;
-                    mountainLabRoomNikkeHelmLevel = Core.level.Find("909_MountainLabRoomNikkeHelm").gameObject;
-                    mountainLabRoomNikkeHelmRoomtalk = Core.roomTalk.Find("MountainLabRoomNikkeHelm").gameObject;
-                    mountainLabRoomNikkeMaidenLevel = Core.level.Find("910_MountainLabRoomNikkeMaiden").gameObject;
-                    mountainLabRoomNikkeMaidenRoomtalk = Core.roomTalk.Find("MountainLabRoomNikkeMaiden").gameObject;
-                    mountainLabRoomNikkeMaryLevel = Core.level.Find("911_MountainLabRoomNikkeMary").gameObject;
-                    mountainLabRoomNikkeMaryRoomtalk = Core.roomTalk.Find("MountainLabRoomNikkeMary").gameObject;
-                    mountainLabRoomNikkeMastLevel = Core.level.Find("912_MountainLabRoomNikkeMast").gameObject;
-                    mountainLabRoomNikkeMastRoomtalk = Core.roomTalk.Find("MountainLabRoomNikkeMast").gameObject;
-                    mountainLabRoomNikkeNeonLevel = Core.level.Find("914_MountainLabRoomNikkeNeon").gameObject;
-                    mountainLabRoomNikkeNeonRoomtalk = Core.roomTalk.Find("MountainLabRoomNikkeNeon").gameObject;
-                    mountainLabRoomNikkePepperLevel = Core.level.Find("915_MountainLabRoomNikkePepper").gameObject;
-                    mountainLabRoomNikkePepperRoomtalk = Core.roomTalk.Find("MountainLabRoomNikkePepper").gameObject;
-                    mountainLabRoomNikkeRapiLevel = Core.level.Find("916_MountainLabRoomNikkeRapi").gameObject;
-                    mountainLabRoomNikkeRapiRoomtalk = Core.roomTalk.Find("MountainLabRoomNikkeRapi").gameObject;
-                    mountainLabRoomNikkeRosannaLevel = Core.level.Find("917_MountainLabRoomNikkeRosanna").gameObject;
-                    mountainLabRoomNikkeRosannaRoomtalk = Core.roomTalk.Find("MountainLabRoomNikkeRosanna").gameObject;
-                    mountainLabRoomNikkeSakuraLevel = Core.level.Find("918_MountainLabRoomNikkeSakura").gameObject;
-                    mountainLabRoomNikkeSakuraRoomtalk = Core.roomTalk.Find("MountainLabRoomNikkeSakura").gameObject;
-                    mountainLabRoomNikkeToveLevel = Core.level.Find("919_MountainLabRoomNikkeTove").gameObject;
-                    mountainLabRoomNikkeToveRoomtalk = Core.roomTalk.Find("MountainLabRoomNikkeTove").gameObject;
-                    mountainLabRoomNikkeViperLevel = Core.level.Find("920_MountainLabRoomNikkeViper").gameObject;
-                    mountainLabRoomNikkeViperRoomtalk = Core.roomTalk.Find("MountainLabRoomNikkeViper").gameObject;
-                    mountainLabRoomNikkeYanLevel = Core.level.Find("921_MountainLabRoomNikkeYan").gameObject;
-                    mountainLabRoomNikkeYanRoomtalk = Core.roomTalk.Find("MountainLabRoomNikkeYan").gameObject;
-
-                    giftShopLevel = Core.level.Find("922_GiftShop").gameObject;
-                    giftShopRoomtalk = Core.roomTalk.Find("GiftShop").gameObject;
-                    giftShopInteriorLevel = Core.level.Find("923_GiftShopInterior").gameObject;
-                    giftShopInteriorRoomtalk = Core.roomTalk.Find("GiftShopInterior").gameObject;
-
-                    harborHomeLivingroomLevel = Core.level.Find("924_HarborHomeLivingRoom").gameObject;
-                    harborHomeLivingroomRoomtalk = Core.roomTalk.Find("HarborHomeLivingRoom").gameObject;
-                    harborHomeBedroomLevel = Core.level.Find("925_HarborHomeBedroom").gameObject;
-                    harborHomeBedroomRoomtalk = Core.roomTalk.Find("HarborHomeBedroom").gameObject;
+                    // The pack creates the roomtalk children of the bedroom
+                    // level; SMSAndroids grafts the PlayerRoom_ButtonCanvas
+                    // (sleep / calendar / PC buttons) onto it so the player
+                    // can still interact with their bedroom from the HH
+                    // bedroom view.
                     harborHomeBedroomButtonCanvas = GameObject.Instantiate(Core.level.Find("5_MyRoom").Find("PlayerRoom_ButtonCanvas").gameObject, harborHomeBedroomLevel.transform);
                     harborHomeBedroomButtonCanvas.transform.Find("Player_Room_Buttons").gameObject.GetComponent<ParallaxMouseEffect>().parallaxStrength = 0.05f;
                     harborHomeBedroomButtonCanvas.transform.Find("Player_Room_Buttons").Find("SleepButton").localPosition = new Vector2(0, -140);
                     harborHomeBedroomButtonCanvas.transform.Find("Player_Room_Buttons").Find("CalendarButton").localPosition = new Vector2(-20, 250);
                     harborHomeBedroomButtonCanvas.transform.Find("Player_Room_Buttons").Find("PCButton").localPosition = new Vector2(-720, -100);
-                    harborHomeBathroomLevel = Core.level.Find("926_HarborHomeBathroom").gameObject;
-                    harborHomeBathroomRoomtalk = Core.roomTalk.Find("HarborHomeBathroom").gameObject;
-                    harborHomeClosetLevel = Core.level.Find("927_HarborHomeCloset").gameObject;
-                    harborHomeClosetRoomtalk = Core.roomTalk.Find("HarborHomeCloset").gameObject;
-                    harborHomeKitchenLevel = Core.level.Find("928_HarborHomeKitchen").gameObject;
-                    harborHomeKitchenRoomtalk = Core.roomTalk.Find("HarborHomeKitchen").gameObject;
-                    harborHomePoolLevel = Core.level.Find("929_HarborHomePool").gameObject;
-                    harborHomePoolRoomtalk = Core.roomTalk.Find("HarborHomePool").gameObject;
-                    harborHouseEntranceLevel = Core.level.Find("930_HarborHouseEntrance").gameObject;
-                    harborHouseEntranceRoomtalk = Core.roomTalk.Find("HarborHouseEntrance").gameObject;
+                    // Active from creation — visibility follows the bedroom
+                    // level via the hierarchy. (The old activation lived in
+                    // the bedroom map-button click handler, which is gone
+                    // now that ModForge owns navigation.)
+                    harborHomeBedroomButtonCanvas.SetActive(true);
 
-                    // Create Harbor Home Entrance radial button in Foundry
-                    CreateHarborHouseEntranceRadialButton();
+                    // The Harbor Home Entrance radial button — including its
+                    // "House for Sale" -> "Home" rename once the house is
+                    // bought — is fully pack-side now: the label is
+                    // [PV:HarborHome_ButtonLabel] (live-resolved by
+                    // RadialButtonRuntime) and an Integration rule writes
+                    // the variable on the rising edge of HarborHome_Bought.
 
                     // Initialize ModShops and GiftStore
                     InitializeModShops();
@@ -447,38 +289,14 @@ namespace SMSAndroidsCore
                     giftShopItemNecklace = AddItemToGiftStore("Shark Tooth Necklace", "$1850", "Necklace.PNG");
                     giftShopItemBonsai = AddItemToGiftStore("Bonsai Tree", "$3500", "Bonsai.PNG");
 
-                    secretBeachSky = GameObject.Instantiate(Places.secretBeachLevel.transform.GetChild(1).gameObject, Places.secretBeachLevel.transform);
-                    secretBeachFlash = GameObject.Instantiate(Places.secretBeachLevel.transform.GetChild(1).gameObject, Places.secretBeachLevel.transform);
-                    secretBeachGatekeeper = GameObject.Instantiate(Places.secretBeachLevel.transform.GetChild(1).gameObject, Places.secretBeachLevel.transform);
-                    secretBeachGatekeeperB = GameObject.Instantiate(Places.secretBeachLevel.transform.GetChild(1).gameObject, secretBeachGatekeeper.transform);
-                    SetNewLevelSprite(secretBeachSky, Core.locationPath, "SecretBeachUp.PNG", 2048, 1729);
-                    SetNewLevelSprite(secretBeachFlash, Core.locationPath, "Flash.PNG", 2048, 1729);
-                    SetNewLevelSprite(secretBeachGatekeeper, Core.locationPath, "Gatekeeper.PNG", 1024, 783);
-                    SetNewLevelSprite(secretBeachGatekeeperB, Core.locationPath, "GatekeeperB.PNG", 1024, 783);
-                    secretBeachSky.name = "Sky";
-                    secretBeachFlash.name = "Flash";
-                    secretBeachGatekeeper.name = "Gatekeeper";
-                    secretBeachGatekeeperB.name = "Portal";
-                    secretBeachSky.transform.position = new Vector2(secretBeachSky.transform.position.x, 15);
-                    secretBeachFlash.transform.position = new Vector2(secretBeachFlash.transform.position.x, 15);
-                    secretBeachGatekeeper.transform.position = new Vector2(secretBeachSky.transform.position.x, 18);
-                    secretBeachSky.GetComponent<ParallaxMouseEffect>().enabled = false;
-                    secretBeachFlash.GetComponent<ParallaxMouseEffect>().enabled = false;
-                    secretBeachFlash.GetComponent<SpriteRenderer>().sortingOrder = -9;
-                    secretBeachGatekeeper.GetComponent<ParallaxMouseEffect>().enabled = false;
-                    secretBeachGatekeeper.GetComponent<SpriteRenderer>().sortingOrder = -10;
-                    secretBeachGatekeeperB.GetComponent<ParallaxMouseEffect>().enabled = false;
-                    secretBeachGatekeeperB.GetComponent<SpriteRenderer>().sortingOrder = -11;
-                    secretBeachFlash.SetActive(false);
-                    secretBeachGatekeeperB.SetActive(false);
-                    secretBeachGatekeeperB.GetComponent<SpriteRenderer>().color = new Color(secretBeachGatekeeperB.GetComponent<SpriteRenderer>().color.r,
-                        secretBeachGatekeeperB.GetComponent<SpriteRenderer>().color.g, secretBeachGatekeeperB.GetComponent<SpriteRenderer>().color.b, 0);
-                    secretBeachGatekeeperB.AddComponent<FadeInSprite>();
-                    secretBeachFlash.AddComponent<FadeOutSprite>();
-                    originLevelPos = Places.secretBeachLevel.transform.position;
+                    // Secret Beach Sky / Flash / Gatekeeper / Portal overlays are
+                    // now authored as pack data (SMSAndroidsPack place "overlays")
+                    // and animated by the GK dialogue's MoveGameObject /
+                    // SpinGameObject / FadeSprite actions — no longer built here.
 
-                    SetupMapButtonsGrid(Core.mainCanvas.Find("Navigator").Find("MapButtons").gameObject, new Vector2(125, 75), 6, 15f, 20f, this);
-
+                    // Navigator grid + extended second-row background are
+                    // owned by ModForge (NavigatorGridSetup / NavigatorGridLayout)
+                    // along with the map buttons themselves.
 
                     solid = GameObject.Instantiate(Places.secretBeachLevel.transform.GetChild(1).gameObject, Places.levelForest.transform);
                     SetNewLevelSprite(solid, Core.bustPath, "Solid\\Solid.PNG", 2048, 1136);
@@ -497,12 +315,18 @@ namespace SMSAndroidsCore
 
                     solid.SetActive(true);
 
-                    harborHomeBathroomLevelB1 = GameObject.Instantiate(harborHomeBathroomLevel.transform.Find("926_HarborHomeBathroom").gameObject, harborHomeBathroomLevel.transform);
+                    // The B1 overlays (shower glass + fridge-open) are
+                    // SMSAndroids-side art layered on top of the pack-built
+                    // HH bathroom + kitchen levels. We clone the secondary-
+                    // sprite child (child index 1 — the same secondary the
+                    // PlaceFactory cloned from the Beach prototype) so the
+                    // overlay carries the right shader / material.
+                    harborHomeBathroomLevelB1 = GameObject.Instantiate(harborHomeBathroomLevel.transform.GetChild(1).gameObject, harborHomeBathroomLevel.transform);
                     harborHomeBathroomLevelB1.name = "ShowerGlassOverlay";
                     harborHomeBathroomLevelB1.GetComponent<SpriteRenderer>().sortingOrder = 0;
                     Destroy(harborHomeBathroomLevelB1.GetComponent<ParallaxMouseEffect>());
                     SetNewLevelSprite(harborHomeBathroomLevelB1, Core.locationPath, "HHomeBathroomB1.PNG", 2048, 1136);
-                    harborHomeKitchenLevelB1 = GameObject.Instantiate(harborHomeKitchenLevel.transform.Find("928_HarborHomeKitchen").gameObject, harborHomeKitchenLevel.transform);
+                    harborHomeKitchenLevelB1 = GameObject.Instantiate(harborHomeKitchenLevel.transform.GetChild(1).gameObject, harborHomeKitchenLevel.transform);
                     harborHomeKitchenLevelB1.name = "FridgeOpenOverlay";
                     harborHomeKitchenLevelB1.SetActive(false);
                     harborHomeKitchenLevelB1.GetComponent<SpriteRenderer>().sortingOrder = harborHomeKitchenLevel.GetComponent<SpriteRenderer>().sortingOrder + 1;
@@ -521,6 +345,12 @@ namespace SMSAndroidsCore
                     harborHomeLivingroomLevelMovies = GameObject.Instantiate(Core.level.Find("3_LivingRoom").Find("Movies").gameObject, harborHomeLivingroomLevel.transform);
                     harborHomePoolNPCTanningleft = GameObject.Instantiate(new GameObject(), harborHomePoolLevel.transform.Find("NPCs")).transform; harborHomePoolNPCTanningleft.name = "Tanningleft";
                     harborHomePoolNPCTanningright = GameObject.Instantiate(new GameObject(), harborHomePoolLevel.transform.Find("NPCs")).transform; harborHomePoolNPCTanningright.name = "Tanningright";
+
+                    // Subscribe to gift-UI signals here too, in case Places
+                    // finishes before Dialogues (load order isn't strict
+                    // between them). EnsureSubscribed is idempotent so both
+                    // call sites can stay.
+                    GiftUIBridge.EnsureSubscribed();
 
                     Logger.LogInfo("----- PLACES LOADED -----");
                     loadedPlaces = true;
@@ -561,47 +391,7 @@ namespace SMSAndroidsCore
                 if (levelMall.activeSelf && randomNumMall == -1) { randomNumMall = Core.GetRandomNumber(100); Debug.Log("randomNumMall: " + randomNumMall); } if (!levelMall.activeSelf) { randomNumMall = -1; }
                 if (mountainLabRoomNikkeAnisLevel.activeSelf && randomNumMLRoomAnis == -1) { randomNumMLRoomAnis = Core.GetRandomNumber(100); Debug.Log("randomNumMLRoomAnis: " + randomNumMLRoomAnis); } if (!mountainLabRoomNikkeAnisLevel.activeSelf) { randomNumMLRoomAnis = -1; }
 
-                if (secretBeachLevel.activeSelf || giftShopLevel.activeSelf) { buttonBeach.SetActive(true); }
-                if (secretBeachLevel.activeSelf || harborHouseEntranceLevel.activeSelf) { buttonCar.SetActive(true); }
-
                 harborHomeKitchenLevelB1.SetActive(Schedule.anisLocation == "HarborHomeKitchenFridge");
-
-                buttonSecretBeach.SetActive(Core.levelBeach.activeSelf || mountainLabLevel.activeSelf);
-                buttonMountainLab.SetActive(SaveManager.GetBool("SecretBeach_UnlockedLab") && (secretBeachLevel.activeSelf || mountainLabCorridorNikke1Level.activeSelf || mountainLabCorridorNikke2Level.activeSelf));
-                buttonMountainLabCorridorNikke1.SetActive(mountainLabLevel.activeSelf || mountainLabRoomNikkeAnisLevel.activeSelf || mountainLabRoomNikkeCentiLevel.activeSelf || mountainLabRoomNikkeDorothyLevel.activeSelf ||
-                    mountainLabRoomNikkeEleggLevel.activeSelf || mountainLabRoomNikkeFrimaLevel.activeSelf || mountainLabRoomNikkeGuiltyLevel.activeSelf || mountainLabRoomNikkeHelmLevel.activeSelf || mountainLabRoomNikkeMaidenLevel.activeSelf || 
-                    mountainLabRoomNikkeMaryLevel.activeSelf || mountainLabRoomNikkeMastLevel.activeSelf || mountainLabCorridorNikke2Level.activeSelf);
-                buttonMountainLabRoomNikkeAnis.SetActive(SaveManager.GetBool("Voyeur_SeenAnis") && mountainLabCorridorNikke1Level.activeSelf);
-                buttonMountainLabRoomNikkeCenti.SetActive(SaveManager.GetBool("Voyeur_SeenCenti") && mountainLabCorridorNikke1Level.activeSelf);
-                buttonMountainLabRoomNikkeDorothy.SetActive(SaveManager.GetBool("Voyeur_SeenDorothy") && mountainLabCorridorNikke1Level.activeSelf);
-                buttonMountainLabRoomNikkeElegg.SetActive(SaveManager.GetBool("Voyeur_SeenElegg") && mountainLabCorridorNikke1Level.activeSelf);
-                buttonMountainLabRoomNikkeFrima.SetActive(SaveManager.GetBool("Voyeur_SeenFrima") && mountainLabCorridorNikke1Level.activeSelf);
-                buttonMountainLabRoomNikkeGuilty.SetActive(SaveManager.GetBool("Voyeur_SeenGuilty") && mountainLabCorridorNikke1Level.activeSelf);
-                buttonMountainLabRoomNikkeHelm.SetActive(SaveManager.GetBool("Voyeur_SeenHelm") && mountainLabCorridorNikke1Level.activeSelf);
-                buttonMountainLabRoomNikkeMaiden.SetActive(SaveManager.GetBool("Voyeur_SeenMaiden") && mountainLabCorridorNikke1Level.activeSelf);
-                buttonMountainLabRoomNikkeMary.SetActive(SaveManager.GetBool("Voyeur_SeenMary") && mountainLabCorridorNikke1Level.activeSelf);
-                buttonMountainLabRoomNikkeMast.SetActive(SaveManager.GetBool("Voyeur_SeenMast") && mountainLabCorridorNikke1Level.activeSelf);
-                buttonMountainLabCorridorNikke2.SetActive(mountainLabRoomNikkeNeonLevel.activeSelf || mountainLabRoomNikkePepperLevel.activeSelf || mountainLabRoomNikkeRapiLevel.activeSelf || mountainLabCorridorNikke1Level.activeSelf || 
-                    mountainLabRoomNikkeRosannaLevel.activeSelf || mountainLabRoomNikkeSakuraLevel.activeSelf || mountainLabRoomNikkeToveLevel.activeSelf || mountainLabRoomNikkeViperLevel.activeSelf || mountainLabRoomNikkeYanLevel.activeSelf);
-                buttonMountainLabRoomNikkeNeon.SetActive(SaveManager.GetBool("Voyeur_SeenNeon") && mountainLabCorridorNikke2Level.activeSelf);
-                buttonMountainLabRoomNikkePepper.SetActive(SaveManager.GetBool("Voyeur_SeenPepper") && mountainLabCorridorNikke2Level.activeSelf);
-                buttonMountainLabRoomNikkeRapi.SetActive(SaveManager.GetBool("Voyeur_SeenRapi") && mountainLabCorridorNikke2Level.activeSelf);
-                buttonMountainLabRoomNikkeRosanna.SetActive(SaveManager.GetBool("Voyeur_SeenRosanna") && mountainLabCorridorNikke2Level.activeSelf);
-                buttonMountainLabRoomNikkeSakura.SetActive(SaveManager.GetBool("Voyeur_SeenSakura") && mountainLabCorridorNikke2Level.activeSelf);
-                buttonMountainLabRoomNikkeTove.SetActive(SaveManager.GetBool("Voyeur_SeenTove") && mountainLabCorridorNikke2Level.activeSelf);
-                buttonMountainLabRoomNikkeViper.SetActive(SaveManager.GetBool("Voyeur_SeenViper") && mountainLabCorridorNikke2Level.activeSelf);
-                buttonMountainLabRoomNikkeYan.SetActive(SaveManager.GetBool("Voyeur_SeenYan") && mountainLabCorridorNikke2Level.activeSelf);
-                buttonGiftShop.SetActive((SaveManager.GetBool("Voyeur_SeenCenti") && SaveManager.GetBool("Voyeur_SeenYan")) && (Core.levelBeach.activeSelf || giftShopInteriorLevel.activeSelf));
-                buttonGiftShopInterior.SetActive(SaveManager.GetInt("GiftShop_BuildCounter") >= 2 && giftShopLevel.activeSelf);
-                buttonHarborHouseEntrance.SetActive(harborHomeLivingroomLevel.activeSelf);
-                buttonHarborHomeLivingroom.SetActive(SaveManager.GetBool("HarborHome_Bought") && (harborHouseEntranceLevel.activeSelf || harborHomeBedroomLevel.activeSelf || harborHomeKitchenLevel.activeSelf ||
-                    harborHomePoolLevel.activeSelf));
-                buttonHarborHomeBedroom.SetActive(harborHomeLivingroomLevel.activeSelf || harborHomeClosetLevel.activeSelf || harborHomeBathroomLevel.activeSelf);
-                buttonHarborHomeBathroom.SetActive(harborHomeBedroomLevel.activeSelf || harborHomeClosetLevel.activeSelf);
-                buttonHarborHomeCloset.SetActive(harborHomeBedroomLevel.activeSelf || harborHomeBathroomLevel.activeSelf);
-                buttonHarborHomeKitchen.SetActive(harborHomeLivingroomLevel.activeSelf);
-                buttonHarborHomePool.SetActive(harborHomeLivingroomLevel.activeSelf);
-                buttonHarborHouseEntrance.SetActive(harborHomeLivingroomLevel.activeSelf);
 
                 if (Core.GetVariableBool("rainy-day"))
                 {
@@ -613,41 +403,6 @@ namespace SMSAndroidsCore
                     if (giftShopInteriorLevel.activeSelf || harborHomeLivingroomLevel.activeSelf || harborHomeBedroomLevel.activeSelf || harborHomeKitchenLevel.activeSelf) { weatherInsideSnow.SetActive(true); }
                     if (giftShopLevel.activeSelf || harborHouseEntranceLevel.activeSelf || harborHomePoolLevel.activeSelf || secretBeachLevel.activeSelf) { weatherOutsideSnow.SetActive(true); }
                 }
-
-                if (buttonSecretBeach.transform.GetChild(0).gameObject.activeSelf) { ClickMapButton(secretBeachRoomtalk, 0); buttonSecretBeach.transform.GetChild(0).gameObject.SetActive(false); }
-                if (buttonMountainLab.transform.GetChild(0).gameObject.activeSelf) { ClickMapButton(mountainLabRoomtalk, 1); buttonMountainLab.transform.GetChild(0).gameObject.SetActive(false); }
-                if (buttonMountainLabCorridorNikke1.transform.GetChild(0).gameObject.activeSelf) { ClickMapButton(mountainLabCorridorNikke1Roomtalk, 2); buttonMountainLabCorridorNikke1.transform.GetChild(0).gameObject.SetActive(false); }
-                if (buttonMountainLabRoomNikkeAnis.transform.GetChild(0).gameObject.activeSelf) { ClickMapButton(mountainLabRoomNikkeAnisRoomtalk, 3); buttonMountainLabRoomNikkeAnis.transform.GetChild(0).gameObject.SetActive(false); }
-                if (buttonMountainLabRoomNikkeCenti.transform.GetChild(0).gameObject.activeSelf) { ClickMapButton(mountainLabRoomNikkeCentiRoomtalk, 4); buttonMountainLabRoomNikkeCenti.transform.GetChild(0).gameObject.SetActive(false); }
-                if (buttonMountainLabRoomNikkeDorothy.transform.GetChild(0).gameObject.activeSelf) { ClickMapButton(mountainLabRoomNikkeDorothyRoomtalk, 5); buttonMountainLabRoomNikkeDorothy.transform.GetChild(0).gameObject.SetActive(false); }
-                if (buttonMountainLabRoomNikkeElegg.transform.GetChild(0).gameObject.activeSelf) { ClickMapButton(mountainLabRoomNikkeEleggRoomtalk, 6); buttonMountainLabRoomNikkeElegg.transform.GetChild(0).gameObject.SetActive(false); }
-                if (buttonMountainLabRoomNikkeFrima.transform.GetChild(0).gameObject.activeSelf) { ClickMapButton(mountainLabRoomNikkeFrimaRoomtalk, 7); buttonMountainLabRoomNikkeFrima.transform.GetChild(0).gameObject.SetActive(false); }
-                if (buttonMountainLabRoomNikkeGuilty.transform.GetChild(0).gameObject.activeSelf) { ClickMapButton(mountainLabRoomNikkeGuiltyRoomtalk, 8); buttonMountainLabRoomNikkeGuilty.transform.GetChild(0).gameObject.SetActive(false); }
-                if (buttonMountainLabRoomNikkeHelm.transform.GetChild(0).gameObject.activeSelf) { ClickMapButton(mountainLabRoomNikkeHelmRoomtalk, 9); buttonMountainLabRoomNikkeHelm.transform.GetChild(0).gameObject.SetActive(false); }
-                if (buttonMountainLabRoomNikkeMaiden.transform.GetChild(0).gameObject.activeSelf) { ClickMapButton(mountainLabRoomNikkeMaidenRoomtalk, 10); buttonMountainLabRoomNikkeMaiden.transform.GetChild(0).gameObject.SetActive(false); }
-                if (buttonMountainLabRoomNikkeMary.transform.GetChild(0).gameObject.activeSelf) { ClickMapButton(mountainLabRoomNikkeMaryRoomtalk, 11); buttonMountainLabRoomNikkeMary.transform.GetChild(0).gameObject.SetActive(false); }
-                if (buttonMountainLabRoomNikkeMast.transform.GetChild(0).gameObject.activeSelf) { ClickMapButton(mountainLabRoomNikkeMastRoomtalk, 12); buttonMountainLabRoomNikkeMast.transform.GetChild(0).gameObject.SetActive(false); }
-                if (buttonMountainLabCorridorNikke2.transform.GetChild(0).gameObject.activeSelf) { ClickMapButton(mountainLabCorridorNikke2Roomtalk, 13); buttonMountainLabCorridorNikke2.transform.GetChild(0).gameObject.SetActive(false); }
-                if (buttonMountainLabRoomNikkeNeon.transform.GetChild(0).gameObject.activeSelf) { ClickMapButton(mountainLabRoomNikkeNeonRoomtalk, 14); buttonMountainLabRoomNikkeNeon.transform.GetChild(0).gameObject.SetActive(false); }
-                if (buttonMountainLabRoomNikkePepper.transform.GetChild(0).gameObject.activeSelf) { ClickMapButton(mountainLabRoomNikkePepperRoomtalk, 15); buttonMountainLabRoomNikkePepper.transform.GetChild(0).gameObject.SetActive(false); }
-                if (buttonMountainLabRoomNikkeRapi.transform.GetChild(0).gameObject.activeSelf) { ClickMapButton(mountainLabRoomNikkeRapiRoomtalk, 16); buttonMountainLabRoomNikkeRapi.transform.GetChild(0).gameObject.SetActive(false); }
-                if (buttonMountainLabRoomNikkeRosanna.transform.GetChild(0).gameObject.activeSelf) { ClickMapButton(mountainLabRoomNikkeRosannaRoomtalk, 17); buttonMountainLabRoomNikkeRosanna.transform.GetChild(0).gameObject.SetActive(false); }
-                if (buttonMountainLabRoomNikkeSakura.transform.GetChild(0).gameObject.activeSelf) { ClickMapButton(mountainLabRoomNikkeSakuraRoomtalk, 18); buttonMountainLabRoomNikkeSakura.transform.GetChild(0).gameObject.SetActive(false); }
-                if (buttonMountainLabRoomNikkeTove.transform.GetChild(0).gameObject.activeSelf) { ClickMapButton(mountainLabRoomNikkeToveRoomtalk, 19); buttonMountainLabRoomNikkeTove.transform.GetChild(0).gameObject.SetActive(false); }
-                if (buttonMountainLabRoomNikkeViper.transform.GetChild(0).gameObject.activeSelf) { ClickMapButton(mountainLabRoomNikkeViperRoomtalk, 20); buttonMountainLabRoomNikkeViper.transform.GetChild(0).gameObject.SetActive(false); }
-                if (buttonMountainLabRoomNikkeYan.transform.GetChild(0).gameObject.activeSelf) { ClickMapButton(mountainLabRoomNikkeYanRoomtalk, 21); buttonMountainLabRoomNikkeYan.transform.GetChild(0).gameObject.SetActive(false); }
-                if (buttonGiftShop.transform.GetChild(0).gameObject.activeSelf) { ClickMapButton(giftShopRoomtalk, 22); buttonGiftShop.transform.GetChild(0).gameObject.SetActive(false); }
-                if (buttonGiftShopInterior.transform.GetChild(0).gameObject.activeSelf) { ClickMapButton(giftShopInteriorRoomtalk, 23); buttonGiftShopInterior.transform.GetChild(0).gameObject.SetActive(false); }
-                if (buttonHarborHomeLivingroom.transform.GetChild(0).gameObject.activeSelf) { ClickMapButton(harborHomeLivingroomRoomtalk, 24); buttonHarborHomeLivingroom.transform.GetChild(0).gameObject.SetActive(false); }
-                if (buttonHarborHomeBedroom.transform.GetChild(0).gameObject.activeSelf) { ClickMapButton(harborHomeBedroomRoomtalk, 25); buttonHarborHomeBedroom.transform.GetChild(0).gameObject.SetActive(false); harborHomeBedroomButtonCanvas.SetActive(true); }
-                if (buttonHarborHomeBathroom.transform.GetChild(0).gameObject.activeSelf) { ClickMapButton(harborHomeBathroomRoomtalk, 26); buttonHarborHomeBathroom.transform.GetChild(0).gameObject.SetActive(false); }
-                if (buttonHarborHomeCloset.transform.GetChild(0).gameObject.activeSelf) { ClickMapButton(harborHomeClosetRoomtalk, 27); buttonHarborHomeCloset.transform.GetChild(0).gameObject.SetActive(false); }
-                if (buttonHarborHomeKitchen.transform.GetChild(0).gameObject.activeSelf) { ClickMapButton(harborHomeKitchenRoomtalk, 28); buttonHarborHomeKitchen.transform.GetChild(0).gameObject.SetActive(false); }
-                if (buttonHarborHomePool.transform.GetChild(0).gameObject.activeSelf) { ClickMapButton(harborHomePoolRoomtalk, 29); buttonHarborHomePool.transform.GetChild(0).gameObject.SetActive(false); }
-                if (buttonHarborHouseEntrance.transform.GetChild(0).gameObject.activeSelf) { ClickMapButton(harborHouseEntranceRoomtalk, 30); buttonHarborHouseEntrance.transform.GetChild(0).gameObject.SetActive(false); }
-
-                if (SaveManager.GetBool("HarborHome_Bought") && harborHouseEntranceRadialButtonText.GetComponent<TextMeshProUGUI>().text == "House for Sale") { harborHouseEntranceRadialButtonText.GetComponent<TextMeshProUGUI>().text = "Home"; }
-
                 // Update gift store item visibility based on proxy variables
                 if (giftStore != null && giftStore.activeSelf)
                 {
@@ -673,10 +428,7 @@ namespace SMSAndroidsCore
                 }
 
 
-                if (Places.secretBeachLevel.activeSelf)
-                {
-                    secretBeachGatekeeper.transform.Rotate(0, 0, 1f * Time.deltaTime);
-                }
+                // (Gatekeeper spin moved to the pack's SpinGameObject action.)
             }
         }
 
@@ -813,163 +565,127 @@ namespace SMSAndroidsCore
             }
         }
 
-        private void CreateHarborHouseEntranceRadialButton()
+        /// <summary>
+        /// Bind every <c>secretBeach*</c> / <c>mountainLab*</c> /
+        /// <c>giftShop*</c> / <c>harborHome*</c> / <c>harborHouse*</c>
+        /// static field to the matching GameObject built by
+        /// <c>SMSModForge.PackPlugin.PlaceFactory</c>. Pack-built levels are named <c>&lt;absoluteIndex&gt;_&lt;key&gt;</c>
+        /// where the index is auto-assigned at build time (so we can't
+        /// hard-code it the way the original SMSAndroids code did); we
+        /// suffix-match on <c>_&lt;key&gt;</c> instead. Pack roomtalks are
+        /// named bare (just <c>&lt;key&gt;</c>) so we keep the original
+        /// exact-name <see cref="Transform.Find"/>.
+        /// <para/>
+        /// Returns <c>false</c> when one or more of the expected pack GOs
+        /// isn't present yet — typically because ModForge hasn't reached
+        /// its <c>LoadAllPacks</c> step yet. The caller treats this as
+        /// "retry next frame" by returning from the init guard.
+        /// </summary>
+        private bool TryResolvePackBuiltPlaces()
         {
-            // Find World_Map > Canvas > Core > Radial_Buttons
-            Transform worldMap = Core.FindInActiveObjectByName("World_Map");
-            if (worldMap == null)
-            {
-                Debug.LogError("[Places] Could not find World_Map for radial button creation");
-                return;
-            }
+            var levelRoot = Core.level;
+            var roomTalkRoot = Core.roomTalk;
+            if (levelRoot == null || roomTalkRoot == null) return false;
 
-            Transform radialButtons = worldMap.Find("Canvas")?.Find("Core")?.Find("Radial_Buttons");
-            if (radialButtons == null)
-            {
-                Debug.LogError("[Places] Could not find Radial_Buttons");
-                return;
-            }
+            // Probe: if SecretBeach isn't built yet, the pack hasn't run.
+            // (Picked as a probe because it's the first place SMSAndroids
+            // ever created, and the SMSAndroidsPack ships it as places[0].)
+            if (FindChildBySuffix(levelRoot, "_SecretBeach") == null) return false;
 
-            // Find the Seaside > Beach button to copy
-            Transform beachButton = radialButtons.Find("Seaside")?.Find("Beach");
-            if (beachButton == null)
-            {
-                Debug.LogError("[Places] Could not find Seaside > Beach button to copy");
-                return;
-            }
+            // SecretBeach
+            secretBeachLevel        = FindChildBySuffix(levelRoot, "_SecretBeach");
+            secretBeachLevelBG      = secretBeachLevel?.transform.childCount > 1
+                                          ? secretBeachLevel.transform.GetChild(1).gameObject : null;
+            secretBeachRoomtalk     = roomTalkRoot.Find("SecretBeach")?.gameObject;
 
-            // Find the Foundry section
-            Transform foundry = radialButtons.Find("Foundry");
-            if (foundry == null)
-            {
-                Debug.LogError("[Places] Could not find Foundry section");
-                return;
-            }
+            // MountainLab + 2 corridors
+            mountainLabLevel        = FindChildBySuffix(levelRoot, "_MountainLab");
+            mountainLabRoomtalk     = roomTalkRoot.Find("MountainLab")?.gameObject;
+            mountainLabCorridorNikke1Level    = FindChildBySuffix(levelRoot, "_MountainLabCorridorNikke1");
+            mountainLabCorridorNikke1Roomtalk = roomTalkRoot.Find("MountainLabCorridorNikke1")?.gameObject;
+            mountainLabCorridorNikke2Level    = FindChildBySuffix(levelRoot, "_MountainLabCorridorNikke2");
+            mountainLabCorridorNikke2Roomtalk = roomTalkRoot.Find("MountainLabCorridorNikke2")?.gameObject;
 
-            // Create a copy of the Beach button in Foundry
-            harborHouseEntranceRadialButton = GameObject.Instantiate(beachButton.gameObject, foundry);
-            harborHouseEntranceRadialButton.name = "HarborHouseEntrance";
-            harborHouseEntranceRadialButtonText = harborHouseEntranceRadialButton.transform.Find("Text (TMP)").gameObject;
+            // 18 Nikke rooms. Same pattern; one helper line per girl.
+            BindMountainLabRoom("Anis",    out mountainLabRoomNikkeAnisLevel,    out mountainLabRoomNikkeAnisRoomtalk,    levelRoot, roomTalkRoot);
+            BindMountainLabRoom("Centi",   out mountainLabRoomNikkeCentiLevel,   out mountainLabRoomNikkeCentiRoomtalk,   levelRoot, roomTalkRoot);
+            BindMountainLabRoom("Dorothy", out mountainLabRoomNikkeDorothyLevel, out mountainLabRoomNikkeDorothyRoomtalk, levelRoot, roomTalkRoot);
+            BindMountainLabRoom("Elegg",   out mountainLabRoomNikkeEleggLevel,   out mountainLabRoomNikkeEleggRoomtalk,   levelRoot, roomTalkRoot);
+            BindMountainLabRoom("Frima",   out mountainLabRoomNikkeFrimaLevel,   out mountainLabRoomNikkeFrimaRoomtalk,   levelRoot, roomTalkRoot);
+            BindMountainLabRoom("Guilty",  out mountainLabRoomNikkeGuiltyLevel,  out mountainLabRoomNikkeGuiltyRoomtalk,  levelRoot, roomTalkRoot);
+            BindMountainLabRoom("Helm",    out mountainLabRoomNikkeHelmLevel,    out mountainLabRoomNikkeHelmRoomtalk,    levelRoot, roomTalkRoot);
+            BindMountainLabRoom("Maiden",  out mountainLabRoomNikkeMaidenLevel,  out mountainLabRoomNikkeMaidenRoomtalk,  levelRoot, roomTalkRoot);
+            BindMountainLabRoom("Mary",    out mountainLabRoomNikkeMaryLevel,    out mountainLabRoomNikkeMaryRoomtalk,    levelRoot, roomTalkRoot);
+            BindMountainLabRoom("Mast",    out mountainLabRoomNikkeMastLevel,    out mountainLabRoomNikkeMastRoomtalk,    levelRoot, roomTalkRoot);
+            BindMountainLabRoom("Neon",    out mountainLabRoomNikkeNeonLevel,    out mountainLabRoomNikkeNeonRoomtalk,    levelRoot, roomTalkRoot);
+            BindMountainLabRoom("Pepper",  out mountainLabRoomNikkePepperLevel,  out mountainLabRoomNikkePepperRoomtalk,  levelRoot, roomTalkRoot);
+            BindMountainLabRoom("Rapi",    out mountainLabRoomNikkeRapiLevel,    out mountainLabRoomNikkeRapiRoomtalk,    levelRoot, roomTalkRoot);
+            BindMountainLabRoom("Rosanna", out mountainLabRoomNikkeRosannaLevel, out mountainLabRoomNikkeRosannaRoomtalk, levelRoot, roomTalkRoot);
+            BindMountainLabRoom("Sakura",  out mountainLabRoomNikkeSakuraLevel,  out mountainLabRoomNikkeSakuraRoomtalk,  levelRoot, roomTalkRoot);
+            BindMountainLabRoom("Tove",    out mountainLabRoomNikkeToveLevel,    out mountainLabRoomNikkeToveRoomtalk,    levelRoot, roomTalkRoot);
+            BindMountainLabRoom("Viper",   out mountainLabRoomNikkeViperLevel,   out mountainLabRoomNikkeViperRoomtalk,   levelRoot, roomTalkRoot);
+            BindMountainLabRoom("Yan",     out mountainLabRoomNikkeYanLevel,     out mountainLabRoomNikkeYanRoomtalk,     levelRoot, roomTalkRoot);
 
-            // Change the text to "House for Sale"
-            Transform textTMP = harborHouseEntranceRadialButton.transform.Find("Text (TMP)");
-            if (textTMP != null)
-            {
-                TextMeshProUGUI textComponent = textTMP.GetComponent<TextMeshProUGUI>();
-                if (textComponent != null)
-                {
-                    textComponent.text = "House for Sale";
-                }
-            }
+            // GiftShop pair
+            giftShopLevel           = FindChildBySuffix(levelRoot, "_GiftShop");
+            giftShopRoomtalk        = roomTalkRoot.Find("GiftShop")?.gameObject;
+            giftShopInteriorLevel   = FindChildBySuffix(levelRoot, "_GiftShopInterior");
+            giftShopInteriorRoomtalk = roomTalkRoot.Find("GiftShopInterior")?.gameObject;
 
-            // Remove ButtonInstructions and add Unity Button
-            ButtonInstructions buttonInstructions = harborHouseEntranceRadialButton.GetComponent<ButtonInstructions>();
-            if (buttonInstructions != null)
-            {
-                GameObject.DestroyImmediate(buttonInstructions);
-            }
+            // Harbor Home (six rooms + entrance)
+            harborHomeLivingroomLevel  = FindChildBySuffix(levelRoot, "_HarborHomeLivingRoom");
+            harborHomeLivingroomRoomtalk = roomTalkRoot.Find("HarborHomeLivingRoom")?.gameObject;
+            harborHomeBedroomLevel     = FindChildBySuffix(levelRoot, "_HarborHomeBedroom");
+            harborHomeBedroomRoomtalk  = roomTalkRoot.Find("HarborHomeBedroom")?.gameObject;
+            harborHomeBathroomLevel    = FindChildBySuffix(levelRoot, "_HarborHomeBathroom");
+            harborHomeBathroomRoomtalk = roomTalkRoot.Find("HarborHomeBathroom")?.gameObject;
+            harborHomeClosetLevel      = FindChildBySuffix(levelRoot, "_HarborHomeCloset");
+            harborHomeClosetRoomtalk   = roomTalkRoot.Find("HarborHomeCloset")?.gameObject;
+            harborHomeKitchenLevel     = FindChildBySuffix(levelRoot, "_HarborHomeKitchen");
+            harborHomeKitchenRoomtalk  = roomTalkRoot.Find("HarborHomeKitchen")?.gameObject;
+            harborHomePoolLevel        = FindChildBySuffix(levelRoot, "_HarborHomePool");
+            harborHomePoolRoomtalk     = roomTalkRoot.Find("HarborHomePool")?.gameObject;
+            harborHouseEntranceLevel   = FindChildBySuffix(levelRoot, "_HarborHouseEntrance");
+            harborHouseEntranceRoomtalk = roomTalkRoot.Find("HarborHouseEntrance")?.gameObject;
 
-            // Add Unity Button component
-            UnityEngine.UI.Button button = harborHouseEntranceRadialButton.AddComponent<UnityEngine.UI.Button>();
-
-            // Set Target Graphic to the Image component for visual feedback
-            UnityEngine.UI.Image targetImage = harborHouseEntranceRadialButton.GetComponent<UnityEngine.UI.Image>();
-            if (targetImage != null)
-            {
-                button.targetGraphic = targetImage;
-            }
-
-            // Configure ColorBlock
-            var colors = button.colors;
-            colors.normalColor = Color.white;
-            colors.highlightedColor = new Color(0.9f, 0.9f, 0.9f, 1f);
-            colors.pressedColor = new Color(0.8f, 0.8f, 0.8f, 1f);
-            colors.selectedColor = Color.white;
-            colors.disabledColor = new Color(0.5f, 0.5f, 0.5f, 0.5f);
-            colors.colorMultiplier = 1f;
-            colors.fadeDuration = 0.1f;
-            button.colors = colors;
-            button.transition = UnityEngine.UI.Selectable.Transition.ColorTint;
-
-            // Add onClick listener
-            button.onClick.RemoveAllListeners();
-            button.onClick.AddListener(OnHarborHouseEntranceRadialButtonClick);
-
-            Debug.Log("[Places] Created Harbor Home Entrance radial button in Foundry");
+            return true;
         }
 
-        private void OnHarborHouseEntranceRadialButtonClick()
+        /// <summary>
+        /// Per-Nikke binder for the 18 MountainLabRoomNikke<i>X</i> entries.
+        /// Folded out so <see cref="TryResolvePackBuiltPlaces"/> stays
+        /// readable — same body for every girl, only the key changes.
+        /// </summary>
+        private static void BindMountainLabRoom(string charName,
+            out GameObject level, out GameObject roomtalk,
+            Transform levelRoot, Transform roomTalkRoot)
         {
-            // Instruction 1: Set Active Click_Effect to True
-            Transform worldMap = Core.FindInActiveObjectByName("World_Map");
-            if (worldMap != null)
-            {
-                Transform clickEffect = worldMap.Find("Click_Effect");
-                if (clickEffect != null)
-                {
-                    clickEffect.gameObject.SetActive(true);
-                    ClickMapButton(harborHouseEntranceRoomtalk, 30, "HarborHomeMusic");
-                }
-            }
-
-            // Instruction 2: Check If Core[Lock-Game] = False
-            if (Core.GetVariableBool("Lock-Game"))
-            {
-                return; // Game is locked, don't proceed
-            }
-
-            // Instruction 3: Set Core[Upcoming-Level] = vanillaLevelCount + 30
-            Core.FindAndModifyVariableDouble("Upcoming-Level", vanillaLevelCount + 30);
-
-            // Instruction 4: District_Buttons CanvasGroup Interactable = True
-            if (worldMap != null)
-            {
-                Transform districtButtons = worldMap.Find("Canvas")?.Find("Core")?.Find("District_Buttons");
-                if (districtButtons != null)
-                {
-                    CanvasGroup canvasGroup = districtButtons.GetComponent<CanvasGroup>();
-                    if (canvasGroup != null)
-                    {
-                        canvasGroup.interactable = true;
-                    }
-                }
-            }
-
-            // Instruction 5: Set Core[Start-Transfer] = True
-            Core.FindAndModifyVariableBool("Start-Transfer", true);
+            string suffix = "_MountainLabRoomNikke" + charName;
+            level    = FindChildBySuffix(levelRoot, suffix);
+            roomtalk = roomTalkRoot.Find("MountainLabRoomNikke" + charName)?.gameObject;
         }
 
-        public void CreateNewPlace(int index, string name, string pathName, string buttonText, float parallaxStrength)
+        /// <summary>Find the first direct child of <paramref name="parent"/>
+        /// whose name ends with <paramref name="suffix"/>; returns null when
+        /// no such child exists. Used by the pack-place resolver since the
+        /// pack-built GO names carry an unpredictable index prefix and we
+        /// can only match the trailing key portion.</summary>
+        private static GameObject FindChildBySuffix(Transform parent, string suffix)
         {
-            // Variables
-            GameObject baseMapButton = GameObject.Find("9_MainCanvas").transform.Find("Navigator").Find("MapButtons").Find("14_beach").gameObject;
-
-            // Button
-            GameObject mapButton = GameObject.Instantiate(Core.otherBundle.LoadAsset<GameObject>("ButtonTemplate"), baseMapButton.transform.parent);
-            GameObject mapButtonText = GameObject.Instantiate(baseMapButton.transform.GetChild(0).gameObject, mapButton.transform);
-            GameObject mapButtonImage = GameObject.Instantiate(baseMapButton.transform.GetChild(1).gameObject, mapButton.transform);
-            GameObject mapButtonImage1 = GameObject.Instantiate(baseMapButton.transform.GetChild(2).gameObject, mapButton.transform);
-            GameObject mapButtonKBNumber = GameObject.Instantiate(baseMapButton.transform.GetChild(3).gameObject, mapButton.transform);
-            mapButton.SetActive(false);
-            mapButton.AddComponent<ButtonHover>();
-            mapButton.name = index + "_" + name;
-            mapButtonText.name = "Text (TMP)";
-            mapButtonImage.GetComponent<UnityEngine.UI.Image>().color = new Color32(156, 111, 22, 0);
-            mapButtonImage.name = "Image";
-            mapButtonImage1.name = "Image (1)";
-            mapButtonKBNumber.name = "keyboardnumber";
-            mapButton.GetComponent<UnityEngine.UI.Image>().sprite = baseMapButton.GetComponent<UnityEngine.UI.Image>().sprite;
-            mapButtonText.GetComponent<TextMeshProUGUI>().text = buttonText;
-            mapButtonImage.GetComponent<UnityEngine.UI.Image>().sprite = baseMapButton.transform.GetChild(1).gameObject.GetComponent<UnityEngine.UI.Image>().sprite;
-            mapButtonKBNumber.GetComponent<TextMeshProUGUI>().text = "2";
-
-            // Level
-            GameObject level = CreateNewLevel(index + "_" + name, Core.locationPath, pathName + ".PNG", pathName + "B.PNG", pathName + "Mask.PNG", parallaxStrength, name == "SecretBeach" || name == "GiftShop");
-            Destroy(level.GetComponent<Trigger>());
-
-            // RoomTalk
-            CreateNewRoomTalk(name);
+            if (parent == null || string.IsNullOrEmpty(suffix)) return null;
+            foreach (Transform t in parent)
+            {
+                if (t.name.EndsWith(suffix, System.StringComparison.Ordinal))
+                    return t.gameObject;
+            }
+            return null;
         }
+
+        // CreateNewPlace + CreateNewLevel are gone — ModForge's
+        // SMSModForge.PackPlugin.PlaceFactory owns the loose-PNG-to-level
+        // pipeline now. CreateNewRoomTalk stays because Hospital / Hotel /
+        // Trail still get a SMSAndroids-side extra roomtalk node grafted
+        // under Core.roomTalk for legacy event dialogues that target them.
         public GameObject CreateNewRoomTalk(string name)
         {
             GameObject roomTalk = GameObject.Instantiate(Core.roomTalk.Find("Beach").gameObject, Core.roomTalk);
@@ -980,74 +696,6 @@ namespace SMSAndroidsCore
             }
             Destroy(roomTalk.GetComponent<Conditions>());
             return roomTalk;
-        }
-        public GameObject CreateNewLevel(string name, string pathToCG, string baseSprite, string secondarySprite, string maskSprite, float parallaxStrength, bool keepAudioAndParticles = false)
-        {
-            GameObject newLevel = GameObject.Instantiate(GameObject.Find("5_Levels").transform.Find("14_Beach").gameObject, GameObject.Find("5_Levels").transform);
-            newLevel.name = name;
-            newLevel.GetComponent<ParallaxMouseEffect>().parallaxStrength = parallaxStrength;
-            GameObject secondaryTex = newLevel.transform.GetChild(1).gameObject;
-            secondaryTex.name = name;
-            secondaryTex.GetComponent<ParallaxMouseEffect>().parallaxStrength = parallaxStrength;
-            GameObject NPCs = newLevel.transform.GetChild(2).gameObject;
-            Destroy(NPCs.GetComponent<Actions>());
-            Destroy(NPCs.GetComponent<Conditions>());
-            Destroy(NPCs.GetComponent<DisableChildren>());
-            foreach (Transform npc in NPCs.transform)
-            {
-                Destroy(npc.gameObject);
-            }
-            
-            // Remove duplicate "14_Beach (1)" if it exists
-            for (int i = newLevel.transform.childCount - 1; i >= 0; i--)
-            {
-                Transform child = newLevel.transform.GetChild(i);
-                if (child.name == "14_Beach (1)")
-                {
-                    Destroy(child.gameObject);
-                    break;
-                }
-            }
-            
-            // Disable Audio Source and Particle System (2) if not needed
-            if (!keepAudioAndParticles)
-            {
-                for (int i = newLevel.transform.childCount - 1; i >= 0; i--)
-                {
-                    Transform child = newLevel.transform.GetChild(i);
-                    if (child.name == "Audio Source" || child.name == "Particle System (2)")
-                    {
-                        child.gameObject.SetActive(false);
-                    }
-                }
-            }
-            
-            Material mat = new Material(newLevel.GetComponent<SpriteRenderer>().material);
-
-            var rawData = System.IO.File.ReadAllBytes(pathToCG + baseSprite);
-            Texture2D tex = new Texture2D(2048, 1136);
-            tex.filterMode = FilterMode.Bilinear;
-            ImageConversion.LoadImage(tex, rawData);
-            Sprite newSprite = Sprite.Create(tex, new Rect(0, 0, 2048, 1136), new Vector2(0.5f, 0.5f), 70.32f);
-            newLevel.GetComponent<SpriteRenderer>().sprite = newSprite;
-
-            rawData = System.IO.File.ReadAllBytes(pathToCG + secondarySprite);
-            tex = new Texture2D(2048, 1136);
-            tex.filterMode = FilterMode.Point;
-            ImageConversion.LoadImage(tex, rawData);
-            newSprite = Sprite.Create(tex, new Rect(0, 0, 2048, 1136), new Vector2(0.5f, 0.5f), 70.32f);
-            secondaryTex.GetComponent<SpriteRenderer>().sprite = newSprite;
-
-            rawData = System.IO.File.ReadAllBytes(pathToCG + maskSprite);
-            tex = new Texture2D(256, 143, TextureFormat.RGBA32, false);
-            tex.LoadImage(rawData);
-            tex.filterMode = FilterMode.Point;
-            mat.SetTexture("_MaskTex", tex);
-            newLevel.GetComponent<SpriteRenderer>().material = mat;
-            newLevel.GetComponent<SpriteRenderer>().material.SetTexture("_MaskTex", tex);
-
-            newLevel.SetActive(false);
-            return newLevel;
         }
         public static void SetNewLevelSprite(GameObject gO, string pathToCG, string baseSprite, int width, int height)
         {
@@ -1086,61 +734,6 @@ namespace SMSAndroidsCore
 
             Debug.Log($"Gift Shop texture updated. Built: {giftShopBuilt}, Using: {baseSpriteName}");
         }
-        public void ClickMapButton(GameObject roomTalk, Double index, string musicName = null)
-        {
-            if (!Core.GetVariableBool("Lock-Game"))
-            {
-                currentRoomTalk = roomTalk;
-                Core.FindAndModifyVariableDouble("Upcoming-Level", vanillaLevelCount + index);
-                Core.FindAndModifyVariableBool("Start-Transfer", true);
-
-                // Handle music switching if a music name is provided
-                if (!string.IsNullOrEmpty(musicName))
-                {
-                    GameObject audioPlayerParent = GameObject.Find("12_AudioPlayer");
-                    if (audioPlayerParent != null)
-                    {
-                        // Disable all children of 12_AudioPlayer
-                        foreach (Transform child in audioPlayerParent.transform)
-                        {
-                            child.gameObject.SetActive(false);
-                        }
-
-                        // Enable the specific child with the matching name
-                        Transform targetMusic = audioPlayerParent.transform.Find(musicName);
-                        if (targetMusic != null)
-                        {
-                            targetMusic.gameObject.SetActive(true);
-                            Debug.Log($"[Places] Switched music to: {musicName}");
-                        }
-                        else
-                        {
-                            Debug.LogWarning($"[Places] Could not find music child '{musicName}' under 12_AudioPlayer");
-                        }
-                    }
-                    else
-                    {
-                        Debug.LogWarning("[Places] Could not find 12_AudioPlayer in scene");
-                    }
-                }
-
-                var triggerChangeLevel = Core.gameplay?.Find("TransferScene")?.gameObject;
-                if (triggerChangeLevel != null)
-                {
-                    var triggerComponent = triggerChangeLevel.GetComponent<Trigger>();
-                    if (triggerComponent != null)
-                    {
-                        Debug.Log("[Places] Executing TransferScene trigger");
-                        triggerComponent.Execute();
-                    }
-                }
-                Invoke(nameof(EnableRoomTalk), 1.0f);
-            }
-        }
-        private void EnableRoomTalk()
-        {
-            currentRoomTalk.SetActive(true);
-        }
         public static bool GetBadWeather()
         {
             if (Core.GetVariableBool("rainy-day") || Core.GetVariableBool("snowy-day"))
@@ -1151,38 +744,6 @@ namespace SMSAndroidsCore
             {
                 return false;
             }
-        }
-
-        public static void SetupMapButtonsGrid(GameObject mapButtons, Vector2 cellSize, int columns, float horizontalSpacing, float rowSpacing, MonoBehaviour context)
-        {
-            // Remove other layout groups
-            var hlg = mapButtons.GetComponent<HorizontalLayoutGroup>();
-            if (hlg != null) UnityEngine.Object.Destroy(hlg);
-            var vlg = mapButtons.GetComponent<VerticalLayoutGroup>();
-            if (vlg != null) UnityEngine.Object.Destroy(vlg);
-
-            // Remove Unity's GridLayoutGroup if present
-            var unityGrid = mapButtons.GetComponent<UnityEngine.UI.GridLayoutGroup>();
-            if (unityGrid != null) UnityEngine.Object.Destroy(unityGrid);
-
-            // Start coroutine to add custom GridLayoutGroup after one frame
-            context.StartCoroutine(AddGridLayoutGroupNextFrame(mapButtons, cellSize, columns, horizontalSpacing, rowSpacing));
-        }
-
-        private static IEnumerator AddGridLayoutGroupNextFrame(GameObject mapButtons, Vector2 cellSize, int columns, float horizontalSpacing, float rowSpacing)
-        {
-            yield return null; // Wait one frame so old LayoutGroup is destroyed
-
-            var grid = mapButtons.GetComponent<SMSAndroidsCore.GridLayoutGroup>();
-            if (grid == null) grid = mapButtons.AddComponent<SMSAndroidsCore.GridLayoutGroup>();
-
-            grid.constraint = UnityEngine.UI.GridLayoutGroup.Constraint.FixedColumnCount;
-            grid.constraintCount = columns;
-            grid.cellSize = cellSize;
-            grid.spacing = new Vector2(horizontalSpacing, rowSpacing);
-            grid.childAlignment = TextAnchor.MiddleCenter;
-            grid.startAxis = UnityEngine.UI.GridLayoutGroup.Axis.Horizontal;
-            grid.startCorner = UnityEngine.UI.GridLayoutGroup.Corner.UpperLeft;
         }
 
         public static void ActivateShop(GameObject shop)

@@ -41,89 +41,68 @@ namespace SMSAndroidsCore
         public static string amberDefaultLocation;
         public static string amberLocation;
         public static string amberHHLocation;
-        public static GameObject amberHHOutfit;
         public static string claireDefaultLocation;
         public static string claireLocation;
         public static string claireHHLocation;
-        public static GameObject claireHHOutfit;
         public static string sarahDefaultLocation;
         public static string sarahLocation;
         public static string sarahHHLocation;
-        public static GameObject sarahHHOutfit;
 
         public static string anisDefaultLocation;
         public static string anisLocation;
         public static string anisLocationPrevious;
         public static string anisHHLocation;
-        public static GameObject anisHHOutfit;
         public static string centiDefaultLocation;
         public static string centiLocation;
         public static string centiHHLocation;
-        public static GameObject centiHHOutfit;
         public static string dorothyDefaultLocation;
         public static string dorothyLocation;
         public static string dorothyHHLocation;
-        public static GameObject dorothyHHOutfit;
         public static string eleggDefaultLocation;
         public static string eleggLocation;
         public static string eleggHHLocation;
-        public static GameObject eleggHHOutfit;
         public static string frimaDefaultLocation;
         public static string frimaLocation;
         public static string frimaHHLocation;
-        public static GameObject frimaHHOutfit;
         public static string guiltyDefaultLocation;
         public static string guiltyLocation;
         public static string guiltyHHLocation;
-        public static GameObject guiltyHHOutfit;
         public static string helmDefaultLocation;
         public static string helmLocation;
         public static string helmHHLocation;
-        public static GameObject helmHHOutfit;
         public static string maidenDefaultLocation;
         public static string maidenLocation;
         public static string maidenHHLocation;
-        public static GameObject maidenHHOutfit;
         public static string maryDefaultLocation;
         public static string maryLocation;
         public static string maryHHLocation;
-        public static GameObject maryHHOutfit;
         public static string mastDefaultLocation;
         public static string mastLocation;
         public static string mastHHLocation;
-        public static GameObject mastHHOutfit;
         public static string neonDefaultLocation;
         public static string neonLocation;
         public static string neonHHLocation;
-        public static GameObject neonHHOutfit;
         public static string pepperDefaultLocation;
         public static string pepperLocation;
         public static string pepperHHLocation;
-        public static GameObject pepperHHOutfit;
         public static string rapiDefaultLocation;
         public static string rapiLocation;
         public static string rapiHHLocation;
-        public static GameObject rapiHHOutfit;
         public static string rosannaDefaultLocation;
         public static string rosannaLocation;
         public static string rosannaHHLocation;
-        public static GameObject rosannaHHOutfit;
         public static string sakuraDefaultLocation;
         public static string sakuraLocation;
         public static string sakuraHHLocation;
-        public static GameObject sakuraHHOutfit;
         public static string toveDefaultLocation;
         public static string toveLocation;
         public static string toveHHLocation;
-        public static GameObject toveHHOutfit;
         public static string viperDefaultLocation;
         public static string viperLocation;
         public static string viperHHLocation;
-        public static GameObject viperHHOutfit;
         public static string yanDefaultLocation;
         public static string yanLocation;
         public static string yanHHLocation;
-        public static GameObject yanHHOutfit;
 
         public static string snekDefaultLocation;
         public static string snekLocation;
@@ -155,7 +134,6 @@ namespace SMSAndroidsCore
 
         public static double day;
         public static bool loadedSchedule = false;
-        private static bool hhOutfitsInitialized = false;
 
         public void Update()
         {
@@ -197,33 +175,11 @@ namespace SMSAndroidsCore
                 {
                     if (Core.loadedBases)
                     {
-                        // Initialize HH outfits to default character busts once Characters are loaded
-                        if (!hhOutfitsInitialized)
-                        {
-                            amberHHOutfit = Characters.amber;
-                            claireHHOutfit = Characters.claire;
-                            sarahHHOutfit = Characters.sarah;
-                            anisHHOutfit = Characters.anis;
-                            centiHHOutfit = Characters.centi;
-                            dorothyHHOutfit = Characters.dorothy;
-                            eleggHHOutfit = Characters.elegg;
-                            frimaHHOutfit = Characters.frima;
-                            guiltyHHOutfit = Characters.guilty;
-                            helmHHOutfit = Characters.helm;
-                            maidenHHOutfit = Characters.maiden;
-                            maryHHOutfit = Characters.mary;
-                            mastHHOutfit = Characters.mast;
-                            neonHHOutfit = Characters.neon;
-                            pepperHHOutfit = Characters.pepper;
-                            rapiHHOutfit = Characters.rapi;
-                            rosannaHHOutfit = Characters.rosanna;
-                            sakuraHHOutfit = Characters.sakura;
-                            toveHHOutfit = Characters.tove;
-                            viperHHOutfit = Characters.viper;
-                            yanHHOutfit = Characters.yan;
-                            hhOutfitsInitialized = true;
-                            Debug.Log("[Schedule] HH outfits initialized to default busts");
-                        }
+                        // The HH outfit initialization block previously kicked
+                        // off here. Those <char>HHOutfit fields were only
+                        // written, never read — they were live for the now-
+                        // deleted MainStory dialogue runner. Stripped along
+                        // with the rest of MainStory.
 
                         // Start timer for first HH roaming pass once Core.loadedBases is true
                         if (!hhFirstPassTriggered)
@@ -349,7 +305,6 @@ namespace SMSAndroidsCore
                 {
                     Logger.LogInfo("----- SCHEDULE UNLOADED -----");
                     loadedSchedule = false;
-                    hhOutfitsInitialized = false;
                     hhFirstPassTriggered = false;
                     hhFirstPassTriggerTime = 0f;
                 }

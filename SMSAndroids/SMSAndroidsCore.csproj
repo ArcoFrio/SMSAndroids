@@ -33,15 +33,14 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="BreastPhysics.cs" />
-    <Compile Include="BustOutfitDescriptor.cs" />
-    <Compile Include="ButtonHover.cs" />
     <Compile Include="Characters.cs" />
     <Compile Include="Debugging.cs" />
     <Compile Include="Dialogues.cs" />
     <Compile Include="DragSpriteController.cs" />
-    <Compile Include="GridLayoutGroup.cs" />
+    <Compile Include="GiftUIBridge.cs" />
     <Compile Include="LotionTrail.cs" />
     <Compile Include="MainStory.cs" />
+    <Compile Include="ModForgeBridge.cs" />
     <Compile Include="Core.cs" />
     <Compile Include="MassageMinigame.cs" />
     <Compile Include="MassageMovementPattern.cs" />
@@ -50,13 +49,11 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RandomChildActivator.cs" />
     <Compile Include="SaveManager.cs" />
-    <Compile Include="Scenes.cs" />
     <Compile Include="Schedule.cs" />
     <Compile Include="ScheduleVisualizer.cs" />
     <Compile Include="SqueezeContourFollower.cs" />
     <Compile Include="SqueezeSpriteController.cs" />
     <Compile Include="TransformExtensions.cs" />
-    <Compile Include="Wallpaper.cs" />
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Connected Services\" />
