@@ -247,7 +247,20 @@ namespace SMSAndroidsCore
                         // Top up first: a pack-built button may not have existed
                         // when this initialised, and without an overlay its
                         // locations can never show icons.
-                        EnsureLocationOverlays();
+                        //
+                        // Isolated deliberately. Drawing the icons is the job
+                        // that matters, and topping up overlays is a best-effort
+                        // extra — letting it throw here took the whole schedule
+                        // display down with it.
+                        try
+                        {
+                            EnsureLocationOverlays();
+                        }
+                        catch (Exception ex)
+                        {
+                            Debug.LogError($"[ScheduleVisualizer] Overlay top-up failed: {ex.Message}");
+                        }
+
                         UpdateAllCharacterIcons();
                         Debug.Log($"[ScheduleVisualizer] World_Map opened, updating icons");
                     }
@@ -401,7 +414,26 @@ namespace SMSAndroidsCore
                 }
             }
             districtOverlays.Clear();
-            
+
+            // The icon pools hold the overlays' child icons, which the Destroy
+            // calls above have just taken with them. Leaving the lists behind
+            // carried destroyed GameObjects into the next scene, where anything
+            // that touched them threw. They used to be masked because
+            // CreateAllLocationOverlays overwrote each pool on re-init — but
+            // only for buttons that existed at that moment, so a pack-built
+            // button's stale pool survived.
+            locationIconPools.Clear();
+            districtIconPools.Clear();
+
+            // Same reasoning for the cached Transforms: they point into the
+            // scene being torn down. InitializeVisualizer reassigns them, but
+            // until it does they must not look valid.
+            radialButtons = null;
+            districtButtons = null;
+            worldMapCanvas = null;
+            worldMapGameObject = null;
+            wasWorldMapActive = false;
+
             characterIconCache.Clear();
         }
 
@@ -631,14 +663,28 @@ namespace SMSAndroidsCore
             {
                 string buttonPath = mapping.Value;
                 if (string.IsNullOrEmpty(buttonPath)) continue;
-                if (locationOverlays.ContainsKey(buttonPath)) continue;
-                // Checked here rather than letting CreateOverlayForButton warn:
-                // a pack that simply isn't installed would otherwise log for every
-                // one of its buttons every time the map is opened.
-                if (radialButtons.Find(buttonPath) == null) continue;
 
-                CreateOverlayForButton(buttonPath, radialButtons, locationOverlays, locationIconPools);
-                Debug.Log($"[ScheduleVisualizer] Overlay created late for {buttonPath}");
+                // Present AND still alive: an entry whose overlay was destroyed
+                // (a scene torn down without a clean unload) is worth rebuilding
+                // rather than skipping forever on the strength of its key.
+                if (locationOverlays.TryGetValue(buttonPath, out var existing) && existing != null)
+                    continue;
+
+                try
+                {
+                    // Checked here rather than letting CreateOverlayForButton warn:
+                    // a pack that simply isn't installed would otherwise log for
+                    // every one of its buttons every time the map is opened.
+                    if (radialButtons.Find(buttonPath) == null) continue;
+
+                    CreateOverlayForButton(buttonPath, radialButtons, locationOverlays, locationIconPools);
+                    Debug.Log($"[ScheduleVisualizer] Overlay created late for {buttonPath}");
+                }
+                catch (Exception ex)
+                {
+                    // One bad path must not cost the others theirs.
+                    Debug.LogError($"[ScheduleVisualizer] Could not create overlay for {buttonPath}: {ex.Message}");
+                }
             }
         }
 
