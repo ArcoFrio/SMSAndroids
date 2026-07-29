@@ -23,8 +23,6 @@ namespace SMSAndroidsCore
         public static Transform worldMapCanvas;
         public static GameObject worldMapGameObject;
         
-        // Track the last known schedule version to detect changes
-        private static int lastKnownScheduleVersion = -1;
         
         // Track World_Map active state to detect when it's opened
         private static bool wasWorldMapActive = false;
@@ -126,31 +124,45 @@ namespace SMSAndroidsCore
             { "HarborHouseEntrance", "Foundry/HarborHouseEntrance" },
             { "HarborHome*", "Foundry/HarborHouseEntrance" }, 
             
-            // Locations that don't show on world map (internal/mod areas)
+            // The gift shop sits on the ordinary beach, so it stays on the
+            // vanilla Beach button.
             { "GiftShop", "Seaside/Beach" },
             { "GiftShopInterior", "Seaside/Beach" },
-            { "MountainLab", "Seaside/Beach" },
-            { "MountainLabRoomNikkeAnis", "Seaside/Beach" },
-            { "MountainLabRoomNikkeCenti", "Seaside/Beach" },
-            { "MountainLabRoomNikkeDorothy", "Seaside/Beach" },
-            { "MountainLabRoomNikkeElegg", "Seaside/Beach" },
-            { "MountainLabRoomNikkeFrima", "Seaside/Beach" },
-            { "MountainLabRoomNikkeGuilty", "Seaside/Beach" },
-            { "MountainLabRoomNikkeHelm", "Seaside/Beach" },
-            { "MountainLabRoomNikkeMaiden", "Seaside/Beach" },
-            { "MountainLabRoomNikkeMary", "Seaside/Beach" },
-            { "MountainLabRoomNikkeMast", "Seaside/Beach" },
-            { "MountainLabRoomNikkeNeon", "Seaside/Beach" },
-            { "MountainLabRoomNikkePepper", "Seaside/Beach" },
-            { "MountainLabRoomNikkeRapi", "Seaside/Beach" },
-            { "MountainLabRoomNikkeRosanna", "Seaside/Beach" },
-            { "MountainLabRoomNikkeSakura", "Seaside/Beach" },
-            { "MountainLabRoomNikkeTove", "Seaside/Beach" },
-            { "MountainLabRoomNikkeViper", "Seaside/Beach" },
-            { "MountainLabRoomNikkeYan", "Seaside/Beach" },
-            { "SecretBeach", "Seaside/Beach" },
+
+            // ── Remote Area (secret beach) ────────────────────────────────
+            // Everything behind the secret beach — the beach itself, the
+            // Mountain Lab and its per-character rooms — belongs to the
+            // pack's own "Remote Area" radial button rather than the public
+            // Beach. ModForge names a pack-built radial button after the bare
+            // place key of its target, so the pack's mapButton (district
+            // Seaside, target self:SecretBeach) resolves to Seaside/SecretBeach.
+            // These are wildcards on purpose: MountainLab* covers the lab plus
+            // all 18 MountainLabRoomNikke<Char> rooms in one entry, so adding a
+            // character's room never needs a matching entry here again.
+            // If the pack isn't installed the button won't exist and the icons
+            // simply don't render for these locations — the same outcome as
+            // before for a place the player can't reach yet.
+            { "SecretBeach*", REMOTE_AREA_BUTTON },
+            { "MountainLab*", REMOTE_AREA_BUTTON },
+            { "RemoteArea*", REMOTE_AREA_BUTTON },
+            { "Facility*", REMOTE_AREA_BUTTON },
+
             { "Unknown", null },
         };
+
+        /// <summary>
+        /// Radial-button path for the pack's "Remote Area" button — the world
+        /// map entry point for the secret-beach side of the mod.
+        /// <para/>
+        /// The path is <c>&lt;district&gt;/&lt;bare place key&gt;</c>:
+        /// ModForge's <c>RadialButtonRuntime</c> strips the <c>self:</c> /
+        /// <c>pack:&lt;id&gt;.</c> prefix off the button's target and uses the
+        /// remainder as the GameObject name, precisely so host-side lookups
+        /// like this one resolve a pack-built button by name. Keep this in
+        /// step with the pack's mapButton entry (district Seaside,
+        /// target self:SecretBeach).
+        /// </summary>
+        private const string REMOTE_AREA_BUTTON = "Seaside/SecretBeach";
 
         // ============================================================================
         // RADIAL BUTTON TO DISTRICT BUTTON MAPPING
@@ -232,8 +244,11 @@ namespace SMSAndroidsCore
                     // Check if World_Map just became active (was closed, now open)
                     if (isWorldMapActive && !wasWorldMapActive)
                     {
+                        // Top up first: a pack-built button may not have existed
+                        // when this initialised, and without an overlay its
+                        // locations can never show icons.
+                        EnsureLocationOverlays();
                         UpdateAllCharacterIcons();
-                        lastKnownScheduleVersion = Schedule.scheduleVersion;
                         Debug.Log($"[ScheduleVisualizer] World_Map opened, updating icons");
                     }
                     
@@ -588,6 +603,42 @@ namespace SMSAndroidsCore
             foreach (string buttonPath in uniqueButtonPaths)
             {
                 CreateOverlayForButton(buttonPath, radialButtons, locationOverlays, locationIconPools);
+            }
+        }
+
+        /// <summary>
+        /// Create overlays for any mapped button that still has none.
+        /// <para/>
+        /// Overlay creation used to happen once, at init. A button that did not
+        /// exist at that moment never got one, and the miss was permanent — which
+        /// is exactly the case for the pack-built radial buttons: ModForge builds
+        /// them during its place pass, and it is not guaranteed to have run by the
+        /// time this initialises. That is why Remote Area (Seaside/SecretBeach)
+        /// showed no icons for MountainLab / SecretBeach even though the mapping
+        /// was correct.
+        /// <para/>
+        /// Called when the World Map opens, which the player cannot do before the
+        /// pack has loaded. Buttons that are merely INACTIVE were never the
+        /// problem — Transform.Find descends inactive children — so a Remote Area
+        /// button that is disabled until later in progression still gets its
+        /// overlay now and simply renders nothing until it is revealed.
+        /// </summary>
+        private void EnsureLocationOverlays()
+        {
+            if (radialButtons == null) return;
+
+            foreach (var mapping in LocationToButtonMapping)
+            {
+                string buttonPath = mapping.Value;
+                if (string.IsNullOrEmpty(buttonPath)) continue;
+                if (locationOverlays.ContainsKey(buttonPath)) continue;
+                // Checked here rather than letting CreateOverlayForButton warn:
+                // a pack that simply isn't installed would otherwise log for every
+                // one of its buttons every time the map is opened.
+                if (radialButtons.Find(buttonPath) == null) continue;
+
+                CreateOverlayForButton(buttonPath, radialButtons, locationOverlays, locationIconPools);
+                Debug.Log($"[ScheduleVisualizer] Overlay created late for {buttonPath}");
             }
         }
 
@@ -956,6 +1007,21 @@ namespace SMSAndroidsCore
         }
 
         /// <summary>
+        /// The location to draw a character's world-map icon at.
+        /// <para/>
+        /// The pack owns the schedule outright — its integration rules reset
+        /// every <c>Location_&lt;Char&gt;</c> to "Unknown" daily, then set it
+        /// from the character's default + schedule rules — and the plugin-side
+        /// simulation is gone, so the pack variable is the only source there
+        /// is. An empty read (pack not loaded yet) shows no icon for a frame
+        /// or two; "Unknown" is a real value and passes straight through — it
+        /// simply has no button mapping, so the character shows nowhere, which
+        /// is the intended meaning.
+        /// </summary>
+        private static string GetDisplayLocation(string character)
+            => SaveManager.GetString("Location_" + character, "");
+
+        /// <summary>
         /// Looks up a button path for a location, supporting wildcard matching.
         /// Keys ending with '*' will match any location starting with the prefix.
         /// </summary>
@@ -1006,7 +1072,7 @@ namespace SMSAndroidsCore
             // Go through all characters and get their current locations
             foreach (string character in AllCharacters)
             {
-                string location = Schedule.GetCharacterLocation(character);
+                string location = GetDisplayLocation(character);
                 if (string.IsNullOrEmpty(location))
                     continue;
 
