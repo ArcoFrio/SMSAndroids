@@ -60,20 +60,13 @@ namespace SMSAndroidsCore
         public static bool actionTodaySB = false;
         public static bool relaxed       = false;
 
-        // ── Daily lottery numbers ─────────────────────────────────────────
-        // Re-rolled on scene load (below) and at every sleep
-        // (SaveManager.RunDailySleepTurnover). Schedule.SetDayXSchedule
-        // consults these to bias each character's location for the day.
-        //
-        // NOTE: the voyeur system (tier progression, eligible-target list,
-        // lottery + random pick) lives ENTIRELY in the pack now — a List
-        // variable maintained with AddToList/RemoveFromList, a DailyRandom
-        // lottery variable, and the Variable action's "Random from list"
-        // operation. Nothing voyeur-related remains on the plugin side.
-        public static int generalLotteryNumber1 = 0;
-        public static int generalLotteryNumber2 = 0;
-        public static int generalLotteryNumber3 = 0;
-
+        // NOTE: the daily lottery numbers that used to be re-rolled here are
+        // gone with the native day schedules — the pack's ScheduleDaily rules
+        // roll their own DailyChance. The voyeur system (tier progression,
+        // eligible-target list, lottery + random pick) also lives ENTIRELY in
+        // the pack — a List variable maintained with AddToList/RemoveFromList,
+        // a DailyRandom lottery variable, and the Variable action's "Random
+        // from list" operation. Nothing of either remains on the plugin side.
         public void Update()
         {
             if (Core.currentScene.name == "CoreGameScene")

@@ -48,12 +48,7 @@ namespace SMSAndroidsCore
             MainStory.actionTodaySB = false;
             if (scene.name == "CoreGameScene")
             {
-                Schedule.day = Core.GetVariableNumber("Day");
-                MainStory.generalLotteryNumber1 = Core.GetRandomNumber(100);
-                MainStory.generalLotteryNumber2 = Core.GetRandomNumber(100);
-                MainStory.generalLotteryNumber3 = Core.GetRandomNumber(100);
                 Core.RefreshDailyProxyVariables();
-                Invoke(nameof(UpdateScheduleInvoke), 1.0f);
             }
             StartCoroutine(MigrateLegacySaveWhenReady());
         }
@@ -81,8 +76,7 @@ namespace SMSAndroidsCore
                 }
                 SetBool("HarborHome_Slept", Places.harborHomeBedroomSwapApplied);
                 SetBool("HarborHome_SleepCD", false);
-                Schedule.day = Core.GetVariableNumber("Day");
-                Debug.Log("Day: " + Schedule.day);
+                Debug.Log("Day: " + Core.GetVariableNumber("Day"));
 
                 // Voyeur tier progression / eligible-target maintenance now
                 // lives entirely in the pack (List variable + list actions);
@@ -90,10 +84,6 @@ namespace SMSAndroidsCore
                 MainStory.relaxed = false;
                 MainStory.actionTodaySB = false;
                 Places.UpdateGiftShopTextureBasedOnBuildStatus();
-                MainStory.generalLotteryNumber1 = Core.GetRandomNumber(100);
-                MainStory.generalLotteryNumber2 = Core.GetRandomNumber(100);
-                MainStory.generalLotteryNumber3 = Core.GetRandomNumber(100);
-                Invoke(nameof(UpdateScheduleInvoke), 1.0f);
                 afterSleepEventsProc = false;
             }
         }
@@ -234,9 +224,5 @@ namespace SMSAndroidsCore
         }
         #endregion
 
-        private void UpdateScheduleInvoke()
-        {
-            Schedule.UpdateScheduleForDay();
-        }
     }
 }

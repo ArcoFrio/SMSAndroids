@@ -40,7 +40,8 @@ namespace SMSAndroidsCore
         public const string pluginVersion = "0.7.0";
         #endregion
 
-        public static AssetBundle characterBundle;
+        // characterBundle retired: it only carried the Anis HH NPC prefabs,
+        // which are pack NPC placements now.
         public static AssetBundle dialogueBundle;
         public static AssetBundle minigameBundle;
         public static AssetBundle otherBundle;
@@ -99,7 +100,6 @@ namespace SMSAndroidsCore
             {
                 exePath += "/../";
             }
-            characterBundle = AssetBundle.LoadFromFile(exePath + assetPath + "characterbundle");
             dialogueBundle = AssetBundle.LoadFromFile(exePath + assetPath + "dialoguebundle");
             otherBundle = AssetBundle.LoadFromFile(exePath + assetPath + "otherbundle");
 
@@ -188,9 +188,10 @@ namespace SMSAndroidsCore
                     loadedCore = true;
 
                     //Debugging.PrintActionsComponentInfo(gameplay.Find("Sleeping").Find("sleepactions").gameObject);
-                    //Debugging.PrintConditionsAndTriggers(GameObject.Find("4_CG_Manager-Photos").transform.Find("01_MSmile").gameObject);
-                    //Debugging.PrintButtonInstructions(Core.level.Find("5_MyRoom").Find("PlayerRoom_ButtonCanvas").Find("Player_Room_Buttons").Find("SleepButton").gameObject);
-                    //Debugging.PrintDialogueComponentDeep(roomTalk.Find("Livingroom").Find("DefaultDialoge").gameObject, 10);
+                    //Debugging.PrintConditionsAndTriggers(FindInActiveObjectByName("World_Map").gameObject);
+                    //Debugging.PrintConditionsAndTriggers(roomTalk.Find("Kitchen").Find("DefaultDialogue").gameObject);
+                    //Debugging.PrintButtonInstructionsFull(FindInActiveObjectByName("World_Map").transform.Find("Canvas").Find("Core").Find("Radial_Buttons").Find("Seaside").Find("Beach").gameObject);
+                    //Debugging.PrintDialogueComponentDeep(roomTalk.Find("Kitchen").Find("DefaultDialoge").gameObject, 10);
                     //Debugging.PrintDialogueComponentInfo(roomTalk.Find("Livingroom").Find("DefaultDialoge").gameObject);
                     //Debugging.PrintToggleOnValueChanged(mainCanvas.Find("Starmaker").Find("Starmaker_Profile").Find("Extra_settings").Find("Toggle").gameObject);
                     //Core.EmitSignalDelayed("FadeIn2025", 5f);
@@ -770,6 +771,41 @@ namespace SMSAndroidsCore
             {
                 Debug.LogError($"[ProxyVariables] Error modifying variable '{variableName}': {e.Message}");
             }
+        }
+
+        /// <summary>
+        /// Writes a gifting hand-off variable to the PACK (the source of truth —
+        /// the pack's gift dialogues gate on these) and mirrors it into the GC2
+        /// proxy asset so any vanilla graph still reading it keeps working.
+        /// <para/>
+        /// These used to be proxy-only, which meant the pack's
+        /// <c>AnisDialogueGift</c> — gating on pack-store <c>Gifting_Target</c> /
+        /// <c>Gifting_Gifted</c> — could never fire: the UI wrote one store and
+        /// the dialogue read the other. Pack-first fixes the handshake; the
+        /// mirror keeps the proxy path intact.
+        /// </summary>
+        public static void SetGiftingString(string variableName, string value)
+        {
+            SaveManager.SetString(variableName, value ?? "");
+            if (proxyVariables != null && proxyVariables.Exists(variableName))
+                FindAndModifyProxyVariableString(variableName, value);
+        }
+
+        /// <inheritdoc cref="SetGiftingString"/>
+        public static void SetGiftingBool(string variableName, bool value)
+        {
+            SaveManager.SetBool(variableName, value);
+            if (proxyVariables != null && proxyVariables.Exists(variableName))
+                FindAndModifyProxyVariableBool(variableName, value);
+        }
+
+        /// <summary>Reads a gifting hand-off variable from the pack, falling back
+        /// to the proxy while the pack is still loading.</summary>
+        public static string GetGiftingString(string variableName)
+        {
+            string fromPack = SaveManager.GetString(variableName, "");
+            if (!string.IsNullOrEmpty(fromPack)) return fromPack;
+            return GetProxyVariableString(variableName, "");
         }
 
         /// <summary>

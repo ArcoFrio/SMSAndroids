@@ -2524,6 +2524,195 @@ namespace SMSAndroidsCore
 
         }
 
+        /// <summary>
+        /// Exhaustive dump of a ButtonInstructions component — everything needed to
+        /// replicate the button: GameObject context (path, RectTransform geometry,
+        /// sibling components), the full Selectable/Button visual state (transition,
+        /// ColorBlock, SpriteState, AnimationTriggers, targetGraphic), every field of
+        /// the component across its whole inheritance chain with deep recursion into
+        /// GC2 objects (InstructionList → instructions → nested Transitions/getters),
+        /// onClick persistent listeners, and a one-line summary of each child GO.
+        /// </summary>
+        public static void PrintButtonInstructionsFull(GameObject targetGameObject, int maxDepth = 5)
+        {
+            if (targetGameObject == null)
+            {
+                Debug.LogError("[BtnFull] Target GameObject is null");
+                return;
+            }
+
+            ButtonInstructions btn = targetGameObject.GetComponent<ButtonInstructions>();
+            if (btn == null)
+            {
+                Debug.LogError($"[BtnFull] ButtonInstructions component not found on: {targetGameObject.name}");
+                return;
+            }
+
+            Debug.Log($"[BtnFull] ================ FULL DUMP: {GetGameObjectPath(targetGameObject)} ================");
+
+            // ── GameObject context ─────────────────────────────────────
+            Debug.Log($"[BtnFull] GO: name={targetGameObject.name} activeSelf={targetGameObject.activeSelf} activeInHierarchy={targetGameObject.activeInHierarchy} layer={LayerMask.LayerToName(targetGameObject.layer)} tag={targetGameObject.tag} siblingIndex={targetGameObject.transform.GetSiblingIndex()}");
+            if (targetGameObject.transform is RectTransform rt)
+            {
+                Debug.Log($"[BtnFull] RectTransform: anchorMin={rt.anchorMin} anchorMax={rt.anchorMax} pivot={rt.pivot}");
+                Debug.Log($"[BtnFull]   anchoredPosition={rt.anchoredPosition} sizeDelta={rt.sizeDelta} offsetMin={rt.offsetMin} offsetMax={rt.offsetMax}");
+                Debug.Log($"[BtnFull]   localScale={rt.localScale} localRotation={rt.localEulerAngles} worldPos={rt.position}");
+            }
+
+            Debug.Log($"[BtnFull] --- All components on this GO ---");
+            foreach (var comp in targetGameObject.GetComponents<Component>())
+            {
+                if (comp == null) { Debug.Log("[BtnFull]   (missing script)"); continue; }
+                string extra = "";
+                if (comp is UnityEngine.UI.Image img)
+                    extra = $" | sprite={(img.sprite != null ? img.sprite.name : "(none)")} color={img.color} type={img.type} raycastTarget={img.raycastTarget} material={(img.material != null ? img.material.name : "(none)")}";
+                else if (comp is CanvasGroup cg)
+                    extra = $" | alpha={cg.alpha} interactable={cg.interactable} blocksRaycasts={cg.blocksRaycasts}";
+                else if (comp is TMP_Text tmp)
+                    extra = $" | text=\"{tmp.text}\" font={(tmp.font != null ? tmp.font.name : "(none)")} size={tmp.fontSize} color={tmp.color}";
+                Debug.Log($"[BtnFull]   * {comp.GetType().Name}{extra}");
+            }
+
+            // ── Selectable / Button visual state ───────────────────────
+            Debug.Log($"[BtnFull] --- Selectable state ---");
+            Debug.Log($"[BtnFull]   interactable={btn.interactable} transition={btn.transition}");
+            Debug.Log($"[BtnFull]   targetGraphic={(btn.targetGraphic != null ? btn.targetGraphic.name + " (" + btn.targetGraphic.GetType().Name + ")" : "(none)")}");
+            if (btn.targetGraphic is UnityEngine.UI.Image tgImg)
+                Debug.Log($"[BtnFull]     targetGraphic sprite={(tgImg.sprite != null ? tgImg.sprite.name : "(none)")} color={tgImg.color}");
+            var cb = btn.colors;
+            Debug.Log($"[BtnFull]   ColorBlock: normal={cb.normalColor} highlighted={cb.highlightedColor} pressed={cb.pressedColor} selected={cb.selectedColor} disabled={cb.disabledColor} multiplier={cb.colorMultiplier} fadeDuration={cb.fadeDuration}");
+            var ss = btn.spriteState;
+            Debug.Log($"[BtnFull]   SpriteState: highlighted={(ss.highlightedSprite != null ? ss.highlightedSprite.name : "(none)")} pressed={(ss.pressedSprite != null ? ss.pressedSprite.name : "(none)")} selected={(ss.selectedSprite != null ? ss.selectedSprite.name : "(none)")} disabled={(ss.disabledSprite != null ? ss.disabledSprite.name : "(none)")}");
+            var at = btn.animationTriggers;
+            Debug.Log($"[BtnFull]   AnimationTriggers: normal=\"{at.normalTrigger}\" highlighted=\"{at.highlightedTrigger}\" pressed=\"{at.pressedTrigger}\" selected=\"{at.selectedTrigger}\" disabled=\"{at.disabledTrigger}\"");
+            Debug.Log($"[BtnFull]   Navigation: mode={btn.navigation.mode}");
+
+            // ── Every field on the component, whole inheritance chain ──
+            Debug.Log($"[BtnFull] --- Deep field dump (type chain: {DescribeTypeChain(btn.GetType())}) ---");
+            var seen = new HashSet<object>();
+            DumpFieldsRecursive(btn, "", 1, maxDepth, seen);
+
+            // ── onClick persistent listeners ───────────────────────────
+            Debug.Log($"[BtnFull] --- onClick persistent listeners ---");
+            var onClick = btn.onClick;
+            if (onClick == null || onClick.GetPersistentEventCount() == 0)
+                Debug.Log("[BtnFull]   (none)");
+            else
+                for (int i = 0; i < onClick.GetPersistentEventCount(); i++)
+                {
+                    var target = onClick.GetPersistentTarget(i);
+                    Debug.Log($"[BtnFull]   Listener {i}: target={(target != null ? target.name + " (" + target.GetType().Name + ")" : "(null)")} method={onClick.GetPersistentMethodName(i)}");
+                }
+
+            // ── Children summary (icons/labels live here) ──────────────
+            Debug.Log($"[BtnFull] --- Children ({targetGameObject.transform.childCount}) ---");
+            foreach (Transform child in targetGameObject.transform)
+            {
+                string comps = string.Join(", ", child.GetComponents<Component>()
+                    .Where(c => c != null && !(c is Transform))
+                    .Select(c => c.GetType().Name).ToArray());
+                string visual = "";
+                var cImg = child.GetComponent<UnityEngine.UI.Image>();
+                if (cImg != null) visual += $" sprite={(cImg.sprite != null ? cImg.sprite.name : "(none)")} color={cImg.color}";
+                var cTmp = child.GetComponent<TMP_Text>();
+                if (cTmp != null) visual += $" text=\"{cTmp.text}\"";
+                Debug.Log($"[BtnFull]   - {child.name} [active={child.gameObject.activeSelf}] ({comps}){visual}");
+            }
+
+            Debug.Log($"[BtnFull] ================ END DUMP: {targetGameObject.name} ================");
+        }
+
+        private static string DescribeTypeChain(Type type)
+        {
+            var names = new List<string>();
+            for (Type t = type; t != null && t != typeof(object); t = t.BaseType) names.Add(t.Name);
+            return string.Join(" → ", names.ToArray());
+        }
+
+        /// <summary>
+        /// Recursively prints every instance field of an object (public + private,
+        /// including private fields declared on base classes, which GetFields()
+        /// alone won't return). UnityEngine.Object references are printed by name
+        /// without recursion; GC2 POCOs (instructions, transitions, getters,
+        /// IdString…) are expanded up to maxDepth; collections are enumerated;
+        /// cycles are guarded by reference identity.
+        /// </summary>
+        private static void DumpFieldsRecursive(object obj, string indent, int depth, int maxDepth, HashSet<object> seen)
+        {
+            if (obj == null) return;
+            Type type = obj.GetType();
+
+            // Collect fields across the whole chain — DeclaredOnly per level so
+            // base-class private fields (m_Interactable etc.) are included.
+            for (Type t = type; t != null && t != typeof(object); t = t.BaseType)
+            {
+                foreach (var field in t.GetFields(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.DeclaredOnly))
+                {
+                    object value;
+                    try { value = field.GetValue(obj); }
+                    catch (Exception ex) { Debug.Log($"[BtnFull] {indent}{field.Name}: <unreadable: {ex.GetType().Name}>"); continue; }
+                    DumpValueRecursive(value, $"{field.Name} ({t.Name})", indent, depth, maxDepth, seen);
+                }
+            }
+        }
+
+        private static void DumpValueRecursive(object value, string label, string indent, int depth, int maxDepth, HashSet<object> seen)
+        {
+            if (value == null) { Debug.Log($"[BtnFull] {indent}{label}: null"); return; }
+            Type vt = value.GetType();
+
+            // Leaves: primitives, strings, enums, common Unity structs.
+            if (vt.IsPrimitive || vt.IsEnum || value is string || value is Vector2 || value is Vector3 ||
+                value is Vector4 || value is Color || value is Rect || value is Quaternion || value is LayerMask)
+            {
+                Debug.Log($"[BtnFull] {indent}{label}: {value}");
+                return;
+            }
+
+            // Unity objects: identify, never recurse (sprites, GOs, materials…).
+            if (value is UnityEngine.Object uo)
+            {
+                Debug.Log($"[BtnFull] {indent}{label}: '{(uo != null ? uo.name : "(destroyed)")}' ({vt.Name})");
+                return;
+            }
+
+            // Delegates and UnityEvents: summarize, don't expand internals.
+            if (value is Delegate del)
+            {
+                Debug.Log($"[BtnFull] {indent}{label}: <delegate {vt.Name}, {del.GetInvocationList().Length} handler(s)>");
+                return;
+            }
+            if (value is UnityEngine.Events.UnityEventBase ueb)
+            {
+                Debug.Log($"[BtnFull] {indent}{label}: <UnityEvent {vt.Name}, {ueb.GetPersistentEventCount()} persistent listener(s)>");
+                return;
+            }
+
+            if (depth > maxDepth) { Debug.Log($"[BtnFull] {indent}{label}: {value} <max depth>"); return; }
+            if (!vt.IsValueType)
+            {
+                if (seen.Contains(value)) { Debug.Log($"[BtnFull] {indent}{label}: <cycle to {vt.Name}>"); return; }
+                seen.Add(value);
+            }
+
+            // Collections: enumerate elements.
+            if (value is IEnumerable en && !(value is string))
+            {
+                var items = en.Cast<object>().ToList();
+                Debug.Log($"[BtnFull] {indent}{label}: {vt.Name} [{items.Count} element(s)]");
+                for (int i = 0; i < items.Count; i++)
+                    DumpValueRecursive(items[i], $"[{i}]", indent + "  ", depth + 1, maxDepth, seen);
+                return;
+            }
+
+            // GC2 POCO: title (if any) + recurse into its fields.
+            string title = null;
+            try { title = vt.GetProperty("Title", BindingFlags.Public | BindingFlags.Instance)?.GetValue(value)?.ToString(); }
+            catch { /* some Titles throw outside play state */ }
+            Debug.Log($"[BtnFull] {indent}{label}: {vt.Name}{(string.IsNullOrEmpty(title) || title == vt.Name ? "" : $" \"{title}\"")}");
+            DumpFieldsRecursive(value, indent + "  ", depth + 1, maxDepth, seen);
+        }
+
         public static void PrintToggleOnValueChanged(GameObject targetGameObject)
         {
             if (targetGameObject == null)

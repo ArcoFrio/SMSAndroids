@@ -27,10 +27,6 @@ namespace SMSAndroidsCore
     ///   <item>Harbor Home Talk panel -- per-room replacement for the vanilla
     ///   TalkButton; shows up to two character buttons for whoever's in the
     ///   active HH room. Pure UI on top of <see cref="Schedule"/> state.</item>
-    ///   <item><see cref="audioShower"/> / <see cref="audioShowerQuiet"/> /
-    ///   <see cref="audioHarborHomeMusic"/> -- vanilla AudioSource lookups
-    ///   under 12_AudioPlayer that Schedule and the HH transitions still
-    ///   toggle.</item>
     ///   <item><see cref="dialoguePlaying"/> / <see cref="dialoguePlayingVanilla"/>
     ///   -- mirrored into the proxy variable Checks_Dialogue-is-playing so
     ///   vanilla GC2 conditions can branch on it; the ModForge dispatcher
@@ -49,14 +45,6 @@ namespace SMSAndroidsCore
         public static GameObject giftItemTemplate;
         public static Dictionary<string, bool> giftVanillaMap = new Dictionary<string, bool>();
 
-        // -- Audio sources under 12_AudioPlayer ----------------------------
-        // audioShower / audioShowerQuiet are gated by Schedule based on which
-        // HH room the player is in vs. where Anis is. audioHarborHomeMusic is
-        // the per-house music swap track loaded from the other bundle.
-        public static GameObject audioHarborHomeMusic;
-        public static GameObject audioShower;
-        public static GameObject audioShowerQuiet;
-
         // -- Harbor Home Talk Panel ----------------------------------------
         public static GameObject hhTalkPanel;
         public static GameObject hhTalkButton1;
@@ -66,7 +54,9 @@ namespace SMSAndroidsCore
         private static string hhTalkLastActiveRoom = null;
         private static float hhTalkLastUpdateTime = 0f;
         private static float hhTalkUpdateInterval = 0.3f;
-        private static int hhTalkLastScheduleVersion = -1;
+        /// <summary>Last seen "who is where" snapshot, used to detect roster
+        /// changes without a schedule-version counter. See UpdateHHTalkPanel.</summary>
+        private static string hhTalkLastRoster = null;
 
         // Cached rounded-corner sprites for the HHTalk UI
         private static Sprite hhPanelSprite;
@@ -131,9 +121,10 @@ namespace SMSAndroidsCore
                     // matching roomtalk) is gone. ModForge spawns those now
                     // -- see SMSModForge.PackPlugin.DialogueBuilder.
 
-                    audioHarborHomeMusic = CreateMusicPlayer("HarborHomeMusic");
-                    audioShower          = Core.audioPlayer.Find("Shower").gameObject;
-                    audioShowerQuiet     = Core.audioPlayer.Find("ShowerQuiet").gameObject;
+                    // Shower / ShowerQuiet gating is the pack's HHShowerAudio
+                    // rule (Direct Path targets under 12_AudioPlayer), and
+                    // HarborHomeMusic is pack music built by MusicFactory —
+                    // creating a second one here made SwitchMusic ambiguous.
 
                     giftUI = InitializeGiftUICanvas();
                     AddGiftItem("Gift_Action-Figure", "Action Figure", false, "Figure.PNG");
@@ -250,16 +241,14 @@ namespace SMSAndroidsCore
 
                     if (isVanilla)
                     {
-                        // Get vanilla GNV value
+                        // Real game inventory item — stays a vanilla GNV read.
                         giftValue = Core.GetVariableBool(giftName);
                     }
                     else
                     {
-                        // Get proxy GNV value
-                        if (Core.proxyVariables != null && Core.proxyVariables.Exists(giftName))
-                        {
-                            giftValue = (bool)Core.proxyVariables.Get(giftName);
-                        }
+                        // Mod-only Gift_* item: the pack declares and persists
+                        // these, so the pack store is what "do I own it" means.
+                        giftValue = SaveManager.GetBool(giftName);
                     }
 
                     // Set active state based on GNV value (true = active, false = inactive)
@@ -758,29 +747,29 @@ namespace SMSAndroidsCore
                         Singleton<AudioManager>.Instance.UserInterface.Play(kissClip, AudioConfigSoundUI.Default, Args.EMPTY);
                     }
 
-                    // Increment affection if character likes this gift
-                    string giftingTarget = Core.GetProxyVariableString("Gifting_Target", "");
+                    // The pack sets Gifting_Target before emitting OpenGiftUI, so
+                    // read it from the pack (proxy is only a load-window fallback).
+                    string giftingTarget = Core.GetGiftingString("Gifting_Target");
                     if (!string.IsNullOrEmpty(giftingTarget))
                     {
                         Core.IncrementAffectionForGiftIfLiked(giftName, giftingTarget);
                     }
                     else
                     {
-                        Debug.LogWarning("[GiftUI] Gifting_Target proxy variable not found or empty");
+                        Debug.LogWarning("[GiftUI] Gifting_Target is empty — did the dialogue set it before emitting OpenGiftUI?");
                     }
 
-                    // Set Gifting_Gift to this gift's name
-                    Core.FindAndModifyProxyVariableString("Gifting_Gift", giftName);
+                    // Hand-off back to the pack: its gift dialogues gate on these
+                    // pack variables, so they must be written to the pack store.
+                    // Core.SetGifting* writes the pack AND mirrors to the proxy.
+                    Core.SetGiftingString("Gifting_Gift", giftName);
+                    Core.SetGiftingBool("Gifting_Gifted", true);
 
-                    // Set Gifting_Gifted to true
-                    Core.FindAndModifyProxyVariableBool("Gifting_Gifted", true);
-
-                    // Set DailyProc_Gifting_[CHARNAME] to true
-                    string giftingTargetForDaily = Core.GetProxyVariableString("Gifting_Target", "");
-                    if (!string.IsNullOrEmpty(giftingTargetForDaily))
+                    // Per-character daily lock, so the gift option disappears for
+                    // the rest of the day.
+                    if (!string.IsNullOrEmpty(giftingTarget))
                     {
-                        string dailyProcVarName = $"DailyProc_Gifting_{giftingTargetForDaily}";
-                        Core.FindAndModifyProxyVariableBool(dailyProcVarName, true);
+                        Core.SetGiftingBool($"DailyProc_Gifting_{giftingTarget}", true);
                     }
 
                     // Set GNV to False (vanilla or proxy)
@@ -813,61 +802,6 @@ namespace SMSAndroidsCore
             Debug.Log($"[AddGiftItem] Successfully added gift: {name} to {targetGiftList.name}");
         }
 
-        public static GameObject CreateMusicPlayer(string assetName)
-        {
-            try
-            {
-                // Find 12_AudioPlayer in the scene
-                GameObject audioPlayerParent = GameObject.Find("12_AudioPlayer");
-                if (audioPlayerParent == null)
-                {
-                    Debug.LogError("[CreateMusicPlayer] Could not find 12_AudioPlayer in the scene");
-                    return null;
-                }
-
-                // Find the Music child object
-                Transform musicTransform = audioPlayerParent.transform.Find("Beach");
-                if (musicTransform == null)
-                {
-                    Debug.LogError("[CreateMusicPlayer] Could not find Music object under 12_AudioPlayer");
-                    return null;
-                }
-
-                // Load the audio asset from OtherBundle
-                AudioClip audioClip = Core.otherBundle.LoadAsset<AudioClip>(assetName);
-                if (audioClip == null)
-                {
-                    Debug.LogError($"[CreateMusicPlayer] Could not load audio asset '{assetName}' from OtherBundle");
-                    return null;
-                }
-
-                // Instantiate a copy of the Music object (disabled to prevent auto-play)
-                GameObject newMusicPlayer = GameObject.Instantiate(musicTransform.gameObject, audioPlayerParent.transform);
-                newMusicPlayer.SetActive(false);
-                
-                // Set the name to match the asset name
-                newMusicPlayer.name = assetName;
-
-                // Get the AudioSource component and set the clip
-                AudioSource audioSource = newMusicPlayer.GetComponent<AudioSource>();
-                if (audioSource != null)
-                {
-                    audioSource.clip = audioClip;
-                    Debug.Log($"[CreateMusicPlayer] Created music player '{assetName}' (disabled) with AudioClip successfully");
-                }
-                else
-                {
-                    Debug.LogWarning($"[CreateMusicPlayer] Created music player '{assetName}' but AudioSource component not found");
-                }
-
-                return newMusicPlayer;
-            }
-            catch (Exception e)
-            {
-                Debug.LogError($"[CreateMusicPlayer] Error creating music player for '{assetName}': {e.Message}");
-                return null;
-            }
-        }
 
         #region Harbor Home Talk Panel
 
@@ -1065,18 +999,26 @@ namespace SMSAndroidsCore
                     hhTalkPanel.SetActive(true);
                 }
 
-                // Check if room changed or schedule updated
+                // Check if room changed or the roster moved.
+                //
+                // This used to watch Schedule.scheduleVersion, a counter the
+                // SMSAndroids-side simulation bumped when it moved anyone. The
+                // pack's roaming rules own those locations now and have no such
+                // counter, so instead we diff a signature of the roster itself:
+                // any change to who is where — whoever made it — shows up here.
+                // It's a handful of string reads on a 0.3s poll.
                 bool roomChanged = activeRoom != hhTalkLastActiveRoom;
-                bool scheduleChanged = Schedule.scheduleVersion != hhTalkLastScheduleVersion;
-                
+                string roster = BuildHHRosterSignature();
+                bool scheduleChanged = roster != hhTalkLastRoster;
+
                 if (roomChanged)
                 {
                     hhTalkLastActiveRoom = activeRoom;
                 }
-                
+
                 if (scheduleChanged)
                 {
-                    hhTalkLastScheduleVersion = Schedule.scheduleVersion;
+                    hhTalkLastRoster = roster;
                 }
                 
                 // Rebuild buttons when room or schedule changes, or when immediate is requested
@@ -1139,6 +1081,23 @@ namespace SMSAndroidsCore
         /// <summary>
         /// Finds characters whose HH location is in the given room and populates up to 2 buttons.
         /// </summary>
+        /// <summary>
+        /// "Who is at the Harbor Home, and where" as one string, built from the
+        /// pack's own variables. Purely a change-detection key — its contents
+        /// only have to differ when the roster differs.
+        /// </summary>
+        private static string BuildHHRosterSignature()
+        {
+            var sb = new System.Text.StringBuilder();
+            foreach (string charName in hhTalkCharacterNames)
+            {
+                if (!SaveManager.GetBool("HarborHome_Visit_" + charName)) continue;
+                sb.Append(charName).Append('=')
+                  .Append(SaveManager.GetString("Location_" + charName, "")).Append(';');
+            }
+            return sb.ToString();
+        }
+
         private static void PopulateHHTalkButtons(string activeRoom)
         {
             List<string> charactersInRoom = new List<string>();
@@ -1148,8 +1107,12 @@ namespace SMSAndroidsCore
                 if (!SaveManager.GetBool("HarborHome_Visit_" + charName))
                     continue;
 
-                // The main location variable is already set to the HH position by the roaming system
-                string charLocation = Schedule.GetCharacterLocation(charName);
+                // The pack's roaming rules own Location_<Char>, so read it straight
+                // from the pack store rather than through Schedule's mirror fields.
+                // SaveManager is already a façade over ModForgeBridge, so this needs
+                // nothing mod-specific on the ModForge side — it's the same generic
+                // "read a pack variable by name" call any host mod would use.
+                string charLocation = SaveManager.GetString("Location_" + charName, "");
                 if (string.IsNullOrEmpty(charLocation))
                     continue;
 

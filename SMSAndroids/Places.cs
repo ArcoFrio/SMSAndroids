@@ -84,7 +84,6 @@ namespace SMSAndroidsCore
         public static GameObject giftShopInteriorRoomtalk;
 
         public static GameObject harborHomeBathroomLevel;
-        public static GameObject harborHomeBathroomLevelB1;
         public static GameObject harborHomeBathroomRoomtalk;
         public static GameObject harborHomeBedroomLevel;
         public static GameObject harborHomeBedroomRoomtalk;
@@ -94,24 +93,12 @@ namespace SMSAndroidsCore
         public static GameObject harborHouseEntranceLevel;
         public static GameObject harborHouseEntranceRoomtalk;
         public static GameObject harborHomeKitchenLevel;
-        public static GameObject harborHomeKitchenLevelB1;
         public static GameObject harborHomeKitchenRoomtalk;
         public static GameObject harborHomeLivingroomLevel;
         public static GameObject harborHomeLivingroomLevelMovies;
         public static GameObject harborHomeLivingroomRoomtalk;
         public static GameObject harborHomePoolLevel;
         public static GameObject harborHomePoolRoomtalk;
-        public static Transform harborHomeBathroomNPCShower;
-        public static Transform harborHomeBedroomNPCBedleft;
-        public static Transform harborHomeBedroomNPCBedright;
-        public static Transform harborHomeClosetNPCChangingleft;
-        public static Transform harborHomeClosetNPCChangingright;
-        public static Transform harborHomeKitchenNPCFridge;
-        public static Transform harborHomeKitchenNPCSink;
-        public static Transform harborHomeLivingroomNPCCouchleft;
-        public static Transform harborHomeLivingroomNPCCouchright;
-        public static Transform harborHomePoolNPCTanningleft;
-        public static Transform harborHomePoolNPCTanningright;
 
         public static GameObject mountainLabLevel;
         public static GameObject mountainLabRoomtalk;
@@ -162,7 +149,7 @@ namespace SMSAndroidsCore
         public static GameObject secretBeachLevelBG;
         public static GameObject secretBeachRoomtalk;
         // Secret Beach Sky / Flash / Gatekeeper / Portal overlays migrated to the
-        // pack (SMSAndroidsPack place "overlays" + Move/Spin dialogue actions).
+        // pack (SMSAndroidsPack place "gameObjects" + Move/Spin dialogue actions).
 
         public static GameObject weatherInsideRain;
         public static GameObject weatherInsideSnow;
@@ -188,7 +175,6 @@ namespace SMSAndroidsCore
         public static bool loadedPlaces = false;
         public static bool harborHomeBedroomSwapApplied = false;
         public static bool insideHarborHome = false;
-        public static GameObject solid;
         public void Update()
         {
             if (Core.currentScene.name == "CoreGameScene")
@@ -290,7 +276,7 @@ namespace SMSAndroidsCore
                     giftShopItemBonsai = AddItemToGiftStore("Bonsai Tree", "$3500", "Bonsai.PNG");
 
                     // Secret Beach Sky / Flash / Gatekeeper / Portal overlays are
-                    // now authored as pack data (SMSAndroidsPack place "overlays")
+                    // now authored as pack data (SMSAndroidsPack place "gameObjects")
                     // and animated by the GK dialogue's MoveGameObject /
                     // SpinGameObject / FadeSprite actions — no longer built here.
 
@@ -298,53 +284,25 @@ namespace SMSAndroidsCore
                     // owned by ModForge (NavigatorGridSetup / NavigatorGridLayout)
                     // along with the map buttons themselves.
 
-                    solid = GameObject.Instantiate(Places.secretBeachLevel.transform.GetChild(1).gameObject, Places.levelForest.transform);
-                    SetNewLevelSprite(solid, Core.bustPath, "Solid\\Solid.PNG", 2048, 1136);
-                    solid.GetComponent<SpriteRenderer>().color = new Color(1,1,1,0);
-                    solid.name = "Solid";
+                    // The Solid cameo on Forest Entrance is pack data now — an
+                    // added GameObject (sprite + SolidMask + FadeInSprite) on the
+                    // vanilla:67_Jap_ForestEntrance extension. The ShowerGlass
+                    // B1 overlay is the pack's ShowerGlassOverlay on the
+                    // HarborHomeBathroom place; FridgeOpenOverlay likewise on
+                    // HarborHomeKitchen, toggled by the HHFridgeOverlay rule.
+                    // The per-slot NPC anchor Transforms (Shower / Bedleft / …)
+                    // are gone too: the pack's HarborHome places author those
+                    // containers inside their own NPCs trees, and creating
+                    // same-named siblings here would collide with them.
 
-                    Material mat = new Material(Core.bustManager.Find("Anna_Bust").gameObject.GetComponent<SpriteRenderer>().material);
-                    Texture2D tex = new Texture2D(2048, 1136, TextureFormat.RGBA32, false);
-                    var rawData = System.IO.File.ReadAllBytes(Core.bustPath + "Solid\\SolidMask.PNG");
-                    tex.LoadImage(rawData);
-                    tex.filterMode = FilterMode.Point;
-                    mat.SetTexture("_MaskTex", tex);
-                    solid.GetComponent<SpriteRenderer>().material = mat;
-                    solid.GetComponent<SpriteRenderer>().material.SetTexture("_MaskTex", tex);
-                    solid.GetComponent<SpriteRenderer>().sortingOrder = -5;
-
-                    solid.SetActive(true);
-
-                    // The B1 overlays (shower glass + fridge-open) are
-                    // SMSAndroids-side art layered on top of the pack-built
-                    // HH bathroom + kitchen levels. We clone the secondary-
-                    // sprite child (child index 1 — the same secondary the
-                    // PlaceFactory cloned from the Beach prototype) so the
-                    // overlay carries the right shader / material.
-                    harborHomeBathroomLevelB1 = GameObject.Instantiate(harborHomeBathroomLevel.transform.GetChild(1).gameObject, harborHomeBathroomLevel.transform);
-                    harborHomeBathroomLevelB1.name = "ShowerGlassOverlay";
-                    harborHomeBathroomLevelB1.GetComponent<SpriteRenderer>().sortingOrder = 0;
-                    Destroy(harborHomeBathroomLevelB1.GetComponent<ParallaxMouseEffect>());
-                    SetNewLevelSprite(harborHomeBathroomLevelB1, Core.locationPath, "HHomeBathroomB1.PNG", 2048, 1136);
-                    harborHomeKitchenLevelB1 = GameObject.Instantiate(harborHomeKitchenLevel.transform.GetChild(1).gameObject, harborHomeKitchenLevel.transform);
-                    harborHomeKitchenLevelB1.name = "FridgeOpenOverlay";
-                    harborHomeKitchenLevelB1.SetActive(false);
-                    harborHomeKitchenLevelB1.GetComponent<SpriteRenderer>().sortingOrder = harborHomeKitchenLevel.GetComponent<SpriteRenderer>().sortingOrder + 1;
-                    Destroy(harborHomeKitchenLevelB1.GetComponent<ParallaxMouseEffect>());
-                    SetNewLevelSprite(harborHomeKitchenLevelB1, Core.locationPath, "HHomeKitchenB1.PNG", 2048, 1136);
+                    // Living-room base sprite must draw over the couch NPCs;
+                    // PlaceFactory clones levels at the Beach prototype's -10,
+                    // and a level's own sprite order isn't pack-authorable.
                     harborHomeLivingroomLevel.GetComponent<SpriteRenderer>().sortingOrder = 2;
-                    harborHomeBathroomNPCShower = GameObject.Instantiate(new GameObject(), harborHomeBathroomLevel.transform.Find("NPCs")).transform; harborHomeBathroomNPCShower.name = "Shower";
-                    harborHomeBedroomNPCBedleft = GameObject.Instantiate(new GameObject(), harborHomeBedroomLevel.transform.Find("NPCs")).transform; harborHomeBedroomNPCBedleft.name = "Bedleft";
-                    harborHomeBedroomNPCBedright = GameObject.Instantiate(new GameObject(), harborHomeBedroomLevel.transform.Find("NPCs")).transform; harborHomeBedroomNPCBedright.name = "Bedright";
-                    harborHomeClosetNPCChangingleft = GameObject.Instantiate(new GameObject(), harborHomeClosetLevel.transform.Find("NPCs")).transform; harborHomeClosetNPCChangingleft.name = "Changingleft";
-                    harborHomeClosetNPCChangingright = GameObject.Instantiate(new GameObject(), harborHomeClosetLevel.transform.Find("NPCs")).transform; harborHomeClosetNPCChangingright.name = "Changingright";
-                    harborHomeKitchenNPCFridge = GameObject.Instantiate(new GameObject(), harborHomeKitchenLevel.transform.Find("NPCs")).transform; harborHomeKitchenNPCFridge.name = "Fridge";
-                    harborHomeKitchenNPCSink = GameObject.Instantiate(new GameObject(), harborHomeKitchenLevel.transform.Find("NPCs")).transform; harborHomeKitchenNPCSink.name = "Sink";
-                    harborHomeLivingroomNPCCouchleft = GameObject.Instantiate(new GameObject(), harborHomeLivingroomLevel.transform.Find("NPCs")).transform; harborHomeLivingroomNPCCouchleft.name = "Couchleft";
-                    harborHomeLivingroomNPCCouchright = GameObject.Instantiate(new GameObject(), harborHomeLivingroomLevel.transform.Find("NPCs")).transform; harborHomeLivingroomNPCCouchright.name = "Couchright";
+                    // Vanilla Movies subtree grafted so the living room can run
+                    // the TV flow. A cross-level clone of a vanilla hierarchy
+                    // isn't expressible as pack data.
                     harborHomeLivingroomLevelMovies = GameObject.Instantiate(Core.level.Find("3_LivingRoom").Find("Movies").gameObject, harborHomeLivingroomLevel.transform);
-                    harborHomePoolNPCTanningleft = GameObject.Instantiate(new GameObject(), harborHomePoolLevel.transform.Find("NPCs")).transform; harborHomePoolNPCTanningleft.name = "Tanningleft";
-                    harborHomePoolNPCTanningright = GameObject.Instantiate(new GameObject(), harborHomePoolLevel.transform.Find("NPCs")).transform; harborHomePoolNPCTanningright.name = "Tanningright";
 
                     // Subscribe to gift-UI signals here too, in case Places
                     // finishes before Dialogues (load order isn't strict
@@ -391,7 +349,6 @@ namespace SMSAndroidsCore
                 if (levelMall.activeSelf && randomNumMall == -1) { randomNumMall = Core.GetRandomNumber(100); Debug.Log("randomNumMall: " + randomNumMall); } if (!levelMall.activeSelf) { randomNumMall = -1; }
                 if (mountainLabRoomNikkeAnisLevel.activeSelf && randomNumMLRoomAnis == -1) { randomNumMLRoomAnis = Core.GetRandomNumber(100); Debug.Log("randomNumMLRoomAnis: " + randomNumMLRoomAnis); } if (!mountainLabRoomNikkeAnisLevel.activeSelf) { randomNumMLRoomAnis = -1; }
 
-                harborHomeKitchenLevelB1.SetActive(Schedule.anisLocation == "HarborHomeKitchenFridge");
 
                 if (Core.GetVariableBool("rainy-day"))
                 {
@@ -979,7 +936,7 @@ namespace SMSAndroidsCore
 
         private static void UpdateGiftStoreItemVisibility()
         {
-            if (Core.proxyVariables == null || giftStore == null) return;
+            if (giftStore == null) return;
 
             Transform giftStoreCore = giftStore.transform.Find("Core");
             if (giftStoreCore == null) return;
@@ -992,27 +949,30 @@ namespace SMSAndroidsCore
                 // Skip non-item objects (like CloseStore button)
                 if (item.name == "CloseStore") continue;
 
-                // Create proxy variable name from item name
-                string proxyVariableName = "Gift_" + item.name.Replace(" ", "-");
+                // Ownership variable name from the item name. Every one of these
+                // is a mod-only gift the PACK declares and persists, so the pack
+                // store is the source of truth — the shop hides what you own.
+                string ownedVariableName = "Gift_" + item.name.Replace(" ", "-");
 
-                // Check if proxy variable exists and get its value
-                if (Core.proxyVariables.Exists(proxyVariableName))
+                // A variable the pack doesn't know about would read false and
+                // leave the item permanently on sale, so skip those rather than
+                // silently misreport them.
+                if (!SaveManager.HasVariable(ownedVariableName)) continue;
+
+                bool isPurchased = SaveManager.GetBool(ownedVariableName);
+
+                // Set active to opposite of purchased state (if purchased, hide it)
+                if (item.gameObject.activeSelf == isPurchased)
                 {
-                    bool isPurchased = (bool)Core.proxyVariables.Get(proxyVariableName);
+                    item.gameObject.SetActive(!isPurchased);
+                    layoutChanged = true;
+                    Debug.Log($"[GiftStore] Set {item.name} active to {!isPurchased} (purchased: {isPurchased})");
 
-                    // Set active to opposite of purchased state (if purchased, hide it)
-                    if (item.gameObject.activeSelf == isPurchased)
+                    // Reset scale to (1,1,1) when item becomes visible
+                    if (!isPurchased)
                     {
-                        item.gameObject.SetActive(!isPurchased);
-                        layoutChanged = true;
-                        Debug.Log($"[GiftStore] Set {item.name} active to {!isPurchased} (purchased: {isPurchased})");
-                        
-                        // Reset scale to (1,1,1) when item becomes visible
-                        if (!isPurchased)
-                        {
-                            item.localScale = new Vector3(1f, 1f, 1f);
-                            Debug.Log($"[GiftStore] Reset {item.name} scale to (1,1,1)");
-                        }
+                        item.localScale = new Vector3(1f, 1f, 1f);
+                        Debug.Log($"[GiftStore] Reset {item.name} scale to (1,1,1)");
                     }
                 }
             }
