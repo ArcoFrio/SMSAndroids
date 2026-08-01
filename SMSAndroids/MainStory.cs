@@ -11,15 +11,8 @@ namespace SMSAndroidsCore
     /// switch on each character's <see cref="Schedule"/> location; that logic
     /// has been wholesale migrated into ModForge (each dialogue is now a pack
     /// def in <c>SMSAndroidsPack/modpack.json</c> with its own conditions +
-    /// actions). The remaining surface here is purely the non-dialogue state
-    /// other surviving subsystems still read:
+    /// actions). The remaining surface here is one thing:
     /// <list type="bullet">
-    ///   <item>Daily lottery numbers — three general. Used by
-    ///   <see cref="Schedule"/> to pick alternate per-character locations.
-    ///   Re-rolled at scene load + sleep.</item>
-    ///   <item>Per-day flags — <see cref="relaxed"/>, <see cref="actionTodaySB"/>
-    ///   — read by pack dialogues via the proxy variable mirror in
-    ///   <see cref="Core"/> and cleared at sleep.</item>
     ///   <item>Shared GC2 <see cref="SignalArgs"/> constants — referenced by
     ///   the surviving subsystems (<see cref="Minigames"/>, <see cref="Dialogues"/>)
     ///   that still emit fades directly rather than going through a pack
@@ -53,12 +46,6 @@ namespace SMSAndroidsCore
         public static SignalArgs forceEnableUISignal          = new SignalArgs(new PropertyName("ForceEnableUI"), null);
         public static SignalArgs kissSignal                   = new SignalArgs(new PropertyName("kiss"), null);
         public static SignalArgs whiteFlashNoSoundBlackSignal = new SignalArgs(new PropertyName("whiteflashnosound"), null);
-
-        // ── Per-day flags ─────────────────────────────────────────────────
-        // Both default to false on scene load + are reset by SaveManager's
-        // sleep day-turnover. Packs read them via the proxy variable mirror.
-        public static bool actionTodaySB = false;
-        public static bool relaxed       = false;
 
         // NOTE: the daily lottery numbers that used to be re-rolled here are
         // gone with the native day schedules — the pack's ScheduleDaily rules

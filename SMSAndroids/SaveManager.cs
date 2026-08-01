@@ -44,8 +44,6 @@ namespace SMSAndroidsCore
 
         public void OnSceneLoaded(Scene scene, UnityEngine.SceneManagement.LoadSceneMode mode)
         {
-            MainStory.relaxed = false;
-            MainStory.actionTodaySB = false;
             if (scene.name == "CoreGameScene")
             {
                 Core.RefreshDailyProxyVariables();
@@ -69,20 +67,17 @@ namespace SMSAndroidsCore
             }
             if (Core.savedUI.activeSelf && afterSleepEventsProc)
             {
+                // What is left here is what the pack genuinely cannot do: it
+                // reads GC2 proxy variables and plugin-side level state.
+                //
+                // Gone, and deliberately: the GiftShop_BuildCounter increment
+                // (the pack's GS_Counter rule owns the count, and this was a
+                // second, unlatched writer racing it), the HarborHome_SleepCD
+                // reset (the variable is refreshMode Daily now), and two
+                // MainStory flags nothing ever read.
                 Core.RefreshDailyProxyVariables();
-                if (GetBool("GiftShop_FirstVisited") && GetInt("GiftShop_BuildCounter") < 2)
-                {
-                    SetInt("GiftShop_BuildCounter", GetInt("GiftShop_BuildCounter") + 1);
-                }
                 SetBool("HarborHome_Slept", Places.harborHomeBedroomSwapApplied);
-                SetBool("HarborHome_SleepCD", false);
                 Debug.Log("Day: " + Core.GetVariableNumber("Day"));
-
-                // Voyeur tier progression / eligible-target maintenance now
-                // lives entirely in the pack (List variable + list actions);
-                // no plugin-side rebuild here anymore.
-                MainStory.relaxed = false;
-                MainStory.actionTodaySB = false;
                 Places.UpdateGiftShopTextureBasedOnBuildStatus();
                 afterSleepEventsProc = false;
             }
