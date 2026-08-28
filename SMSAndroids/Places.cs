@@ -45,15 +45,12 @@ namespace SMSAndroidsCore
         public static GameObject roomTalkForest;
         public static GameObject roomTalkGabrielsMansion;
         public static GameObject roomTalkGasStation;
-        public static GameObject roomTalkHospital;
         public static GameObject roomTalkHospitalHallway;
-        public static GameObject roomTalkHotel;
         public static GameObject roomTalkKensHome;
         public static GameObject roomTalkMall;
         public static GameObject roomTalkPark;
         public static GameObject roomTalkParkingLot;
         public static GameObject roomTalkTemple;
-        public static GameObject roomTalkTrail;
         public static GameObject roomTalkVilla;
 
         public static GameObject levelAlley;
@@ -151,10 +148,8 @@ namespace SMSAndroidsCore
         // Secret Beach Sky / Flash / Gatekeeper / Portal overlays migrated to the
         // pack (SMSAndroidsPack place "gameObjects" + Move/Spin dialogue actions).
 
-        public static GameObject weatherInsideRain;
-        public static GameObject weatherInsideSnow;
-        public static GameObject weatherOutsideRain;
-        public static GameObject weatherOutsideSnow;
+        // The four weather particle cores are ModForge's to resolve and switch
+        // (WeatherRuntime, driven by each pack place's weatherType).
 
         public static GameObject modShops;
         public static GameObject giftStore;
@@ -191,26 +186,18 @@ namespace SMSAndroidsCore
                     }
 
 
-                    weatherInsideRain = GameObject.Find("Weather_System_Inside").transform.Find("Prefab_Rainy_Day").Find("Rain_Core").gameObject;
-                    weatherInsideSnow = GameObject.Find("Weather_System_Inside").transform.Find("Prefab_Snowy_Day").Find("Snow_Core").gameObject;
-                    weatherOutsideRain = GameObject.Find("Weather_System_Outside").transform.Find("Prefab_Rainy_Day").Find("Rain_Core").gameObject;
-                    weatherOutsideSnow = GameObject.Find("Weather_System_Outside").transform.Find("Prefab_Snowy_Day").Find("Snow_Core").gameObject;
-
                     roomTalkAlley = Core.roomTalk.Find("ParkingLotBackyard_Events").gameObject;
                     roomTalkBeach = Core.roomTalk.Find("Beach").gameObject;
                     roomTalkDowntown = Core.roomTalk.Find("Downtown").gameObject;
                     roomTalkForest = Core.roomTalk.Find("EvergreenForest_Entrance").gameObject;
                     roomTalkGabrielsMansion = Core.roomTalk.Find("Mansion").gameObject;
                     roomTalkGasStation = Core.roomTalk.Find("Gasstation").gameObject;
-                    roomTalkHospital = CreateNewRoomTalk("Hospital");
                     roomTalkHospitalHallway = Core.roomTalk.Find("Hospitalhallway").gameObject;
-                    roomTalkHotel = CreateNewRoomTalk("Hotel");
                     roomTalkKensHome = Core.roomTalk.Find("KenhouseOutside").gameObject;
                     roomTalkMall = Core.roomTalk.Find("Mall").gameObject;
                     roomTalkPark = Core.roomTalk.Find("publicparksuburbs").gameObject;
                     roomTalkParkingLot = Core.roomTalk.Find("Parkinglot_events").gameObject;
                     roomTalkTemple = Core.roomTalk.Find("Temple_Entrance").gameObject;
-                    roomTalkTrail = CreateNewRoomTalk("Trail");
                     roomTalkVilla = Core.roomTalk.Find("OutsideVilla").gameObject;
 
                     levelMyRoom = Core.level.Find("5_MyRoom").gameObject;
@@ -295,10 +282,9 @@ namespace SMSAndroidsCore
                     // containers inside their own NPCs trees, and creating
                     // same-named siblings here would collide with them.
 
-                    // Living-room base sprite must draw over the couch NPCs;
-                    // PlaceFactory clones levels at the Beach prototype's -10,
-                    // and a level's own sprite order isn't pack-authorable.
-                    harborHomeLivingroomLevel.GetComponent<SpriteRenderer>().sortingOrder = 2;
+                    // (The living room's base sprite order is the pack's
+                    // baseSortingOrder now — it became authorable, and this was
+                    // the only reason a C# line still touched that renderer.)
                     // Vanilla Movies subtree grafted so the living room can run
                     // the TV flow. A cross-level clone of a vanilla hierarchy
                     // isn't expressible as pack data.
@@ -350,16 +336,12 @@ namespace SMSAndroidsCore
                 if (mountainLabRoomNikkeAnisLevel.activeSelf && randomNumMLRoomAnis == -1) { randomNumMLRoomAnis = Core.GetRandomNumber(100); Debug.Log("randomNumMLRoomAnis: " + randomNumMLRoomAnis); } if (!mountainLabRoomNikkeAnisLevel.activeSelf) { randomNumMLRoomAnis = -1; }
 
 
-                if (Core.GetVariableBool("rainy-day"))
-                {
-                    if (giftShopInteriorLevel.activeSelf || harborHomeLivingroomLevel.activeSelf || harborHomeBedroomLevel.activeSelf || harborHomeKitchenLevel.activeSelf) { weatherInsideRain.SetActive(true); }
-                    if (giftShopLevel.activeSelf|| harborHouseEntranceLevel.activeSelf || harborHomePoolLevel.activeSelf || secretBeachLevel.activeSelf) { weatherOutsideRain.SetActive(true); }
-                }
-                if (Core.GetVariableBool("snowy-day"))
-                {
-                    if (giftShopInteriorLevel.activeSelf || harborHomeLivingroomLevel.activeSelf || harborHomeBedroomLevel.activeSelf || harborHomeKitchenLevel.activeSelf) { weatherInsideSnow.SetActive(true); }
-                    if (giftShopLevel.activeSelf || harborHouseEntranceLevel.activeSelf || harborHomePoolLevel.activeSelf || secretBeachLevel.activeSelf) { weatherOutsideSnow.SetActive(true); }
-                }
+                // Weather is ModForge's. Every pack place declares a weatherType
+                // (None / Inside / Outside) and WeatherRuntime.Tick activates the
+                // matching vanilla particle core off PlaceRegistry — the same
+                // behaviour this used to hardcode for eight named levels, minus
+                // the hardcoding. Two per-frame writers on the same four cores
+                // was duplication, not redundancy.
                 // Update gift store item visibility based on proxy variables
                 if (giftStore != null && giftStore.activeSelf)
                 {
@@ -640,68 +622,13 @@ namespace SMSAndroidsCore
 
         // CreateNewPlace + CreateNewLevel are gone — ModForge's
         // SMSModForge.PackPlugin.PlaceFactory owns the loose-PNG-to-level
-        // pipeline now. CreateNewRoomTalk stays because Hospital / Hotel /
-        // Trail still get a SMSAndroids-side extra roomtalk node grafted
-        // under Core.roomTalk for legacy event dialogues that target them.
-        public GameObject CreateNewRoomTalk(string name)
-        {
-            GameObject roomTalk = GameObject.Instantiate(Core.roomTalk.Find("Beach").gameObject, Core.roomTalk);
-            roomTalk.name = name;
-            for (int i = roomTalk.transform.childCount - 1; i > 0; i--)
-            {
-                Destroy(roomTalk.transform.GetChild(i).gameObject);
-            }
-            Destroy(roomTalk.GetComponent<Conditions>());
-            return roomTalk;
-        }
-        public static void SetNewLevelSprite(GameObject gO, string pathToCG, string baseSprite, int width, int height)
-        {
-            Material mat = new Material(gO.GetComponent<SpriteRenderer>().material);
-
-            Texture2D tex = new Texture2D(width, height, TextureFormat.RGBA32, false);
-            var rawData = System.IO.File.ReadAllBytes(pathToCG + baseSprite);
-            tex.LoadImage(rawData);
-            tex.filterMode = FilterMode.Point;
-            Sprite newSprite = Sprite.Create(tex, new Rect(0, 0, width, height), new Vector2(0.5f, 0.5f), 70.32f);
-            gO.GetComponent<SpriteRenderer>().sprite = newSprite;
-        }
-        public static void UpdateGiftShopTextureBasedOnBuildStatus()
-        {
-            if (giftShopLevel == null)
-            {
-                Debug.LogWarning("GiftShopLevel not initialized yet, cannot update texture");
-                return;
-            }
-
-            int giftShopBuildCounter = SaveManager.GetInt("GiftShop_BuildCounter", 0);
-            bool giftShopBuilt = giftShopBuildCounter >= 2;
-            string baseSpriteName = giftShopBuilt ? "GiftShop.PNG" : "GiftShopAlt.PNG";
-            string secondarySpriteName = giftShopBuilt ? "GiftShopB.PNG" : "GiftShopAltB.PNG";
-
-            Debug.Log($"[UpdateGiftShopTexture] GiftShop_BuildCounter: {giftShopBuildCounter}, Built: {giftShopBuilt}, Using: {baseSpriteName}");
-            
-            // Update primary sprite
-            SetNewLevelSprite(giftShopLevel, Core.locationPath, baseSpriteName, 1920, 1080);
-            
-            // Update secondary sprite (second child)
-            if (giftShopLevel.transform.childCount > 1)
-            {
-                SetNewLevelSprite(giftShopLevel.transform.GetChild(1).gameObject, Core.locationPath, secondarySpriteName, 1920, 1080);
-            }
-
-            Debug.Log($"Gift Shop texture updated. Built: {giftShopBuilt}, Using: {baseSpriteName}");
-        }
-        public static bool GetBadWeather()
-        {
-            if (Core.GetVariableBool("rainy-day") || Core.GetVariableBool("snowy-day"))
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
+        // pipeline now. CreateNewRoomTalk went with them: it cloned the vanilla
+        // Beach roomtalk into 8_Room_Talk three times (Hospital / Hotel / Trail)
+        // for legacy event dialogues, and those dialogues are pack content now —
+        // the three fields it filled were assigned and never read again.
+        //
+        // GetBadWeather went too. Nothing called it, and the pack asks the same
+        // question with its Weather condition (WeatherRuntime.IsBadWeather).
 
         public static void ActivateShop(GameObject shop)
         {
@@ -899,16 +826,17 @@ namespace SMSAndroidsCore
                         // Scale parent to (0, 1, 1) - shrink horizontally
                         capturedItem.transform.localScale = new Vector3(0f, 1f, 1f);
 
-                        // Set proxy variable to true
-                        if (Core.proxyVariables != null && Core.proxyVariables.Exists(proxyVariableName))
-                        {
-                            Core.proxyVariables.Set(proxyVariableName, true);
-                            Debug.Log($"[GiftStore] Set {proxyVariableName} to true");
-                        }
-                        else
-                        {
-                            Debug.LogWarning($"[GiftStore] Proxy variable '{proxyVariableName}' not found");
-                        }
+                        // Mark it owned through the helper, which writes BOTH the
+                        // pack variable and the GC2 proxy.
+                        //
+                        // Writing only the proxy (what this used to do) made a
+                        // purchase visibly undo itself: UpdateGiftStoreItemVisibility
+                        // polls while the store is open and reads ownership from
+                        // SaveManager — i.e. the PACK store, which is the source of
+                        // truth for persistence. The proxy write never reached it, so
+                        // the item vanished on click and the next poll turned it
+                        // straight back on.
+                        Core.SetAndSyncGiftVariable(proxyVariableName, true);
 
                         // Set parent inactive after scaling
                         capturedItem.SetActive(false);

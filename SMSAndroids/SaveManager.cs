@@ -75,10 +75,22 @@ namespace SMSAndroidsCore
                 // second, unlatched writer racing it), the HarborHome_SleepCD
                 // reset (the variable is refreshMode Daily now), and two
                 // MainStory flags nothing ever read.
+                //
+                // HarborHome_Slept is gone too, and is worth spelling out. The
+                // original mod set it from harborHomeBedroomLevel.activeSelf —
+                // "was the player in the Harbor Home bedroom when they slept" —
+                // and that got rewritten to read harborHomeBedroomSwapApplied,
+                // which Places only ever sets BECAUSE this variable is already
+                // true. Each was written from the other, so from a fresh save
+                // neither could ever become true and the bedroom swap could
+                // never start. The pack's HarborHomeSleepFlag rule makes the
+                // original observation again, on the same after-sleep gate;
+                // re-adding a write here would race it and lose the first night.
                 Core.RefreshDailyProxyVariables();
-                SetBool("HarborHome_Slept", Places.harborHomeBedroomSwapApplied);
                 Debug.Log("Day: " + Core.GetVariableNumber("Day"));
-                Places.UpdateGiftShopTextureBasedOnBuildStatus();
+                // Gift-shop art is the pack's GiftShopArt integration rule now —
+                // it re-evaluates every tick, so it also corrects itself on load
+                // instead of only when something remembers to call it.
                 afterSleepEventsProc = false;
             }
         }
@@ -146,7 +158,6 @@ namespace SMSAndroidsCore
                 yield return null;
             }
             TryMigrateLegacySlot(Core.saveLoadManager.SlotLoaded);
-            Places.UpdateGiftShopTextureBasedOnBuildStatus();
         }
 
         private void TryMigrateLegacySlot(int slot)

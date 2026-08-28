@@ -188,8 +188,8 @@ namespace SMSAndroidsCore
                     loadedCore = true;
 
                     //Debugging.PrintActionsComponentInfo(gameplay.Find("Sleeping").Find("sleepactions").gameObject);
-                    //Debugging.PrintConditionsAndTriggers(FindInActiveObjectByName("World_Map").gameObject);
-                    //Debugging.PrintConditionsAndTriggers(roomTalk.Find("Kitchen").Find("DefaultDialogue").gameObject);
+                    //Debugging.PrintConditionsAndTriggers(effects.Find("FadeMainUI").gameObject);
+                    //Debugging.PrintConditionsAndTriggers(roomTalk.Find("Beach").gameObject);
                     //Debugging.PrintButtonInstructionsFull(FindInActiveObjectByName("World_Map").transform.Find("Canvas").Find("Core").Find("Radial_Buttons").Find("Seaside").Find("Beach").gameObject);
                     //Debugging.PrintDialogueComponentDeep(roomTalk.Find("Kitchen").Find("DefaultDialoge").gameObject, 10);
                     //Debugging.PrintDialogueComponentInfo(roomTalk.Find("Livingroom").Find("DefaultDialoge").gameObject);
@@ -814,15 +814,35 @@ namespace SMSAndroidsCore
         /// </summary>
         public static void SetAndSyncGiftVariable(string giftVariableName, bool newValue)
         {
+            // Pack store FIRST, and unconditionally. It is the source of truth for
+            // ownership — the gift store's visibility pass reads it through
+            // SaveManager — while the proxy only exists to surface the same fact
+            // to vanilla GC2 conditions. This used to bail out before writing
+            // anything when the proxy was missing, which meant a gift absent from
+            // the proxy asset could never be recorded as owned at all: the shop
+            // would hide it on purchase and show it again on the next poll.
+            try
+            {
+                SaveManager.SetBool(giftVariableName, newValue);
+                Debug.Log($"[ProxyVariables] Persisted gift variable {giftVariableName} = {newValue}");
+            }
+            catch (Exception e)
+            {
+                Debug.LogError($"[ProxyVariables] Error persisting gift variable '{giftVariableName}': {e.Message}");
+            }
+
+            // Then mirror to the proxy, best-effort — a missing mirror is worth
+            // reporting but must not cost us the write above.
             if (proxyVariables == null)
             {
-                Debug.LogError("[ProxyVariables] Proxy variables not initialized, cannot modify gift variable");
+                Debug.LogError("[ProxyVariables] Proxy variables not initialized — '" +
+                               giftVariableName + "' persisted but not mirrored to GC2");
                 return;
             }
 
             if (!proxyVariables.Exists(giftVariableName))
             {
-                Debug.LogError($"[ProxyVariables] Gift variable '{giftVariableName}' not found in Proxy Variables");
+                Debug.LogError($"[ProxyVariables] Gift variable '{giftVariableName}' not found in Proxy Variables — persisted but not mirrored to GC2");
                 return;
             }
 
@@ -830,10 +850,6 @@ namespace SMSAndroidsCore
             {
                 proxyVariables.Set(giftVariableName, newValue);
                 Debug.Log($"[ProxyVariables] Set gift variable {giftVariableName} to {newValue}");
-                
-                // Sync to SaveManager to ensure persistence
-                SaveManager.SetBool(giftVariableName, newValue);
-                Debug.Log($"[ProxyVariables] Synced gift variable {giftVariableName} to SaveManager with value {newValue}");
             }
             catch (Exception e)
             {
