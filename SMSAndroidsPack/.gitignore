@@ -1,0 +1,15 @@
+# Editing backups of the manifest, not pack content.
+#
+# Each of these is a near-complete copy of modpack.json taken by hand before
+# some risky edit. There were 21 of them at ~1.6 MB each -- 35 MB of almost
+# identical JSON, which is a third of this folder and would sit in the history
+# permanently. The manifest's real history is the commits.
+#
+# They are only ignored, never deleted: they stay on disk for as long as they
+# are useful. Delete one for real when you no longer want it.
+modpack.json.bak*
+modpack.json.bak
+modpack - Copy.json
+
+# The pack the editor exports from this folder. Rebuildable, and large.
+*.smspack
