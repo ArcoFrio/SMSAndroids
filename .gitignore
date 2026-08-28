@@ -363,3 +363,7 @@ MigrationBackup/
 FodyWeavers.xsd
 # Claude Code local session data
 .claude/
+
+# Exported mod packs. Rebuildable from SMSAndroidsPack/ via ModForge, and large
+# (the current one is 70 MB), so the folder is the source of truth, not the zip.
+*.smspack
