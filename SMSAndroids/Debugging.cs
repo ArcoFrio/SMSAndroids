@@ -100,13 +100,17 @@ namespace SMSAndroidsCore
                 //    Core.level.Find("5_MyRoom").Find("PlayerRoom_ButtonCanvas").gameObject.SetActive(false);
                 //}
 
-                // Check for P key press to print all Proxy Variables
+#if DEBUG
+                // P starts the massage minigame on the spot. A test shortcut,
+                // and P is an ordinary key to press by accident in a build a
+                // player runs - so Debug only.
                 if (Input.GetKeyDown(KeyCode.P))
                 {
                     Minigames.minigameMassage.GetComponent<MassageMinigame>().LoadPatterns();
                     Minigames.minigameMassage.GetComponent<MassageMinigame>().LoadVisualAssets();
                     Minigames.minigameMassage.GetComponent<MassageMinigame>().StartMinigame();
                 }
+#endif
 
                 //if (Input.GetKeyDown(KeyCode.V))
                 //{ 
