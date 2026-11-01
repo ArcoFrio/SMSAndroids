@@ -1,0 +1,3 @@
+# Files in the author's working pack folder that are not part of the pack (robocopy /XF names, one per line).
+# A stray bust image at the pack's root; the author had it deleted from the repo (2026-10-21).
+Base.PNG

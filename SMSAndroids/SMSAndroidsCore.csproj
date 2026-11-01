@@ -52,6 +52,7 @@
     <Compile Include="ScheduleVisualizer.cs" />
     <Compile Include="SqueezeContourFollower.cs" />
     <Compile Include="SqueezeSpriteController.cs" />
+    <Compile Include="TestBridge.cs" />
     <Compile Include="TransformExtensions.cs" />
   </ItemGroup>
   <ItemGroup>

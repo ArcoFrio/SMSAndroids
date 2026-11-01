@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <!-- Exports and checks SMSAndroidsPack with ModForge's own code (the editor's exporter and validator),
+       so a test pack is exactly what the editor's Export would write. Build with an artifacts path of its
+       own (Tools/Game/export-pack.ps1 does) so nothing lands in ModForge's own bin/obj. -->
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <UseWPF>true</UseWPF>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\SMSModForge\SMSModForge\SMSModForge.csproj" />
+  </ItemGroup>
+</Project>

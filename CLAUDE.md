@@ -7,7 +7,7 @@ This file is auto-loaded by Claude Code into every conversation in this repo. It
 Content for this mod has been migrated out of hardcoded C# into a **data-driven mod pack** loaded by a sibling plugin:
 
 - **SMSAndroidsCore** (this repo, .NET 4.8 → `SMSAndroidsCore.dll`) — native features that can't be expressed as pack data: schedule/roaming simulation, minigames, gift UI, world-map overlays, save management, and the bridges below.
-- **SMSModForge.PackPlugin** (sibling repo `C:\Users\gabri\source\repos\SMSBustForge`) — generic pack runtime. Reads `.smspack` archives (ZIP, `modpack.json` at root) from `BepInEx/plugins/SMSModForge/ModPacks/` and builds **dialogues, scene CGs, wallpapers, music, SFX, places/levels, navigator + radial map buttons, the extended navigator grid, busts/outfits, and pack variables** at runtime. The migrated content ships as `SMSAndroidsPack.smspack`, authored with the SMSBustForge WPF editor.
+- **SMSModForge.PackPlugin** (sibling repo `C:\Users\gabri\source\repos\SMSModForge`) — generic pack runtime. Reads `.smspack` archives (ZIP, `modpack.json` at root) from `BepInEx/plugins/SMSModForge/ModPacks/` and builds **dialogues, scene CGs, wallpapers, music, SFX, places/levels, navigator + radial map buttons, the extended navigator grid, busts/outfits, and pack variables** at runtime. The migrated content ships as `SMSAndroidsPack.smspack`, authored with the ModForge editor (SMSModForge).
 
 Neither DLL hard-references the other. Coordination is reflection + GC2 signals:
 
@@ -26,7 +26,9 @@ Neither DLL hard-references the other. Coordination is reflection + GC2 signals:
 - **Debug `OutputPath`:** `D:\Downloads\SkyrimM\spec\uTorrent\Starmaker Story 1.8E\BepInEx\plugins\` — Debug builds drop directly into the local game install.
 - **Key references** (all under `..\Libraries\`): `BepInEx.dll`, `0Harmony.dll`, `Assembly-CSharp*.dll`, `GameCreator.Runtime.*.dll` (GC2), `Newtonsoft.Json.dll`, `Fullscreen.NanoSave.dll`, full `UnityEngine.*Module.dll` family.
 - Manually decompiled GC2 references live under [`SMSAndroids/ReferenceClasses/`](SMSAndroids/ReferenceClasses) — **read-only documentation**, not compiled.
-- No automated tests. Verification = launching Starmaker Story 1.8E with both DLLs + the `.smspack` installed.
+- **Testing is in the game, in a test copy** — [`Tools/Game/README.md`](Tools/Game/README.md). Never the author's game or saves: `setup-test-game.ps1 -Build` (Debug ModForge + SMSAndroidsCore into `Starmaker Story 1.8E - Androids test`), `launch.ps1` (own desktop, muted, test save only), `ingame_check.py` (startup, places, behaviour, day, dialogues, ui), `pack_logic.py` (static logic consistency), `bridge.py` for hand-driving. [`TestBridge.cs`](SMSAndroids/TestBridge.cs) is SMSAndroids' half of the bridge (Debug only, asleep without `-mfBridge`).
+- **The pack under test is the author's working folder, not this repo's copy.** They edit `C:\Users\gabri\source\repos\- AI Gen\sd-webui-forge-neo\output\- STARMAKER MOD-\SMSAndroidsPack`. Before any work or test, run `Tools/Game/export-pack.ps1`: it copies anything newer from there into `SMSAndroidsPack/` (add/replace only, minus `sync-exclude.txt`) and exports the `.smspack` with ModForge's own exporter. A pack fix made in JSON must go into the working folder too, or the next sync undoes it — and only while the ModForge editor is not open on it.
+- **What the pack is meant to do** is the mod before ModForge (`git show d42d17d:SMSAndroids/<file>`), minus the author's deliberate changes. Issues that are ModForge's to solve go to `SMSModForge/FROM-PACK-TESTING.md`, written generically.
 
 ## Scene gating & load chain
 
@@ -94,7 +96,7 @@ Each major file is a `[BepInPlugin]` `BaseUnityPlugin` (GUIDs under `treboy.star
 
 - **Plugin pattern.** New persistent subsystems get their own `BaseUnityPlugin` + GUID, a `loaded<Name>` flag, a `Logger.LogInfo("----- <NAME> LOADED -----")` confirmation, and flag reset in the `GameStart` branch.
 - **Guard first.** Inside `if (!loadedX && deps) { ... }` blocks, dependency-wait early-returns go before any side effects (the block re-runs per frame; clones placed earlier leak per retry).
-- **Content goes in the pack.** New dialogues, scenes, places, wallpapers, music, SFX, busts, variables → author in SMSBustForge and export the `.smspack`. Only add C# here for behavior the pack format can't express — and prefer extending the pack format.
+- **Content goes in the pack.** New dialogues, scenes, places, wallpapers, music, SFX, busts, variables → author in the ModForge editor (SMSModForge) and export the `.smspack`. Only add C# here for behavior the pack format can't express — and prefer extending the pack format.
 - **Persistence is pack-owned.** All state is a pack variable; `SaveManager.Get/Set` is just a façade over `ModForgeBridge`. To add persistent state, declare the variable in the pack manifest — there's no SMSAndroids-side save file or sync table to update anymore.
 - **Surfacing state to vanilla GC2** goes through Proxy Variables (`Core.proxyVariables`); the asset's keys are authored in the Unity bundle project.
 - **Numeric bounds are pack-declared.** `Affection_*` carry `minValue`/`maxValue` in the manifest and `PackVariableStore` clamps on write. `SaveManager.SetInt` does NOT clamp — it is a one-line forward to the bridge. Add bounds in the pack, not here.
