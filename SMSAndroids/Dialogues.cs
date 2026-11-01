@@ -5,6 +5,7 @@ using GameCreator.Runtime.Common.UnityUI;  // ButtonInstructions
 using GameCreator.Runtime.VisualScripting; // Trigger
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -959,7 +960,10 @@ namespace SMSAndroidsCore
             textRect.offsetMax = Vector2.zero;
             TextMeshProUGUI tmpText = textGO.AddComponent<TextMeshProUGUI>();
             tmpText.text = "";
-            tmpText.fontSize = 16;
+            // The game's own interface font; TMP's default (LiberationSans) read as foreign beside the HUD.
+            TMP_FontAsset gameFont = Resources.FindObjectsOfTypeAll<TMP_FontAsset>().FirstOrDefault(f => f.name == "Curse Casual SDF");
+            if (gameFont != null) tmpText.font = gameFont;
+            tmpText.fontSize = 18;
             tmpText.alignment = TextAlignmentOptions.Center;
             tmpText.color = Color.white;
             tmpText.raycastTarget = false;
@@ -994,11 +998,6 @@ namespace SMSAndroidsCore
                     vanillaTalkButton.SetActive(false);
                 }
 
-                if (!hhTalkPanel.activeSelf)
-                {
-                    hhTalkPanel.SetActive(true);
-                }
-
                 // Check if room changed or the roster moved.
                 //
                 // This used to watch Schedule.scheduleVersion, a counter the
@@ -1025,6 +1024,14 @@ namespace SMSAndroidsCore
                 if (roomChanged || scheduleChanged || immediate)
                 {
                     PopulateHHTalkButtons(activeRoom);
+                }
+
+                // With nobody in the room the panel was an empty dark box where
+                // the talk bubble usually sits; it only shows with someone to talk to.
+                bool anyoneHere = hhTalkButton1 != null && hhTalkButton1.activeSelf;
+                if (hhTalkPanel.activeSelf != anyoneHere)
+                {
+                    hhTalkPanel.SetActive(anyoneHere);
                 }
 
                 // Update button interactability based on HarborHome_TalkSelected and Lock-Game
