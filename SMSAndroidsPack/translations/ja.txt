@@ -8773,8 +8773,8 @@ dialogue.GSDialogueStory05.376002006 = 悪くない投資みたいだな。（�
 dialogue.GSDialogueStory05.1927993340 = 実際、いい投資さ！
 
 # Line -1879601828, said by Yan
-# en: I think you heard Centi, but it should be done in 2 days. 
-dialogue.GSDialogueStory05.-1879601828 = センティから聞いたと思うけど、2日後には完成するはずだ。
+# en: I think you heard Centi, but it should be done in 3 days. 
+dialogue.GSDialogueStory05.-1879601828 = センティから聞いたと思うけど、3日後には完成するはずだ。
 
 # Line 1149007806, said by Yan
 # en: You should come then, who knows what you might find?
@@ -9914,6 +9914,728 @@ dialogue.CinderellaDialogueSecretbeach01.13 = ああ...
 # en: ...
 dialogue.CinderellaDialogueSecretbeach01.14 = ……
 
+# Line 15, said by Cinderella
+# en: It's been a while since I've used a swimming-capable body...
+dialogue.CinderellaDialogueSecretbeach01.15 = 泳げる身体を使うのは久しぶりだ…。
+
+# Line 16, said by Cinderella
+# en: But I have to enjoy myself from time to time. It's no good to stay focused all the time.
+dialogue.CinderellaDialogueSecretbeach01.16 = でも、たまには楽しまなくてはいけません。ずっと集中していてはダメです。
+
+# Line 17, said by Cinderella
+# en: Oh... I can't wait to feel the ocean water!
+dialogue.CinderellaDialogueSecretbeach01.17 = ああ...海の水を感じるのが待ちきれません!
+
+# Line 18
+# en: *splash*
+dialogue.CinderellaDialogueSecretbeach01.18 = *スプラッシュ*
+
+# Line 19, said by Cinderella
+# en: Ahh... It's beautifully warm!
+dialogue.CinderellaDialogueSecretbeach01.19 = ああ... とても暖かいですね!
+
+# Line 20, said by Cinderella
+# en: This is very relaxing... I've been craving this feeling for quite some time.
+dialogue.CinderellaDialogueSecretbeach01.20 = これはとてもリラックスできます...私はかなり長い間この感覚を切望していました。
+
+# Line 21, said by Cinderella
+# en: Hmm...
+dialogue.CinderellaDialogueSecretbeach01.21 = うーん...
+
+# Line 22, said by Cinderella
+# en: How about giving diving a go this time?
+dialogue.CinderellaDialogueSecretbeach01.22 = 今度はダイビングに挑戦してみませんか？
+
+# Line 23
+# en: *splash*
+dialogue.CinderellaDialogueSecretbeach01.23 = *スプラッシュ*
+
+# Line 24, said by Cinderella
+# en: ...
+dialogue.CinderellaDialogueSecretbeach01.24 = ……
+
+# Line 25, said by You
+# en: (Isn't it a bit dangerous to swim that deep in the sea?)
+dialogue.CinderellaDialogueSecretbeach01.25 = (そんなに深い海で泳ぐのはちょっと危険ではないですか?)
+
+# Line 27, said by You
+# en: (...)
+dialogue.CinderellaDialogueSecretbeach01.27 = (……)
+
+# Line 28, said by You
+# en: (Well... They seem to know how to handle themselves, so I'll trust she knows what she's doing.)
+dialogue.CinderellaDialogueSecretbeach01.28 = (そうですね... 彼らは自分自身に対処する方法を知っているようです。だから、彼女は自分が何をしているのか知っていると私は信じます。)
+
+# Line 29, said by You
+# en: (...)
+dialogue.CinderellaDialogueSecretbeach01.29 = (……)
+
+# Line 30, said by You
+# en: (...)
+dialogue.CinderellaDialogueSecretbeach01.30 = (……)
+
+# Line 31, said by You
+# en: (Okay, this is getting worrying.)
+dialogue.CinderellaDialogueSecretbeach01.31 = (なるほど、心配になってきました。)
+
+# Line 32, said by You
+# en: (Can she really hold her breath for this long? Maybe I should do someth-)
+dialogue.CinderellaDialogueSecretbeach01.32 = (彼女は本当にこんなに長く息を止めていられるのでしょうか？私が何かしたほうがいいかもしれません-)
+
+# Line 33
+# en: *splash*
+dialogue.CinderellaDialogueSecretbeach01.33 = *スプラッシュ*
+
+# Line 26, said by Cinderella
+# en: *gasp*
+dialogue.CinderellaDialogueSecretbeach01.26 = *息を呑む*
+
+# Line 34, said by Cinderella
+# en: Ahhh... This was marvelous!
+dialogue.CinderellaDialogueSecretbeach01.34 = ああ...これは素晴らしかったです!
+
+# Line 35, said by Cinderella
+# en: I should do this more often, the ocean can be wondrous!
+dialogue.CinderellaDialogueSecretbeach01.35 = もっと頻繁にやるべきです、海は素晴らしいです!
+
+# Line 36, said by Cinderella
+# en: Oh?
+dialogue.CinderellaDialogueSecretbeach01.36 = ああ？
+
+# Line 37, said by Cinderella
+# en: Oops. This is hardly beautiful.
+dialogue.CinderellaDialogueSecretbeach01.37 = おっと。これは決して美しいとは言えません。
+
+# Line 38, said by Cinderella
+# en: That's better.
+dialogue.CinderellaDialogueSecretbeach01.38 = その方が良いです。
+
+# Line 39, said by Cinderella
+# en: Having such a beautiful body can be such a hassle some times.
+dialogue.CinderellaDialogueSecretbeach01.39 = こんなに美しい体を持つのは、時にはとても面倒なこともあります。
+
+# Line 40, said by You
+# en: (Well...)
+dialogue.CinderellaDialogueSecretbeach01.40 = (まあ...)
+
+# Line 41, said by You
+# en: (She is correct in more than just the full statement.)
+dialogue.CinderellaDialogueSecretbeach01.41 = (彼女は発言全体以上に正しいです。)
+
+[Dialogue: MarcianaDialogueSecretbeach01]
+
+# Line 1, said by You
+# en: (...)
+dialogue.MarcianaDialogueSecretbeach01.1 = (……)
+
+# Line 2, said by You
+# en: (Is that...)
+dialogue.MarcianaDialogueSecretbeach01.2 = (そうですか...)
+
+# Line 3, said by You
+# en: (A... penguin?)
+dialogue.MarcianaDialogueSecretbeach01.3 = (A... ペンギン?)
+
+# Line 4, said by Marciana
+# en: ... What am I supposed to do exactly?
+dialogue.MarcianaDialogueSecretbeach01.4 = ... 正確には何をすればよいでしょうか?
+
+# Line 5, said by Marciana
+# en: I can't say I'm used to having a lot of free time on my hands...
+dialogue.MarcianaDialogueSecretbeach01.5 = 自由な時間をたくさん持つことに慣れているとは言えません...
+
+# Line 6, said by Marciana
+# en: Not really sure how I can go through with this forced vacation.
+dialogue.MarcianaDialogueSecretbeach01.6 = この強制休暇をどうやって乗り越えればよいのか、本当にわかりません。
+
+# Line 7, said by Marciana
+# en: Hmmm...
+dialogue.MarcianaDialogueSecretbeach01.7 = うーん...
+
+# Line 8, said by Marciana
+# en: Well, this time there isn't really anyone around...
+dialogue.MarcianaDialogueSecretbeach01.8 = さて、今回は本当に誰もいません...
+
+# Line 9, said by Marciana
+# en: So no use being shy about this swimsuit.
+dialogue.MarcianaDialogueSecretbeach01.9 = したがって、この水着について恥ずかしがるのは無駄です。
+
+# Line 10, said by You
+# en: (... What does she mean?)
+dialogue.MarcianaDialogueSecretbeach01.10 = (...どういう意味ですか?)
+
+# Line 15
+# en: *zip*
+# same in this language
+dialogue.MarcianaDialogueSecretbeach01.15 = *zip*
+
+# Line 11, said by You
+# en: (.ç..!)
+# same in this language
+dialogue.MarcianaDialogueSecretbeach01.11 = (.ç..!)
+
+# Line 12, said by Marciana
+# en: Still... Pretty embarrassing.
+dialogue.MarcianaDialogueSecretbeach01.12 = それでも...かなり恥ずかしいです。
+
+# Line 13, said by Marciana
+# en: I really have to buy other swimwear, but this request was too sudden.
+dialogue.MarcianaDialogueSecretbeach01.13 = 本当は他の水着も買わないといけないのですが、突然のお願いでした。
+
+# Line 14, said by Marciana
+# en: Didn't have any time to prepare for this, so I just left in a hurry...
+dialogue.MarcianaDialogueSecretbeach01.14 = 準備する時間がなかったので、急いで出発しました...
+
+# Line 16, said by Marciana
+# en: ...
+dialogue.MarcianaDialogueSecretbeach01.16 = ……
+
+# Line 17, said by Marciana
+# en: This place is pretty beautiful though...
+dialogue.MarcianaDialogueSecretbeach01.17 = ここはとても美しい場所ですが...
+
+# Line 18
+# en: *rustle*
+dialogue.MarcianaDialogueSecretbeach01.18 = *カサカサ音*
+
+# Line 19
+# en: *scrunch*
+dialogue.MarcianaDialogueSecretbeach01.19 = *クランチ*
+
+# Line 20, said by Marciana
+# en: Haahh...
+dialogue.MarcianaDialogueSecretbeach01.20 = はぁ…
+
+# Line 21, said by Marciana
+# en: I think... I had almost forgotten what relaxing felt like.
+dialogue.MarcianaDialogueSecretbeach01.21 = だと思います...リラックスすることがどのような感じかをほとんど忘れていました。
+
+# Line 22, said by Marciana
+# en: I'm always having to worry about my students and their grades...
+dialogue.MarcianaDialogueSecretbeach01.22 = 私はいつも生徒とその成績のことを心配しなければなりません...
+
+# Line 23, said by Marciana
+# en: I feel little guilty.
+# same in this language
+dialogue.MarcianaDialogueSecretbeach01.23 = I feel little guilty.
+
+# Line 24, said by Marciana
+# en: Even though they certainly are enjoying their holidays now...
+dialogue.MarcianaDialogueSecretbeach01.24 = 今は確かに休暇を楽しんでいるのに…。
+
+# Line 25, said by Marciana
+# en: Hm. What am I thinking?
+dialogue.MarcianaDialogueSecretbeach01.25 = うーん。私は何を考えているのでしょうか？
+
+# Line 26, said by Marciana
+# en: They'd want me to enjoy a little, so that's what I'll do.
+dialogue.MarcianaDialogueSecretbeach01.26 = 彼らは私に少し楽しんでもらいたいと思っているので、そうするつもりです。
+
+# Line 27, said by Marciana
+# en: And to start... Hmmm...
+# same in this language
+dialogue.MarcianaDialogueSecretbeach01.27 = And to start... Hmmm...
+
+# Line 28, said by Marciana
+# en: Maybe making a sand castle?
+# same in this language
+dialogue.MarcianaDialogueSecretbeach01.28 = Maybe making a sand castle?
+
+# Line 29, said by Marciana
+# en: Sounds a bit childish, but I've never made one before. I should try that out.
+dialogue.MarcianaDialogueSecretbeach01.29 = ちょっと子供っぽく聞こえますが、これまで作ったことはありません。それを試してみるべきです。
+
+# Line 30, said by Marciana
+# en: So... First I need to grab some water...
+dialogue.MarcianaDialogueSecretbeach01.30 = それで...まず水を汲む必要があります...
+
+# Line 31, said by Marciana
+# en: ...
+dialogue.MarcianaDialogueSecretbeach01.31 = ……
+
+# Line 32, said by Marciana
+# en: Then, shape the sand and use the water to solidify it...
+dialogue.MarcianaDialogueSecretbeach01.32 = 次に、砂を形作り、水を使って固めます...
+
+# Line 33, said by Marciana
+# en: ...
+dialogue.MarcianaDialogueSecretbeach01.33 = ……
+
+# Line 34, said by You
+# en: (Well, isn't this a sight to behold?)
+# same in this language
+dialogue.MarcianaDialogueSecretbeach01.34 = (Well, isn't this a sight to behold?)
+
+# Line 35, said by Marciana
+# en: ... It seems to be coming along pretty well.
+dialogue.MarcianaDialogueSecretbeach01.35 = ... かなり順調に進んでいるようです。
+
+# Line 36, said by Marciana
+# en: One tower done... Now the other...
+# same in this language
+dialogue.MarcianaDialogueSecretbeach01.36 = One tower done... Now the other...
+
+# Line 37, said by You
+# en: (Wait... Is she right below that coconut tree?)
+dialogue.MarcianaDialogueSecretbeach01.37 = (待って...彼女はあのヤシの木の真下にいるの?)
+
+# Line 38, said by You
+# en: ({D} always says it's dangerous to do that. You never know when a coconut might fa-)
+dialogue.MarcianaDialogueSecretbeach01.38 = ({D} はいつもそれをするのは危険だと言います。ココナッツがいつ落ちるかわかりません。)
+
+# Line 39
+# en: *thunk*
+dialogue.MarcianaDialogueSecretbeach01.39 = *ありがとう*
+
+# Line 40, said by Marciana
+# en: OW!
+dialogue.MarcianaDialogueSecretbeach01.40 = ああ!
+
+# Line 41, said by Marciana
+# en: Wha- Oh.
+dialogue.MarcianaDialogueSecretbeach01.41 = わ、ああ。
+
+# Line 42, said by Marciana
+# en: Ow... That really was on me...
+# same in this language
+dialogue.MarcianaDialogueSecretbeach01.42 = Ow... That really was on me...
+
+# Line 43, said by Marciana
+# en: The main teacher at M.M.R. Vocational School, and I still was caught by this.
+dialogue.MarcianaDialogueSecretbeach01.43 = The main teacher at M.M.R.専門学校、それでも私はこれに引っかかりました。
+
+# Line 44, said by Marciana
+# en: This... Is embarrassing...
+# same in this language
+dialogue.MarcianaDialogueSecretbeach01.44 = This... Is embarrassing...
+
+# Line 45, said by You
+# en: (H-How is she okay after this?)
+# same in this language
+dialogue.MarcianaDialogueSecretbeach01.45 = (H-How is she okay after this?)
+
+# Line 46, said by You
+# en: (... I guess I really should start taking {D}'s warnings more seriously...)
+dialogue.MarcianaDialogueSecretbeach01.46 = (... {D} の警告をもっと真剣に受け止めるべきだと思います...)
+
+[Dialogue: NagaDialogueSecretbeach]
+
+# Line 1, said by Naga
+# en: Hmmph...
+dialogue.NagaDialogueSecretbeach.1 = うーん...
+
+# Line 2, said by Naga
+# en: I worry about Tia...
+dialogue.NagaDialogueSecretbeach.2 = I worry about ティア...
+
+# Line 3, said by Naga
+# en: I know I agreed with Miss Marciana with this activity to decrease our mutual dependency, but...
+dialogue.NagaDialogueSecretbeach.3 = 相互依存を減らすために、マルシアナ さんにこの活動に同意したのはわかっていますが...
+
+# Line 4, said by Naga
+# en: Is it wrong to be so worried about how Tia will do by herself?
+dialogue.NagaDialogueSecretbeach.4 = ティア が一人でどうするか心配するのは間違っているでしょうか?
+
+# Line 5, said by Naga
+# en: ...
+dialogue.NagaDialogueSecretbeach.5 = ……
+
+# Line 6, said by Naga
+# en: We were both assigned to separate areas with a low Rapture rate, so...
+dialogue.NagaDialogueSecretbeach.6 = 私たちは二人とも携挙率の低い別々のエリアに割り当てられていたので...
+
+# Line 7, said by Naga
+# en: She should be fine...
+# same in this language
+dialogue.NagaDialogueSecretbeach.7 = She should be fine...
+
+# Line 8, said by Naga
+# en: ...
+dialogue.NagaDialogueSecretbeach.8 = ……
+
+# Line 9, said by Naga
+# en: Hmph. What am I thinking?
+dialogue.NagaDialogueSecretbeach.9 = ふん。私は何を考えているのでしょうか？
+
+# Line 10, said by Naga
+# en: Of course she'll be okay. Tia is perfectly capable of handling her own.
+dialogue.NagaDialogueSecretbeach.10 = Of course she'll be okay. ティア is perfectly capable of handling her own.
+
+# Line 11, said by Naga
+# en: I should instead focus on relaxing, as instructed.
+dialogue.NagaDialogueSecretbeach.11 = 指示どおり、リラックスすることに集中する必要があります。
+
+# Line 12, said by Naga
+# en: There's no reason to keep sulking anyway, might as well enjoy!
+dialogue.NagaDialogueSecretbeach.12 = とにかく拗ね続ける必要はないので、楽しむのもいいかもしれません。
+
+# Line 13, said by Naga
+# en: Hmmm...
+dialogue.NagaDialogueSecretbeach.13 = うーん...
+
+# Line 14, said by Naga
+# en: Why not start with some volleyball?
+# same in this language
+dialogue.NagaDialogueSecretbeach.14 = Why not start with some volleyball?
+
+# Line 15, said by Naga
+# en: It's a game that's meant to be played as a team, but practicing by myself can prove to be good for this exercise...
+dialogue.NagaDialogueSecretbeach.15 = チームでプレイするゲームですが、一人で練習するのも効果的です...
+
+# Line 16, said by Naga
+# en: And for this... I brought this ball with me!
+dialogue.NagaDialogueSecretbeach.16 = そしてこのために... このボールを持ってきました!
+
+# Line 17, said by Naga
+# en: And what fun is there playing only on the sand... Right?
+dialogue.NagaDialogueSecretbeach.17 = そして、砂の上だけで遊ぶなんて楽しいことはありません... そうでしょう?
+
+# Line 18, said by Naga
+# en: Hah!
+dialogue.NagaDialogueSecretbeach.18 = はぁ！
+
+# Line 19, said by Naga
+# en: One... Two... Three... Four...
+# same in this language
+dialogue.NagaDialogueSecretbeach.19 = One... Two... Three... Four...
+
+# Line 22, said by Naga
+# en: Five... ...Ten... ...Twenty...
+# same in this language
+dialogue.NagaDialogueSecretbeach.22 = Five... ...Ten... ...Twenty...
+
+# Line 20, said by Naga
+# en: Twenty o- oops! Dropped it.
+dialogue.NagaDialogueSecretbeach.20 = 20、おっと!落としてしまいました。
+
+# Line 21, said by Naga
+# en: Hah, it seems I can have fun by myself.
+dialogue.NagaDialogueSecretbeach.21 = はぁ、一人でも楽しめそうです。
+
+# Line 23, said by You
+# en: (She's not bad at this.)
+dialogue.NagaDialogueSecretbeach.23 = (彼女はこれに関しては悪くありません。)
+
+# Line 25, said by You
+# en: (Amelia would probably like meeting her.)
+dialogue.NagaDialogueSecretbeach.25 = (アメリア はおそらく彼女に会いたいと思っています。)
+
+# Line 24, said by Naga
+# en: Starting again.
+dialogue.NagaDialogueSecretbeach.24 = 再開します。
+
+# Line 26, said by Naga
+# en: Huff!
+dialogue.NagaDialogueSecretbeach.26 = ハッ！
+
+# Line 27, said by Naga
+# en: One... Two.. Three...
+dialogue.NagaDialogueSecretbeach.27 = 1 つ... 2 つ... 3 つ...
+
+# Line 28, said by Naga
+# en: ...Fifteen... ...Thirty...
+dialogue.NagaDialogueSecretbeach.28 = ...15... ...30...
+
+# Line 29, said by Naga
+# en: Hmph! Thirty fi-aaAH!
+dialogue.NagaDialogueSecretbeach.29 = ふん！ 30 ふぁああ！
+
+# Line 30
+# en: *splash*
+dialogue.NagaDialogueSecretbeach.30 = *スプラッシュ*
+
+# Line 31, said by Naga
+# en: Aww...
+dialogue.NagaDialogueSecretbeach.31 = ああ...
+
+# Line 32, said by Naga
+# en: I was so close to beating my record...
+dialogue.NagaDialogueSecretbeach.32 = もう少しで記録を破るところでした...
+
+# Line 34, said by You
+# en: (Woah!)
+dialogue.NagaDialogueSecretbeach.34 = (すごい!)
+
+# Line 33, said by Naga
+# en: Whe- Did I drop my phone too?
+dialogue.NagaDialogueSecretbeach.33 = どこ、私も携帯電話を落としてしまったのですか?
+
+# Line 35, said by Naga
+# en: It's good that this case is waterproof, but where is it?...
+dialogue.NagaDialogueSecretbeach.35 = このケースは防水なのは良いのですが、どこにあるのでしょうか...。
+
+# Line 37, said by You
+# en: (I'll help her out if she takes too long to find it... Though I hope she does...)
+dialogue.NagaDialogueSecretbeach.37 = (彼女が見つけるのに時間がかかりすぎる場合は、私が手伝います...彼女が見つけてくれることを願っていますが...)
+
+[Dialogue: SirenDialogueSecretbeach01]
+
+# Line 1, said by Siren
+# en: Woo!
+dialogue.SirenDialogueSecretbeach01.1 = うわー！
+
+# Line 2, said by Siren
+# en: What a beautiful sunset!
+dialogue.SirenDialogueSecretbeach01.2 = なんて美しい夕日でしょう！
+
+# Line 3, said by Siren
+# en: I should tell the others about this place!
+dialogue.SirenDialogueSecretbeach01.3 = この場所について他の人に知らせなければなりません!
+
+# Line 4, said by Siren
+# en: I wouldn't want to keep it a secret from them...
+dialogue.SirenDialogueSecretbeach01.4 = 彼らには秘密にしたくないのですが...
+
+# Line 5, said by Siren
+# en: If only we had walked just a bit longer when we scouted this place before...
+dialogue.SirenDialogueSecretbeach01.5 = 以前この場所を偵察したときに、もう少し歩いていれば...
+
+# Line 6, said by Siren
+# en: Oh?
+dialogue.SirenDialogueSecretbeach01.6 = ああ？
+
+# Line 7, said by Siren
+# en: Aah!
+dialogue.SirenDialogueSecretbeach01.7 = ああ！
+
+# Line 8, said by Siren
+# en: This is one of those beaches full of seashells!
+dialogue.SirenDialogueSecretbeach01.8 = ここは、貝殻がたくさんあるビーチの 1 つです。
+
+# Line 9, said by Siren
+# en: This one is very pretty!
+dialogue.SirenDialogueSecretbeach01.9 = これはとてもきれいですね!
+
+# Line 10, said by Siren
+# en: Hmmm...
+dialogue.SirenDialogueSecretbeach01.10 = うーん...
+
+# Line 11, said by Siren
+# en: Awoo! This one is beautiful too!
+dialogue.SirenDialogueSecretbeach01.11 = ああ！こっちも綺麗ですね！
+
+# Line 12, said by Siren
+# en: It's a shame I can't bring them all with me, but I'd like to bring at least a few for my friends!
+dialogue.SirenDialogueSecretbeach01.12 = 全部は持っていけないのが残念ですが、友達のために数個くらい持っていきたいです！
+
+# Line 13, said by Siren
+# en: ... This one is nice.
+dialogue.SirenDialogueSecretbeach01.13 = ... これはいいですね。
+
+# Line 14, said by Siren
+# en: Hmmm... Maybe there are more in the water!
+dialogue.SirenDialogueSecretbeach01.14 = うーん...水中にはもっといるかもしれません!
+
+# Line 15, said by Siren
+# en: So shiny! This one is such a pretty white!
+dialogue.SirenDialogueSecretbeach01.15 = とても輝いています!こちらはとても綺麗な白ですね！
+
+# Line 16, said by Siren
+# en: I think... I should have enough seashells for everyone.
+dialogue.SirenDialogueSecretbeach01.16 = 思うのですが... 貝殻は全員分あるはずです。
+
+# Line 17, said by Siren
+# en: I'll start heading back, don't want Levi to get worried...
+dialogue.SirenDialogueSecretbeach01.17 = リヴァイに心配をかけたくないので帰ります...
+
+# Line 18, said by Siren
+# en: She'll absolutely love this one though, it's so beautiful!
+dialogue.SirenDialogueSecretbeach01.18 = でも、彼女はこれを絶対気に入るでしょう、とても美しいです!
+
+# Line 19, said by Siren
+# en: The first thing I thought of when picking it up was her-
+dialogue.SirenDialogueSecretbeach01.19 = それを手に取ったとき、最初に思ったのは彼女のことでした -
+
+# Line 20
+# en: *splash*
+dialogue.SirenDialogueSecretbeach01.20 = *スプラッシュ*
+
+# Line 21, said by Siren
+# en: EEK!
+dialogue.SirenDialogueSecretbeach01.21 = すごい！
+
+# Line 22, said by Siren
+# en: Ah! T-That wave really caught me by surprise...
+dialogue.SirenDialogueSecretbeach01.22 = ああ！そ、あの波には本当にびっくりしました…。
+
+# Line 23, said by Siren
+# en: ...?
+dialogue.SirenDialogueSecretbeach01.23 = ……？
+
+# Line 24, said by Siren
+# en: E-Eh!?
+dialogue.SirenDialogueSecretbeach01.24 = え、えっ!?
+
+# Line 25, said by Siren
+# en: H-How did this happen!?
+dialogue.SirenDialogueSecretbeach01.25 = ひ、どうしてこんなことになったの!?
+
+# Line 26
+# en: *rustle*
+dialogue.SirenDialogueSecretbeach01.26 = *カサカサ音*
+
+# Line 27, said by Siren
+# en: I-I've went through plenty more action than this and t-that never happened before!
+dialogue.SirenDialogueSecretbeach01.27 = わ、これよりもたくさんの行動を経験しましたが、そ、そんなことはかつてありませんでした!
+
+# Line 28, said by Siren
+# en: ... Woo...
+dialogue.SirenDialogueSecretbeach01.28 = ... うわー...
+
+[Dialogue: TiaDialogueSecretbeach01]
+
+# Line 1, said by You
+# en: (...)
+dialogue.TiaDialogueSecretbeach01.1 = (……)
+
+# Line 2, said by You
+# en: (Hey, there's someone there.)
+dialogue.TiaDialogueSecretbeach01.2 = (おい、そこに誰かがいる。)
+
+# Line 3, said by Tia
+# en: Ah! I'm finally ready to relax!
+dialogue.TiaDialogueSecretbeach01.3 = ああ！ようやくリラックスする準備ができました！
+
+# Line 4, said by Tia
+# en: Took me sooo long to set up this spot...
+dialogue.TiaDialogueSecretbeach01.4 = このスポットを設定するのにとても時間がかかりました...
+
+# Line 5, said by Tia
+# en: But I should be all set to have a good time!
+dialogue.TiaDialogueSecretbeach01.5 = でも、楽しい時間を過ごす準備は万端です!
+
+# Line 9, said by Tia
+# en: ...
+dialogue.TiaDialogueSecretbeach01.9 = ……
+
+# Line 10, said by Tia
+# en: This would all be so much easier with Naga...
+dialogue.TiaDialogueSecretbeach01.10 = ナーガ を使用すると、これがずっと簡単になります...
+
+# Line 11, said by Tia
+# en: But Miss Marciana really wanted us to show that we're able to work on our own as adults...
+dialogue.TiaDialogueSecretbeach01.11 = でも、マルシアナ さんは、私たちが大人として自分の力で仕事ができるということを見せてほしかったのです...
+
+# Line 12, said by Tia
+# en: Ugh... Well, I trust my teacher.
+dialogue.TiaDialogueSecretbeach01.12 = うーん...そうですね、私は先生を信頼しています。
+
+# Line 6, said by Tia
+# en: So now, let's check again. Should be a low Rapture area, but I need to be safe either way~
+dialogue.TiaDialogueSecretbeach01.6 = それでは、もう一度確認してみましょう。ラプチャーの低いエリアのはずですが、どちらにせよ安全を確保しなければなりません〜
+
+# Line 7, said by Tia
+# en: I set up decoys...
+dialogue.TiaDialogueSecretbeach01.7 = おとりを設置しました...
+
+# Line 8, said by Tia
+# en: Brought rations...
+dialogue.TiaDialogueSecretbeach01.8 = 食料を持ってきました...
+
+# Line 13, said by Tia
+# en: Prepared the tent...
+dialogue.TiaDialogueSecretbeach01.13 = テントを準備しました...
+
+# Line 14, said by Tia
+# en: There's nothing missing... I think?
+dialogue.TiaDialogueSecretbeach01.14 = 何も足りないものはありません...そう思いますか?
+
+# Line 15, said by Tia
+# en: Welp, time to enjoy!
+dialogue.TiaDialogueSecretbeach01.15 = さあ、お楽しみください!
+
+# Line 16
+# en: *rustle*
+dialogue.TiaDialogueSecretbeach01.16 = *カサカサ音*
+
+# Line 17, said by Tia
+# en: Haahh...
+dialogue.TiaDialogueSecretbeach01.17 = はぁ…
+
+# Line 18, said by Tia
+# en: Now a well deserved rest!
+dialogue.TiaDialogueSecretbeach01.18 = さあ、当然の休息です!
+
+# Line 19, said by Tia
+# en: ...
+dialogue.TiaDialogueSecretbeach01.19 = ……
+
+# Line 20, said by Tia
+# en: Isn't this place beautiful?
+dialogue.TiaDialogueSecretbeach01.20 = ここは美しい場所ではありませんか?
+
+# Line 21, said by Tia
+# en: So many trees and mountains!
+dialogue.TiaDialogueSecretbeach01.21 = 木々や山がたくさん！
+
+# Line 22, said by Tia
+# en: Makes me wonder if there are any-
+dialogue.TiaDialogueSecretbeach01.22 = 何かあるのか気になりますが-
+
+# Line 23, said by Tia
+# en: LIZARD!
+dialogue.TiaDialogueSecretbeach01.23 = トカゲ!
+
+# Line 24, said by Tia
+# en: Come here little iguana, I won't bite you~
+dialogue.TiaDialogueSecretbeach01.24 = こっちにおいで、小さなイグアナ、噛まないよ~
+
+# Line 25, said by Tia
+# en: Huff... Huff... W-Wait-
+dialogue.TiaDialogueSecretbeach01.25 = ハフ... ハフ... わ、待って-
+
+# Line 26, said by Tia
+# en: Don't go in the waterrrr!
+dialogue.TiaDialogueSecretbeach01.26 = 水の中には入らないでください!
+
+# Line 28, said by Tia
+# en: That's not your habitat!
+dialogue.TiaDialogueSecretbeach01.28 = そこはあなたの生息地ではありません!
+
+# Line 27, said by Tia
+# en: L-Let me help you, little iguana!
+dialogue.TiaDialogueSecretbeach01.27 = L-手伝いましょう、小さなイグアナ！
+
+# Line 29, said by Tia
+# en: Huff... You're so... Huff... Fast...
+dialogue.TiaDialogueSecretbeach01.29 = はぁ... すごいですね... はぁ... 早いですね...
+
+# Line 30, said by Tia
+# en: Got ya-AAH!
+dialogue.TiaDialogueSecretbeach01.30 = わかった、ああ!
+
+# Line 31
+# en: *splash*
+dialogue.TiaDialogueSecretbeach01.31 = *スプラッシュ*
+
+# Line 32, said by Tia
+# en: Uhh... Oh, hello there Mister Iguana!
+dialogue.TiaDialogueSecretbeach01.32 = えー... ああ、こんにちは、ミスター・イグアナ!
+
+# Line 33, said by Tia
+# en: You're the absolutely cutest!
+dialogue.TiaDialogueSecretbeach01.33 = あなたは絶対に一番かわいいです!
+
+# Line 34, said by Tia
+# en: Wait a second... You're a marine iguana!
+dialogue.TiaDialogueSecretbeach01.34 = ちょっと待ってください...あなたはウミイグアナです!
+
+# Line 35, said by Tia
+# en: That's why you were running to the water! I'm so sorry!
+dialogue.TiaDialogueSecretbeach01.35 = だからこそ、あなたは水辺に走っていたのです。ごめんなさい！
+
+# Line 36, said by Tia
+# en: Teehee~
+dialogue.TiaDialogueSecretbeach01.36 = てへー
+
+# Line 37, said by You
+# en: (D-Does she really not realize tha-)
+dialogue.TiaDialogueSecretbeach01.37 = (D-彼女は本当に気づいていないのでしょうか-)
+
+# Line 38, said by You
+# en: (Hm...)
+dialogue.TiaDialogueSecretbeach01.38 = (うーん...)
+
 [Quest: Taking a break (Androids)]
 
 # The quest's title in the journal
@@ -10531,3 +11253,9 @@ ui.giftui.GiftWindow.Gifts.Wine.Text__TMP_.text = ワイン
 # The text of GiftWindow/Gifts/Wine/Button/Text (TMP)
 # en: Gift
 ui.giftui.GiftWindow.Gifts.Wine.Button.Text__TMP_.text = ギフト
+
+[Transitions]
+
+# Words on a black screen, at line 28 of CinderellaDialogueSecretbeach01
+# en: 3 minutes later...
+dialogue.CinderellaDialogueSecretbeach01.28.transition = 3 分後...

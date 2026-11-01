@@ -8880,8 +8880,8 @@ dialogue.GSDialogueStory05.376002006 = Ça a l'air d'être un bon investissement
 dialogue.GSDialogueStory05.1927993340 = Parce que ça l'est !
 
 # Line -1879601828, said by Yan
-# en: I think you heard Centi, but it should be done in 2 days. 
-dialogue.GSDialogueStory05.-1879601828 = Je pense que vous avez entendu Centi, mais cela devrait être fait dans 2 jours.
+# en: I think you heard Centi, but it should be done in 3 days. 
+dialogue.GSDialogueStory05.-1879601828 = Je pense que vous avez entendu Centi, mais cela devrait être fait dans 3 jours.
 
 # Line 1149007806, said by Yan
 # en: You should come then, who knows what you might find?
@@ -10026,6 +10026,727 @@ dialogue.CinderellaDialogueSecretbeach01.13 = Ahh...
 # en: ...
 dialogue.CinderellaDialogueSecretbeach01.14 = ...
 
+# Line 15, said by Cinderella
+# en: It's been a while since I've used a swimming-capable body...
+dialogue.CinderellaDialogueSecretbeach01.15 = Cela fait un moment que je n'ai pas utilisé un corps capable de nager...
+
+# Line 16, said by Cinderella
+# en: But I have to enjoy myself from time to time. It's no good to stay focused all the time.
+dialogue.CinderellaDialogueSecretbeach01.16 = Mais je dois m'amuser de temps en temps. Ce n'est pas bon de rester concentré tout le temps.
+
+# Line 17, said by Cinderella
+# en: Oh... I can't wait to feel the ocean water!
+dialogue.CinderellaDialogueSecretbeach01.17 = Oh... J'ai hâte de sentir l'eau de l'océan !
+
+# Line 18
+# en: *splash*
+dialogue.CinderellaDialogueSecretbeach01.18 = *éclaboussure*
+
+# Line 19, said by Cinderella
+# en: Ahh... It's beautifully warm!
+dialogue.CinderellaDialogueSecretbeach01.19 = Ahh... Il fait magnifiquement chaud !
+
+# Line 20, said by Cinderella
+# en: This is very relaxing... I've been craving this feeling for quite some time.
+dialogue.CinderellaDialogueSecretbeach01.20 = C'est très relaxant... J'avais envie de cette sensation depuis un certain temps.
+
+# Line 21, said by Cinderella
+# en: Hmm...
+# same in this language
+dialogue.CinderellaDialogueSecretbeach01.21 = Hmm...
+
+# Line 22, said by Cinderella
+# en: How about giving diving a go this time?
+dialogue.CinderellaDialogueSecretbeach01.22 = Et si vous essayiez la plongée cette fois ?
+
+# Line 23
+# en: *splash*
+dialogue.CinderellaDialogueSecretbeach01.23 = *éclaboussure*
+
+# Line 24, said by Cinderella
+# en: ...
+dialogue.CinderellaDialogueSecretbeach01.24 = ...
+
+# Line 25, said by You
+# en: (Isn't it a bit dangerous to swim that deep in the sea?)
+dialogue.CinderellaDialogueSecretbeach01.25 = (N'est-ce pas un peu dangereux de nager aussi profondément dans la mer ?)
+
+# Line 27, said by You
+# en: (...)
+dialogue.CinderellaDialogueSecretbeach01.27 = (...)
+
+# Line 28, said by You
+# en: (Well... They seem to know how to handle themselves, so I'll trust she knows what she's doing.)
+dialogue.CinderellaDialogueSecretbeach01.28 = (Eh bien... Ils semblent savoir comment se comporter, alors j'espère qu'elle sait ce qu'elle fait.)
+
+# Line 29, said by You
+# en: (...)
+dialogue.CinderellaDialogueSecretbeach01.29 = (...)
+
+# Line 30, said by You
+# en: (...)
+dialogue.CinderellaDialogueSecretbeach01.30 = (...)
+
+# Line 31, said by You
+# en: (Okay, this is getting worrying.)
+dialogue.CinderellaDialogueSecretbeach01.31 = (D'accord, cela devient inquiétant.)
+
+# Line 32, said by You
+# en: (Can she really hold her breath for this long? Maybe I should do someth-)
+dialogue.CinderellaDialogueSecretbeach01.32 = (Peut-elle vraiment retenir sa respiration aussi longtemps ? Peut-être que je devrais faire quelque chose-)
+
+# Line 33
+# en: *splash*
+dialogue.CinderellaDialogueSecretbeach01.33 = *éclaboussure*
+
+# Line 26, said by Cinderella
+# en: *gasp*
+dialogue.CinderellaDialogueSecretbeach01.26 = *halètement*
+
+# Line 34, said by Cinderella
+# en: Ahhh... This was marvelous!
+dialogue.CinderellaDialogueSecretbeach01.34 = Ahhh... C'était merveilleux !
+
+# Line 35, said by Cinderella
+# en: I should do this more often, the ocean can be wondrous!
+dialogue.CinderellaDialogueSecretbeach01.35 = Je devrais faire ça plus souvent, l'océan peut être merveilleux !
+
+# Line 36, said by Cinderella
+# en: Oh?
+dialogue.CinderellaDialogueSecretbeach01.36 = Oh ?
+
+# Line 37, said by Cinderella
+# en: Oops. This is hardly beautiful.
+dialogue.CinderellaDialogueSecretbeach01.37 = Oups. Ce n'est guère beau.
+
+# Line 38, said by Cinderella
+# en: That's better.
+dialogue.CinderellaDialogueSecretbeach01.38 = C'est mieux.
+
+# Line 39, said by Cinderella
+# en: Having such a beautiful body can be such a hassle some times.
+dialogue.CinderellaDialogueSecretbeach01.39 = Avoir un si beau corps peut parfois être très compliqué.
+
+# Line 40, said by You
+# en: (Well...)
+dialogue.CinderellaDialogueSecretbeach01.40 = (Eh bien...)
+
+# Line 41, said by You
+# en: (She is correct in more than just the full statement.)
+dialogue.CinderellaDialogueSecretbeach01.41 = (Elle a raison au-delà de la déclaration complète.)
+
+[Dialogue: MarcianaDialogueSecretbeach01]
+
+# Line 1, said by You
+# en: (...)
+dialogue.MarcianaDialogueSecretbeach01.1 = (...)
+
+# Line 2, said by You
+# en: (Is that...)
+dialogue.MarcianaDialogueSecretbeach01.2 = (Est-ce que...)
+
+# Line 3, said by You
+# en: (A... penguin?)
+dialogue.MarcianaDialogueSecretbeach01.3 = (Un... pingouin ?)
+
+# Line 4, said by Marciana
+# en: ... What am I supposed to do exactly?
+dialogue.MarcianaDialogueSecretbeach01.4 = ... Que suis-je censé faire exactement ?
+
+# Line 5, said by Marciana
+# en: I can't say I'm used to having a lot of free time on my hands...
+dialogue.MarcianaDialogueSecretbeach01.5 = Je ne peux pas dire que je suis habituée à avoir beaucoup de temps libre entre mes mains...
+
+# Line 6, said by Marciana
+# en: Not really sure how I can go through with this forced vacation.
+dialogue.MarcianaDialogueSecretbeach01.6 = Je ne sais pas vraiment comment je peux vivre ces vacances forcées.
+
+# Line 7, said by Marciana
+# en: Hmmm...
+# same in this language
+dialogue.MarcianaDialogueSecretbeach01.7 = Hmmm...
+
+# Line 8, said by Marciana
+# en: Well, this time there isn't really anyone around...
+dialogue.MarcianaDialogueSecretbeach01.8 = Eh bien, cette fois, il n'y a vraiment personne autour...
+
+# Line 9, said by Marciana
+# en: So no use being shy about this swimsuit.
+dialogue.MarcianaDialogueSecretbeach01.9 = Alors, inutile d'être timide avec ce maillot de bain.
+
+# Line 10, said by You
+# en: (... What does she mean?)
+dialogue.MarcianaDialogueSecretbeach01.10 = (... Que veut-elle dire ?)
+
+# Line 15
+# en: *zip*
+# same in this language
+dialogue.MarcianaDialogueSecretbeach01.15 = *zip*
+
+# Line 11, said by You
+# en: (.ç..!)
+# same in this language
+dialogue.MarcianaDialogueSecretbeach01.11 = (.ç..!)
+
+# Line 12, said by Marciana
+# en: Still... Pretty embarrassing.
+dialogue.MarcianaDialogueSecretbeach01.12 = Quand même... Assez embarrassant.
+
+# Line 13, said by Marciana
+# en: I really have to buy other swimwear, but this request was too sudden.
+dialogue.MarcianaDialogueSecretbeach01.13 = Je dois vraiment acheter d'autres maillots de bain, mais cette demande était trop soudaine.
+
+# Line 14, said by Marciana
+# en: Didn't have any time to prepare for this, so I just left in a hurry...
+dialogue.MarcianaDialogueSecretbeach01.14 = Je n'ai pas eu le temps de me préparer, alors je suis partie précipitamment...
+
+# Line 16, said by Marciana
+# en: ...
+dialogue.MarcianaDialogueSecretbeach01.16 = ...
+
+# Line 17, said by Marciana
+# en: This place is pretty beautiful though...
+dialogue.MarcianaDialogueSecretbeach01.17 = Cet endroit est plutôt beau cependant...
+
+# Line 18
+# en: *rustle*
+dialogue.MarcianaDialogueSecretbeach01.18 = *bruissement*
+
+# Line 19
+# en: *scrunch*
+dialogue.MarcianaDialogueSecretbeach01.19 = *froisser*
+
+# Line 20, said by Marciana
+# en: Haahh...
+# same in this language
+dialogue.MarcianaDialogueSecretbeach01.20 = Haahh...
+
+# Line 21, said by Marciana
+# en: I think... I had almost forgotten what relaxing felt like.
+dialogue.MarcianaDialogueSecretbeach01.21 = Je pense... J'avais presque oublié à quoi ressemblait la détente.
+
+# Line 22, said by Marciana
+# en: I'm always having to worry about my students and their grades...
+dialogue.MarcianaDialogueSecretbeach01.22 = Je dois toujours m'inquiéter pour mes élèves et leurs notes...
+
+# Line 23, said by Marciana
+# en: I feel little guilty.
+dialogue.MarcianaDialogueSecretbeach01.23 = Je me sens peu coupable.
+
+# Line 24, said by Marciana
+# en: Even though they certainly are enjoying their holidays now...
+dialogue.MarcianaDialogueSecretbeach01.24 = Même s'ils profitent certainement de leurs vacances maintenant...
+
+# Line 25, said by Marciana
+# en: Hm. What am I thinking?
+dialogue.MarcianaDialogueSecretbeach01.25 = Hm. À quoi je pense ?
+
+# Line 26, said by Marciana
+# en: They'd want me to enjoy a little, so that's what I'll do.
+dialogue.MarcianaDialogueSecretbeach01.26 = Ils voudraient que je profite un peu, alors c'est ce que je vais faire.
+
+# Line 27, said by Marciana
+# en: And to start... Hmmm...
+dialogue.MarcianaDialogueSecretbeach01.27 = Et pour commencer... Hmmm...
+
+# Line 28, said by Marciana
+# en: Maybe making a sand castle?
+dialogue.MarcianaDialogueSecretbeach01.28 = Peut-être faire un château de sable ?
+
+# Line 29, said by Marciana
+# en: Sounds a bit childish, but I've never made one before. I should try that out.
+dialogue.MarcianaDialogueSecretbeach01.29 = Cela semble un peu enfantin, mais je n'en ai jamais fait auparavant. Je devrais essayer ça.
+
+# Line 30, said by Marciana
+# en: So... First I need to grab some water...
+dialogue.MarcianaDialogueSecretbeach01.30 = Alors... Je dois d'abord prendre de l'eau...
+
+# Line 31, said by Marciana
+# en: ...
+dialogue.MarcianaDialogueSecretbeach01.31 = ...
+
+# Line 32, said by Marciana
+# en: Then, shape the sand and use the water to solidify it...
+dialogue.MarcianaDialogueSecretbeach01.32 = Ensuite, façonnez le sable et utilisez l'eau pour le solidifier...
+
+# Line 33, said by Marciana
+# en: ...
+dialogue.MarcianaDialogueSecretbeach01.33 = ...
+
+# Line 34, said by You
+# en: (Well, isn't this a sight to behold?)
+dialogue.MarcianaDialogueSecretbeach01.34 = (Eh bien, n'est-ce pas un spectacle à voir ?)
+
+# Line 35, said by Marciana
+# en: ... It seems to be coming along pretty well.
+dialogue.MarcianaDialogueSecretbeach01.35 = ... Cela semble plutôt bien se passer.
+
+# Line 36, said by Marciana
+# en: One tower done... Now the other...
+dialogue.MarcianaDialogueSecretbeach01.36 = Une tour terminée... Maintenant l'autre...
+
+# Line 37, said by You
+# en: (Wait... Is she right below that coconut tree?)
+dialogue.MarcianaDialogueSecretbeach01.37 = (Attendez... Est-elle juste en dessous de ce cocotier ?)
+
+# Line 38, said by You
+# en: ({D} always says it's dangerous to do that. You never know when a coconut might fa-)
+dialogue.MarcianaDialogueSecretbeach01.38 = ({D} dit toujours que c'est dangereux de faire ça. On ne sait jamais quand une noix de coco pourrait tomber-)
+
+# Line 39
+# en: *thunk*
+dialogue.MarcianaDialogueSecretbeach01.39 = *je pense*
+
+# Line 40, said by Marciana
+# en: OW!
+dialogue.MarcianaDialogueSecretbeach01.40 = OW !
+
+# Line 41, said by Marciana
+# en: Wha- Oh.
+dialogue.MarcianaDialogueSecretbeach01.41 = Quoi- Oh.
+
+# Line 42, said by Marciana
+# en: Ow... That really was on me...
+dialogue.MarcianaDialogueSecretbeach01.42 = Aïe... C'était vraiment de ma faute...
+
+# Line 43, said by Marciana
+# en: The main teacher at M.M.R. Vocational School, and I still was caught by this.
+dialogue.MarcianaDialogueSecretbeach01.43 = Le professeur principal de M.M.R. école professionnelle, et j'étais toujours captivé par cela.
+
+# Line 44, said by Marciana
+# en: This... Is embarrassing...
+dialogue.MarcianaDialogueSecretbeach01.44 = C'est... embarrassant...
+
+# Line 45, said by You
+# en: (H-How is she okay after this?)
+dialogue.MarcianaDialogueSecretbeach01.45 = (H-Comment va-t-elle bien après ça ?)
+
+# Line 46, said by You
+# en: (... I guess I really should start taking {D}'s warnings more seriously...)
+dialogue.MarcianaDialogueSecretbeach01.46 = (... Je suppose que je devrais vraiment commencer à prendre les avertissements de {D} plus au sérieux...)
+
+[Dialogue: NagaDialogueSecretbeach]
+
+# Line 1, said by Naga
+# en: Hmmph...
+# same in this language
+dialogue.NagaDialogueSecretbeach.1 = Hmmph...
+
+# Line 2, said by Naga
+# en: I worry about Tia...
+dialogue.NagaDialogueSecretbeach.2 = Je m'inquiète pour Tia...
+
+# Line 3, said by Naga
+# en: I know I agreed with Miss Marciana with this activity to decrease our mutual dependency, but...
+dialogue.NagaDialogueSecretbeach.3 = Je sais que j'étais d'accord avec Mademoiselle Marciana avec cette activité pour diminuer notre dépendance mutuelle, mais...
+
+# Line 4, said by Naga
+# en: Is it wrong to be so worried about how Tia will do by herself?
+dialogue.NagaDialogueSecretbeach.4 = Est-ce mal de s'inquiéter autant de la façon dont Tia va se débrouiller seule ?
+
+# Line 5, said by Naga
+# en: ...
+dialogue.NagaDialogueSecretbeach.5 = ...
+
+# Line 6, said by Naga
+# en: We were both assigned to separate areas with a low Rapture rate, so...
+dialogue.NagaDialogueSecretbeach.6 = Nous avons tous deux été affectés à des zones séparées avec un faible taux d'enlèvement, donc...
+
+# Line 7, said by Naga
+# en: She should be fine...
+dialogue.NagaDialogueSecretbeach.7 = Elle devrait aller bien...
+
+# Line 8, said by Naga
+# en: ...
+dialogue.NagaDialogueSecretbeach.8 = ...
+
+# Line 9, said by Naga
+# en: Hmph. What am I thinking?
+dialogue.NagaDialogueSecretbeach.9 = Hmph. À quoi je pense ?
+
+# Line 10, said by Naga
+# en: Of course she'll be okay. Tia is perfectly capable of handling her own.
+dialogue.NagaDialogueSecretbeach.10 = Bien sûr, tout ira bien. Tia est parfaitement capable de se débrouiller seule.
+
+# Line 11, said by Naga
+# en: I should instead focus on relaxing, as instructed.
+dialogue.NagaDialogueSecretbeach.11 = Je devrais plutôt me concentrer sur la relaxation, comme indiqué.
+
+# Line 12, said by Naga
+# en: There's no reason to keep sulking anyway, might as well enjoy!
+dialogue.NagaDialogueSecretbeach.12 = De toute façon, il n'y a aucune raison de continuer à bouder, autant en profiter !
+
+# Line 13, said by Naga
+# en: Hmmm...
+# same in this language
+dialogue.NagaDialogueSecretbeach.13 = Hmmm...
+
+# Line 14, said by Naga
+# en: Why not start with some volleyball?
+dialogue.NagaDialogueSecretbeach.14 = Pourquoi ne pas commencer par un peu de volley-ball ?
+
+# Line 15, said by Naga
+# en: It's a game that's meant to be played as a team, but practicing by myself can prove to be good for this exercise...
+dialogue.NagaDialogueSecretbeach.15 = C'est un jeu qui est fait pour être joué en équipe, mais pratiquer seul peut s'avérer bon pour cet exercice...
+
+# Line 16, said by Naga
+# en: And for this... I brought this ball with me!
+dialogue.NagaDialogueSecretbeach.16 = Et pour ça... J'ai apporté cette balle avec moi !
+
+# Line 17, said by Naga
+# en: And what fun is there playing only on the sand... Right?
+dialogue.NagaDialogueSecretbeach.17 = Et quel plaisir y a-t-il à jouer uniquement sur le sable... N'est-ce pas ?
+
+# Line 18, said by Naga
+# en: Hah!
+dialogue.NagaDialogueSecretbeach.18 = Hah !
+
+# Line 19, said by Naga
+# en: One... Two... Three... Four...
+dialogue.NagaDialogueSecretbeach.19 = Un... Deux... Trois... Quatre...
+
+# Line 22, said by Naga
+# en: Five... ...Ten... ...Twenty...
+dialogue.NagaDialogueSecretbeach.22 = Cinq... ...Dix... ...Vingt...
+
+# Line 20, said by Naga
+# en: Twenty o- oops! Dropped it.
+dialogue.NagaDialogueSecretbeach.20 = Vingt o- oups ! Je l'ai laissé tomber.
+
+# Line 21, said by Naga
+# en: Hah, it seems I can have fun by myself.
+dialogue.NagaDialogueSecretbeach.21 = Hah, on dirait que je peux m'amuser toute seule.
+
+# Line 23, said by You
+# en: (She's not bad at this.)
+dialogue.NagaDialogueSecretbeach.23 = (Elle n'est pas mauvaise dans ce domaine.)
+
+# Line 25, said by You
+# en: (Amelia would probably like meeting her.)
+dialogue.NagaDialogueSecretbeach.25 = (Amelia aimerait probablement la rencontrer.)
+
+# Line 24, said by Naga
+# en: Starting again.
+dialogue.NagaDialogueSecretbeach.24 = On recommence.
+
+# Line 26, said by Naga
+# en: Huff!
+dialogue.NagaDialogueSecretbeach.26 = Huff !
+
+# Line 27, said by Naga
+# en: One... Two.. Three...
+dialogue.NagaDialogueSecretbeach.27 = Un... Deux... Trois...
+
+# Line 28, said by Naga
+# en: ...Fifteen... ...Thirty...
+dialogue.NagaDialogueSecretbeach.28 = ...Quinze... ...Trente...
+
+# Line 29, said by Naga
+# en: Hmph! Thirty fi-aaAH!
+dialogue.NagaDialogueSecretbeach.29 = Hmph ! Trente fi-aaAH !
+
+# Line 30
+# en: *splash*
+dialogue.NagaDialogueSecretbeach.30 = *éclaboussure*
+
+# Line 31, said by Naga
+# en: Aww...
+# same in this language
+dialogue.NagaDialogueSecretbeach.31 = Aww...
+
+# Line 32, said by Naga
+# en: I was so close to beating my record...
+dialogue.NagaDialogueSecretbeach.32 = J'étais si près de battre mon record...
+
+# Line 34, said by You
+# en: (Woah!)
+dialogue.NagaDialogueSecretbeach.34 = (Woah !)
+
+# Line 33, said by Naga
+# en: Whe- Did I drop my phone too?
+dialogue.NagaDialogueSecretbeach.33 = Où- Ai-je laissé tomber mon téléphone aussi ?
+
+# Line 35, said by Naga
+# en: It's good that this case is waterproof, but where is it?...
+dialogue.NagaDialogueSecretbeach.35 = C'est bien que cette coque soit étanche, mais où est-elle ?...
+
+# Line 37, said by You
+# en: (I'll help her out if she takes too long to find it... Though I hope she does...)
+dialogue.NagaDialogueSecretbeach.37 = (Je l'aiderai si elle met trop de temps à le trouver... Même si j'espère qu'elle le fera...)
+
+[Dialogue: SirenDialogueSecretbeach01]
+
+# Line 1, said by Siren
+# en: Woo!
+dialogue.SirenDialogueSecretbeach01.1 = Woo !
+
+# Line 2, said by Siren
+# en: What a beautiful sunset!
+dialogue.SirenDialogueSecretbeach01.2 = Quel magnifique coucher de soleil !
+
+# Line 3, said by Siren
+# en: I should tell the others about this place!
+dialogue.SirenDialogueSecretbeach01.3 = Je devrais parler de cet endroit aux autres !
+
+# Line 4, said by Siren
+# en: I wouldn't want to keep it a secret from them...
+dialogue.SirenDialogueSecretbeach01.4 = Je ne voudrais pas leur cacher cela...
+
+# Line 5, said by Siren
+# en: If only we had walked just a bit longer when we scouted this place before...
+dialogue.SirenDialogueSecretbeach01.5 = Si seulement nous avions marché un peu plus longtemps lorsque nous avons exploré cet endroit auparavant...
+
+# Line 6, said by Siren
+# en: Oh?
+dialogue.SirenDialogueSecretbeach01.6 = Oh ?
+
+# Line 7, said by Siren
+# en: Aah!
+dialogue.SirenDialogueSecretbeach01.7 = Aah !
+
+# Line 8, said by Siren
+# en: This is one of those beaches full of seashells!
+dialogue.SirenDialogueSecretbeach01.8 = C'est une de ces plages pleines de coquillages !
+
+# Line 9, said by Siren
+# en: This one is very pretty!
+dialogue.SirenDialogueSecretbeach01.9 = Celle-ci est très jolie !
+
+# Line 10, said by Siren
+# en: Hmmm...
+# same in this language
+dialogue.SirenDialogueSecretbeach01.10 = Hmmm...
+
+# Line 11, said by Siren
+# en: Awoo! This one is beautiful too!
+dialogue.SirenDialogueSecretbeach01.11 = Awoo ! Celui-ci est magnifique aussi !
+
+# Line 12, said by Siren
+# en: It's a shame I can't bring them all with me, but I'd like to bring at least a few for my friends!
+dialogue.SirenDialogueSecretbeach01.12 = C'est dommage que je ne puisse pas tous les emmener avec moi, mais j'aimerais en apporter au moins quelques-uns pour mes amis !
+
+# Line 13, said by Siren
+# en: ... This one is nice.
+dialogue.SirenDialogueSecretbeach01.13 = ... Celui-ci est sympa.
+
+# Line 14, said by Siren
+# en: Hmmm... Maybe there are more in the water!
+dialogue.SirenDialogueSecretbeach01.14 = Hmmm... Peut-être qu'il y en a plus dans l'eau !
+
+# Line 15, said by Siren
+# en: So shiny! This one is such a pretty white!
+dialogue.SirenDialogueSecretbeach01.15 = Tellement brillant ! Celui-ci est d'un si joli blanc !
+
+# Line 16, said by Siren
+# en: I think... I should have enough seashells for everyone.
+dialogue.SirenDialogueSecretbeach01.16 = Je pense... que je devrais avoir assez de coquillages pour tout le monde.
+
+# Line 17, said by Siren
+# en: I'll start heading back, don't want Levi to get worried...
+dialogue.SirenDialogueSecretbeach01.17 = Je vais commencer à rentrer, je ne veux pas que Levi s'inquiète...
+
+# Line 18, said by Siren
+# en: She'll absolutely love this one though, it's so beautiful!
+dialogue.SirenDialogueSecretbeach01.18 = Mais elle va absolument adorer celui-ci, il est tellement beau !
+
+# Line 19, said by Siren
+# en: The first thing I thought of when picking it up was her-
+dialogue.SirenDialogueSecretbeach01.19 = La première chose à laquelle j'ai pensé en le prenant, c'était elle-
+
+# Line 20
+# en: *splash*
+dialogue.SirenDialogueSecretbeach01.20 = *éclaboussure*
+
+# Line 21, said by Siren
+# en: EEK!
+dialogue.SirenDialogueSecretbeach01.21 = EEK !
+
+# Line 22, said by Siren
+# en: Ah! T-That wave really caught me by surprise...
+dialogue.SirenDialogueSecretbeach01.22 = Ah ! T-Cette vague m'a vraiment pris par surprise...
+
+# Line 23, said by Siren
+# en: ...?
+dialogue.SirenDialogueSecretbeach01.23 = ...?
+
+# Line 24, said by Siren
+# en: E-Eh!?
+dialogue.SirenDialogueSecretbeach01.24 = E-Eh !?
+
+# Line 25, said by Siren
+# en: H-How did this happen!?
+dialogue.SirenDialogueSecretbeach01.25 = H-Comment est-ce arrivé !?
+
+# Line 26
+# en: *rustle*
+dialogue.SirenDialogueSecretbeach01.26 = *bruissement*
+
+# Line 27, said by Siren
+# en: I-I've went through plenty more action than this and t-that never happened before!
+dialogue.SirenDialogueSecretbeach01.27 = J-J'ai vécu bien plus d'actions que ceci et cela n'est jamais arrivé auparavant !
+
+# Line 28, said by Siren
+# en: ... Woo...
+# same in this language
+dialogue.SirenDialogueSecretbeach01.28 = ... Woo...
+
+[Dialogue: TiaDialogueSecretbeach01]
+
+# Line 1, said by You
+# en: (...)
+dialogue.TiaDialogueSecretbeach01.1 = (...)
+
+# Line 2, said by You
+# en: (Hey, there's someone there.)
+dialogue.TiaDialogueSecretbeach01.2 = (Hé, il y a quelqu'un là-bas.)
+
+# Line 3, said by Tia
+# en: Ah! I'm finally ready to relax!
+dialogue.TiaDialogueSecretbeach01.3 = Ah ! Je suis enfin prêt à me détendre !
+
+# Line 4, said by Tia
+# en: Took me sooo long to set up this spot...
+dialogue.TiaDialogueSecretbeach01.4 = Il m'a fallu tellement de temps pour installer cet endroit...
+
+# Line 5, said by Tia
+# en: But I should be all set to have a good time!
+dialogue.TiaDialogueSecretbeach01.5 = Mais je devrais être prête à passer un bon moment !
+
+# Line 9, said by Tia
+# en: ...
+dialogue.TiaDialogueSecretbeach01.9 = ...
+
+# Line 10, said by Tia
+# en: This would all be so much easier with Naga...
+dialogue.TiaDialogueSecretbeach01.10 = Tout serait tellement plus facile avec Naga...
+
+# Line 11, said by Tia
+# en: But Miss Marciana really wanted us to show that we're able to work on our own as adults...
+dialogue.TiaDialogueSecretbeach01.11 = Mais Mademoiselle Marciana voulait vraiment que nous montrions que nous sommes capables de travailler seuls en tant qu'adultes...
+
+# Line 12, said by Tia
+# en: Ugh... Well, I trust my teacher.
+dialogue.TiaDialogueSecretbeach01.12 = Ugh... Eh bien, je fais confiance à mon professeur.
+
+# Line 6, said by Tia
+# en: So now, let's check again. Should be a low Rapture area, but I need to be safe either way~
+dialogue.TiaDialogueSecretbeach01.6 = Alors maintenant, vérifions à nouveau. Cela devrait être une zone de Rapture faible, mais je dois être en sécurité de toute façon ~
+
+# Line 7, said by Tia
+# en: I set up decoys...
+dialogue.TiaDialogueSecretbeach01.7 = J'ai installé des leurres...
+
+# Line 8, said by Tia
+# en: Brought rations...
+dialogue.TiaDialogueSecretbeach01.8 = J'ai apporté des rations...
+
+# Line 13, said by Tia
+# en: Prepared the tent...
+dialogue.TiaDialogueSecretbeach01.13 = J'ai préparé la tente...
+
+# Line 14, said by Tia
+# en: There's nothing missing... I think?
+dialogue.TiaDialogueSecretbeach01.14 = Il ne manque rien... je pense ?
+
+# Line 15, said by Tia
+# en: Welp, time to enjoy!
+dialogue.TiaDialogueSecretbeach01.15 = Eh bien, il est temps d'en profiter !
+
+# Line 16
+# en: *rustle*
+dialogue.TiaDialogueSecretbeach01.16 = *bruissement*
+
+# Line 17, said by Tia
+# en: Haahh...
+# same in this language
+dialogue.TiaDialogueSecretbeach01.17 = Haahh...
+
+# Line 18, said by Tia
+# en: Now a well deserved rest!
+dialogue.TiaDialogueSecretbeach01.18 = Maintenant un repos bien mérité !
+
+# Line 19, said by Tia
+# en: ...
+dialogue.TiaDialogueSecretbeach01.19 = ...
+
+# Line 20, said by Tia
+# en: Isn't this place beautiful?
+dialogue.TiaDialogueSecretbeach01.20 = Cet endroit n'est-il pas magnifique ?
+
+# Line 21, said by Tia
+# en: So many trees and mountains!
+dialogue.TiaDialogueSecretbeach01.21 = Tant d'arbres et de montagnes !
+
+# Line 22, said by Tia
+# en: Makes me wonder if there are any-
+dialogue.TiaDialogueSecretbeach01.22 = Je me demande s'il y a des-
+
+# Line 23, said by Tia
+# en: LIZARD!
+dialogue.TiaDialogueSecretbeach01.23 = LÉZARD !
+
+# Line 24, said by Tia
+# en: Come here little iguana, I won't bite you~
+dialogue.TiaDialogueSecretbeach01.24 = Viens ici petit iguane, je ne te mordrai pas~
+
+# Line 25, said by Tia
+# en: Huff... Huff... W-Wait-
+dialogue.TiaDialogueSecretbeach01.25 = Huff... Huff... W-Attends-
+
+# Line 26, said by Tia
+# en: Don't go in the waterrrr!
+dialogue.TiaDialogueSecretbeach01.26 = N'entre pas dans l'eaurrr !
+
+# Line 28, said by Tia
+# en: That's not your habitat!
+dialogue.TiaDialogueSecretbeach01.28 = Ce n'est pas votre habitat !
+
+# Line 27, said by Tia
+# en: L-Let me help you, little iguana!
+dialogue.TiaDialogueSecretbeach01.27 = L-Laisse-moi t'aider, petit iguane !
+
+# Line 29, said by Tia
+# en: Huff... You're so... Huff... Fast...
+dialogue.TiaDialogueSecretbeach01.29 = Huff... Tu es tellement... Huff... Vite...
+
+# Line 30, said by Tia
+# en: Got ya-AAH!
+dialogue.TiaDialogueSecretbeach01.30 = Je vous ai-AAH !
+
+# Line 31
+# en: *splash*
+dialogue.TiaDialogueSecretbeach01.31 = *éclaboussure*
+
+# Line 32, said by Tia
+# en: Uhh... Oh, hello there Mister Iguana!
+dialogue.TiaDialogueSecretbeach01.32 = Euh... Oh, bonjour Monsieur Iguana !
+
+# Line 33, said by Tia
+# en: You're the absolutely cutest!
+dialogue.TiaDialogueSecretbeach01.33 = Vous êtes absolument le plus mignon !
+
+# Line 34, said by Tia
+# en: Wait a second... You're a marine iguana!
+dialogue.TiaDialogueSecretbeach01.34 = Attendez une seconde... Vous êtes un iguane marin !
+
+# Line 35, said by Tia
+# en: That's why you were running to the water! I'm so sorry!
+dialogue.TiaDialogueSecretbeach01.35 = C'est pour ça que tu courais vers l'eau ! Je suis vraiment désolé !
+
+# Line 36, said by Tia
+# en: Teehee~
+# same in this language
+dialogue.TiaDialogueSecretbeach01.36 = Teehee~
+
+# Line 37, said by You
+# en: (D-Does she really not realize tha-)
+dialogue.TiaDialogueSecretbeach01.37 = (D-Est-ce qu'elle ne se rend vraiment pas compte que-)
+
+# Line 38, said by You
+# en: (Hm...)
+# same in this language
+dialogue.TiaDialogueSecretbeach01.38 = (Hm...)
+
 [Quest: Taking a break (Androids)]
 
 # The quest's title in the journal
@@ -10647,3 +11368,9 @@ ui.giftui.GiftWindow.Gifts.Wine.Text__TMP_.text = Vin
 # The text of GiftWindow/Gifts/Wine/Button/Text (TMP)
 # en: Gift
 ui.giftui.GiftWindow.Gifts.Wine.Button.Text__TMP_.text = Cadeau
+
+[Transitions]
+
+# Words on a black screen, at line 28 of CinderellaDialogueSecretbeach01
+# en: 3 minutes later...
+dialogue.CinderellaDialogueSecretbeach01.28.transition = 3 minutes plus tard...

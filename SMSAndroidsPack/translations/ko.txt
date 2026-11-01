@@ -8773,8 +8773,8 @@ dialogue.GSDialogueStory05.376002006 = 꽤 괜찮은 투자 같은데. (계속)
 dialogue.GSDialogueStory05.1927993340 = 실제로도 그렇거든!
 
 # Line -1879601828, said by Yan
-# en: I think you heard Centi, but it should be done in 2 days. 
-dialogue.GSDialogueStory05.-1879601828 = 센티한테서 들었겠지만, 이틀이면 작업이 끝날 거야.
+# en: I think you heard Centi, but it should be done in 3 days. 
+dialogue.GSDialogueStory05.-1879601828 = 센티한테서 들었겠지만, 사흘이면 작업이 끝날 거야.
 
 # Line 1149007806, said by Yan
 # en: You should come then, who knows what you might find?
@@ -9914,6 +9914,716 @@ dialogue.CinderellaDialogueSecretbeach01.13 = 아아...
 # en: ...
 dialogue.CinderellaDialogueSecretbeach01.14 = ...
 
+# Line 15, said by Cinderella
+# en: It's been a while since I've used a swimming-capable body...
+dialogue.CinderellaDialogueSecretbeach01.15 = 수영이 가능한 바디를 사용해본지 꽤 됐는데...
+
+# Line 16, said by Cinderella
+# en: But I have to enjoy myself from time to time. It's no good to stay focused all the time.
+dialogue.CinderellaDialogueSecretbeach01.16 = 하지만 가끔은 즐거운 시간을 보내야 해요. 항상 집중하는 것은 좋지 않습니다.
+
+# Line 17, said by Cinderella
+# en: Oh... I can't wait to feel the ocean water!
+dialogue.CinderellaDialogueSecretbeach01.17 = 아... 바닷물을 빨리 느끼고 싶어요!
+
+# Line 18
+# en: *splash*
+dialogue.CinderellaDialogueSecretbeach01.18 = *튀김*
+
+# Line 19, said by Cinderella
+# en: Ahh... It's beautifully warm!
+dialogue.CinderellaDialogueSecretbeach01.19 = 아... 정말 따뜻해요!
+
+# Line 20, said by Cinderella
+# en: This is very relaxing... I've been craving this feeling for quite some time.
+dialogue.CinderellaDialogueSecretbeach01.20 = 정말 편안해요... 꽤 오랫동안 이 느낌을 갈망해왔어요.
+
+# Line 21, said by Cinderella
+# en: Hmm...
+dialogue.CinderellaDialogueSecretbeach01.21 = 흠...
+
+# Line 22, said by Cinderella
+# en: How about giving diving a go this time?
+dialogue.CinderellaDialogueSecretbeach01.22 = 이번에는 다이빙을 한번 해보시는 건 어떨까요?
+
+# Line 23
+# en: *splash*
+dialogue.CinderellaDialogueSecretbeach01.23 = *튀김*
+
+# Line 24, said by Cinderella
+# en: ...
+dialogue.CinderellaDialogueSecretbeach01.24 = ...
+
+# Line 25, said by You
+# en: (Isn't it a bit dangerous to swim that deep in the sea?)
+dialogue.CinderellaDialogueSecretbeach01.25 = (그렇게 깊은 바다에서 수영하는 건 좀 위험하지 않나요?)
+
+# Line 27, said by You
+# en: (...)
+dialogue.CinderellaDialogueSecretbeach01.27 = (...)
+
+# Line 28, said by You
+# en: (Well... They seem to know how to handle themselves, so I'll trust she knows what she's doing.)
+dialogue.CinderellaDialogueSecretbeach01.28 = (글쎄... 그 사람들은 자기 자신을 어떻게 처리해야 할지 아는 것 같으니, 그 사람도 자기가 무슨 일을 하는지 알고 있을 거라 믿겠다.)
+
+# Line 29, said by You
+# en: (...)
+dialogue.CinderellaDialogueSecretbeach01.29 = (...)
+
+# Line 30, said by You
+# en: (...)
+dialogue.CinderellaDialogueSecretbeach01.30 = (...)
+
+# Line 31, said by You
+# en: (Okay, this is getting worrying.)
+dialogue.CinderellaDialogueSecretbeach01.31 = (알겠습니다. 걱정스럽네요.)
+
+# Line 32, said by You
+# en: (Can she really hold her breath for this long? Maybe I should do someth-)
+dialogue.CinderellaDialogueSecretbeach01.32 = (정말 이렇게 오랫동안 숨을 참을 수 있을까? 뭔가 조치를 취해야 할지도-)
+
+# Line 33
+# en: *splash*
+dialogue.CinderellaDialogueSecretbeach01.33 = *튀김*
+
+# Line 26, said by Cinderella
+# en: *gasp*
+dialogue.CinderellaDialogueSecretbeach01.26 = *헐떡임*
+
+# Line 34, said by Cinderella
+# en: Ahhh... This was marvelous!
+dialogue.CinderellaDialogueSecretbeach01.34 = 아아... 정말 환상적이었어요!
+
+# Line 35, said by Cinderella
+# en: I should do this more often, the ocean can be wondrous!
+dialogue.CinderellaDialogueSecretbeach01.35 = 이 일을 더 자주 해야겠어요, 바다는 정말 경이로울 수 있어요!
+
+# Line 36, said by Cinderella
+# en: Oh?
+dialogue.CinderellaDialogueSecretbeach01.36 = 아?
+
+# Line 37, said by Cinderella
+# en: Oops. This is hardly beautiful.
+dialogue.CinderellaDialogueSecretbeach01.37 = 이런. 이것은 거의 아름답지 않습니다.
+
+# Line 38, said by Cinderella
+# en: That's better.
+dialogue.CinderellaDialogueSecretbeach01.38 = 그게 더 낫네요.
+
+# Line 39, said by Cinderella
+# en: Having such a beautiful body can be such a hassle some times.
+dialogue.CinderellaDialogueSecretbeach01.39 = 이렇게 아름다운 몸매를 갖는 것은 때로는 번거로울 수도 있습니다.
+
+# Line 40, said by You
+# en: (Well...)
+dialogue.CinderellaDialogueSecretbeach01.40 = (글쎄...)
+
+# Line 41, said by You
+# en: (She is correct in more than just the full statement.)
+dialogue.CinderellaDialogueSecretbeach01.41 = (그녀는 전체 진술 그 이상으로 정확합니다.)
+
+[Dialogue: MarcianaDialogueSecretbeach01]
+
+# Line 1, said by You
+# en: (...)
+dialogue.MarcianaDialogueSecretbeach01.1 = (...)
+
+# Line 2, said by You
+# en: (Is that...)
+dialogue.MarcianaDialogueSecretbeach01.2 = (그게...)
+
+# Line 3, said by You
+# en: (A... penguin?)
+dialogue.MarcianaDialogueSecretbeach01.3 = (... 펭귄?)
+
+# Line 4, said by Marciana
+# en: ... What am I supposed to do exactly?
+dialogue.MarcianaDialogueSecretbeach01.4 = ... 정확히 무엇을 해야 합니까?
+
+# Line 5, said by Marciana
+# en: I can't say I'm used to having a lot of free time on my hands...
+dialogue.MarcianaDialogueSecretbeach01.5 = 시간이 많이 남는 것에 익숙해졌다고는 말할 수 없지만...
+
+# Line 6, said by Marciana
+# en: Not really sure how I can go through with this forced vacation.
+dialogue.MarcianaDialogueSecretbeach01.6 = 이 강제 휴가를 어떻게 보낼 수 있을지 잘 모르겠습니다.
+
+# Line 7, said by Marciana
+# en: Hmmm...
+dialogue.MarcianaDialogueSecretbeach01.7 = 흠...
+
+# Line 8, said by Marciana
+# en: Well, this time there isn't really anyone around...
+dialogue.MarcianaDialogueSecretbeach01.8 = 그런데 이번에는 주변에 사람이 정말 없군요...
+
+# Line 9, said by Marciana
+# en: So no use being shy about this swimsuit.
+dialogue.MarcianaDialogueSecretbeach01.9 = 그러니까 이 수영복에 대해 부끄러워해도 소용없어요.
+
+# Line 10, said by You
+# en: (... What does she mean?)
+dialogue.MarcianaDialogueSecretbeach01.10 = (...무슨 뜻인가요?)
+
+# Line 15
+# en: *zip*
+# same in this language
+dialogue.MarcianaDialogueSecretbeach01.15 = *zip*
+
+# Line 11, said by You
+# en: (.ç..!)
+# same in this language
+dialogue.MarcianaDialogueSecretbeach01.11 = (.ç..!)
+
+# Line 12, said by Marciana
+# en: Still... Pretty embarrassing.
+dialogue.MarcianaDialogueSecretbeach01.12 = 그래도... 꽤 당황스럽네요.
+
+# Line 13, said by Marciana
+# en: I really have to buy other swimwear, but this request was too sudden.
+dialogue.MarcianaDialogueSecretbeach01.13 = 수영복을 하나 더 사야 하는데 너무 갑작스러운 부탁이군요.
+
+# Line 14, said by Marciana
+# en: Didn't have any time to prepare for this, so I just left in a hurry...
+dialogue.MarcianaDialogueSecretbeach01.14 = 준비할 시간이 없어서 그냥 급하게 나왔어요...
+
+# Line 16, said by Marciana
+# en: ...
+dialogue.MarcianaDialogueSecretbeach01.16 = ...
+
+# Line 17, said by Marciana
+# en: This place is pretty beautiful though...
+dialogue.MarcianaDialogueSecretbeach01.17 = 이곳은 꽤 아름답지만...
+
+# Line 18
+# en: *rustle*
+dialogue.MarcianaDialogueSecretbeach01.18 = *바스락거림*
+
+# Line 19
+# en: *scrunch*
+dialogue.MarcianaDialogueSecretbeach01.19 = *스크런치*
+
+# Line 20, said by Marciana
+# en: Haahh...
+dialogue.MarcianaDialogueSecretbeach01.20 = 하아...
+
+# Line 21, said by Marciana
+# en: I think... I had almost forgotten what relaxing felt like.
+dialogue.MarcianaDialogueSecretbeach01.21 = 내 생각에는... 휴식이 어떤 느낌인지 거의 잊어버린 것 같다.
+
+# Line 22, said by Marciana
+# en: I'm always having to worry about my students and their grades...
+dialogue.MarcianaDialogueSecretbeach01.22 = 나는 항상 내 학생들과 그들의 성적에 대해 걱정해야 해요...
+
+# Line 23, said by Marciana
+# en: I feel little guilty.
+dialogue.MarcianaDialogueSecretbeach01.23 = 죄책감이 거의 없습니다.
+
+# Line 24, said by Marciana
+# en: Even though they certainly are enjoying their holidays now...
+dialogue.MarcianaDialogueSecretbeach01.24 = 지금은 분명 휴가를 즐기고 있지만...
+
+# Line 25, said by Marciana
+# en: Hm. What am I thinking?
+dialogue.MarcianaDialogueSecretbeach01.25 = 흠. 나는 무엇을 생각하고 있습니까?
+
+# Line 26, said by Marciana
+# en: They'd want me to enjoy a little, so that's what I'll do.
+dialogue.MarcianaDialogueSecretbeach01.26 = 그들은 내가 조금 즐기기를 원하므로 나는 그렇게 할 것이다.
+
+# Line 27, said by Marciana
+# en: And to start... Hmmm...
+dialogue.MarcianaDialogueSecretbeach01.27 = 그리고 시작하려면... 흠...
+
+# Line 28, said by Marciana
+# en: Maybe making a sand castle?
+dialogue.MarcianaDialogueSecretbeach01.28 = 어쩌면 모래성을 만드는 걸까요?
+
+# Line 29, said by Marciana
+# en: Sounds a bit childish, but I've never made one before. I should try that out.
+dialogue.MarcianaDialogueSecretbeach01.29 = 좀 유치하게 들리겠지만, 저는 한번도 만들어본 적이 없습니다. 나는 그것을 시험해보아야 한다.
+
+# Line 30, said by Marciana
+# en: So... First I need to grab some water...
+dialogue.MarcianaDialogueSecretbeach01.30 = 그럼... 먼저 물을 좀 챙겨야 하는데...
+
+# Line 31, said by Marciana
+# en: ...
+dialogue.MarcianaDialogueSecretbeach01.31 = ...
+
+# Line 32, said by Marciana
+# en: Then, shape the sand and use the water to solidify it...
+dialogue.MarcianaDialogueSecretbeach01.32 = 그리고 모래를 빚고 물을 이용해 굳히면 되는데...
+
+# Line 33, said by Marciana
+# en: ...
+dialogue.MarcianaDialogueSecretbeach01.33 = ...
+
+# Line 34, said by You
+# en: (Well, isn't this a sight to behold?)
+dialogue.MarcianaDialogueSecretbeach01.34 = (글쎄, 정말 볼만한 광경이 아닌가?)
+
+# Line 35, said by Marciana
+# en: ... It seems to be coming along pretty well.
+dialogue.MarcianaDialogueSecretbeach01.35 = ... 꽤 잘 진행되고 있는 것 같습니다.
+
+# Line 36, said by Marciana
+# en: One tower done... Now the other...
+dialogue.MarcianaDialogueSecretbeach01.36 = 하나의 타워가 완성되었습니다... 이제 다른 타워는...
+
+# Line 37, said by You
+# en: (Wait... Is she right below that coconut tree?)
+dialogue.MarcianaDialogueSecretbeach01.37 = (잠깐... 저 코코넛 나무 바로 아래에 있는 걸까요?)
+
+# Line 38, said by You
+# en: ({D} always says it's dangerous to do that. You never know when a coconut might fa-)
+dialogue.MarcianaDialogueSecretbeach01.38 = ({D}는 항상 그렇게 하는 것이 위험하다고 말합니다. 코코넛이 언제 사라질지 알 수 없습니다-)
+
+# Line 39
+# en: *thunk*
+dialogue.MarcianaDialogueSecretbeach01.39 = *썽크*
+
+# Line 40, said by Marciana
+# en: OW!
+dialogue.MarcianaDialogueSecretbeach01.40 = 아야!
+
+# Line 41, said by Marciana
+# en: Wha- Oh.
+dialogue.MarcianaDialogueSecretbeach01.41 = 와- 아.
+
+# Line 42, said by Marciana
+# en: Ow... That really was on me...
+dialogue.MarcianaDialogueSecretbeach01.42 = 아야... 그건 정말 내 잘못이었어...
+
+# Line 43, said by Marciana
+# en: The main teacher at M.M.R. Vocational School, and I still was caught by this.
+dialogue.MarcianaDialogueSecretbeach01.43 = M.M.R.의 주요 교사입니다. 직업 학교, 나는 아직도 이것에 사로 잡혔습니다.
+
+# Line 44, said by Marciana
+# en: This... Is embarrassing...
+dialogue.MarcianaDialogueSecretbeach01.44 = 이거... 창피하네요...
+
+# Line 45, said by You
+# en: (H-How is she okay after this?)
+dialogue.MarcianaDialogueSecretbeach01.45 = (아-이후엔 괜찮아요?)
+
+# Line 46, said by You
+# en: (... I guess I really should start taking {D}'s warnings more seriously...)
+dialogue.MarcianaDialogueSecretbeach01.46 = (... {D} 님의 경고를 좀 더 심각하게 받아들여야 할 것 같아요...)
+
+[Dialogue: NagaDialogueSecretbeach]
+
+# Line 1, said by Naga
+# en: Hmmph...
+dialogue.NagaDialogueSecretbeach.1 = 흠...
+
+# Line 2, said by Naga
+# en: I worry about Tia...
+dialogue.NagaDialogueSecretbeach.2 = 티아이(가) 걱정됩니다...
+
+# Line 3, said by Naga
+# en: I know I agreed with Miss Marciana with this activity to decrease our mutual dependency, but...
+dialogue.NagaDialogueSecretbeach.3 = 나는 마르시아나 양과 우리의 상호 의존성을 줄이기 위해 이 활동에 동의했다는 것을 알고 있지만...
+
+# Line 4, said by Naga
+# en: Is it wrong to be so worried about how Tia will do by herself?
+dialogue.NagaDialogueSecretbeach.4 = 티아 혼자 어떻게 될지 걱정하는 게 잘못된 건가요?
+
+# Line 5, said by Naga
+# en: ...
+dialogue.NagaDialogueSecretbeach.5 = ...
+
+# Line 6, said by Naga
+# en: We were both assigned to separate areas with a low Rapture rate, so...
+dialogue.NagaDialogueSecretbeach.6 = 우리 둘 다 휴거율이 낮은 별도의 지역에 배정되었기 때문에...
+
+# Line 7, said by Naga
+# en: She should be fine...
+dialogue.NagaDialogueSecretbeach.7 = 그녀는 괜찮을 거야...
+
+# Line 8, said by Naga
+# en: ...
+dialogue.NagaDialogueSecretbeach.8 = ...
+
+# Line 9, said by Naga
+# en: Hmph. What am I thinking?
+dialogue.NagaDialogueSecretbeach.9 = 흥. 나는 무엇을 생각하고 있습니까?
+
+# Line 10, said by Naga
+# en: Of course she'll be okay. Tia is perfectly capable of handling her own.
+dialogue.NagaDialogueSecretbeach.10 = 물론 그녀는 괜찮을 겁니다. 티아은(는) 자신의 일을 완벽하게 처리할 수 있습니다.
+
+# Line 11, said by Naga
+# en: I should instead focus on relaxing, as instructed.
+dialogue.NagaDialogueSecretbeach.11 = 지시대로 휴식에 집중해야겠습니다.
+
+# Line 12, said by Naga
+# en: There's no reason to keep sulking anyway, might as well enjoy!
+dialogue.NagaDialogueSecretbeach.12 = 어차피 계속 부루퉁할 이유가 없으니 즐겨보는 게 좋을 것 같아요!
+
+# Line 13, said by Naga
+# en: Hmmm...
+dialogue.NagaDialogueSecretbeach.13 = 흠...
+
+# Line 14, said by Naga
+# en: Why not start with some volleyball?
+dialogue.NagaDialogueSecretbeach.14 = 배구부터 시작해 보는 건 어떨까요?
+
+# Line 15, said by Naga
+# en: It's a game that's meant to be played as a team, but practicing by myself can prove to be good for this exercise...
+dialogue.NagaDialogueSecretbeach.15 = 팀으로 플레이해야 하는 게임이지만 혼자서 연습하는 것도 이 연습에 도움이 될 수 있습니다...
+
+# Line 16, said by Naga
+# en: And for this... I brought this ball with me!
+dialogue.NagaDialogueSecretbeach.16 = 그리고 이것을 위해... 이 공을 가져왔습니다!
+
+# Line 17, said by Naga
+# en: And what fun is there playing only on the sand... Right?
+dialogue.NagaDialogueSecretbeach.17 = 그리고 모래 위에서만 노는 게 무슨 재미가 있겠는가... 그렇지?
+
+# Line 18, said by Naga
+# en: Hah!
+dialogue.NagaDialogueSecretbeach.18 = 하!
+
+# Line 19, said by Naga
+# en: One... Two... Three... Four...
+dialogue.NagaDialogueSecretbeach.19 = 하나... 둘... 셋... 넷...
+
+# Line 22, said by Naga
+# en: Five... ...Ten... ...Twenty...
+dialogue.NagaDialogueSecretbeach.22 = 다섯... ...열... ...스물...
+
+# Line 20, said by Naga
+# en: Twenty o- oops! Dropped it.
+dialogue.NagaDialogueSecretbeach.20 = 스무 아- 이런! 떨어뜨렸어요.
+
+# Line 21, said by Naga
+# en: Hah, it seems I can have fun by myself.
+dialogue.NagaDialogueSecretbeach.21 = 하하, 혼자서도 재미있게 놀 수 있을 것 같다.
+
+# Line 23, said by You
+# en: (She's not bad at this.)
+dialogue.NagaDialogueSecretbeach.23 = (그녀는 이 일을 잘하지 못합니다.)
+
+# Line 25, said by You
+# en: (Amelia would probably like meeting her.)
+dialogue.NagaDialogueSecretbeach.25 = (아멜리아는 아마도 그녀를 만나고 싶어할 것입니다.)
+
+# Line 24, said by Naga
+# en: Starting again.
+dialogue.NagaDialogueSecretbeach.24 = 다시 시작합니다.
+
+# Line 26, said by Naga
+# en: Huff!
+dialogue.NagaDialogueSecretbeach.26 = 윽!
+
+# Line 27, said by Naga
+# en: One... Two.. Three...
+dialogue.NagaDialogueSecretbeach.27 = 하나... 둘.. 셋...
+
+# Line 28, said by Naga
+# en: ...Fifteen... ...Thirty...
+dialogue.NagaDialogueSecretbeach.28 = ...열다섯... ...서른...
+
+# Line 29, said by Naga
+# en: Hmph! Thirty fi-aaAH!
+dialogue.NagaDialogueSecretbeach.29 = 흥! 30피아아아!
+
+# Line 30
+# en: *splash*
+dialogue.NagaDialogueSecretbeach.30 = *튀김*
+
+# Line 31, said by Naga
+# en: Aww...
+dialogue.NagaDialogueSecretbeach.31 = 으아...
+
+# Line 32, said by Naga
+# en: I was so close to beating my record...
+dialogue.NagaDialogueSecretbeach.32 = 내 기록을 깨기 직전이었는데...
+
+# Line 34, said by You
+# en: (Woah!)
+dialogue.NagaDialogueSecretbeach.34 = (와!)
+
+# Line 33, said by Naga
+# en: Whe- Did I drop my phone too?
+dialogue.NagaDialogueSecretbeach.33 = 뭐- 나도 휴대폰 떨어뜨렸나?
+
+# Line 35, said by Naga
+# en: It's good that this case is waterproof, but where is it?...
+dialogue.NagaDialogueSecretbeach.35 = 이 케이스는 방수라서 좋은데 어디있나요...
+
+# Line 37, said by You
+# en: (I'll help her out if she takes too long to find it... Though I hope she does...)
+dialogue.NagaDialogueSecretbeach.37 = (그녀가 그것을 찾는 데 너무 오래 걸리면 내가 도와주겠다... 하지만 그녀가 그러기를 바라지만...)
+
+[Dialogue: SirenDialogueSecretbeach01]
+
+# Line 1, said by Siren
+# en: Woo!
+dialogue.SirenDialogueSecretbeach01.1 = 우!
+
+# Line 2, said by Siren
+# en: What a beautiful sunset!
+dialogue.SirenDialogueSecretbeach01.2 = 정말 아름다운 일몰이네요!
+
+# Line 3, said by Siren
+# en: I should tell the others about this place!
+dialogue.SirenDialogueSecretbeach01.3 = 다른 사람들에게 이곳에 대해 알려야겠어요!
+
+# Line 4, said by Siren
+# en: I wouldn't want to keep it a secret from them...
+dialogue.SirenDialogueSecretbeach01.4 = 그들에게 비밀로 하고 싶지 않아요...
+
+# Line 5, said by Siren
+# en: If only we had walked just a bit longer when we scouted this place before...
+dialogue.SirenDialogueSecretbeach01.5 = 전에 이곳을 정찰할 때 조금만 더 걸었더라면...
+
+# Line 6, said by Siren
+# en: Oh?
+dialogue.SirenDialogueSecretbeach01.6 = 아?
+
+# Line 7, said by Siren
+# en: Aah!
+dialogue.SirenDialogueSecretbeach01.7 = 아아!
+
+# Line 8, said by Siren
+# en: This is one of those beaches full of seashells!
+dialogue.SirenDialogueSecretbeach01.8 = 이곳은 조개껍질이 가득한 해변 중 하나예요!
+
+# Line 9, said by Siren
+# en: This one is very pretty!
+dialogue.SirenDialogueSecretbeach01.9 = 이거 정말 예쁘네요!
+
+# Line 10, said by Siren
+# en: Hmmm...
+dialogue.SirenDialogueSecretbeach01.10 = 흠...
+
+# Line 11, said by Siren
+# en: Awoo! This one is beautiful too!
+dialogue.SirenDialogueSecretbeach01.11 = 아우! 이것도 아름답습니다!
+
+# Line 12, said by Siren
+# en: It's a shame I can't bring them all with me, but I'd like to bring at least a few for my friends!
+dialogue.SirenDialogueSecretbeach01.12 = 다 가져갈 수 없어서 아쉽지만, 친구들을 위해 최소한 몇 개는 가져가고 싶습니다!
+
+# Line 13, said by Siren
+# en: ... This one is nice.
+dialogue.SirenDialogueSecretbeach01.13 = ... 이거 좋은데.
+
+# Line 14, said by Siren
+# en: Hmmm... Maybe there are more in the water!
+dialogue.SirenDialogueSecretbeach01.14 = 흠... 아마도 물 속에 더 있을 수도 있겠네요!
+
+# Line 15, said by Siren
+# en: So shiny! This one is such a pretty white!
+dialogue.SirenDialogueSecretbeach01.15 = 반짝반짝 빛나네요! 이거 정말 흰색이더라구요!
+
+# Line 16, said by Siren
+# en: I think... I should have enough seashells for everyone.
+dialogue.SirenDialogueSecretbeach01.16 = 내 생각엔... 모두가 먹을 만큼의 조개껍질이 있어야 할 것 같아.
+
+# Line 17, said by Siren
+# en: I'll start heading back, don't want Levi to get worried...
+dialogue.SirenDialogueSecretbeach01.17 = 이제 돌아갈게요, 리바이가 걱정할까봐...
+
+# Line 18, said by Siren
+# en: She'll absolutely love this one though, it's so beautiful!
+dialogue.SirenDialogueSecretbeach01.18 = 그녀는 이 제품을 정말 좋아할 것입니다. 너무 아름다워요!
+
+# Line 19, said by Siren
+# en: The first thing I thought of when picking it up was her-
+dialogue.SirenDialogueSecretbeach01.19 = 내가 그것을 집어 들었을 때 가장 먼저 생각난 것은 그녀-
+
+# Line 20
+# en: *splash*
+dialogue.SirenDialogueSecretbeach01.20 = *튀김*
+
+# Line 21, said by Siren
+# en: EEK!
+dialogue.SirenDialogueSecretbeach01.21 = 윽!
+
+# Line 22, said by Siren
+# en: Ah! T-That wave really caught me by surprise...
+dialogue.SirenDialogueSecretbeach01.22 = 아! T, 그 파도가 정말 놀랐어요...
+
+# Line 23, said by Siren
+# en: ...?
+dialogue.SirenDialogueSecretbeach01.23 = ...?
+
+# Line 24, said by Siren
+# en: E-Eh!?
+dialogue.SirenDialogueSecretbeach01.24 = 에엣!?
+
+# Line 25, said by Siren
+# en: H-How did this happen!?
+dialogue.SirenDialogueSecretbeach01.25 = 흐, 이게 어떻게 된 일이야!?
+
+# Line 26
+# en: *rustle*
+dialogue.SirenDialogueSecretbeach01.26 = *바스락거림*
+
+# Line 27, said by Siren
+# en: I-I've went through plenty more action than this and t-that never happened before!
+dialogue.SirenDialogueSecretbeach01.27 = 나-나는 이것보다 훨씬 더 많은 행동을 겪었고, 이전에는 결코 일어나지 않았던 일이다!
+
+# Line 28, said by Siren
+# en: ... Woo...
+dialogue.SirenDialogueSecretbeach01.28 = ... 우...
+
+[Dialogue: TiaDialogueSecretbeach01]
+
+# Line 1, said by You
+# en: (...)
+dialogue.TiaDialogueSecretbeach01.1 = (...)
+
+# Line 2, said by You
+# en: (Hey, there's someone there.)
+dialogue.TiaDialogueSecretbeach01.2 = (저기 사람 있어요.)
+
+# Line 3, said by Tia
+# en: Ah! I'm finally ready to relax!
+dialogue.TiaDialogueSecretbeach01.3 = 아! 드디어 긴장을 풀 준비가 되었습니다!
+
+# Line 4, said by Tia
+# en: Took me sooo long to set up this spot...
+dialogue.TiaDialogueSecretbeach01.4 = 이 장소를 설정하는 데 너무 오랜 시간이 걸렸습니다...
+
+# Line 5, said by Tia
+# en: But I should be all set to have a good time!
+dialogue.TiaDialogueSecretbeach01.5 = 하지만 난 즐거운 시간을 보낼 준비가 다 되어 있어야 해!
+
+# Line 9, said by Tia
+# en: ...
+dialogue.TiaDialogueSecretbeach01.9 = ...
+
+# Line 10, said by Tia
+# en: This would all be so much easier with Naga...
+dialogue.TiaDialogueSecretbeach01.10 = 나가를 사용하면 이 모든 것이 훨씬 쉬울 것입니다...
+
+# Line 11, said by Tia
+# en: But Miss Marciana really wanted us to show that we're able to work on our own as adults...
+dialogue.TiaDialogueSecretbeach01.11 = 하지만 마르시아나 선생님은 우리가 어른이 되어도 스스로 일할 수 있다는 걸 보여주고 싶었어요...
+
+# Line 12, said by Tia
+# en: Ugh... Well, I trust my teacher.
+dialogue.TiaDialogueSecretbeach01.12 = 윽... 글쎄요, 저는 선생님을 믿습니다.
+
+# Line 6, said by Tia
+# en: So now, let's check again. Should be a low Rapture area, but I need to be safe either way~
+dialogue.TiaDialogueSecretbeach01.6 = 그럼 이제 다시 확인해 보겠습니다. 낮은 휴거 지역이어야 하지만, 어느 쪽이든 안전해야 합니다~
+
+# Line 7, said by Tia
+# en: I set up decoys...
+dialogue.TiaDialogueSecretbeach01.7 = 미끼를 설치했습니다...
+
+# Line 8, said by Tia
+# en: Brought rations...
+dialogue.TiaDialogueSecretbeach01.8 = 식량을 가져왔습니다...
+
+# Line 13, said by Tia
+# en: Prepared the tent...
+dialogue.TiaDialogueSecretbeach01.13 = 텐트를 준비했습니다...
+
+# Line 14, said by Tia
+# en: There's nothing missing... I think?
+dialogue.TiaDialogueSecretbeach01.14 = 빠진 게 하나도 없군요... 제 생각엔요?
+
+# Line 15, said by Tia
+# en: Welp, time to enjoy!
+dialogue.TiaDialogueSecretbeach01.15 = 웰프, 즐길 시간이야!
+
+# Line 16
+# en: *rustle*
+dialogue.TiaDialogueSecretbeach01.16 = *바스락거림*
+
+# Line 17, said by Tia
+# en: Haahh...
+dialogue.TiaDialogueSecretbeach01.17 = 하아...
+
+# Line 18, said by Tia
+# en: Now a well deserved rest!
+dialogue.TiaDialogueSecretbeach01.18 = 이제 충분한 휴식을 취하세요!
+
+# Line 19, said by Tia
+# en: ...
+dialogue.TiaDialogueSecretbeach01.19 = ...
+
+# Line 20, said by Tia
+# en: Isn't this place beautiful?
+dialogue.TiaDialogueSecretbeach01.20 = 이곳은 아름답지 않나요?
+
+# Line 21, said by Tia
+# en: So many trees and mountains!
+dialogue.TiaDialogueSecretbeach01.21 = 나무와 산이 너무 많아요!
+
+# Line 22, said by Tia
+# en: Makes me wonder if there are any-
+dialogue.TiaDialogueSecretbeach01.22 = 혹시 어떤-
+
+# Line 23, said by Tia
+# en: LIZARD!
+dialogue.TiaDialogueSecretbeach01.23 = 도마뱀!
+
+# Line 24, said by Tia
+# en: Come here little iguana, I won't bite you~
+dialogue.TiaDialogueSecretbeach01.24 = 이리와라 꼬마 이구아나, 안물어~
+
+# Line 25, said by Tia
+# en: Huff... Huff... W-Wait-
+dialogue.TiaDialogueSecretbeach01.25 = 윽... 윽... 으-잠깐-
+
+# Line 26, said by Tia
+# en: Don't go in the waterrrr!
+dialogue.TiaDialogueSecretbeach01.26 = 물에 들어가지 마세요아아!
+
+# Line 28, said by Tia
+# en: That's not your habitat!
+dialogue.TiaDialogueSecretbeach01.28 = 그곳은 당신의 서식지가 아닙니다!
+
+# Line 27, said by Tia
+# en: L-Let me help you, little iguana!
+dialogue.TiaDialogueSecretbeach01.27 = ㅋㅋㅋ 내가 도와줄게, 꼬마 이구아나!
+
+# Line 29, said by Tia
+# en: Huff... You're so... Huff... Fast...
+dialogue.TiaDialogueSecretbeach01.29 = 윽... 너 정말... 윽... 빨라...
+
+# Line 30, said by Tia
+# en: Got ya-AAH!
+dialogue.TiaDialogueSecretbeach01.30 = 알았어-아아!
+
+# Line 31
+# en: *splash*
+dialogue.TiaDialogueSecretbeach01.31 = *튀김*
+
+# Line 32, said by Tia
+# en: Uhh... Oh, hello there Mister Iguana!
+dialogue.TiaDialogueSecretbeach01.32 = 어... 아, 안녕하세요 이구아나 씨!
+
+# Line 33, said by Tia
+# en: You're the absolutely cutest!
+dialogue.TiaDialogueSecretbeach01.33 = 당신은 정말 귀여워요!
+
+# Line 34, said by Tia
+# en: Wait a second... You're a marine iguana!
+dialogue.TiaDialogueSecretbeach01.34 = 잠깐만요... 당신은 바다 이구아나입니다!
+
+# Line 35, said by Tia
+# en: That's why you were running to the water! I'm so sorry!
+dialogue.TiaDialogueSecretbeach01.35 = 그래서 물가로 달려가셨군요! 정말 미안해요!
+
+# Line 36, said by Tia
+# en: Teehee~
+dialogue.TiaDialogueSecretbeach01.36 = 티히~
+
+# Line 37, said by You
+# en: (D-Does she really not realize tha-)
+dialogue.TiaDialogueSecretbeach01.37 = (D-그녀는 정말 그걸 깨닫지 못하는 걸까-)
+
+# Line 38, said by You
+# en: (Hm...)
+dialogue.TiaDialogueSecretbeach01.38 = (흠...)
+
 [Quest: Taking a break (Androids)]
 
 # The quest's title in the journal
@@ -10531,3 +11241,9 @@ ui.giftui.GiftWindow.Gifts.Wine.Text__TMP_.text = 와인
 # The text of GiftWindow/Gifts/Wine/Button/Text (TMP)
 # en: Gift
 ui.giftui.GiftWindow.Gifts.Wine.Button.Text__TMP_.text = 선물
+
+[Transitions]
+
+# Words on a black screen, at line 28 of CinderellaDialogueSecretbeach01
+# en: 3 minutes later...
+dialogue.CinderellaDialogueSecretbeach01.28.transition = 3분 후...
