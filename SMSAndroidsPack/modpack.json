@@ -740,6 +740,16 @@
         {
           "key": "Flirty",
           "expressionGoName": "Flirty"
+        },
+        {
+          "key": "embarrassed",
+          "expressionGoName": "embarrassed",
+          "icon": "embarrassed"
+        },
+        {
+          "key": "smug",
+          "expressionGoName": "smug",
+          "icon": "smug"
         }
       ],
       "typewriter": {
@@ -11873,6 +11883,13 @@
       "defaultValue": "false",
       "persisted": false,
       "description": "A TV show has just finished in the living room; AnisRandomMovie01 plays on it and clears it."
+    },
+    {
+      "name": "Gifting_Outfit_Anis",
+      "type": "String",
+      "defaultValue": "AnisBase",
+      "persisted": false,
+      "description": "What Anis wore in the dialogue that opened the gift window; her after-gift lines wear it ($Gifting_Outfit_Anis)."
     }
   ],
   "dialogues": [
@@ -17696,6 +17713,13 @@
               }
             },
             {
+              "type": "SetVariable",
+              "params": {
+                "name": "Gifting_Outfit_Anis",
+                "value": "AnisBase"
+              }
+            },
+            {
               "type": "SetGameObjectActive",
               "params": {
                 "signal": "SMSAndroidsCore.OpenGiftUI",
@@ -17874,7 +17898,7 @@
           "kind": "Text",
           "actor": "anis",
           "expression": "neutral",
-          "outfit": "AnisBase",
+          "outfit": "$Gifting_Outfit_Anis",
           "text": "Aaaah, yes. Some liquid courage.",
           "conditions": [
             {
@@ -17893,6 +17917,14 @@
                 "name": "Affection_Anis",
                 "delta": "1"
               }
+            },
+            {
+              "type": "SetGameObjectActive",
+              "params": {
+                "kind": "Direct Path",
+                "active": "true",
+                "target": "6_Effects/CFXR2 Expression Affectionate (Timed)"
+              }
             }
           ],
           "actionsOnFinish": [],
@@ -17905,7 +17937,7 @@
           "kind": "Text",
           "actor": "anis",
           "expression": "neutral",
-          "outfit": "AnisBase",
+          "outfit": "$Gifting_Outfit_Anis",
           "text": "Thanks! We should drink together some time.",
           "conditions": [],
           "actionsOnStart": [],
@@ -17925,7 +17957,7 @@
           "kind": "Text",
           "actor": "anis",
           "expression": "Happy",
-          "outfit": "AnisBase",
+          "outfit": "$Gifting_Outfit_Anis",
           "text": "Oh, hey! I was actually looking for some good body oil.",
           "conditions": [
             {
@@ -17944,6 +17976,14 @@
                 "name": "Affection_Anis",
                 "delta": "1"
               }
+            },
+            {
+              "type": "SetGameObjectActive",
+              "params": {
+                "kind": "Direct Path",
+                "active": "true",
+                "target": "6_Effects/CFXR2 Expression Affectionate (Timed)"
+              }
             }
           ],
           "actionsOnFinish": [],
@@ -17957,7 +17997,7 @@
           "kind": "Text",
           "actor": "anis",
           "expression": "Flirty",
-          "outfit": "AnisBase",
+          "outfit": "$Gifting_Outfit_Anis",
           "text": "All that's left now is somebody to help me apply it...",
           "conditions": [],
           "actionsOnStart": [],
@@ -17969,7 +18009,7 @@
           "kind": "Text",
           "actor": "anis",
           "expression": "neutral",
-          "outfit": "AnisBase",
+          "outfit": "$Gifting_Outfit_Anis",
           "text": "Hehe, <size=80%>j-just kidding, of course.",
           "conditions": [],
           "actionsOnStart": [],
@@ -17989,7 +18029,7 @@
           "kind": "Text",
           "actor": "anis",
           "expression": "Sad",
-          "outfit": "AnisBase",
+          "outfit": "$Gifting_Outfit_Anis",
           "text": "Hmmm, I know I shouldn't, but...",
           "conditions": [
             {
@@ -18008,6 +18048,14 @@
                 "name": "Affection_Anis",
                 "delta": "1"
               }
+            },
+            {
+              "type": "SetGameObjectActive",
+              "params": {
+                "kind": "Direct Path",
+                "active": "true",
+                "target": "6_Effects/CFXR2 Expression Affectionate (Timed)"
+              }
             }
           ],
           "actionsOnFinish": [],
@@ -18021,7 +18069,7 @@
           "kind": "Text",
           "actor": "anis",
           "expression": "neutral",
-          "outfit": "AnisBase",
+          "outfit": "$Gifting_Outfit_Anis",
           "text": "Ahh, screw this. Give me that!",
           "conditions": [],
           "actionsOnStart": [],
@@ -18033,7 +18081,7 @@
           "kind": "Text",
           "actor": "anis",
           "expression": "neutral",
-          "outfit": "AnisBase",
+          "outfit": "$Gifting_Outfit_Anis",
           "text": "Hehe, thanks {PC}!",
           "conditions": [],
           "actionsOnStart": [],
@@ -18053,7 +18101,7 @@
           "kind": "Text",
           "actor": "anis",
           "expression": "Happy",
-          "outfit": "AnisBase",
+          "outfit": "$Gifting_Outfit_Anis",
           "text": "Hey, these are super cool!",
           "conditions": [
             {
@@ -18072,6 +18120,14 @@
                 "name": "Affection_Anis",
                 "delta": "1"
               }
+            },
+            {
+              "type": "SetGameObjectActive",
+              "params": {
+                "kind": "Direct Path",
+                "active": "true",
+                "target": "6_Effects/CFXR2 Expression Affectionate (Timed)"
+              }
             }
           ],
           "actionsOnFinish": [],
@@ -18084,7 +18140,7 @@
           "kind": "Text",
           "actor": "anis",
           "expression": "neutral",
-          "outfit": "AnisBase",
+          "outfit": "$Gifting_Outfit_Anis",
           "text": "No takesies-backsies, okay?",
           "conditions": [],
           "actionsOnStart": [],
@@ -18104,7 +18160,7 @@
           "kind": "Text",
           "actor": "anis",
           "expression": "neutral",
-          "outfit": "AnisBase",
+          "outfit": "$Gifting_Outfit_Anis",
           "text": "Ooooh, fancy!",
           "conditions": [
             {
@@ -18123,6 +18179,14 @@
                 "name": "Affection_Anis",
                 "delta": "1"
               }
+            },
+            {
+              "type": "SetGameObjectActive",
+              "params": {
+                "kind": "Direct Path",
+                "active": "true",
+                "target": "6_Effects/CFXR2 Expression Affectionate (Timed)"
+              }
             }
           ],
           "actionsOnFinish": [],
@@ -18137,7 +18201,7 @@
           "kind": "Text",
           "actor": "anis",
           "expression": "neutral",
-          "outfit": "AnisBase",
+          "outfit": "$Gifting_Outfit_Anis",
           "text": "Hmm...",
           "conditions": [],
           "actionsOnStart": [],
@@ -18149,7 +18213,7 @@
           "kind": "Text",
           "actor": "anis",
           "expression": "neutral",
-          "outfit": "AnisBase",
+          "outfit": "$Gifting_Outfit_Anis",
           "text": "Pretty sad to drink this alone though...",
           "conditions": [],
           "actionsOnStart": [],
@@ -18161,7 +18225,7 @@
           "kind": "Text",
           "actor": "anis",
           "expression": "neutral",
-          "outfit": "AnisBase",
+          "outfit": "$Gifting_Outfit_Anis",
           "text": "Wanna join? <size=80%>N-No second intentions of course.",
           "conditions": [],
           "actionsOnStart": [],
@@ -18181,7 +18245,7 @@
           "kind": "Text",
           "actor": "anis",
           "expression": "Sad",
-          "outfit": "AnisBase",
+          "outfit": "$Gifting_Outfit_Anis",
           "text": "Thanks, but...",
           "conditions": [
             {
@@ -18242,7 +18306,7 @@
           "kind": "Text",
           "actor": "anis",
           "expression": "Sad",
-          "outfit": "AnisBase",
+          "outfit": "$Gifting_Outfit_Anis",
           "text": "Uhh...<size=80%> I'm not really sure what to do with that.",
           "conditions": [],
           "actionsOnStart": [],
@@ -18254,7 +18318,7 @@
           "kind": "Text",
           "actor": "anis",
           "expression": "neutral",
-          "outfit": "AnisBase",
+          "outfit": "$Gifting_Outfit_Anis",
           "text": "Still appreciate it though.",
           "conditions": [],
           "actionsOnStart": [],
@@ -19181,6 +19245,13 @@
               "params": {
                 "name": "Gifting_Target",
                 "value": "Anis"
+              }
+            },
+            {
+              "type": "SetVariable",
+              "params": {
+                "name": "Gifting_Outfit_Anis",
+                "value": "$HarborHome_Outfit_Anis"
               }
             },
             {
@@ -20516,6 +20587,13 @@
               "params": {
                 "name": "Gifting_Target",
                 "value": "Anis"
+              }
+            },
+            {
+              "type": "SetVariable",
+              "params": {
+                "name": "Gifting_Outfit_Anis",
+                "value": "$HarborHome_Outfit_Anis"
               }
             },
             {
@@ -60497,21 +60575,6 @@
           }
         }
       ],
-      "rootNodeIds": [
-        -1518221233,
-        -923017098,
-        -1844799193,
-        -1330702005,
-        1336706142,
-        2100645406,
-        1216876921,
-        96730130,
-        -1659162455,
-        -1375600656,
-        -1881985281,
-        910000001
-      ],
-      "queueBehind": true,
       "nodes": [
         {
           "id": -1518221233,
@@ -60812,30 +60875,6 @@
           "timeout": 1.5
         },
         {
-          "id": 323401550,
-          "kind": "Text",
-          "actor": "tvVarrus",
-          "expression": "neutral",
-          "outfit": "",
-          "text": "But… doesn’t the sound of her cheeks clapping alert nearby guards? I can hear her coming from a mile away!",
-          "conditions": [],
-          "actionsOnStart": [],
-          "actionsOnFinish": [],
-          "children": []
-        },
-        {
-          "id": -1656900528,
-          "kind": "Text",
-          "actor": "tvSpectre",
-          "expression": "neutral",
-          "outfit": "",
-          "text": "That’s where you’re mistaken, my friend. It’s a distraction tactic—similar to how bats use their echolocation to obscure their true position.",
-          "conditions": [],
-          "actionsOnStart": [],
-          "actionsOnFinish": [],
-          "children": []
-        },
-        {
           "id": 96730130,
           "kind": "Text",
           "actor": "tvSpectre",
@@ -60861,24 +60900,24 @@
           ]
         },
         {
-          "id": 1211188328,
+          "id": 323401550,
           "kind": "Text",
           "actor": "tvVarrus",
           "expression": "neutral",
           "outfit": "",
-          "text": "And for that you'll need to have a threesome with them?",
+          "text": "But… doesn’t the sound of her cheeks clapping alert nearby guards? I can hear her coming from a mile away!",
           "conditions": [],
           "actionsOnStart": [],
           "actionsOnFinish": [],
           "children": []
         },
         {
-          "id": -710981433,
+          "id": -1656900528,
           "kind": "Text",
           "actor": "tvSpectre",
           "expression": "neutral",
           "outfit": "",
-          "text": "Exactly.",
+          "text": "That’s where you’re mistaken, my friend. It’s a distraction tactic—similar to how bats use their echolocation to obscure their true position.",
           "conditions": [],
           "actionsOnStart": [],
           "actionsOnFinish": [],
@@ -60910,24 +60949,24 @@
           ]
         },
         {
-          "id": 1837262067,
+          "id": 1211188328,
           "kind": "Text",
           "actor": "tvVarrus",
           "expression": "neutral",
           "outfit": "",
-          "text": "But what does she need an artifical pussy for?",
+          "text": "And for that you'll need to have a threesome with them?",
           "conditions": [],
           "actionsOnStart": [],
           "actionsOnFinish": [],
           "children": []
         },
         {
-          "id": -1575978830,
+          "id": -710981433,
           "kind": "Text",
           "actor": "tvSpectre",
           "expression": "neutral",
           "outfit": "",
-          "text": "Uh… well… let’s just say it was part of the standard package.",
+          "text": "Exactly.",
           "conditions": [],
           "actionsOnStart": [],
           "actionsOnFinish": [],
@@ -60957,6 +60996,30 @@
             1837262067,
             -1575978830
           ]
+        },
+        {
+          "id": 1837262067,
+          "kind": "Text",
+          "actor": "tvVarrus",
+          "expression": "neutral",
+          "outfit": "",
+          "text": "But what does she need an artifical pussy for?",
+          "conditions": [],
+          "actionsOnStart": [],
+          "actionsOnFinish": [],
+          "children": []
+        },
+        {
+          "id": -1575978830,
+          "kind": "Text",
+          "actor": "tvSpectre",
+          "expression": "neutral",
+          "outfit": "",
+          "text": "Uh… well… let’s just say it was part of the standard package.",
+          "conditions": [],
+          "actionsOnStart": [],
+          "actionsOnFinish": [],
+          "children": []
         },
         {
           "id": -1881985281,
@@ -61045,7 +61108,22 @@
           "duration": "Timeout",
           "timeout": 0.1
         }
-      ]
+      ],
+      "rootNodeIds": [
+        -1518221233,
+        -923017098,
+        -1844799193,
+        -1330702005,
+        1336706142,
+        2100645406,
+        1216876921,
+        96730130,
+        -1659162455,
+        -1375600656,
+        -1881985281,
+        910000001
+      ],
+      "queueBehind": true
     },
     {
       "key": "HHMovieFantasy",
@@ -61066,27 +61144,6 @@
           }
         }
       ],
-      "rootNodeIds": [
-        -1518221233,
-        -923017098,
-        -1872853847,
-        498396662,
-        2077896015,
-        553821948,
-        -1330702005,
-        1336706142,
-        2100645406,
-        410628855,
-        1216876921,
-        -833538060,
-        262677958,
-        96730130,
-        -1659162455,
-        -1375600656,
-        -1881985281,
-        910000002
-      ],
-      "queueBehind": true,
       "nodes": [
         {
           "id": -1518221233,
@@ -61601,7 +61658,28 @@
           "duration": "Timeout",
           "timeout": 0.1
         }
-      ]
+      ],
+      "rootNodeIds": [
+        -1518221233,
+        -923017098,
+        -1872853847,
+        498396662,
+        2077896015,
+        553821948,
+        -1330702005,
+        1336706142,
+        2100645406,
+        410628855,
+        1216876921,
+        -833538060,
+        262677958,
+        96730130,
+        -1659162455,
+        -1375600656,
+        -1881985281,
+        910000002
+      ],
+      "queueBehind": true
     },
     {
       "key": "HHMovieNews",
@@ -61622,23 +61700,6 @@
           }
         }
       ],
-      "rootNodeIds": [
-        -1518221233,
-        -1720097975,
-        1723904990,
-        181385099,
-        501514350,
-        -915811141,
-        740220104,
-        1621869749,
-        -1127923837,
-        1155217834,
-        -844417606,
-        -1824310066,
-        -1881985281,
-        910000003
-      ],
-      "queueBehind": true,
       "nodes": [
         {
           "id": -1518221233,
@@ -61730,30 +61791,6 @@
           "children": []
         },
         {
-          "id": -1843089295,
-          "kind": "Text",
-          "actor": "claudia",
-          "expression": "neutral",
-          "outfit": "",
-          "text": "Ohhh, Veronica! Sweetie, darling, starlight of our lives, what happened? Was your oat milk latte one degree too cold? Did someone have the AUDACITY to breathe in your presence?",
-          "conditions": [],
-          "actionsOnStart": [],
-          "actionsOnFinish": [],
-          "children": []
-        },
-        {
-          "id": 1155760527,
-          "kind": "Text",
-          "actor": "claudia",
-          "expression": "Happy",
-          "outfit": "",
-          "text": "Such tragedy. Such betrayal. How will we ever recover from this heinous act of rebellion?",
-          "conditions": [],
-          "actionsOnStart": [],
-          "actionsOnFinish": [],
-          "children": []
-        },
-        {
           "id": 1723904990,
           "kind": "Text",
           "actor": "claudia",
@@ -61796,24 +61833,24 @@
           ]
         },
         {
-          "id": 1747372985,
+          "id": -1843089295,
           "kind": "Text",
           "actor": "claudia",
           "expression": "neutral",
           "outfit": "",
-          "text": "Eyewitnesses report that her perfectly radiant skin was so blindingly divine, a few unfortunate peasants ran headfirst into the ocean!",
+          "text": "Ohhh, Veronica! Sweetie, darling, starlight of our lives, what happened? Was your oat milk latte one degree too cold? Did someone have the AUDACITY to breathe in your presence?",
           "conditions": [],
           "actionsOnStart": [],
           "actionsOnFinish": [],
           "children": []
         },
         {
-          "id": -95351522,
+          "id": 1155760527,
           "kind": "Text",
           "actor": "claudia",
           "expression": "Happy",
           "outfit": "",
-          "text": "Folks, let’s take a moment of silence for those poor souls… and then let’s get them some sunglasses because Celeste isn’t dimming her shine for anyone!",
+          "text": "Such tragedy. Such betrayal. How will we ever recover from this heinous act of rebellion?",
           "conditions": [],
           "actionsOnStart": [],
           "actionsOnFinish": [],
@@ -61854,24 +61891,24 @@
           ]
         },
         {
-          "id": -219230664,
+          "id": 1747372985,
           "kind": "Text",
           "actor": "claudia",
           "expression": "neutral",
           "outfit": "",
-          "text": "That’s right, folks. Peak News is great, but Peak Me? Even better. Exclusive content, behind-the-scenes chaos, and maybe, just maybe… a few tasteful disasters.",
+          "text": "Eyewitnesses report that her perfectly radiant skin was so blindingly divine, a few unfortunate peasants ran headfirst into the ocean!",
           "conditions": [],
           "actionsOnStart": [],
           "actionsOnFinish": [],
           "children": []
         },
         {
-          "id": -2111662183,
+          "id": -95351522,
           "kind": "Text",
           "actor": "claudia",
           "expression": "Happy",
           "outfit": "",
-          "text": "So, for those who can’t get enough of me here—get ready. And for my haters? Well, congratulations! Now you get even more Claudia to complain about.",
+          "text": "Folks, let’s take a moment of silence for those poor souls… and then let’s get them some sunglasses because Celeste isn’t dimming her shine for anyone!",
           "conditions": [],
           "actionsOnStart": [],
           "actionsOnFinish": [],
@@ -61912,24 +61949,24 @@
           ]
         },
         {
-          "id": 694785351,
+          "id": -219230664,
           "kind": "Text",
           "actor": "claudia",
           "expression": "neutral",
           "outfit": "",
-          "text": "No cryptic selfies. No poetic midnight rants. Not even a single ‘Gaze into the abyss, my loves’ post in over 48 hours!",
+          "text": "That’s right, folks. Peak News is great, but Peak Me? Even better. Exclusive content, behind-the-scenes chaos, and maybe, just maybe… a few tasteful disasters.",
           "conditions": [],
           "actionsOnStart": [],
           "actionsOnFinish": [],
           "children": []
         },
         {
-          "id": -264625326,
+          "id": -2111662183,
           "kind": "Text",
           "actor": "claudia",
           "expression": "Happy",
           "outfit": "",
-          "text": "Has she ascended to the shadow realm? Did she summon something she shouldn’t have?  More as this story develops.",
+          "text": "So, for those who can’t get enough of me here—get ready. And for my haters? Well, congratulations! Now you get even more Claudia to complain about.",
           "conditions": [],
           "actionsOnStart": [],
           "actionsOnFinish": [],
@@ -61970,24 +62007,24 @@
           ]
         },
         {
-          "id": -588183515,
+          "id": 694785351,
           "kind": "Text",
           "actor": "claudia",
           "expression": "neutral",
           "outfit": "",
-          "text": "Witnesses report that this criminal mastermind has been toppling trash cans, stealing entire rotisserie chickens, and sitting wherever he pleases—blocking roads, businesses, and even city hall!",
+          "text": "No cryptic selfies. No poetic midnight rants. Not even a single ‘Gaze into the abyss, my loves’ post in over 48 hours!",
           "conditions": [],
           "actionsOnStart": [],
           "actionsOnFinish": [],
           "children": []
         },
         {
-          "id": 1924481042,
+          "id": -264625326,
           "kind": "Text",
           "actor": "claudia",
           "expression": "Happy",
           "outfit": "",
-          "text": "Authorities have attempted bribes of tuna, belly rubs, and even a gold-plated scratching post—but the beast remains uncontrollable. If you see it… do not engage. Just offer tribute and pray.",
+          "text": "Has she ascended to the shadow realm? Did she summon something she shouldn’t have?  More as this story develops.",
           "conditions": [],
           "actionsOnStart": [],
           "actionsOnFinish": [],
@@ -62028,36 +62065,24 @@
           ]
         },
         {
-          "id": 1920398614,
+          "id": -588183515,
           "kind": "Text",
           "actor": "claudia",
           "expression": "neutral",
           "outfit": "",
-          "text": "Now, before you overreact, let’s remember—Fusk has always been ahead of the curve. ",
+          "text": "Witnesses report that this criminal mastermind has been toppling trash cans, stealing entire rotisserie chickens, and sitting wherever he pleases—blocking roads, businesses, and even city hall!",
           "conditions": [],
           "actionsOnStart": [],
           "actionsOnFinish": [],
           "children": []
         },
         {
-          "id": 2118553369,
+          "id": 1924481042,
           "kind": "Text",
           "actor": "claudia",
           "expression": "Happy",
           "outfit": "",
-          "text": "He gave us self-driving cars that may or may not drive into lakes, rocket ships that explode for progress, and now… the next logical step—Soylent You!",
-          "conditions": [],
-          "actionsOnStart": [],
-          "actionsOnFinish": [],
-          "children": []
-        },
-        {
-          "id": 857677181,
-          "kind": "Text",
-          "actor": "claudia",
-          "expression": "neutral",
-          "outfit": "",
-          "text": "And, really, can we blame him? People are expensive, loud, and frankly, a little inefficient. Maybe it’s time we start giving back… in the most tastyway possible.",
+          "text": "Authorities have attempted bribes of tuna, belly rubs, and even a gold-plated scratching post—but the beast remains uncontrollable. If you see it… do not engage. Just offer tribute and pray.",
           "conditions": [],
           "actionsOnStart": [],
           "actionsOnFinish": [],
@@ -62099,24 +62124,36 @@
           ]
         },
         {
-          "id": -1704793414,
+          "id": 1920398614,
           "kind": "Text",
           "actor": "claudia",
           "expression": "neutral",
           "outfit": "",
-          "text": "We’re seeing a spike in all the usual fun activities—unmarked cargo, shifty-eyed men in trench coats, and a dramatic increase in sex workers who, let’s be honest, probably have better healthcare than most of us.",
+          "text": "Now, before you overreact, let’s remember—Fusk has always been ahead of the curve. ",
           "conditions": [],
           "actionsOnStart": [],
           "actionsOnFinish": [],
           "children": []
         },
         {
-          "id": -1916138561,
+          "id": 2118553369,
           "kind": "Text",
           "actor": "claudia",
           "expression": "Happy",
           "outfit": "",
-          "text": "Who are they? What do they want? Will they accept bribes in the form of baked goods? We don’t know! But one thing’s for sure—Peak City’s harbor is no longer just for fishy business… it’s for business business.",
+          "text": "He gave us self-driving cars that may or may not drive into lakes, rocket ships that explode for progress, and now… the next logical step—Soylent You!",
+          "conditions": [],
+          "actionsOnStart": [],
+          "actionsOnFinish": [],
+          "children": []
+        },
+        {
+          "id": 857677181,
+          "kind": "Text",
+          "actor": "claudia",
+          "expression": "neutral",
+          "outfit": "",
+          "text": "And, really, can we blame him? People are expensive, loud, and frankly, a little inefficient. Maybe it’s time we start giving back… in the most tastyway possible.",
           "conditions": [],
           "actionsOnStart": [],
           "actionsOnFinish": [],
@@ -62148,24 +62185,24 @@
           ]
         },
         {
-          "id": -1263050770,
+          "id": -1704793414,
           "kind": "Text",
           "actor": "claudia",
-          "expression": "Happy",
+          "expression": "neutral",
           "outfit": "",
-          "text": "It’s been {days} days now, which means she’s spent more time in space than she has in the Oval Office this term.",
+          "text": "We’re seeing a spike in all the usual fun activities—unmarked cargo, shifty-eyed men in trench coats, and a dramatic increase in sex workers who, let’s be honest, probably have better healthcare than most of us.",
           "conditions": [],
           "actionsOnStart": [],
           "actionsOnFinish": [],
           "children": []
         },
         {
-          "id": 2013281720,
+          "id": -1916138561,
           "kind": "Text",
           "actor": "claudia",
-          "expression": "neutral",
+          "expression": "Happy",
           "outfit": "",
-          "text": "Say what you will about her politics, but Eleanor Prescott has proven one thing: the sky is literally no longer the limit. ",
+          "text": "Who are they? What do they want? Will they accept bribes in the form of baked goods? We don’t know! But one thing’s for sure—Peak City’s harbor is no longer just for fishy business… it’s for business business.",
           "conditions": [],
           "actionsOnStart": [],
           "actionsOnFinish": [],
@@ -62197,24 +62234,24 @@
           ]
         },
         {
-          "id": 747549347,
+          "id": -1263050770,
           "kind": "Text",
           "actor": "claudia",
           "expression": "Happy",
           "outfit": "",
-          "text": "The last cartons are being traded like rare collectibles, and cafés are serving ‘milk-style beverages’ nobody asked for.",
+          "text": "It’s been {days} days now, which means she’s spent more time in space than she has in the Oval Office this term.",
           "conditions": [],
           "actionsOnStart": [],
           "actionsOnFinish": [],
           "children": []
         },
         {
-          "id": -1429073822,
+          "id": 2013281720,
           "kind": "Text",
           "actor": "claudia",
           "expression": "neutral",
           "outfit": "",
-          "text": "Officials insist the problem only affects cow milk, not human milk… which is the kind of clarification that just raises more questions. ",
+          "text": "Say what you will about her politics, but Eleanor Prescott has proven one thing: the sky is literally no longer the limit. ",
           "conditions": [],
           "actionsOnStart": [],
           "actionsOnFinish": [],
@@ -62244,6 +62281,30 @@
             747549347,
             -1429073822
           ]
+        },
+        {
+          "id": 747549347,
+          "kind": "Text",
+          "actor": "claudia",
+          "expression": "Happy",
+          "outfit": "",
+          "text": "The last cartons are being traded like rare collectibles, and cafés are serving ‘milk-style beverages’ nobody asked for.",
+          "conditions": [],
+          "actionsOnStart": [],
+          "actionsOnFinish": [],
+          "children": []
+        },
+        {
+          "id": -1429073822,
+          "kind": "Text",
+          "actor": "claudia",
+          "expression": "neutral",
+          "outfit": "",
+          "text": "Officials insist the problem only affects cow milk, not human milk… which is the kind of clarification that just raises more questions. ",
+          "conditions": [],
+          "actionsOnStart": [],
+          "actionsOnFinish": [],
+          "children": []
         },
         {
           "id": -1824310066,
@@ -62358,7 +62419,24 @@
           "duration": "Timeout",
           "timeout": 0.1
         }
-      ]
+      ],
+      "rootNodeIds": [
+        -1518221233,
+        -1720097975,
+        1723904990,
+        181385099,
+        501514350,
+        -915811141,
+        740220104,
+        1621869749,
+        -1127923837,
+        1155217834,
+        -844417606,
+        -1824310066,
+        -1881985281,
+        910000003
+      ],
+      "queueBehind": true
     }
   ],
   "scenes": [
@@ -69415,6 +69493,7 @@
       "id": "giftshop",
       "name": "Gift shop",
       "hidesWithGameplayUi": false,
+      "sortingOrder": 100,
       "template": "copy",
       "nodes": [
         {
@@ -69598,6 +69677,7 @@
                   }
                 }
               ],
+              "hoverTint": "#AF54E7FF",
               "children": [
                 {
                   "IsBound": false,
@@ -69630,8 +69710,7 @@
                     "tint": "#FFFFFFFF"
                   }
                 }
-              ],
-              "hoverTint": "#AF54E7FF"
+              ]
             },
             {
               "IsBound": false,
@@ -72690,8 +72769,7 @@
             }
           ]
         }
-      ],
-      "sortingOrder": 100
+      ]
     },
     {
       "id": "giftui",
@@ -72705,24 +72783,24 @@
           "name": "GiftWindow",
           "rect": {
             "anchorMin": [
-              0,
-              0
+              0.0,
+              0.0
             ],
             "anchorMax": [
-              1,
-              1
+              1.0,
+              1.0
             ],
             "pivot": [
               0.5,
               0.5
             ],
             "position": [
-              0,
-              0
+              0.0,
+              0.0
             ],
             "size": [
-              0,
-              0
+              0.0,
+              0.0
             ]
           },
           "children": [
@@ -72731,24 +72809,24 @@
               "name": "Dim",
               "rect": {
                 "anchorMin": [
-                  0,
-                  0
+                  0.0,
+                  0.0
                 ],
                 "anchorMax": [
-                  1,
-                  1
+                  1.0,
+                  1.0
                 ],
                 "pivot": [
                   0.5,
                   0.5
                 ],
                 "position": [
-                  0,
-                  0
+                  0.0,
+                  0.0
                 ],
                 "size": [
-                  0,
-                  0
+                  0.0,
+                  0.0
                 ]
               },
               "image": {
@@ -72774,12 +72852,12 @@
                   0.5
                 ],
                 "position": [
-                  0,
-                  0
+                  0.0,
+                  0.0
                 ],
                 "size": [
-                  1280,
-                  780
+                  1280.0,
+                  780.0
                 ]
               },
               "image": {
@@ -72795,39 +72873,30 @@
                   -8.0
                 ]
               },
-              "open": {
-                "fade": true,
-                "scaleFrom": [
-                  0.95,
-                  0.95
-                ],
-                "duration": 0.25,
-                "easing": "QuadInOut"
-              },
               "children": [
                 {
                   "IsBound": false,
                   "name": "Accent",
                   "rect": {
                     "anchorMin": [
-                      0,
-                      1
+                      0.0,
+                      1.0
                     ],
                     "anchorMax": [
-                      1,
-                      1
+                      1.0,
+                      1.0
                     ],
                     "pivot": [
                       0.5,
-                      1
+                      1.0
                     ],
                     "position": [
-                      0,
-                      0
+                      0.0,
+                      0.0
                     ],
                     "size": [
-                      -120,
-                      6
+                      -120.0,
+                      6.0
                     ]
                   },
                   "image": {
@@ -72843,29 +72912,29 @@
                   "rect": {
                     "anchorMin": [
                       0.5,
-                      1
+                      1.0
                     ],
                     "anchorMax": [
                       0.5,
-                      1
+                      1.0
                     ],
                     "pivot": [
                       0.5,
                       0.5
                     ],
                     "position": [
-                      0,
-                      -78
+                      0.0,
+                      -78.0
                     ],
                     "size": [
-                      900,
-                      84
+                      900.0,
+                      84.0
                     ]
                   },
                   "text": {
                     "value": "Give a gift",
                     "font": "Barton SDF",
-                    "size": 66,
+                    "size": 66.0,
                     "color": "#FFFFFFFF",
                     "alignment": "Center"
                   }
@@ -72876,29 +72945,29 @@
                   "rect": {
                     "anchorMin": [
                       0.5,
-                      1
+                      1.0
                     ],
                     "anchorMax": [
                       0.5,
-                      1
+                      1.0
                     ],
                     "pivot": [
                       0.5,
                       0.5
                     ],
                     "position": [
-                      0,
-                      -132
+                      0.0,
+                      -132.0
                     ],
                     "size": [
-                      900,
-                      40
+                      900.0,
+                      40.0
                     ]
                   },
                   "text": {
                     "value": "Pick something from your bag.",
                     "font": "Curse Casual SDF",
-                    "size": 30,
+                    "size": 30.0,
                     "color": "#AFC3E6FF",
                     "alignment": "Center"
                   }
@@ -72908,24 +72977,24 @@
                   "name": "Close",
                   "rect": {
                     "anchorMin": [
-                      1,
-                      1
+                      1.0,
+                      1.0
                     ],
                     "anchorMax": [
-                      1,
-                      1
+                      1.0,
+                      1.0
                     ],
                     "pivot": [
                       0.5,
                       0.5
                     ],
                     "position": [
-                      -62,
-                      -62
+                      -62.0,
+                      -62.0
                     ],
                     "size": [
-                      76,
-                      76
+                      76.0,
+                      76.0
                     ]
                   },
                   "image": {
@@ -72933,7 +73002,6 @@
                     "type": "Simple",
                     "tint": "#0A1A33FF"
                   },
-                  "hoverTint": "#AF54E7FF",
                   "onClick": [
                     {
                       "type": "SetGameObjectActive",
@@ -72957,6 +73025,7 @@
                       }
                     }
                   ],
+                  "hoverTint": "#AF54E7FF",
                   "children": [
                     {
                       "IsBound": false,
@@ -72975,12 +73044,12 @@
                           0.5
                         ],
                         "position": [
-                          0,
-                          0
+                          0.0,
+                          0.0
                         ],
                         "size": [
-                          34,
-                          34
+                          34.0,
+                          34.0
                         ]
                       },
                       "image": {
@@ -73009,41 +73078,13 @@
                       0.5
                     ],
                     "position": [
-                      0,
-                      -62
+                      0.0,
+                      -62.0
                     ],
                     "size": [
-                      1160,
-                      560
+                      1160.0,
+                      560.0
                     ]
-                  },
-                  "layout": {
-                    "kind": "Grid",
-                    "spacing": [
-                      16.0,
-                      16.0
-                    ],
-                    "padding": [
-                      0.0,
-                      0.0,
-                      0.0,
-                      0.0
-                    ],
-                    "alignment": "UpperCenter",
-                    "controlWidth": false,
-                    "controlHeight": false,
-                    "expandWidth": false,
-                    "expandHeight": false,
-                    "cellSize": [
-                      150.0,
-                      176.0
-                    ],
-                    "constraint": "FixedColumnCount",
-                    "constraintCount": 7,
-                    "startAxis": "Horizontal",
-                    "centerLastLine": true,
-                    "startCorner": "UpperLeft",
-                    "reverse": false
                   },
                   "children": [
                     {
@@ -73063,12 +73104,12 @@
                           0.5
                         ],
                         "position": [
-                          0,
-                          0
+                          0.0,
+                          0.0
                         ],
                         "size": [
-                          150,
-                          176
+                          150.0,
+                          176.0
                         ]
                       },
                       "image": {
@@ -73125,32 +73166,32 @@
                           "name": "Stroke",
                           "rect": {
                             "anchorMin": [
-                              0,
-                              0
+                              0.0,
+                              0.0
                             ],
                             "anchorMax": [
-                              1,
-                              1
+                              1.0,
+                              1.0
                             ],
                             "pivot": [
                               0.5,
                               0.5
                             ],
                             "position": [
-                              0,
-                              0
+                              0.0,
+                              0.0
                             ],
                             "size": [
-                              0,
-                              0
+                              0.0,
+                              0.0
                             ]
                           },
                           "image": {
                             "sprite": "Semi Rounded - Stroke 2px",
                             "type": "Sliced",
                             "tint": "#AF54E759",
-                            "pixelsPerUnitMultiplier": 1.6,
-                            "raycastTarget": false
+                            "raycastTarget": false,
+                            "pixelsPerUnitMultiplier": 1.6
                           }
                         },
                         {
@@ -73170,12 +73211,12 @@
                               0.5
                             ],
                             "position": [
-                              0,
-                              22
+                              0.0,
+                              22.0
                             ],
                             "size": [
-                              120,
-                              120
+                              120.0,
+                              120.0
                             ]
                           },
                           "image": {
@@ -73202,12 +73243,12 @@
                               0.5
                             ],
                             "position": [
-                              0,
-                              22
+                              0.0,
+                              22.0
                             ],
                             "size": [
-                              104,
-                              104
+                              104.0,
+                              104.0
                             ]
                           },
                           "image": {
@@ -73235,23 +73276,23 @@
                               0.5
                             ],
                             "position": [
-                              0,
-                              -58
+                              0.0,
+                              -58.0
                             ],
                             "size": [
-                              138,
-                              44
+                              138.0,
+                              44.0
                             ]
                           },
                           "text": {
                             "value": "Action Figure",
                             "font": "Curse Casual SDF",
-                            "size": 26,
+                            "size": 26.0,
                             "color": "#FFFFFFFF",
                             "alignment": "Center",
                             "autoSize": true,
-                            "autoSizeMin": 15,
-                            "autoSizeMax": 26
+                            "autoSizeMin": 15.0,
+                            "autoSizeMax": 26.0
                           }
                         }
                       ]
@@ -73273,12 +73314,12 @@
                           0.5
                         ],
                         "position": [
-                          0,
-                          0
+                          0.0,
+                          0.0
                         ],
                         "size": [
-                          150,
-                          176
+                          150.0,
+                          176.0
                         ]
                       },
                       "image": {
@@ -73337,32 +73378,32 @@
                           "name": "Stroke",
                           "rect": {
                             "anchorMin": [
-                              0,
-                              0
+                              0.0,
+                              0.0
                             ],
                             "anchorMax": [
-                              1,
-                              1
+                              1.0,
+                              1.0
                             ],
                             "pivot": [
                               0.5,
                               0.5
                             ],
                             "position": [
-                              0,
-                              0
+                              0.0,
+                              0.0
                             ],
                             "size": [
-                              0,
-                              0
+                              0.0,
+                              0.0
                             ]
                           },
                           "image": {
                             "sprite": "Semi Rounded - Stroke 2px",
                             "type": "Sliced",
                             "tint": "#AF54E759",
-                            "pixelsPerUnitMultiplier": 1.6,
-                            "raycastTarget": false
+                            "raycastTarget": false,
+                            "pixelsPerUnitMultiplier": 1.6
                           }
                         },
                         {
@@ -73382,12 +73423,12 @@
                               0.5
                             ],
                             "position": [
-                              0,
-                              22
+                              0.0,
+                              22.0
                             ],
                             "size": [
-                              120,
-                              120
+                              120.0,
+                              120.0
                             ]
                           },
                           "image": {
@@ -73414,12 +73455,12 @@
                               0.5
                             ],
                             "position": [
-                              0,
-                              22
+                              0.0,
+                              22.0
                             ],
                             "size": [
-                              104,
-                              104
+                              104.0,
+                              104.0
                             ]
                           },
                           "image": {
@@ -73447,23 +73488,23 @@
                               0.5
                             ],
                             "position": [
-                              0,
-                              -58
+                              0.0,
+                              -58.0
                             ],
                             "size": [
-                              138,
-                              44
+                              138.0,
+                              44.0
                             ]
                           },
                           "text": {
                             "value": "Beer",
                             "font": "Curse Casual SDF",
-                            "size": 26,
+                            "size": 26.0,
                             "color": "#FFFFFFFF",
                             "alignment": "Center",
                             "autoSize": true,
-                            "autoSizeMin": 15,
-                            "autoSizeMax": 26
+                            "autoSizeMin": 15.0,
+                            "autoSizeMax": 26.0
                           }
                         }
                       ]
@@ -73485,12 +73526,12 @@
                           0.5
                         ],
                         "position": [
-                          0,
-                          0
+                          0.0,
+                          0.0
                         ],
                         "size": [
-                          150,
-                          176
+                          150.0,
+                          176.0
                         ]
                       },
                       "image": {
@@ -73547,32 +73588,32 @@
                           "name": "Stroke",
                           "rect": {
                             "anchorMin": [
-                              0,
-                              0
+                              0.0,
+                              0.0
                             ],
                             "anchorMax": [
-                              1,
-                              1
+                              1.0,
+                              1.0
                             ],
                             "pivot": [
                               0.5,
                               0.5
                             ],
                             "position": [
-                              0,
-                              0
+                              0.0,
+                              0.0
                             ],
                             "size": [
-                              0,
-                              0
+                              0.0,
+                              0.0
                             ]
                           },
                           "image": {
                             "sprite": "Semi Rounded - Stroke 2px",
                             "type": "Sliced",
                             "tint": "#AF54E759",
-                            "pixelsPerUnitMultiplier": 1.6,
-                            "raycastTarget": false
+                            "raycastTarget": false,
+                            "pixelsPerUnitMultiplier": 1.6
                           }
                         },
                         {
@@ -73592,12 +73633,12 @@
                               0.5
                             ],
                             "position": [
-                              0,
-                              22
+                              0.0,
+                              22.0
                             ],
                             "size": [
-                              120,
-                              120
+                              120.0,
+                              120.0
                             ]
                           },
                           "image": {
@@ -73624,12 +73665,12 @@
                               0.5
                             ],
                             "position": [
-                              0,
-                              22
+                              0.0,
+                              22.0
                             ],
                             "size": [
-                              104,
-                              104
+                              104.0,
+                              104.0
                             ]
                           },
                           "image": {
@@ -73657,23 +73698,23 @@
                               0.5
                             ],
                             "position": [
-                              0,
-                              -58
+                              0.0,
+                              -58.0
                             ],
                             "size": [
-                              138,
-                              44
+                              138.0,
+                              44.0
                             ]
                           },
                           "text": {
                             "value": "Bikini",
                             "font": "Curse Casual SDF",
-                            "size": 26,
+                            "size": 26.0,
                             "color": "#FFFFFFFF",
                             "alignment": "Center",
                             "autoSize": true,
-                            "autoSizeMin": 15,
-                            "autoSizeMax": 26
+                            "autoSizeMin": 15.0,
+                            "autoSizeMax": 26.0
                           }
                         }
                       ]
@@ -73695,12 +73736,12 @@
                           0.5
                         ],
                         "position": [
-                          0,
-                          0
+                          0.0,
+                          0.0
                         ],
                         "size": [
-                          150,
-                          176
+                          150.0,
+                          176.0
                         ]
                       },
                       "image": {
@@ -73759,32 +73800,32 @@
                           "name": "Stroke",
                           "rect": {
                             "anchorMin": [
-                              0,
-                              0
+                              0.0,
+                              0.0
                             ],
                             "anchorMax": [
-                              1,
-                              1
+                              1.0,
+                              1.0
                             ],
                             "pivot": [
                               0.5,
                               0.5
                             ],
                             "position": [
-                              0,
-                              0
+                              0.0,
+                              0.0
                             ],
                             "size": [
-                              0,
-                              0
+                              0.0,
+                              0.0
                             ]
                           },
                           "image": {
                             "sprite": "Semi Rounded - Stroke 2px",
                             "type": "Sliced",
                             "tint": "#AF54E759",
-                            "pixelsPerUnitMultiplier": 1.6,
-                            "raycastTarget": false
+                            "raycastTarget": false,
+                            "pixelsPerUnitMultiplier": 1.6
                           }
                         },
                         {
@@ -73804,12 +73845,12 @@
                               0.5
                             ],
                             "position": [
-                              0,
-                              22
+                              0.0,
+                              22.0
                             ],
                             "size": [
-                              120,
-                              120
+                              120.0,
+                              120.0
                             ]
                           },
                           "image": {
@@ -73836,12 +73877,12 @@
                               0.5
                             ],
                             "position": [
-                              0,
-                              22
+                              0.0,
+                              22.0
                             ],
                             "size": [
-                              104,
-                              104
+                              104.0,
+                              104.0
                             ]
                           },
                           "image": {
@@ -73869,23 +73910,23 @@
                               0.5
                             ],
                             "position": [
-                              0,
-                              -58
+                              0.0,
+                              -58.0
                             ],
                             "size": [
-                              138,
-                              44
+                              138.0,
+                              44.0
                             ]
                           },
                           "text": {
                             "value": "Body Oil",
                             "font": "Curse Casual SDF",
-                            "size": 26,
+                            "size": 26.0,
                             "color": "#FFFFFFFF",
                             "alignment": "Center",
                             "autoSize": true,
-                            "autoSizeMin": 15,
-                            "autoSizeMax": 26
+                            "autoSizeMin": 15.0,
+                            "autoSizeMax": 26.0
                           }
                         }
                       ]
@@ -73907,12 +73948,12 @@
                           0.5
                         ],
                         "position": [
-                          0,
-                          0
+                          0.0,
+                          0.0
                         ],
                         "size": [
-                          150,
-                          176
+                          150.0,
+                          176.0
                         ]
                       },
                       "image": {
@@ -73969,32 +74010,32 @@
                           "name": "Stroke",
                           "rect": {
                             "anchorMin": [
-                              0,
-                              0
+                              0.0,
+                              0.0
                             ],
                             "anchorMax": [
-                              1,
-                              1
+                              1.0,
+                              1.0
                             ],
                             "pivot": [
                               0.5,
                               0.5
                             ],
                             "position": [
-                              0,
-                              0
+                              0.0,
+                              0.0
                             ],
                             "size": [
-                              0,
-                              0
+                              0.0,
+                              0.0
                             ]
                           },
                           "image": {
                             "sprite": "Semi Rounded - Stroke 2px",
                             "type": "Sliced",
                             "tint": "#AF54E759",
-                            "pixelsPerUnitMultiplier": 1.6,
-                            "raycastTarget": false
+                            "raycastTarget": false,
+                            "pixelsPerUnitMultiplier": 1.6
                           }
                         },
                         {
@@ -74014,12 +74055,12 @@
                               0.5
                             ],
                             "position": [
-                              0,
-                              22
+                              0.0,
+                              22.0
                             ],
                             "size": [
-                              120,
-                              120
+                              120.0,
+                              120.0
                             ]
                           },
                           "image": {
@@ -74046,12 +74087,12 @@
                               0.5
                             ],
                             "position": [
-                              0,
-                              22
+                              0.0,
+                              22.0
                             ],
                             "size": [
-                              104,
-                              104
+                              104.0,
+                              104.0
                             ]
                           },
                           "image": {
@@ -74079,23 +74120,23 @@
                               0.5
                             ],
                             "position": [
-                              0,
-                              -58
+                              0.0,
+                              -58.0
                             ],
                             "size": [
-                              138,
-                              44
+                              138.0,
+                              44.0
                             ]
                           },
                           "text": {
                             "value": "Bonsai Tree",
                             "font": "Curse Casual SDF",
-                            "size": 26,
+                            "size": 26.0,
                             "color": "#FFFFFFFF",
                             "alignment": "Center",
                             "autoSize": true,
-                            "autoSizeMin": 15,
-                            "autoSizeMax": 26
+                            "autoSizeMin": 15.0,
+                            "autoSizeMax": 26.0
                           }
                         }
                       ]
@@ -74117,12 +74158,12 @@
                           0.5
                         ],
                         "position": [
-                          0,
-                          0
+                          0.0,
+                          0.0
                         ],
                         "size": [
-                          150,
-                          176
+                          150.0,
+                          176.0
                         ]
                       },
                       "image": {
@@ -74181,32 +74222,32 @@
                           "name": "Stroke",
                           "rect": {
                             "anchorMin": [
-                              0,
-                              0
+                              0.0,
+                              0.0
                             ],
                             "anchorMax": [
-                              1,
-                              1
+                              1.0,
+                              1.0
                             ],
                             "pivot": [
                               0.5,
                               0.5
                             ],
                             "position": [
-                              0,
-                              0
+                              0.0,
+                              0.0
                             ],
                             "size": [
-                              0,
-                              0
+                              0.0,
+                              0.0
                             ]
                           },
                           "image": {
                             "sprite": "Semi Rounded - Stroke 2px",
                             "type": "Sliced",
                             "tint": "#AF54E759",
-                            "pixelsPerUnitMultiplier": 1.6,
-                            "raycastTarget": false
+                            "raycastTarget": false,
+                            "pixelsPerUnitMultiplier": 1.6
                           }
                         },
                         {
@@ -74226,12 +74267,12 @@
                               0.5
                             ],
                             "position": [
-                              0,
-                              22
+                              0.0,
+                              22.0
                             ],
                             "size": [
-                              120,
-                              120
+                              120.0,
+                              120.0
                             ]
                           },
                           "image": {
@@ -74258,12 +74299,12 @@
                               0.5
                             ],
                             "position": [
-                              0,
-                              22
+                              0.0,
+                              22.0
                             ],
                             "size": [
-                              104,
-                              104
+                              104.0,
+                              104.0
                             ]
                           },
                           "image": {
@@ -74291,23 +74332,23 @@
                               0.5
                             ],
                             "position": [
-                              0,
-                              -58
+                              0.0,
+                              -58.0
                             ],
                             "size": [
-                              138,
-                              44
+                              138.0,
+                              44.0
                             ]
                           },
                           "text": {
                             "value": "Chocolate",
                             "font": "Curse Casual SDF",
-                            "size": 26,
+                            "size": 26.0,
                             "color": "#FFFFFFFF",
                             "alignment": "Center",
                             "autoSize": true,
-                            "autoSizeMin": 15,
-                            "autoSizeMax": 26
+                            "autoSizeMin": 15.0,
+                            "autoSizeMax": 26.0
                           }
                         }
                       ]
@@ -74329,12 +74370,12 @@
                           0.5
                         ],
                         "position": [
-                          0,
-                          0
+                          0.0,
+                          0.0
                         ],
                         "size": [
-                          150,
-                          176
+                          150.0,
+                          176.0
                         ]
                       },
                       "image": {
@@ -74393,32 +74434,32 @@
                           "name": "Stroke",
                           "rect": {
                             "anchorMin": [
-                              0,
-                              0
+                              0.0,
+                              0.0
                             ],
                             "anchorMax": [
-                              1,
-                              1
+                              1.0,
+                              1.0
                             ],
                             "pivot": [
                               0.5,
                               0.5
                             ],
                             "position": [
-                              0,
-                              0
+                              0.0,
+                              0.0
                             ],
                             "size": [
-                              0,
-                              0
+                              0.0,
+                              0.0
                             ]
                           },
                           "image": {
                             "sprite": "Semi Rounded - Stroke 2px",
                             "type": "Sliced",
                             "tint": "#AF54E759",
-                            "pixelsPerUnitMultiplier": 1.6,
-                            "raycastTarget": false
+                            "raycastTarget": false,
+                            "pixelsPerUnitMultiplier": 1.6
                           }
                         },
                         {
@@ -74438,12 +74479,12 @@
                               0.5
                             ],
                             "position": [
-                              0,
-                              22
+                              0.0,
+                              22.0
                             ],
                             "size": [
-                              120,
-                              120
+                              120.0,
+                              120.0
                             ]
                           },
                           "image": {
@@ -74470,12 +74511,12 @@
                               0.5
                             ],
                             "position": [
-                              0,
-                              22
+                              0.0,
+                              22.0
                             ],
                             "size": [
-                              104,
-                              104
+                              104.0,
+                              104.0
                             ]
                           },
                           "image": {
@@ -74503,23 +74544,23 @@
                               0.5
                             ],
                             "position": [
-                              0,
-                              -58
+                              0.0,
+                              -58.0
                             ],
                             "size": [
-                              138,
-                              44
+                              138.0,
+                              44.0
                             ]
                           },
                           "text": {
                             "value": "Energy Drink",
                             "font": "Curse Casual SDF",
-                            "size": 26,
+                            "size": 26.0,
                             "color": "#FFFFFFFF",
                             "alignment": "Center",
                             "autoSize": true,
-                            "autoSizeMin": 15,
-                            "autoSizeMax": 26
+                            "autoSizeMin": 15.0,
+                            "autoSizeMax": 26.0
                           }
                         }
                       ]
@@ -74541,12 +74582,12 @@
                           0.5
                         ],
                         "position": [
-                          0,
-                          0
+                          0.0,
+                          0.0
                         ],
                         "size": [
-                          150,
-                          176
+                          150.0,
+                          176.0
                         ]
                       },
                       "image": {
@@ -74605,32 +74646,32 @@
                           "name": "Stroke",
                           "rect": {
                             "anchorMin": [
-                              0,
-                              0
+                              0.0,
+                              0.0
                             ],
                             "anchorMax": [
-                              1,
-                              1
+                              1.0,
+                              1.0
                             ],
                             "pivot": [
                               0.5,
                               0.5
                             ],
                             "position": [
-                              0,
-                              0
+                              0.0,
+                              0.0
                             ],
                             "size": [
-                              0,
-                              0
+                              0.0,
+                              0.0
                             ]
                           },
                           "image": {
                             "sprite": "Semi Rounded - Stroke 2px",
                             "type": "Sliced",
                             "tint": "#AF54E759",
-                            "pixelsPerUnitMultiplier": 1.6,
-                            "raycastTarget": false
+                            "raycastTarget": false,
+                            "pixelsPerUnitMultiplier": 1.6
                           }
                         },
                         {
@@ -74650,12 +74691,12 @@
                               0.5
                             ],
                             "position": [
-                              0,
-                              22
+                              0.0,
+                              22.0
                             ],
                             "size": [
-                              120,
-                              120
+                              120.0,
+                              120.0
                             ]
                           },
                           "image": {
@@ -74682,12 +74723,12 @@
                               0.5
                             ],
                             "position": [
-                              0,
-                              22
+                              0.0,
+                              22.0
                             ],
                             "size": [
-                              104,
-                              104
+                              104.0,
+                              104.0
                             ]
                           },
                           "image": {
@@ -74715,23 +74756,23 @@
                               0.5
                             ],
                             "position": [
-                              0,
-                              -58
+                              0.0,
+                              -58.0
                             ],
                             "size": [
-                              138,
-                              44
+                              138.0,
+                              44.0
                             ]
                           },
                           "text": {
                             "value": "Flowers",
                             "font": "Curse Casual SDF",
-                            "size": 26,
+                            "size": 26.0,
                             "color": "#FFFFFFFF",
                             "alignment": "Center",
                             "autoSize": true,
-                            "autoSizeMin": 15,
-                            "autoSizeMax": 26
+                            "autoSizeMin": 15.0,
+                            "autoSizeMax": 26.0
                           }
                         }
                       ]
@@ -74753,12 +74794,12 @@
                           0.5
                         ],
                         "position": [
-                          0,
-                          0
+                          0.0,
+                          0.0
                         ],
                         "size": [
-                          150,
-                          176
+                          150.0,
+                          176.0
                         ]
                       },
                       "image": {
@@ -74817,32 +74858,32 @@
                           "name": "Stroke",
                           "rect": {
                             "anchorMin": [
-                              0,
-                              0
+                              0.0,
+                              0.0
                             ],
                             "anchorMax": [
-                              1,
-                              1
+                              1.0,
+                              1.0
                             ],
                             "pivot": [
                               0.5,
                               0.5
                             ],
                             "position": [
-                              0,
-                              0
+                              0.0,
+                              0.0
                             ],
                             "size": [
-                              0,
-                              0
+                              0.0,
+                              0.0
                             ]
                           },
                           "image": {
                             "sprite": "Semi Rounded - Stroke 2px",
                             "type": "Sliced",
                             "tint": "#AF54E759",
-                            "pixelsPerUnitMultiplier": 1.6,
-                            "raycastTarget": false
+                            "raycastTarget": false,
+                            "pixelsPerUnitMultiplier": 1.6
                           }
                         },
                         {
@@ -74862,12 +74903,12 @@
                               0.5
                             ],
                             "position": [
-                              0,
-                              22
+                              0.0,
+                              22.0
                             ],
                             "size": [
-                              120,
-                              120
+                              120.0,
+                              120.0
                             ]
                           },
                           "image": {
@@ -74894,12 +74935,12 @@
                               0.5
                             ],
                             "position": [
-                              0,
-                              22
+                              0.0,
+                              22.0
                             ],
                             "size": [
-                              104,
-                              104
+                              104.0,
+                              104.0
                             ]
                           },
                           "image": {
@@ -74927,23 +74968,23 @@
                               0.5
                             ],
                             "position": [
-                              0,
-                              -58
+                              0.0,
+                              -58.0
                             ],
                             "size": [
-                              138,
-                              44
+                              138.0,
+                              44.0
                             ]
                           },
                           "text": {
                             "value": "Love Gum",
                             "font": "Curse Casual SDF",
-                            "size": 26,
+                            "size": 26.0,
                             "color": "#FFFFFFFF",
                             "alignment": "Center",
                             "autoSize": true,
-                            "autoSizeMin": 15,
-                            "autoSizeMax": 26
+                            "autoSizeMin": 15.0,
+                            "autoSizeMax": 26.0
                           }
                         }
                       ]
@@ -74965,12 +75006,12 @@
                           0.5
                         ],
                         "position": [
-                          0,
-                          0
+                          0.0,
+                          0.0
                         ],
                         "size": [
-                          150,
-                          176
+                          150.0,
+                          176.0
                         ]
                       },
                       "image": {
@@ -75027,32 +75068,32 @@
                           "name": "Stroke",
                           "rect": {
                             "anchorMin": [
-                              0,
-                              0
+                              0.0,
+                              0.0
                             ],
                             "anchorMax": [
-                              1,
-                              1
+                              1.0,
+                              1.0
                             ],
                             "pivot": [
                               0.5,
                               0.5
                             ],
                             "position": [
-                              0,
-                              0
+                              0.0,
+                              0.0
                             ],
                             "size": [
-                              0,
-                              0
+                              0.0,
+                              0.0
                             ]
                           },
                           "image": {
                             "sprite": "Semi Rounded - Stroke 2px",
                             "type": "Sliced",
                             "tint": "#AF54E759",
-                            "pixelsPerUnitMultiplier": 1.6,
-                            "raycastTarget": false
+                            "raycastTarget": false,
+                            "pixelsPerUnitMultiplier": 1.6
                           }
                         },
                         {
@@ -75072,12 +75113,12 @@
                               0.5
                             ],
                             "position": [
-                              0,
-                              22
+                              0.0,
+                              22.0
                             ],
                             "size": [
-                              120,
-                              120
+                              120.0,
+                              120.0
                             ]
                           },
                           "image": {
@@ -75104,12 +75145,12 @@
                               0.5
                             ],
                             "position": [
-                              0,
-                              22
+                              0.0,
+                              22.0
                             ],
                             "size": [
-                              104,
-                              104
+                              104.0,
+                              104.0
                             ]
                           },
                           "image": {
@@ -75137,23 +75178,23 @@
                               0.5
                             ],
                             "position": [
-                              0,
-                              -58
+                              0.0,
+                              -58.0
                             ],
                             "size": [
-                              138,
-                              44
+                              138.0,
+                              44.0
                             ]
                           },
                           "text": {
                             "value": "Parasol",
                             "font": "Curse Casual SDF",
-                            "size": 26,
+                            "size": 26.0,
                             "color": "#FFFFFFFF",
                             "alignment": "Center",
                             "autoSize": true,
-                            "autoSizeMin": 15,
-                            "autoSizeMax": 26
+                            "autoSizeMin": 15.0,
+                            "autoSizeMax": 26.0
                           }
                         }
                       ]
@@ -75175,12 +75216,12 @@
                           0.5
                         ],
                         "position": [
-                          0,
-                          0
+                          0.0,
+                          0.0
                         ],
                         "size": [
-                          150,
-                          176
+                          150.0,
+                          176.0
                         ]
                       },
                       "image": {
@@ -75239,32 +75280,32 @@
                           "name": "Stroke",
                           "rect": {
                             "anchorMin": [
-                              0,
-                              0
+                              0.0,
+                              0.0
                             ],
                             "anchorMax": [
-                              1,
-                              1
+                              1.0,
+                              1.0
                             ],
                             "pivot": [
                               0.5,
                               0.5
                             ],
                             "position": [
-                              0,
-                              0
+                              0.0,
+                              0.0
                             ],
                             "size": [
-                              0,
-                              0
+                              0.0,
+                              0.0
                             ]
                           },
                           "image": {
                             "sprite": "Semi Rounded - Stroke 2px",
                             "type": "Sliced",
                             "tint": "#AF54E759",
-                            "pixelsPerUnitMultiplier": 1.6,
-                            "raycastTarget": false
+                            "raycastTarget": false,
+                            "pixelsPerUnitMultiplier": 1.6
                           }
                         },
                         {
@@ -75284,12 +75325,12 @@
                               0.5
                             ],
                             "position": [
-                              0,
-                              22
+                              0.0,
+                              22.0
                             ],
                             "size": [
-                              120,
-                              120
+                              120.0,
+                              120.0
                             ]
                           },
                           "image": {
@@ -75316,12 +75357,12 @@
                               0.5
                             ],
                             "position": [
-                              0,
-                              22
+                              0.0,
+                              22.0
                             ],
                             "size": [
-                              104,
-                              104
+                              104.0,
+                              104.0
                             ]
                           },
                           "image": {
@@ -75349,23 +75390,23 @@
                               0.5
                             ],
                             "position": [
-                              0,
-                              -58
+                              0.0,
+                              -58.0
                             ],
                             "size": [
-                              138,
-                              44
+                              138.0,
+                              44.0
                             ]
                           },
                           "text": {
                             "value": "Red Meat",
                             "font": "Curse Casual SDF",
-                            "size": 26,
+                            "size": 26.0,
                             "color": "#FFFFFFFF",
                             "alignment": "Center",
                             "autoSize": true,
-                            "autoSizeMin": 15,
-                            "autoSizeMax": 26
+                            "autoSizeMin": 15.0,
+                            "autoSizeMax": 26.0
                           }
                         }
                       ]
@@ -75387,12 +75428,12 @@
                           0.5
                         ],
                         "position": [
-                          0,
-                          0
+                          0.0,
+                          0.0
                         ],
                         "size": [
-                          150,
-                          176
+                          150.0,
+                          176.0
                         ]
                       },
                       "image": {
@@ -75449,32 +75490,32 @@
                           "name": "Stroke",
                           "rect": {
                             "anchorMin": [
-                              0,
-                              0
+                              0.0,
+                              0.0
                             ],
                             "anchorMax": [
-                              1,
-                              1
+                              1.0,
+                              1.0
                             ],
                             "pivot": [
                               0.5,
                               0.5
                             ],
                             "position": [
-                              0,
-                              0
+                              0.0,
+                              0.0
                             ],
                             "size": [
-                              0,
-                              0
+                              0.0,
+                              0.0
                             ]
                           },
                           "image": {
                             "sprite": "Semi Rounded - Stroke 2px",
                             "type": "Sliced",
                             "tint": "#AF54E759",
-                            "pixelsPerUnitMultiplier": 1.6,
-                            "raycastTarget": false
+                            "raycastTarget": false,
+                            "pixelsPerUnitMultiplier": 1.6
                           }
                         },
                         {
@@ -75494,12 +75535,12 @@
                               0.5
                             ],
                             "position": [
-                              0,
-                              22
+                              0.0,
+                              22.0
                             ],
                             "size": [
-                              120,
-                              120
+                              120.0,
+                              120.0
                             ]
                           },
                           "image": {
@@ -75526,12 +75567,12 @@
                               0.5
                             ],
                             "position": [
-                              0,
-                              22
+                              0.0,
+                              22.0
                             ],
                             "size": [
-                              104,
-                              104
+                              104.0,
+                              104.0
                             ]
                           },
                           "image": {
@@ -75559,23 +75600,23 @@
                               0.5
                             ],
                             "position": [
-                              0,
-                              -58
+                              0.0,
+                              -58.0
                             ],
                             "size": [
-                              138,
-                              44
+                              138.0,
+                              44.0
                             ]
                           },
                           "text": {
                             "value": "Ring",
                             "font": "Curse Casual SDF",
-                            "size": 26,
+                            "size": 26.0,
                             "color": "#FFFFFFFF",
                             "alignment": "Center",
                             "autoSize": true,
-                            "autoSizeMin": 15,
-                            "autoSizeMax": 26
+                            "autoSizeMin": 15.0,
+                            "autoSizeMax": 26.0
                           }
                         }
                       ]
@@ -75597,12 +75638,12 @@
                           0.5
                         ],
                         "position": [
-                          0,
-                          0
+                          0.0,
+                          0.0
                         ],
                         "size": [
-                          150,
-                          176
+                          150.0,
+                          176.0
                         ]
                       },
                       "image": {
@@ -75659,32 +75700,32 @@
                           "name": "Stroke",
                           "rect": {
                             "anchorMin": [
-                              0,
-                              0
+                              0.0,
+                              0.0
                             ],
                             "anchorMax": [
-                              1,
-                              1
+                              1.0,
+                              1.0
                             ],
                             "pivot": [
                               0.5,
                               0.5
                             ],
                             "position": [
-                              0,
-                              0
+                              0.0,
+                              0.0
                             ],
                             "size": [
-                              0,
-                              0
+                              0.0,
+                              0.0
                             ]
                           },
                           "image": {
                             "sprite": "Semi Rounded - Stroke 2px",
                             "type": "Sliced",
                             "tint": "#AF54E759",
-                            "pixelsPerUnitMultiplier": 1.6,
-                            "raycastTarget": false
+                            "raycastTarget": false,
+                            "pixelsPerUnitMultiplier": 1.6
                           }
                         },
                         {
@@ -75704,12 +75745,12 @@
                               0.5
                             ],
                             "position": [
-                              0,
-                              22
+                              0.0,
+                              22.0
                             ],
                             "size": [
-                              120,
-                              120
+                              120.0,
+                              120.0
                             ]
                           },
                           "image": {
@@ -75736,12 +75777,12 @@
                               0.5
                             ],
                             "position": [
-                              0,
-                              22
+                              0.0,
+                              22.0
                             ],
                             "size": [
-                              104,
-                              104
+                              104.0,
+                              104.0
                             ]
                           },
                           "image": {
@@ -75769,23 +75810,23 @@
                               0.5
                             ],
                             "position": [
-                              0,
-                              -58
+                              0.0,
+                              -58.0
                             ],
                             "size": [
-                              138,
-                              44
+                              138.0,
+                              44.0
                             ]
                           },
                           "text": {
                             "value": "Shark Tooth Necklace",
                             "font": "Curse Casual SDF",
-                            "size": 26,
+                            "size": 26.0,
                             "color": "#FFFFFFFF",
                             "alignment": "Center",
                             "autoSize": true,
-                            "autoSizeMin": 15,
-                            "autoSizeMax": 26
+                            "autoSizeMin": 15.0,
+                            "autoSizeMax": 26.0
                           }
                         }
                       ]
@@ -75807,12 +75848,12 @@
                           0.5
                         ],
                         "position": [
-                          0,
-                          0
+                          0.0,
+                          0.0
                         ],
                         "size": [
-                          150,
-                          176
+                          150.0,
+                          176.0
                         ]
                       },
                       "image": {
@@ -75869,32 +75910,32 @@
                           "name": "Stroke",
                           "rect": {
                             "anchorMin": [
-                              0,
-                              0
+                              0.0,
+                              0.0
                             ],
                             "anchorMax": [
-                              1,
-                              1
+                              1.0,
+                              1.0
                             ],
                             "pivot": [
                               0.5,
                               0.5
                             ],
                             "position": [
-                              0,
-                              0
+                              0.0,
+                              0.0
                             ],
                             "size": [
-                              0,
-                              0
+                              0.0,
+                              0.0
                             ]
                           },
                           "image": {
                             "sprite": "Semi Rounded - Stroke 2px",
                             "type": "Sliced",
                             "tint": "#AF54E759",
-                            "pixelsPerUnitMultiplier": 1.6,
-                            "raycastTarget": false
+                            "raycastTarget": false,
+                            "pixelsPerUnitMultiplier": 1.6
                           }
                         },
                         {
@@ -75914,12 +75955,12 @@
                               0.5
                             ],
                             "position": [
-                              0,
-                              22
+                              0.0,
+                              22.0
                             ],
                             "size": [
-                              120,
-                              120
+                              120.0,
+                              120.0
                             ]
                           },
                           "image": {
@@ -75946,12 +75987,12 @@
                               0.5
                             ],
                             "position": [
-                              0,
-                              22
+                              0.0,
+                              22.0
                             ],
                             "size": [
-                              104,
-                              104
+                              104.0,
+                              104.0
                             ]
                           },
                           "image": {
@@ -75979,23 +76020,23 @@
                               0.5
                             ],
                             "position": [
-                              0,
-                              -58
+                              0.0,
+                              -58.0
                             ],
                             "size": [
-                              138,
-                              44
+                              138.0,
+                              44.0
                             ]
                           },
                           "text": {
                             "value": "Sunglasses",
                             "font": "Curse Casual SDF",
-                            "size": 26,
+                            "size": 26.0,
                             "color": "#FFFFFFFF",
                             "alignment": "Center",
                             "autoSize": true,
-                            "autoSizeMin": 15,
-                            "autoSizeMax": 26
+                            "autoSizeMin": 15.0,
+                            "autoSizeMax": 26.0
                           }
                         }
                       ]
@@ -76017,12 +76058,12 @@
                           0.5
                         ],
                         "position": [
-                          0,
-                          0
+                          0.0,
+                          0.0
                         ],
                         "size": [
-                          150,
-                          176
+                          150.0,
+                          176.0
                         ]
                       },
                       "image": {
@@ -76079,32 +76120,32 @@
                           "name": "Stroke",
                           "rect": {
                             "anchorMin": [
-                              0,
-                              0
+                              0.0,
+                              0.0
                             ],
                             "anchorMax": [
-                              1,
-                              1
+                              1.0,
+                              1.0
                             ],
                             "pivot": [
                               0.5,
                               0.5
                             ],
                             "position": [
-                              0,
-                              0
+                              0.0,
+                              0.0
                             ],
                             "size": [
-                              0,
-                              0
+                              0.0,
+                              0.0
                             ]
                           },
                           "image": {
                             "sprite": "Semi Rounded - Stroke 2px",
                             "type": "Sliced",
                             "tint": "#AF54E759",
-                            "pixelsPerUnitMultiplier": 1.6,
-                            "raycastTarget": false
+                            "raycastTarget": false,
+                            "pixelsPerUnitMultiplier": 1.6
                           }
                         },
                         {
@@ -76124,12 +76165,12 @@
                               0.5
                             ],
                             "position": [
-                              0,
-                              22
+                              0.0,
+                              22.0
                             ],
                             "size": [
-                              120,
-                              120
+                              120.0,
+                              120.0
                             ]
                           },
                           "image": {
@@ -76156,12 +76197,12 @@
                               0.5
                             ],
                             "position": [
-                              0,
-                              22
+                              0.0,
+                              22.0
                             ],
                             "size": [
-                              104,
-                              104
+                              104.0,
+                              104.0
                             ]
                           },
                           "image": {
@@ -76189,23 +76230,23 @@
                               0.5
                             ],
                             "position": [
-                              0,
-                              -58
+                              0.0,
+                              -58.0
                             ],
                             "size": [
-                              138,
-                              44
+                              138.0,
+                              44.0
                             ]
                           },
                           "text": {
                             "value": "Sunscreen",
                             "font": "Curse Casual SDF",
-                            "size": 26,
+                            "size": 26.0,
                             "color": "#FFFFFFFF",
                             "alignment": "Center",
                             "autoSize": true,
-                            "autoSizeMin": 15,
-                            "autoSizeMax": 26
+                            "autoSizeMin": 15.0,
+                            "autoSizeMax": 26.0
                           }
                         }
                       ]
@@ -76227,12 +76268,12 @@
                           0.5
                         ],
                         "position": [
-                          0,
-                          0
+                          0.0,
+                          0.0
                         ],
                         "size": [
-                          150,
-                          176
+                          150.0,
+                          176.0
                         ]
                       },
                       "image": {
@@ -76289,32 +76330,32 @@
                           "name": "Stroke",
                           "rect": {
                             "anchorMin": [
-                              0,
-                              0
+                              0.0,
+                              0.0
                             ],
                             "anchorMax": [
-                              1,
-                              1
+                              1.0,
+                              1.0
                             ],
                             "pivot": [
                               0.5,
                               0.5
                             ],
                             "position": [
-                              0,
-                              0
+                              0.0,
+                              0.0
                             ],
                             "size": [
-                              0,
-                              0
+                              0.0,
+                              0.0
                             ]
                           },
                           "image": {
                             "sprite": "Semi Rounded - Stroke 2px",
                             "type": "Sliced",
                             "tint": "#AF54E759",
-                            "pixelsPerUnitMultiplier": 1.6,
-                            "raycastTarget": false
+                            "raycastTarget": false,
+                            "pixelsPerUnitMultiplier": 1.6
                           }
                         },
                         {
@@ -76334,12 +76375,12 @@
                               0.5
                             ],
                             "position": [
-                              0,
-                              22
+                              0.0,
+                              22.0
                             ],
                             "size": [
-                              120,
-                              120
+                              120.0,
+                              120.0
                             ]
                           },
                           "image": {
@@ -76366,12 +76407,12 @@
                               0.5
                             ],
                             "position": [
-                              0,
-                              22
+                              0.0,
+                              22.0
                             ],
                             "size": [
-                              104,
-                              104
+                              104.0,
+                              104.0
                             ]
                           },
                           "image": {
@@ -76399,23 +76440,23 @@
                               0.5
                             ],
                             "position": [
-                              0,
-                              -58
+                              0.0,
+                              -58.0
                             ],
                             "size": [
-                              138,
-                              44
+                              138.0,
+                              44.0
                             ]
                           },
                           "text": {
                             "value": "Tropical Flower Bouquet",
                             "font": "Curse Casual SDF",
-                            "size": 26,
+                            "size": 26.0,
                             "color": "#FFFFFFFF",
                             "alignment": "Center",
                             "autoSize": true,
-                            "autoSizeMin": 15,
-                            "autoSizeMax": 26
+                            "autoSizeMin": 15.0,
+                            "autoSizeMax": 26.0
                           }
                         }
                       ]
@@ -76437,12 +76478,12 @@
                           0.5
                         ],
                         "position": [
-                          0,
-                          0
+                          0.0,
+                          0.0
                         ],
                         "size": [
-                          150,
-                          176
+                          150.0,
+                          176.0
                         ]
                       },
                       "image": {
@@ -76501,32 +76542,32 @@
                           "name": "Stroke",
                           "rect": {
                             "anchorMin": [
-                              0,
-                              0
+                              0.0,
+                              0.0
                             ],
                             "anchorMax": [
-                              1,
-                              1
+                              1.0,
+                              1.0
                             ],
                             "pivot": [
                               0.5,
                               0.5
                             ],
                             "position": [
-                              0,
-                              0
+                              0.0,
+                              0.0
                             ],
                             "size": [
-                              0,
-                              0
+                              0.0,
+                              0.0
                             ]
                           },
                           "image": {
                             "sprite": "Semi Rounded - Stroke 2px",
                             "type": "Sliced",
                             "tint": "#AF54E759",
-                            "pixelsPerUnitMultiplier": 1.6,
-                            "raycastTarget": false
+                            "raycastTarget": false,
+                            "pixelsPerUnitMultiplier": 1.6
                           }
                         },
                         {
@@ -76546,12 +76587,12 @@
                               0.5
                             ],
                             "position": [
-                              0,
-                              22
+                              0.0,
+                              22.0
                             ],
                             "size": [
-                              120,
-                              120
+                              120.0,
+                              120.0
                             ]
                           },
                           "image": {
@@ -76578,12 +76619,12 @@
                               0.5
                             ],
                             "position": [
-                              0,
-                              22
+                              0.0,
+                              22.0
                             ],
                             "size": [
-                              104,
-                              104
+                              104.0,
+                              104.0
                             ]
                           },
                           "image": {
@@ -76611,23 +76652,23 @@
                               0.5
                             ],
                             "position": [
-                              0,
-                              -58
+                              0.0,
+                              -58.0
                             ],
                             "size": [
-                              138,
-                              44
+                              138.0,
+                              44.0
                             ]
                           },
                           "text": {
                             "value": "Vape",
                             "font": "Curse Casual SDF",
-                            "size": 26,
+                            "size": 26.0,
                             "color": "#FFFFFFFF",
                             "alignment": "Center",
                             "autoSize": true,
-                            "autoSizeMin": 15,
-                            "autoSizeMax": 26
+                            "autoSizeMin": 15.0,
+                            "autoSizeMax": 26.0
                           }
                         }
                       ]
@@ -76649,12 +76690,12 @@
                           0.5
                         ],
                         "position": [
-                          0,
-                          0
+                          0.0,
+                          0.0
                         ],
                         "size": [
-                          150,
-                          176
+                          150.0,
+                          176.0
                         ]
                       },
                       "image": {
@@ -76713,32 +76754,32 @@
                           "name": "Stroke",
                           "rect": {
                             "anchorMin": [
-                              0,
-                              0
+                              0.0,
+                              0.0
                             ],
                             "anchorMax": [
-                              1,
-                              1
+                              1.0,
+                              1.0
                             ],
                             "pivot": [
                               0.5,
                               0.5
                             ],
                             "position": [
-                              0,
-                              0
+                              0.0,
+                              0.0
                             ],
                             "size": [
-                              0,
-                              0
+                              0.0,
+                              0.0
                             ]
                           },
                           "image": {
                             "sprite": "Semi Rounded - Stroke 2px",
                             "type": "Sliced",
                             "tint": "#AF54E759",
-                            "pixelsPerUnitMultiplier": 1.6,
-                            "raycastTarget": false
+                            "raycastTarget": false,
+                            "pixelsPerUnitMultiplier": 1.6
                           }
                         },
                         {
@@ -76758,12 +76799,12 @@
                               0.5
                             ],
                             "position": [
-                              0,
-                              22
+                              0.0,
+                              22.0
                             ],
                             "size": [
-                              120,
-                              120
+                              120.0,
+                              120.0
                             ]
                           },
                           "image": {
@@ -76790,12 +76831,12 @@
                               0.5
                             ],
                             "position": [
-                              0,
-                              22
+                              0.0,
+                              22.0
                             ],
                             "size": [
-                              104,
-                              104
+                              104.0,
+                              104.0
                             ]
                           },
                           "image": {
@@ -76823,23 +76864,23 @@
                               0.5
                             ],
                             "position": [
-                              0,
-                              -58
+                              0.0,
+                              -58.0
                             ],
                             "size": [
-                              138,
-                              44
+                              138.0,
+                              44.0
                             ]
                           },
                           "text": {
                             "value": "Whiskey",
                             "font": "Curse Casual SDF",
-                            "size": 26,
+                            "size": 26.0,
                             "color": "#FFFFFFFF",
                             "alignment": "Center",
                             "autoSize": true,
-                            "autoSizeMin": 15,
-                            "autoSizeMax": 26
+                            "autoSizeMin": 15.0,
+                            "autoSizeMax": 26.0
                           }
                         }
                       ]
@@ -76861,12 +76902,12 @@
                           0.5
                         ],
                         "position": [
-                          0,
-                          0
+                          0.0,
+                          0.0
                         ],
                         "size": [
-                          150,
-                          176
+                          150.0,
+                          176.0
                         ]
                       },
                       "image": {
@@ -76925,32 +76966,32 @@
                           "name": "Stroke",
                           "rect": {
                             "anchorMin": [
-                              0,
-                              0
+                              0.0,
+                              0.0
                             ],
                             "anchorMax": [
-                              1,
-                              1
+                              1.0,
+                              1.0
                             ],
                             "pivot": [
                               0.5,
                               0.5
                             ],
                             "position": [
-                              0,
-                              0
+                              0.0,
+                              0.0
                             ],
                             "size": [
-                              0,
-                              0
+                              0.0,
+                              0.0
                             ]
                           },
                           "image": {
                             "sprite": "Semi Rounded - Stroke 2px",
                             "type": "Sliced",
                             "tint": "#AF54E759",
-                            "pixelsPerUnitMultiplier": 1.6,
-                            "raycastTarget": false
+                            "raycastTarget": false,
+                            "pixelsPerUnitMultiplier": 1.6
                           }
                         },
                         {
@@ -76970,12 +77011,12 @@
                               0.5
                             ],
                             "position": [
-                              0,
-                              22
+                              0.0,
+                              22.0
                             ],
                             "size": [
-                              120,
-                              120
+                              120.0,
+                              120.0
                             ]
                           },
                           "image": {
@@ -77002,12 +77043,12 @@
                               0.5
                             ],
                             "position": [
-                              0,
-                              22
+                              0.0,
+                              22.0
                             ],
                             "size": [
-                              104,
-                              104
+                              104.0,
+                              104.0
                             ]
                           },
                           "image": {
@@ -77035,28 +77076,58 @@
                               0.5
                             ],
                             "position": [
-                              0,
-                              -58
+                              0.0,
+                              -58.0
                             ],
                             "size": [
-                              138,
-                              44
+                              138.0,
+                              44.0
                             ]
                           },
                           "text": {
                             "value": "Wine",
                             "font": "Curse Casual SDF",
-                            "size": 26,
+                            "size": 26.0,
                             "color": "#FFFFFFFF",
                             "alignment": "Center",
                             "autoSize": true,
-                            "autoSizeMin": 15,
-                            "autoSizeMax": 26
+                            "autoSizeMin": 15.0,
+                            "autoSizeMax": 26.0
                           }
                         }
                       ]
                     }
-                  ]
+                  ],
+                  "layout": {
+                    "IsGrid": true,
+                    "IsVertical": false,
+                    "kind": "Grid",
+                    "spacing": [
+                      16.0,
+                      16.0
+                    ],
+                    "padding": [
+                      0.0,
+                      0.0,
+                      0.0,
+                      0.0
+                    ],
+                    "alignment": "UpperCenter",
+                    "controlWidth": false,
+                    "controlHeight": false,
+                    "expandWidth": false,
+                    "expandHeight": false,
+                    "cellSize": [
+                      150.0,
+                      176.0
+                    ],
+                    "constraint": "FixedColumnCount",
+                    "constraintCount": 7,
+                    "startAxis": "Horizontal",
+                    "centerLastLine": true,
+                    "startCorner": "UpperLeft",
+                    "reverse": false
+                  }
                 },
                 {
                   "IsBound": false,
@@ -77075,18 +77146,18 @@
                       0.5
                     ],
                     "position": [
-                      0,
-                      -40
+                      0.0,
+                      -40.0
                     ],
                     "size": [
-                      900,
-                      120
+                      900.0,
+                      120.0
                     ]
                   },
                   "text": {
                     "value": "You have nothing to give right now.",
                     "font": "Curse Casual SDF",
-                    "size": 34,
+                    "size": 34.0,
                     "color": "#AFC3E6FF",
                     "alignment": "Center"
                   },
@@ -77274,7 +77345,16 @@
                     }
                   ]
                 }
-              ]
+              ],
+              "open": {
+                "fade": true,
+                "scaleFrom": [
+                  0.95,
+                  0.95
+                ],
+                "duration": 0.25,
+                "easing": "QuadInOut"
+              }
             }
           ]
         }
