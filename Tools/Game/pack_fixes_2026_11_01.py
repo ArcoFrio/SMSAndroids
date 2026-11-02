@@ -133,11 +133,19 @@ first = node(gift_dl, 2041717051)
 if not has(first["actionsOnStart"], "SetVariable", name="DailyProc_Gifting_Anis"):
     first["actionsOnStart"].append(setv("DailyProc_Gifting_Anis", "true"))
     done.append("F1 gift lock for the day")
+AFFECTION_EFFECT = "6_Effects/CFXR2 Expression Affectionate (Timed)"
 for nid in LIKED:
     n = node(gift_dl, nid)
     if not has(n["actionsOnStart"], "IncrementVariable", name="Affection_Anis"):
         n["actionsOnStart"].append({"type": "IncrementVariable", "params": {"name": "Affection_Anis", "delta": "1"}})
         done.append("F1 affection on " + LIKED[nid])
+    if not has(n["actionsOnStart"], "SetGameObjectActive", target=AFFECTION_EFFECT):
+        # The game's affection effect, right after the raise - as the pack's other affection lines do it.
+        at = next(i for i, a in enumerate(n["actionsOnStart"])
+                  if a["type"] == "IncrementVariable" and a["params"].get("name") == "Affection_Anis") + 1
+        n["actionsOnStart"].insert(at, {"type": "SetGameObjectActive",
+                                        "params": {"kind": "Direct Path", "active": "true", "target": AFFECTION_EFFECT}})
+        done.append("F1 affection effect on " + LIKED[nid])
 LEAVE_ID = 2041717052
 if LEAVE_ID not in gift_dl["rootNodeIds"]:
     # Every branch used to Exit; now each runs on through the remaining roots (their gift conditions skip
@@ -379,12 +387,30 @@ def translate(instr):
     return None
 
 
+def same_content(a, b):
+    """Equal but for the order of a dialogue's nodes."""
+    def norm(x):
+        x = dict(x)
+        if isinstance(x.get("nodes"), list):
+            x["nodes"] = sorted(x["nodes"], key=lambda n: n["id"])
+        return json.dumps(x, sort_keys=True)
+    return norm(a) == norm(b)
+
+
+def put_in_place(items, field, name, built):
+    at = next((i for i, x in enumerate(items) if x.get(field) == name), None)
+    if at is None:
+        items.append(built)
+    elif not same_content(items[at], built):
+        items[at] = built
+
+
 for show, file, counter, choice_id, exit_id, end_id in SHOWS:
     key = "HHMovie" + show
     # Built afresh every run from the game's extract, so a change here reaches a pack that has an older build;
     # the pack-only episode counters of the first build (2026-11-01, never released) go with it.
-    d["dialogues"] = [x for x in d["dialogues"] if x["key"] != key]
-    d["integrationRules"] = [r for r in d["integrationRules"] if r["key"] != "HHMovieEpisodes" + show]
+    # A show already there is replaced in place, and left exactly as it is when the rebuild says the same thing
+    # (the editor orders the nodes its own way when it saves: a reorder alone is not a change).
     d["variables"] = [v for v in d["variables"] if v["name"] != "HarborHome_MovieEp_" + show]
     g = json.load(open(os.path.join(VANILLA_MOVIES, file), encoding="utf-8"))
     nodes, roots, episodes = [], [], set()
@@ -428,11 +454,12 @@ for show, file, counter, choice_id, exit_id, end_id in SHOWS:
                                   {"type": "IncrementVariable", "params": {"name": counter, "delta": "1", "source": "vanilla"}},
                                   setv("HarborHome_MovieOver", "true")]))
     roots.append(end_id)
-    d["dialogues"].append({"key": key, "displayName": key,
-                           "startConditions": [{"type": "LevelActive", "params": {"level": "place:HarborHomeLivingRoom"}},
-                                               cmp("HarborHome_Movie", show)],
-                           "rootNodeIds": roots, "queueBehind": True, "nodes": nodes})
-    d["integrationRules"].append({
+    put_in_place(d["dialogues"], "key", key, {
+        "key": key, "displayName": key,
+        "startConditions": [{"type": "LevelActive", "params": {"level": "place:HarborHomeLivingRoom"}},
+                            cmp("HarborHome_Movie", show)],
+        "rootNodeIds": roots, "queueBehind": True, "nodes": nodes})
+    put_in_place(d["integrationRules"], "key", "HHMovieEpisodes" + show, {
         "key": "HHMovieEpisodes" + show, "displayName": "Harbor Home - %s episodes" % show,
         "description": ("The game's own %s counter after a Harbor Home showing: past its last episode (%d) the next "
                         "one is the first again, as the game's %s_Condition does after its own showing. Only the "
@@ -464,6 +491,26 @@ if not any(c.get("params", {}).get("name") == "HarborHome_MovieOver" for c in af
         r = node(after, rid)
         r["actionsOnStart"] = [setv("HarborHome_MovieOver", "false")] + (r.get("actionsOnStart") or [])
     done.append("F6 AnisRandomMovie01 follows the show")
+
+# ---------------------------------------------------------------------------------------------- F7 gift outfit
+# The after-gift dialogue wears what she wore in the dialogue that opened the gift window: each gift exit records
+# its own line's outfit (AnisBase in the lab, $HarborHome_Outfit_Anis at Harbor Home), and the reaction's lines
+# read it. A reset on leaving Harbor Home would not do: every morning's refresh takes her through the lab and back.
+add_var("Gifting_Outfit_Anis", "String", "AnisBase",
+        "What Anis wore in the dialogue that opened the gift window; her after-gift lines wear it ($Gifting_Outfit_Anis).",
+        persisted=False)
+for x in d["dialogues"]:
+    for n in x["nodes"]:
+        fin = n.get("actionsOnFinish") or []
+        opens_gifts = any(a["type"] == "SetGameObjectActive" and a["params"].get("target") == "giftui" for a in fin)
+        if opens_gifts and n.get("actor") == "anis" and not has(fin, "SetVariable", name="Gifting_Outfit_Anis"):
+            at = next(i for i, a in enumerate(fin) if a["type"] == "SetGameObjectActive" and a["params"].get("target") == "giftui")
+            fin.insert(at, setv("Gifting_Outfit_Anis", n.get("outfit") or "AnisBase"))
+            done.append("F7 %s records her outfit (%s)" % (x["key"], n.get("outfit") or "AnisBase"))
+for n in gift_dl["nodes"]:
+    if n.get("actor") == "anis" and n.get("outfit") == "AnisBase":
+        n["outfit"] = "$Gifting_Outfit_Anis"
+        done.append("F7 after-gift line wears the recorded outfit")
 
 crlf = "\r\n" in raw
 text = json.dumps(d, ensure_ascii=False, indent=2)

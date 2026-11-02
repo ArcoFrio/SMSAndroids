@@ -734,7 +734,17 @@ def area_fixes():
         # Give the beer: used up, reaction, affection, lock, HUD; in the lab her bust stays (it is her).
         beer, affection = gget("Beer"), pvar("Affection_Anis")
         ask(mf, "press PackUiCanvas_giftui/Pack_giftui/GiftWindow/Panel/Gifts/Beer", area)
-        time.sleep(3)
+        # The liked reaction's first line raises affection and plays the game's affection effect.
+        effect = False
+        for _ in range(16):
+            time.sleep(0.25)
+            if "active True" in ask(mf, "inspect 6_Effects/CFXR2 Expression Affectionate (Timed)", area):
+                effect = True
+                shot("fix_affection_effect")
+                break
+        if not effect:
+            find("error", area, "lab gift: the affection effect never switched on during the liked reaction")
+        time.sleep(1)
         reaction = playing()
         run_dialogue_to_end(area)
         time.sleep(3)
@@ -751,8 +761,8 @@ def area_fixes():
             find("error", area, "lab gift: the daily lock was not set")
         if not got["hud"]:
             find("error", area, "lab gift: the HUD did not come back")
-        if "AnisBase" not in got["busts"]:
-            find("error", area, "lab gift: Anis's bust (her presence in the lab) left: %s" % got["busts"])
+        if "AnisBase" not in got["busts"] or "AnisSwim" in got["busts"]:
+            find("error", area, "lab gift: expected Anis in her lab clothes (AnisBase) after the reaction: %s" % got["busts"])
         shot("fix_after_lab_gift")
     # Closing the window without giving anything brings the HUD back.
     pset("DailyProc_Gifting_Anis", "false")
@@ -767,6 +777,7 @@ def area_fixes():
     pset("DailyProc_Gifting_Anis", "false")
     pset("HarborHome_VisitList", "[]")
     pset("HarborHome_Visit_Anis", "true")
+    pset("HarborHome_Outfit_Anis", "AnisSwim")
     pset("Location_Anis", "HarborHomeKitchenSink")
     travel("pack:%s.HarborHomeKitchen" % PACK_ID, area)
     ask(mf, "press 9_MainCanvas/HHTalkPanel/HHTalkButton1", area)
@@ -776,6 +787,21 @@ def area_fixes():
     if "active True" in ask(mf, "inspect PackUiCanvas_giftui/Pack_giftui/GiftWindow", area):
         ask(mf, "press PackUiCanvas_giftui/Pack_giftui/GiftWindow/Panel/Gifts/Wine", area)
         time.sleep(3)
+        # The reaction wears what she wore at Harbor Home (here her swimsuit), not her lab clothes.
+        reaction_busts = set()
+        for _ in range(40):
+            b = body(ask(sa, "busts", area))
+            if b != "(none)":
+                reaction_busts.add(b.split(" [")[0])
+            if not playing():
+                break
+            line = ask(mf, "line", area)
+            c = re.findall(r"choice: ([^|]+)", line)
+            ask(mf, "press-text " + c[0].strip()) if c else ask(mf, "next", area)
+            time.sleep(0.45)
+        log(area, "HH gift reaction busts", sorted(reaction_busts))
+        if reaction_busts and reaction_busts != {"AnisSwim"}:
+            find("error", area, "Harbor Home gift: in her swimsuit, the reaction showed %s" % sorted(reaction_busts))
         run_dialogue_to_end(area)
         time.sleep(3)
         left = body(ask(sa, "busts", area))
