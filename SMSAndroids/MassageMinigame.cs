@@ -165,7 +165,7 @@ namespace SMSAndroidsCore
 
         // Character / level progression
         // Driven by:
-        //   * proxy variable "Minigame_Massage_Character" — which character GO under "Characters" to show
+        //   * pack variable "Minigame_Massage_Character" — which character GO under "Characters" to show
         //   * SaveManager int "Minigame_Massage_<Char>_Level" — index of the next variant to play
         // When level >= variant count we enter sandbox mode (random pick, score doesn't gate progression).
         private string activeCharacterName;
@@ -174,7 +174,9 @@ namespace SMSAndroidsCore
         private int activeVariantIndex;
         private int activeVariantCount;
         private bool sandboxMode;
-        private const string PROXY_CHAR_KEY = "Minigame_Massage_Character";
+        private const string CHAR_KEY = "Minigame_Massage_Character";
+        /// <summary>The pack its progress is kept in.</summary>
+        private const string PackId = "SMSAndroidsPack";
         private const string SAVE_LEVEL_KEY_PREFIX = "Minigame_Massage_";
         private const string SAVE_LEVEL_KEY_SUFFIX = "_Level";
         private const string SAVE_HIGHSCORE_KEY_PREFIX = "Minigame_Massage_";
@@ -1017,7 +1019,7 @@ namespace SMSAndroidsCore
             }
 
             // Resolve target character name.
-            string charName = Core.GetProxyVariableString(PROXY_CHAR_KEY, "");
+            string charName = ModForgeBridge.GetString(PackId, CHAR_KEY, "");
             if (string.IsNullOrEmpty(charName)) charName = "Anis";
 
             // Activate only the matching character; deactivate the rest.
@@ -1048,7 +1050,7 @@ namespace SMSAndroidsCore
                 return;
             }
 
-            int level = SaveManager.GetInt(LevelKey(activeCharacterName), 0);
+            int level = ModForgeBridge.GetInt(PackId, LevelKey(activeCharacterName), 0);
             sandboxMode = level >= activeVariantCount;
             activeVariantIndex = sandboxMode
                 ? UnityEngine.Random.Range(0, activeVariantCount)
@@ -1261,13 +1263,13 @@ namespace SMSAndroidsCore
 
             // Highscore (per character) — handy for dialogue gating later.
             string hsKey = HighscoreKey(activeCharacterName);
-            if (totalScore > SaveManager.GetInt(hsKey, 0))
-                SaveManager.SetInt(hsKey, totalScore);
+            if (totalScore > ModForgeBridge.GetInt(PackId, hsKey, 0))
+                ModForgeBridge.SetInt(PackId, hsKey, totalScore);
 
             // Legacy keys kept in sync so older code paths still see something sensible.
-            SaveManager.SetBool("Minigame_Massage_Played", true);
-            if (totalScore > SaveManager.GetInt("Minigame_Massage_Highscore", 0))
-                SaveManager.SetInt("Minigame_Massage_Highscore", totalScore);
+            ModForgeBridge.SetBool(PackId, "Minigame_Massage_Played", true);
+            if (totalScore > ModForgeBridge.GetInt(PackId, "Minigame_Massage_Highscore", 0))
+                ModForgeBridge.SetInt(PackId, "Minigame_Massage_Highscore", totalScore);
 
             if (sandboxMode) return;
 
@@ -1278,9 +1280,9 @@ namespace SMSAndroidsCore
             // variant for fun shouldn't bump progression. New variants added later will pick
             // up automatically because activeVariantCount is read from sibling count.
             string levelKey = LevelKey(activeCharacterName);
-            int storedLevel = SaveManager.GetInt(levelKey, 0);
+            int storedLevel = ModForgeBridge.GetInt(PackId, levelKey, 0);
             if (storedLevel == activeVariantIndex)
-                SaveManager.SetInt(levelKey, storedLevel + 1);
+                ModForgeBridge.SetInt(PackId, levelKey, storedLevel + 1);
         }
 
         private static string LevelKey(string charName)     => SAVE_LEVEL_KEY_PREFIX + charName + SAVE_LEVEL_KEY_SUFFIX;

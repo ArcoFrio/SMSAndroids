@@ -492,6 +492,34 @@ if not any(c.get("params", {}).get("name") == "HarborHome_MovieOver" for c in af
         r["actionsOnStart"] = [setv("HarborHome_MovieOver", "false")] + (r.get("actionsOnStart") or [])
     done.append("F6 AnisRandomMovie01 follows the show")
 
+# ---------------------------------------------------------------------------------------------- F8 movie company
+# The shows serve any character: whoever's dialogue picks one says who the player watches with, and each
+# character's follow-up waits for "a show is over" AND "it was with me" (the author, 2026-11-02, for Rapi).
+add_var("HarborHome_MovieWith", "String", "",
+        "Who the player is watching the Harbor Home TV with (Anis, Rapi...): set beside HarborHome_Movie by the dialogue "
+        "that picks the show; that character's follow-up starts on HarborHome_MovieOver and this, and clears both.",
+        persisted=False)
+var("HarborHome_Movie")["description"] = (
+    "The TV show picked in the Harbor Home living room, waiting to play (Scifi, Fantasy, News); any character's "
+    "dialogue sets it, with HarborHome_MovieWith. The show clears it when it starts.")
+var("HarborHome_MovieOver")["description"] = (
+    "A Harbor Home TV show has just finished. The follow-up of the character in HarborHome_MovieWith starts on it "
+    "and clears it.")
+for show, file, counter, choice_id, exit_id, end_id in SHOWS:
+    exit_node = node(dialogue("AnisDialogueHHDefaultMovie"), exit_id)
+    fin = exit_node.get("actionsOnFinish") or []
+    if not has(fin, "SetVariable", name="HarborHome_MovieWith"):
+        at = next(i for i, a in enumerate(fin) if a["type"] == "SetVariable" and a["params"].get("name") == "HarborHome_Movie") + 1
+        fin.insert(at, setv("HarborHome_MovieWith", "Anis"))
+        done.append("F8 Anis's %s pick says who" % show)
+if not any(c.get("params", {}).get("name") == "HarborHome_MovieWith" for c in after["startConditions"]):
+    after["startConditions"].append(cmp("HarborHome_MovieWith", "Anis"))
+    for rid in after["rootNodeIds"]:
+        r = node(after, rid)
+        at = next(i for i, a in enumerate(r["actionsOnStart"]) if a["params"].get("name") == "HarborHome_MovieOver") + 1
+        r["actionsOnStart"].insert(at, setv("HarborHome_MovieWith", ""))
+    done.append("F8 AnisRandomMovie01 follows only a show watched with Anis")
+
 # ---------------------------------------------------------------------------------------------- F7 gift outfit
 # The after-gift dialogue wears what she wore in the dialogue that opened the gift window: each gift exit records
 # its own line's outfit (AnisBase in the lab, $HarborHome_Outfit_Anis at Harbor Home), and the reaction's lines

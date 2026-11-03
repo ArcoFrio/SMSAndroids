@@ -19,12 +19,11 @@ namespace SMSAndroidsCore
     ///   <c>HHFridgeOverlay</c> rules.</item>
     /// </list>
     /// All of it reads/writes the pack's <c>Location_&lt;Char&gt;</c>
-    /// variables — the single source of truth <see cref="ScheduleVisualizer"/>
-    /// and the HHTalk panel already consume.
+    /// variables — which the pack's own world-map icons (UI <c>mapicons</c>)
+    /// and Harbor Home talk panel (UI <c>hhtalk</c>) read too.
     /// <para/>
     /// The plugin survives because <see cref="loadedSchedule"/> is a load gate
-    /// for <see cref="Minigames"/>, <see cref="ScheduleVisualizer"/> and
-    /// <see cref="SaveManager"/>'s post-sleep turnover; it latches on the same
+    /// for <see cref="Minigames"/>; it latches on the same
     /// condition the old initializer used, so downstream timing is unchanged.
     /// </summary>
     [BepInPlugin(pluginGuid, Core.pluginName + " - Schedule", Core.pluginVersion)]

@@ -1,0 +1,29 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <!-- SMSAndroids' half of the in-game checks' bridge (Tools/Game/bridge.py "sa"): a test-only BepInEx plugin, built
+       into the test copy by setup-test-game.ps1 -Build and never shipped. It reads the game's scene, nothing of the
+       mod's, so the checks run the same with or without SMSAndroidsCore. -->
+  <PropertyGroup>
+    <TargetFramework>net48</TargetFramework>
+    <AssemblyName>SMSAndroidsTestBridge</AssemblyName>
+    <RootNamespace>SMSAndroidsTestBridge</RootNamespace>
+    <LangVersion>latest</LangVersion>
+    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <Libraries>$(MSBuildThisFileDirectory)..\..\..\Libraries\</Libraries>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="TestBridge.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="$(Libraries)BepInEx.dll" Private="false" />
+    <Reference Include="$(Libraries)GameCreator.Runtime.Core.dll" Private="false" />
+    <Reference Include="$(Libraries)Unity.TextMeshPro.dll" Private="false" />
+    <Reference Include="$(Libraries)UnityEngine.dll" Private="false" />
+    <Reference Include="$(Libraries)UnityEngine.CoreModule.dll" Private="false" />
+    <Reference Include="$(Libraries)UnityEngine.UI.dll" Private="false" />
+    <Reference Include="$(Libraries)UnityEngine.UIModule.dll" Private="false" />
+    <Reference Include="$(Libraries)UnityEngine.TextRenderingModule.dll" Private="false" />
+    <Reference Include="$(Libraries)UnityEngine.ParticleSystemModule.dll" Private="false" />
+  </ItemGroup>
+</Project>

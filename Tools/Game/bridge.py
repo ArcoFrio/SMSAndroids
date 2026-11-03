@@ -12,7 +12,7 @@ import sys
 import time
 
 TEST = r"D:\Downloads\SkyrimM\spec\uTorrent\Starmaker Story 1.8E - Androids test"
-FOLDERS = {"mf": r"BepInEx\plugins\SMSModForge\DebugBridge", "sa": r"BepInEx\plugins\SMSAndroidsCore\DebugBridge"}
+FOLDERS = {"mf": r"BepInEx\plugins\SMSModForge\DebugBridge", "sa": r"BepInEx\plugins\SMSAndroidsTestBridge\DebugBridge"}
 ANSWER = re.compile(r"^\d\d:\d\d:\d\d\.\d{3} (ok|error|timeout)")
 
 

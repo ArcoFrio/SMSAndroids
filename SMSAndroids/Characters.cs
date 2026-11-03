@@ -23,7 +23,6 @@ namespace SMSAndroidsCore
     ///   fields. Populated by name-lookup against <see cref="Core.bustManager"/>
     ///   once ModForge has finished its bust pass. Nullable — if the player
     ///   strips a character from the pack, the matching field stays null.</item>
-    ///   <item><see cref="characterGiftLikesMap"/> — read by Core's gift glue.</item>
     ///   <item><see cref="AddBlinkingSpriteToBlinkObjects"/> — utility the
     ///   massage minigame still calls on its own character variants.</item>
     /// </list>
@@ -57,25 +56,13 @@ namespace SMSAndroidsCore
         // ── Cameo ─────────────────────────────────────────────────────────
         public static GameObject solidSnake;
 
-        // ── Character → gifts they like mapping ───────────────────────────
-        // Read by Core.IncrementAffectionForGiftIfLiked to decide whether
-        // giving a particular gift bumps a character's affection. Pack-side
-        // alternative: declare the same map via <c>characterGiftLikes</c>
-        // entries in the modpack's actors[].outfits[].gifts list (the bust
-        // pack loader folds those into this same dict at load time, so adds
-        // here remain authoritative for SMSAndroids-only characters).
-        public static Dictionary<string, List<string>> characterGiftLikesMap = new Dictionary<string, List<string>>
-        {
-            { "Anis", new List<string> { "Beer", "Body-Oil", "Chocolate", "Gift_Sunglasses", "Wine" } },
-        };
-
         public static bool loadedBusts = false;
 
         public void Update()
         {
             if (Core.currentScene.name == "CoreGameScene")
             {
-                if (!loadedBusts && Core.loadedCore && Places.loadedPlaces)
+                if (!loadedBusts && Core.loadedCore)
                 {
                     // Defer one extra frame until ModForge has had a chance
                     // to populate the pack busts. We don't take a hard

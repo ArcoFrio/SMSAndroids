@@ -31,7 +31,7 @@ namespace SMSAndroidsCore
         public static bool loadedStory = false;
 
         // ── Shared GC2 signal constants ───────────────────────────────────
-        // Referenced by Minigames/Dialogues/Places. Kept here (not in Core)
+        // Referenced by Minigames. Kept here (not in Core)
         // for backward compatibility with every existing emit site.
         public static SignalArgs blinkSignal                  = new SignalArgs(new PropertyName("Blink"), null);
         public static SignalArgs dialogueEndSignal            = new SignalArgs(new PropertyName("DialogueEnd"), null);
@@ -58,7 +58,7 @@ namespace SMSAndroidsCore
         {
             if (Core.currentScene.name == "CoreGameScene")
             {
-                if (!loadedStory && Places.loadedPlaces && Characters.loadedBusts && Dialogues.loadedDialogues)
+                if (!loadedStory && Characters.loadedBusts)
                 {
                     Logger.LogInfo("----- STORY LOADED -----");
                     loadedStory = true;

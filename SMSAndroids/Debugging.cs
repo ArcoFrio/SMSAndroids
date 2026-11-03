@@ -193,38 +193,6 @@ namespace SMSAndroidsCore
             //}
         }
 
-        private readonly HashSet<GameObject> checkedRoomTalkChildren = new HashSet<GameObject>();
-
-        private void CheckRoomTalkChildren()
-        {
-            foreach (Transform child in Core.roomTalk)
-            {
-                GameObject childGO = child.gameObject;
-
-                if (childGO == null || childGO.name == "Always_Active")
-                {
-                    continue;
-                }
-
-                if (childGO.activeSelf && !checkedRoomTalkChildren.Contains(childGO))
-                {
-                    // Run the CheckAllConditions method for this child
-                    Debug.Log($"[Debugging] Running CheckAllConditions for {childGO.name}");
-                    bool conditionsMet = Places.CheckAllConditions(childGO, new GameCreator.Runtime.Common.Args(childGO));
-
-                    Debug.Log($"[Debugging] Conditions met for {childGO.name}: {conditionsMet}");
-
-                    // Print Conditions only
-                    PrintConditions(childGO);
-
-                    checkedRoomTalkChildren.Add(childGO);
-
-                    // Optionally, deactivate the child after checking, or perform other actions
-                    //child.gameObject.SetActive(false);
-                }
-            }
-        }
-
         private void PrintConditions(GameObject targetGameObject)
         {
             if (targetGameObject == null)
@@ -2922,49 +2890,6 @@ namespace SMSAndroidsCore
             }
 
             Debug.Log("=== END GLOBAL NAME VARIABLES ===");
-        }
-
-        public static void PrintProxyVariables()
-        {
-            if (Core.proxyVariables == null)
-            {
-                Debug.LogError("[PrintProxyVariables] Proxy Variables not initialized");
-                return;
-            }
-
-            Debug.Log("=== PROXY VARIABLES ===");
-            Debug.Log($"Asset Name: {Core.proxyVariables.name}");
-            Debug.Log($"UniqueID: {Core.proxyVariables.UniqueID}");
-
-            // Get all variable names from the proxy variables
-            string[] variableNames = Core.proxyVariables.Names;
-
-            if (variableNames == null || variableNames.Length == 0)
-            {
-                Debug.LogWarning("[PrintProxyVariables] No variables found in Proxy Variables asset");
-                Debug.Log("=== END PROXY VARIABLES ===");
-                return;
-            }
-
-            Debug.Log($"Total Variables: {variableNames.Length}");
-
-            foreach (string varName in variableNames)
-            {
-                if (Core.proxyVariables.Exists(varName))
-                {
-                    object value = Core.proxyVariables.Get(varName);
-                    string typeName = value != null ? value.GetType().Name : "null";
-                    string title = Core.proxyVariables.Title(varName);
-                    
-                    Debug.Log($"  - {varName}: {value ?? "null"} (Type: {typeName}, Title: \"{title}\")");
-                }
-                else
-                {
-                    Debug.LogWarning($"  - {varName}: [DOES NOT EXIST]");
-                }
-            }
-
-            Debug.Log("=== END PROXY VARIABLES ===");
         }
 
         public static IEnumerator PrintAllGlobalNameVariablesDelayed(float delay)

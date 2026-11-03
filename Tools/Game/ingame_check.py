@@ -11,6 +11,10 @@ Areas, each relaunching the game so none inherits another's state:
   places     every place of the pack: travel there, what level is up, a screenshot, errors
   behaviour  what the pack is for (the port of the old SMSAndroids): schedules, Harbor Home, gifting, the gift
              shop, Secret Beach, the voyeur pick - each set up, run, and read back
+  migrated   what moved from SMSAndroidsCore into the pack on 2026-11-02: the Harbor Home talk panel, no random
+             bedroom events in the house, the world map's character icons
+  moved      the rest of SMSAndroidsCore, moved into the pack later on 2026-11-02: the bedroom buttons and TV copied
+             into Harbor Home, the affection effect, waking up there after a night slept there
   dialogues  every dialogue, played from its own place, every choice taken over repeated plays; each line read
              off the box (speaker, words, unfilled {tags}), the busts and scene pictures up, errors per play;
              coverage of the pack's lines counted by their words
@@ -37,7 +41,7 @@ PACK_ID = "SMSAndroidsPack"
 PACK = json.load(open(os.path.join(HERE, "..", "..", PACK_ID, "modpack.json"), encoding="utf-8-sig"))
 RUN = os.path.join(os.environ.get("TEMP", "."), "SMSAndroids-ingame", "run-" + datetime.datetime.now().strftime("%Y%m%d-%H%M"))
 SHOTS_FROM = os.path.join(TEST, r"BepInEx\plugins\SMSModForge\DebugBridge\a0\shots")
-UI_FROM = os.path.join(TEST, r"BepInEx\plugins\SMSAndroidsCore\DebugBridge\a0")
+UI_FROM = os.path.join(TEST, r"BepInEx\plugins\SMSAndroidsTestBridge\DebugBridge\a0")
 for d in ("shots", "ui"):
     os.makedirs(os.path.join(RUN, d), exist_ok=True)
 
@@ -108,7 +112,7 @@ def pset(name, value):
 
 
 def gget(name):
-    return body(ask(mf, "get " + name, "var")).split(" = ", 1)[-1]
+    return body(ask(mf, "get " + name, "var")).split(" = ", 1)[-1].lower()
 
 
 def gset(name, value):
@@ -193,10 +197,10 @@ def launch():
     answer = ask(mf, "wait-ingame 180", "startup", timeout=240)
     if "ok" not in answer:
         raise SystemExit("the game did not get in: " + answer)
-    # The pack's rules and SMSAndroids' load chain settle over the first seconds.
+    # The game's scene up and the pack readable; its rules settle over the first seconds.
     deadline = time.time() + 60
     while time.time() < deadline:
-        if "bases=True" in ask(sa, "state", "startup"):
+        if "levels=True" in ask(sa, "state", "startup") and ask(mf, "pvar %s HarborHome_Bought" % PACK_ID, "startup").startswith("ok"):
             break
         time.sleep(1)
     time.sleep(3)
@@ -211,9 +215,11 @@ def area_startup():
     area = "startup"
     launch()
     state = ask(sa, "state", area)
-    for flag in ("core", "busts", "places", "dialogues", "schedule", "story", "minigame", "visualizer", "bases"):
-        if "%s=True" % flag not in state:
-            find("error", area, "SMSAndroids' %s never finished loading (%s)" % (flag, state))
+    if "levels=True" not in state or "busts=True" not in state:
+        find("error", area, "the game's scene is not up as expected (%s)" % state)
+    # Played without SMSAndroidsCore: the pack is all there is (2026-11-02). Say so if the copy still has it.
+    if os.path.exists(os.path.join(TEST, r"BepInEx\plugins\SMSAndroidsCore.dll")):
+        find("info", area, "the test copy has SMSAndroidsCore (setup-test-game.ps1 -WithPlugin): this run is not what players have")
     warning = ask(mf, "warning", area)
     if "open" in warning:
         find("warn", area, "ModForge shows its save warning: " + warning)
@@ -547,7 +553,7 @@ def area_behaviour():
         if after["Affection_Anis"] == affection_before:
             find("error", area, "Gifting: Anis's reaction to the beer is a liked one ('liquid courage') but Affection_Anis "
                                 "stayed %s after it" % affection_before)
-        if after["Beer"] == beer_before == "True":
+        if after["Beer"] == beer_before == "true":
             find("error", area, "Gifting: the beer given is still in the player's inventory")
         if after["DailyProc_Gifting_Anis"] != "true":
             find("error", area, "Gifting: DailyProc_Gifting_Anis not set - she can be given gifts again the same day")
@@ -632,11 +638,11 @@ def area_hh():
                  if "Anis" in l and "(hidden)" not in l and "NPC" in l]
         if not drawn:
             find("error", area, "%s: Anis (at %s, outfit %s) is not drawn in the room" % (room, spot, pvar("HarborHome_Outfit_Anis")))
-        panel = ask(mf, "inspect 9_MainCanvas/HHTalkPanel/HHTalkButton1", area)
+        panel = ask(mf, "inspect " + talk_card(area), area)
         if "active True" not in panel:
             find("error", area, "%s: no talk button for Anis" % room)
             continue
-        ask(mf, "press 9_MainCanvas/HHTalkPanel/HHTalkButton1", area)
+        ask(mf, "press " + talk_card(area), area)
         time.sleep(2.5)
         first = ask(mf, "line", area)
         if expected not in first:
@@ -654,7 +660,7 @@ def area_hh():
     pset("Location_Anis", "HarborHomeKitchenSink")
     travel("pack:%s.HarborHomeKitchen" % PACK_ID, area)
     for outfit_choice, outfit in (("Sparkling Summer", "AnisSwim"), ("Default", "AnisBase")):
-        ask(mf, "press 9_MainCanvas/HHTalkPanel/HHTalkButton1", area)
+        ask(mf, "press " + talk_card(area), area)
         time.sleep(2.5)
         run_dialogue_to_end(area, prefer=["(Change outfit.)", outfit_choice])
         time.sleep(2)
@@ -670,7 +676,7 @@ def area_hh():
             find("error", area, "after the outfit change ends, a bust is left on screen: %s" % left[:100])
         shot("hh_outfit_" + outfit)
     # The gift, from Harbor Home: window, reaction, HUD back.
-    ask(mf, "press 9_MainCanvas/HHTalkPanel/HHTalkButton1", area)
+    ask(mf, "press " + talk_card(area), area)
     time.sleep(2.5)
     run_dialogue_to_end(area, prefer=["I have something for you."])
     time.sleep(1.5)
@@ -689,6 +695,226 @@ def area_hh():
     else:
         find("error", area, "the gift window did not open from Harbor Home")
     errors(area, "Harbor Home")
+    stop()
+    scan_logs(area)
+
+
+_talk_card = {}
+
+
+def talk_card(area, who="Anis"):
+    """Her card on the Harbor Home talk panel (the pack's UI hhtalk), by the path the game has it at."""
+    if who not in _talk_card:
+        found = body(ask(mf, "find-all Talk_" + who, area)).split(": ", 1)[-1].split(" | ")[0]
+        _talk_card[who] = found if found.startswith("9_MainCanvas") else "9_MainCanvas/Pack_hhtalk/HHTalk/Talk_" + who
+    return _talk_card[who]
+
+
+def shown(path, area):
+    return "active True" in ask(mf, "inspect " + path, area)
+
+
+# --------------------------------------------------------------------------------------------- migrated
+MAP = "World_Map/Canvas/Core"
+
+
+def area_migrated():
+    """What SMSAndroidsCore drew or held in C# until 2026-11-02, now the pack's: the Harbor Home talk panel, no
+    random bedroom events in the house, the world map's character icons. Each with a control that must differ."""
+    area = "migrated"
+    launch()
+    for name, value in (("HarborHome_Bought", "true"), ("HarborHome_Visit_Anis", "true"), ("HarborHome_VisitList", "[]"),
+                        ("Location_Anis", "HarborHomeKitchenSink"), ("Location_Centi", "Unknown")):
+        pset(name, value)
+    gset("Disable-Specific-RNGEvents", "false")
+    time.sleep(2)
+
+    # The talk panel: her card in her room, the game's bubble off; nobody's card in a room she is not in.
+    travel("pack:%s.HarborHomeKitchen" % PACK_ID, area)
+    card = talk_card(area)
+    if pvar("HarborHome_PlayerRoom") != "HarborHomeKitchen":
+        find("error", area, "in the kitchen, HarborHome_PlayerRoom = %r" % pvar("HarborHome_PlayerRoom"))
+    if not shown(card, area):
+        find("error", area, "kitchen with Anis at the sink: her talk card is not shown (%s)" % card)
+    if shown("9_MainCanvas/TalkButton", area):
+        find("error", area, "kitchen: the game's talk bubble is still up beside the panel")
+    shot("migrated_talk_kitchen")
+    ui_dump("hhtalk_kitchen", card.rsplit("/", 1)[0], area)
+    if not shown(card + "/Body/Window/Portrait_AnisBase", area) or shown(card + "/Body/Window/Portrait_AnisSwim", area):
+        find("error", area, "kitchen: her card does not show her in AnisBase")
+    pset("HarborHome_Outfit_Anis", "AnisSwim")
+    time.sleep(1)
+    if not shown(card + "/Body/Window/Portrait_AnisSwim", area) or shown(card + "/Body/Window/Portrait_AnisBase", area):
+        find("error", area, "outfit AnisSwim: her card does not show her in AnisSwim")
+    pset("HarborHome_Outfit_Anis", "AnisBase")
+    # Locked: dimmed, and a click does nothing. Control: unlocked, the same click starts her talk.
+    gset("Lock-Game", "true")
+    time.sleep(0.5)
+    if not shown(card + "/Body/Busy", area):
+        find("error", area, "Lock-Game on: her card is not dimmed")
+    ask(mf, "press " + card, area)
+    time.sleep(2)
+    if pvar("HarborHome_TalkSelected") or playing():
+        find("error", area, "Lock-Game on: clicking her card still selected her (%r)" % pvar("HarborHome_TalkSelected"))
+        see_through(area)
+    gset("Lock-Game", "false")
+    time.sleep(0.5)
+    if shown(card + "/Body/Busy", area):
+        find("error", area, "Lock-Game off: her card is still dimmed")
+    ask(mf, "press " + card, area)
+    time.sleep(2.5)
+    if "AnisDialogueHHDefault" not in ask(mf, "line", area):
+        find("error", area, "clicking her card did not start AnisDialogueHHDefault (TalkSelected %r)" % pvar("HarborHome_TalkSelected"))
+    run_dialogue_to_end(area, prefer=["Just passing by", "Nah"])
+    pset("Location_Anis", "HarborHomePoolTanningleft")
+    time.sleep(1)
+    if shown(card, area):
+        find("error", area, "Anis moved to the pool: her card still shows in the kitchen")
+
+    # Random bedroom events: held on inside, the player's own value back outside - both values of it.
+    for players in ("false", "true"):
+        travel("pack:%s.HarborHouseEntrance" % PACK_ID, area)
+        gset("Disable-Specific-RNGEvents", players)
+        time.sleep(1)
+        travel("pack:%s.HarborHomeLivingRoom" % PACK_ID, area)
+        if gget("Disable-Specific-RNGEvents") != "true":
+            find("error", area, "player's setting %s: inside the house the game's random events are not held off (%s)"
+                 % (players, gget("Disable-Specific-RNGEvents")))
+        if players == "true":
+            # The player turns the setting off in the game's settings while inside: kept for outside.
+            gset("Disable-Specific-RNGEvents", "false")
+            time.sleep(1.5)
+            if gget("Disable-Specific-RNGEvents") != "true":
+                find("error", area, "turned off inside the house, the setting was not held on")
+            players = "false"
+        travel("pack:%s.HarborHouseEntrance" % PACK_ID, area)
+        if gget("Disable-Specific-RNGEvents") != players:
+            find("error", area, "leaving the house, the setting is %s, not the player's %s" % (gget("Disable-Specific-RNGEvents"), players))
+    if pvar("HarborHome_PlayerRoom") != "":
+        find("error", area, "at the entrance, HarborHome_PlayerRoom = %r" % pvar("HarborHome_PlayerRoom"))
+    if not shown("9_MainCanvas/TalkButton", area):
+        find("error", area, "outside the rooms, the game's talk bubble did not come back")
+
+    # The world map: her face on the button her location names, and on its district; Centi (Unknown) nowhere.
+    cases = [("Mall", "Shopside/Mall", "Shoppingdistrict"), ("HarborHomeKitchenSink", "Foundry/HarborHouseEntrance", "Harbor"),
+             ("MountainLabRoomNikkeAnis", "Seaside/SecretBeach", "Seaside"), ("HospitalHallway", "Downtown/Hospital", "Downtown"),
+             ("Hospitalhallway", "Downtown/Hospital", "Downtown"), ("Beach", "Seaside/Beach", "Seaside")]
+    ask(mf, "set-active World_Map true", area)
+    time.sleep(1)
+    for location, button, district in cases:
+        pset("Location_Anis", location)
+        time.sleep(0.8)
+        spot = pvar("MapSpot_Anis")
+        if spot != button:
+            find("error", area, "Location_Anis %s: MapSpot_Anis = %r, not %s" % (location, spot, button))
+        group = button.split("/")[0]
+        ask(mf, "set-active %s/Radial_Buttons/%s true" % (MAP, group), area)
+        time.sleep(0.4)
+        if not shown("%s/Radial_Buttons/%s/AndroidsMapIcons/Icon_Anis" % (MAP, button), area):
+            find("error", area, "%s: no icon for Anis on the %s button" % (location, button))
+        if shown("%s/Radial_Buttons/%s/AndroidsMapIcons/Icon_Centi" % (MAP, button), area):
+            find("error", area, "%s: Centi (Unknown) has an icon on %s" % (location, button))
+        shot("migrated_map_" + location)
+        ask(mf, "set-active %s/Radial_Buttons/%s false" % (MAP, group), area)
+        if not shown("%s/District_Buttons/%s/AndroidsMapIcons/Icon_Anis" % (MAP, district), area):
+            find("error", area, "%s: no icon for Anis under the %s district" % (location, district))
+    # The look, opened as a player opens it, with a crowd: the lab's residents, a busy mall, a few elsewhere.
+    crowd = {"Elegg": "MountainLabRoomNikkeElegg", "Frima": "MountainLabRoomNikkeFrima", "Guilty": "MountainLabRoomNikkeGuilty",
+             "Helm": "MountainLabRoomNikkeHelm", "Maiden": "MountainLabRoomNikkeMaiden", "Mary": "MountainLabRoomNikkeMary",
+             "Mast": "MountainLabRoomNikkeMast", "Neon": "MountainLabRoomNikkeNeon", "Pepper": "MountainLabRoomNikkePepper",
+             "Anis": "Mall", "Centi": "Mall", "Dorothy": "Mall", "Rapi": "Mall", "Rosanna": "Mall", "Sakura": "Mall",
+             "Tove": "Gasstation", "Viper": "Gasstation", "Yan": "Downtown", "Amber": "Beach", "Claire": "GiftShop"}
+    for who, where in crowd.items():
+        pset("Location_" + who, where)
+    time.sleep(1.5)
+    shot("migrated_map_look_districts")
+    for district, group in (("Shoppingdistrict", "Shopside"), ("Seaside", "Seaside")):
+        ask(mf, "press %s/District_Buttons/%s" % (MAP, district), area)
+        time.sleep(2)
+        shot("migrated_map_look_radial_" + group)
+        ask(mf, "press %s/Radial_Buttons/%s/Return" % (MAP, group), area)
+        time.sleep(2)
+    for who in crowd:
+        pset("Location_" + who, "Unknown")
+    time.sleep(0.8)
+    if pvar("MapSpot_Anis") != "" or shown("%s/District_Buttons/Seaside/AndroidsMapIcons/Icon_Anis" % MAP, area):
+        find("error", area, "Location_Anis Unknown: she still shows on the map (%r)" % pvar("MapSpot_Anis"))
+    shot("migrated_map_districts")
+    ask(mf, "set-active World_Map false", area)
+    errors(area, "the migrated parts")
+    stop()
+    scan_logs(area)
+
+
+# --------------------------------------------------------------------------------------------- moved
+def level_now(area):
+    return body(ask(mf, "level", area))
+
+
+def area_moved():
+    """The last of SMSAndroidsCore's Harbor Home work, as pack data since 2026-11-02 (ModForge 1.8.3): the game
+    bedroom's buttons and the living room's TV copied into the house, the pink affection effect copied beside the
+    game's, and waking up at Harbor Home after a night there. Each against the game's original as the control."""
+    area = "moved"
+    launch()
+    pset("HarborHome_Bought", "true")
+    pset("HarborHome_FirstVisited", "true")
+    time.sleep(1)
+    # The copies, found where they belong.
+    canvases = body(ask(mf, "find-all PlayerRoom_ButtonCanvas", area))
+    copy = next((p for p in canvases.split(": ", 1)[-1].split(" | ") if "HarborHomeBedroom" in p), None)
+    if not copy:
+        find("error", area, "no copy of the bedroom's buttons in the Harbor Home bedroom: " + canvases)
+    else:
+        travel("pack:%s.HarborHomeBedroom" % PACK_ID, area)
+        for button, want in (("SleepButton", "0,-140"), ("CalendarButton", "-20,250"), ("PCButton", "-720,-100")):
+            got = ask(sa, "xf %s/Player_Room_Buttons/%s" % (copy, button), area)
+            if "active True" not in got or "local %s " % want not in got:
+                find("error", area, "Harbor Home bedroom %s: %s (want shown at %s)" % (button, got, want))
+            original = ask(sa, "xf 5_Levels/5_MyRoom/PlayerRoom_ButtonCanvas/Player_Room_Buttons/" + button, area)
+            if "local %s " % want in original:
+                find("error", area, "the game's own %s moved too: %s" % (button, original))
+        soft = ask(mf, "fields ParallaxMouseEffect %s/Player_Room_Buttons" % copy, area)
+        own = ask(mf, "fields ParallaxMouseEffect 5_Levels/5_MyRoom/PlayerRoom_ButtonCanvas/Player_Room_Buttons", area)
+        if "parallaxStrength=0.05" not in soft or "parallaxStrength=0.05" in own:
+            find("error", area, "parallax: the copy %s, the game's own %s" % (soft[:160], own[:160]))
+        shot("moved_bedroom")
+    movies = body(ask(mf, "find-all Movies", area))
+    if "HarborHomeLivingRoom" not in movies:
+        find("error", area, "no copy of the TV objects in the Harbor Home living room: " + movies)
+    effect = "6_Effects/CFXR2 Expression Affectionate (Timed)"
+    for path, want in ((effect, "#FF99E6"), (effect + "/Hearts", "#FF59B3")):
+        got = ask(sa, "particles " + path, area)
+        if want not in got:
+            find("error", area, "affection effect %s: %s (want %s)" % (path, got, want))
+    loving = ask(sa, "particles 6_Effects/CFXR2 Expression Loving (Timed)", area)
+    if "#FF99E6" in loving:
+        find("error", area, "the game's own Loving effect was tinted too: " + loving)
+    # Waking up: in the game's bedroom with a Harbor Home night behind, the house's bedroom takes over - once.
+    travel("vanilla:5_MyRoom", area)
+    pset("HarborHome_Slept", "false")
+    time.sleep(4)
+    if "MyRoom" not in level_now(area):
+        find("error", area, "control: not slept at Harbor Home, the game's bedroom did not stay (%s)" % level_now(area))
+    pset("HarborHome_WokeThere", "false")
+    pset("HarborHome_Slept", "true")
+    deadline = time.time() + 15
+    while time.time() < deadline and "HarborHomeBedroom" not in level_now(area):
+        time.sleep(1)
+    if "HarborHomeBedroom" not in level_now(area):
+        find("error", area, "slept at Harbor Home: still in %s, not woken in its bedroom" % level_now(area))
+    if pvar("HarborHome_WokeThere") != "true":
+        find("error", area, "after waking at Harbor Home, HarborHome_WokeThere = %s" % pvar("HarborHome_WokeThere"))
+    # The journey there locks the game for a moment; the next trip waits it out, as a player would.
+    deadline = time.time() + 20
+    while time.time() < deadline and gget("Lock-Game") == "true":
+        time.sleep(0.5)
+    time.sleep(1)
+    travel("vanilla:5_MyRoom", area)
+    time.sleep(5)
+    if "MyRoom" not in level_now(area):
+        find("error", area, "a later trip to the game's bedroom was taken to %s" % level_now(area))
+    errors(area, "the moved parts")
     stop()
     scan_logs(area)
 
@@ -753,7 +979,7 @@ def area_fixes():
         log(area, "lab gift", got)
         if not reaction:
             find("error", area, "lab gift: the reaction did not start")
-        if got["Beer"] != "False":
+        if got["Beer"] != "false":
             find("error", area, "lab gift: the beer was not used up (%s)" % got["Beer"])
         if got["Affection_Anis"] != str(int(affection) + 1):
             find("error", area, "lab gift: Affection_Anis %s -> %s, expected +1" % (affection, got["Affection_Anis"]))
@@ -780,7 +1006,7 @@ def area_fixes():
     pset("HarborHome_Outfit_Anis", "AnisSwim")
     pset("Location_Anis", "HarborHomeKitchenSink")
     travel("pack:%s.HarborHomeKitchen" % PACK_ID, area)
-    ask(mf, "press 9_MainCanvas/HHTalkPanel/HHTalkButton1", area)
+    ask(mf, "press " + talk_card(area), area)
     time.sleep(2.5)
     run_dialogue_to_end(area, prefer=["I have something for you."])
     time.sleep(1.5)
@@ -862,7 +1088,7 @@ def area_fixes():
         travel("pack:%s.HarborHomeLivingRoom" % PACK_ID, area)
         counter, count = COUNTERS[show]
         episode = int(float(gget(counter)))
-        ask(mf, "press 9_MainCanvas/HHTalkPanel/HHTalkButton1", area)
+        ask(mf, "press " + talk_card(area), area)
         time.sleep(2.5)
         said, _ = run_dialogue_to_end(area, prefer=["Wanna watch something?", words], only="AnisDialogueHHDefaultMovie")
         time.sleep(1.0)
@@ -895,10 +1121,26 @@ def area_fixes():
             find("error", area, "%s: the TV stays on after the show" % show)
         if not hud_back(area):
             find("error", area, "%s: the HUD is not back after the show" % show)
+    # A show watched with someone else is not followed by Anis's scene (the control: it must not start).
+    pset("HarborHome_MovieWith", "Rapi")
+    pset("HarborHome_Movie", "Scifi")
+    time.sleep(2.5)
+    if "HHMovieScifi" not in ask(mf, "line", area):
+        find("error", area, "a show picked with Rapi did not start")
+    else:
+        run_dialogue_to_end(area, only="HHMovieScifi")
+        time.sleep(3)
+        follow = ask(mf, "line", area)
+        log(area, "after a show with Rapi", follow)
+        if "AnisRandomMovie01" in follow:
+            find("error", area, "a show watched with Rapi was followed by Anis's AnisRandomMovie01")
+        run_dialogue_to_end(area)
+        pset("HarborHome_MovieOver", "false")
+        pset("HarborHome_MovieWith", "")
     after = {v: gget(v) for v in before}
     if after["incoming-movie"] != before["incoming-movie"]:
         find("error", area, "the game's incoming-movie changed: %s -> %s" % (before["incoming-movie"], after["incoming-movie"]))
-    if gget("claudia-newsseen") != "True":
+    if gget("claudia-newsseen") != "true":
         find("error", area, "after the news, the game's claudia-newsseen is %s" % gget("claudia-newsseen"))
     log(area, "game movie variables", {"before": before, "after": after})
     errors(area, "movie night")
@@ -987,7 +1229,7 @@ def area_ui():
 
 
 AREAS = {"startup": area_startup, "places": area_places, "behaviour": area_behaviour, "hh": area_hh, "fixes": area_fixes, "day": area_day,
-         "dialogues": area_dialogues, "ui": area_ui}
+         "migrated": area_migrated, "moved": area_moved, "dialogues": area_dialogues, "ui": area_ui}
 
 if __name__ == "__main__":
     wanted = [a for a in sys.argv[1:] if a in AREAS] or list(AREAS)

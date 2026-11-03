@@ -12,7 +12,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-namespace SMSAndroidsCore
+namespace SMSAndroidsTestBridge
 {
     /// <summary>
     /// SMSAndroids' half of the in-game checks (Tools/Game): what ModForge's
@@ -37,10 +37,10 @@ namespace SMSAndroidsCore
     /// </list>
     /// Nothing here saves.
     /// </summary>
-    [BepInPlugin(pluginGuid, Core.pluginName + " - Test bridge", Core.pluginVersion)]
+    [BepInPlugin(pluginGuid, "SMSAndroids test bridge", "1.0.0")]
     internal sealed class TestBridge : BaseUnityPlugin
     {
-        public const string pluginGuid = "treboy.starmakerstory.smsandroidscore.testbridge";
+        public const string pluginGuid = "treboy.starmakerstory.smsandroids.testbridge";
 
         private string _dir;
         private StreamWriter _results;
@@ -52,7 +52,7 @@ namespace SMSAndroidsCore
         {
             string name = Arg("-mfBridge");
             if (name == null) { enabled = false; return; }
-            _dir = Path.Combine(Paths.PluginPath, "SMSAndroidsCore", "DebugBridge", name);
+            _dir = Path.Combine(Paths.PluginPath, "SMSAndroidsTestBridge", "DebugBridge", name);
             Directory.CreateDirectory(_dir);
             File.Delete(Path.Combine(_dir, "commands.txt"));
             _results = new StreamWriter(Path.Combine(_dir, "results.txt"), false, new UTF8Encoding(false)) { AutoFlush = true };
@@ -111,11 +111,9 @@ namespace SMSAndroidsCore
                     Say("ok ping scene=" + SceneManager.GetActiveScene().name);
                     break;
                 case "state":
-                    Say("ok state core=" + Core.loadedCore + " busts=" + Characters.loadedBusts + " places=" + Places.loadedPlaces
-                        + " dialogues=" + Dialogues.loadedDialogues + " schedule=" + Schedule.loadedSchedule
-                        + " story=" + MainStory.loadedStory + " minigame=" + Minigames.loadedMinigame
-                        + " visualizer=" + ScheduleVisualizer.loadedVisualizer + " bases=" + Core.loadedBases
-                        + " dialoguePlaying=" + Dialogues.dialoguePlaying);
+                    // The game in play: its scene up, and its levels and bust manager there to be read.
+                    Say("ok state scene=" + SceneManager.GetActiveScene().name + " levels=" + (GameObject.Find("5_Levels") != null)
+                        + " busts=" + (GameObject.Find("2_Bust_Manager") != null));
                     break;
                 case "errors":
                 {
@@ -132,22 +130,13 @@ namespace SMSAndroidsCore
                     Signals.Emit(new SignalArgs(new PropertyName(rest), null));
                     Say("ok signal " + rest);
                     break;
-                case "massage":
-                {
-                    var game = Minigames.minigameMassage != null ? Minigames.minigameMassage.GetComponent<MassageMinigame>() : null;
-                    if (game == null) { Say("error massage: no minigame"); break; }
-                    game.LoadPatterns();
-                    game.LoadVisualAssets();
-                    game.StartMinigame();
-                    Say("ok massage");
-                    break;
-                }
                 case "busts":
                 {
                     // Every bust up, with the outfit and face parts it shows.
-                    if (Core.bustManager == null) { Say("error busts: no bust manager"); break; }
+                    var bustManager = GameObject.Find("2_Bust_Manager");
+                    if (bustManager == null) { Say("error busts: no bust manager"); break; }
                     var up = new List<string>();
-                    foreach (Transform bust in Core.bustManager)
+                    foreach (Transform bust in bustManager.transform)
                     {
                         if (!bust.gameObject.activeInHierarchy) continue;
                         var drawn = bust.GetComponentsInChildren<SpriteRenderer>(false).Where(r => r.enabled)
@@ -160,9 +149,10 @@ namespace SMSAndroidsCore
                 case "cg":
                 {
                     // The scene pictures up (the game's CG manager), and whether each draws anything.
-                    if (Core.cGManagerSexy == null) { Say("error cg: no CG manager"); break; }
+                    var cgManager = GameObject.Find("4_CG_Manager-Sexy");
+                    if (cgManager == null) { Say("error cg: no CG manager"); break; }
                     var up = new List<string>();
-                    foreach (Transform scene in Core.cGManagerSexy)
+                    foreach (Transform scene in cgManager.transform)
                     {
                         if (!scene.gameObject.activeInHierarchy) continue;
                         var images = scene.GetComponentsInChildren<Image>(false);
@@ -212,10 +202,79 @@ namespace SMSAndroidsCore
                     Say("ok at " + rest + ": " + (hits.Count == 0 ? "(nothing)" : string.Join(" | ", hits.OrderByDescending(h => h.Key).Select(h => h.Value).Take(12).ToArray())));
                     break;
                 }
+                case "xf":
+                {
+                    // xf <path>: where an object is, locally, and whether it is up.
+                    var target = Find(rest);
+                    if (target == null) { Say("error xf: no " + rest); break; }
+                    var p = target.localPosition;
+                    Say("ok xf " + rest + ": active " + target.gameObject.activeInHierarchy + " local " + N(p.x) + "," + N(p.y)
+                        + " scale " + N(target.localScale.x) + " children " + target.childCount);
+                    break;
+                }
+                case "particles":
+                {
+                    // particles <path>: the colour a particle system's particles start in.
+                    var target = Find(rest);
+                    var system = target != null ? target.GetComponent<ParticleSystem>() : null;
+                    if (system == null) { Say("error particles: no particle system at " + rest); break; }
+                    var c = system.main.startColor.color;
+                    Say("ok particles " + rest + ": start #" + ColorUtility.ToHtmlStringRGBA(c));
+                    break;
+                }
+                case "hover":
+                {
+                    // hover <path> [off]: the pointer arriving on (or leaving) an object, as a mouse would - for
+                    // seeing a hover state without clicking.
+                    bool off = rest.EndsWith(" off");
+                    string path = off ? rest.Substring(0, rest.Length - 4) : rest;
+                    var target = Find(path);
+                    if (target == null) { Say("error hover: no " + path); break; }
+                    var data = new UnityEngine.EventSystems.PointerEventData(UnityEngine.EventSystems.EventSystem.current);
+                    if (off) UnityEngine.EventSystems.ExecuteEvents.ExecuteHierarchy(target.gameObject, data, UnityEngine.EventSystems.ExecuteEvents.pointerExitHandler);
+                    else UnityEngine.EventSystems.ExecuteEvents.ExecuteHierarchy(target.gameObject, data, UnityEngine.EventSystems.ExecuteEvents.pointerEnterHandler);
+                    Say("ok hover " + rest);
+                    break;
+                }
+                case "track":
+                {
+                    // track <seconds> <name> <path>|<path>...: every frame for that long, each object's local and
+                    // world rotation, scale and position, into <name>.txt - for seeing what an animation moves.
+                    var words = rest.Split(new[] { ' ' }, 3, StringSplitOptions.RemoveEmptyEntries);
+                    var targets = words[2].Split('|').Select(p => new KeyValuePair<string, Transform>(p, Find(p))).ToList();
+                    var missing = targets.Where(t => t.Value == null).Select(t => t.Key).ToArray();
+                    if (missing.Length > 0) { Say("error track: no " + string.Join(", ", missing)); break; }
+                    StartCoroutine(Track(float.Parse(words[0], CultureInfo.InvariantCulture), Path.Combine(_dir, words[1] + ".txt"), targets));
+                    Say("ok track " + targets.Count + " for " + words[0] + "s");
+                    break;
+                }
                 default:
                     Say("error unknown command: " + command);
                     break;
             }
+        }
+
+        private static System.Collections.IEnumerator Track(float seconds, string file, List<KeyValuePair<string, Transform>> targets)
+        {
+            var lines = new List<string>();
+            float start = Time.realtimeSinceStartup;
+            while (Time.realtimeSinceStartup - start < seconds)
+            {
+                string t = N(Time.realtimeSinceStartup - start);
+                foreach (var target in targets)
+                {
+                    var x = target.Value;
+                    if (x == null) continue;
+                    var rt = x as RectTransform;
+                    lines.Add(t + "\t" + target.Key + "\tactive " + x.gameObject.activeInHierarchy + "\tlocalRotZ " + N(x.localEulerAngles.z)
+                              + "\tworldRotZ " + N(x.eulerAngles.z) + "\tlocalScale " + N(x.localScale.x) + "," + N(x.localScale.y)
+                              + "\tlossyScale " + N(x.lossyScale.x) + "\tanchored " + (rt != null ? N(rt.anchoredPosition.x) + "," + N(rt.anchoredPosition.y) : "-")
+                              + "\tworld " + N(x.position.x) + "," + N(x.position.y));
+                }
+                // At the end of the frame: what is drawn, after every LateUpdate has had its say.
+                yield return new WaitForEndOfFrame();
+            }
+            File.WriteAllLines(file, lines.ToArray());
         }
 
         /// <summary>A root object by name, then a path below it; inactive roots included.</summary>

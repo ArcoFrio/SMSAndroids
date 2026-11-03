@@ -40,7 +40,7 @@ namespace SMSAndroidsCore
         public void Update()
         {
             // Wallpaper + Scenes gates dropped — both migrated to ModForge.
-            if (Core.loadedCore && Characters.loadedBusts && Dialogues.loadedDialogues && MainStory.loadedStory && Places.loadedPlaces && Schedule.loadedSchedule)
+            if (Core.loadedCore && Characters.loadedBusts && MainStory.loadedStory && Schedule.loadedSchedule)
             {
                 if (!loadedMinigame)
                 {
